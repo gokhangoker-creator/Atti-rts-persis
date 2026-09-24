@@ -199,7 +199,19 @@ body.viewer-mode #loginModal *{pointer-events:auto!important;opacity:1!important
 </div>
 </div>
 </nav>
-
+<!-- Google Sheets Uyarı Çubuğu -->
+<div id="sheetsWarning" class="hidden bg-red-100 border-l-4 border-red-500 text-red-800 p-4 mb-4 container mx-auto">
+    <div class="flex items-center justify-between flex-wrap gap-3">
+        <div class="flex items-center gap-3">
+            <span class="text-3xl">⚠️</span>
+            <div>
+                <h3 class="font-bold text-lg">Google Sheets'e Bağlanılamadı!</h3>
+                <p class="text-sm">Veriler yüklenemedi. İnternet bağlantınızı kontrol edin ve sayfayı yenileyin.</p>
+            </div>
+        </div>
+        <button onclick="location.reload()" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-bold">🔄 Tekrar Dene</button>
+    </div>
+</div>
 <main id="mainContent" class="container mx-auto px-6 py-8">
 
 <!-- ==================== ANA SAYFA ==================== -->
@@ -528,6 +540,18 @@ body.viewer-mode #loginModal *{pointer-events:auto!important;opacity:1!important
 <!-- Veri Yedekleme -->
 <div class="bg-white rounded-xl shadow-xl p-6">
 <div class="text-center mb-6"><div class="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-r from-gray-600 to-gray-800 flex items-center justify-center text-white text-2xl">💾</div><h3 class="text-xl font-bold">Veri Yedekleme</h3></div>
+<div class="bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-300 rounded-lg p-4 mb-4">
+    <div class="flex items-center justify-between flex-wrap gap-3">
+        <div class="flex items-center gap-3">
+            <div class="w-12 h-12 rounded-full bg-green-500 flex items-center justify-center text-white text-xl">☁️</div>
+            <div>
+                <h4 class="font-bold text-green-900">Google Sheets Bağlantısı</h4>
+                <div id="sheetsConnectionStatus" class="text-xs text-green-700 font-bold">Bağlanıyor...</div>
+            </div>
+        </div>
+        <button onclick="manualRefreshFromSheets()" class="admin-only-btn bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-lg font-bold text-sm">🔄 Sheets'ten Yenile</button>
+    </div>
+</div>
 <div class="bg-blue-50 border-l-4 border-blue-400 p-3 mb-4 rounded">
 <h4 class="font-bold text-blue-900 mb-1 text-sm">📌 Nasıl Kullanılır?</h4>
 <ol class="text-xs text-blue-800 space-y-1 list-decimal list-inside">
@@ -1671,6 +1695,9 @@ body.viewer-mode #loginModal *{pointer-events:auto!important;opacity:1!important
 </div>
 </div>
 <script>
+    // ==================== GOOGLE SHEETS API ====================
+const API_URL = 'https://script.google.com/macros/s/AKfycbx3vUWx6oX4IAi1fkNdVYp4lkWt3QiE7IhRrAHO7NIPFoDYLs7F-rpKP2QwldMfrsq6/exec';
+let sheetsConnected = false;
 if (typeof pdfjsLib !== 'undefined') {
     pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 }
@@ -1852,7 +1879,333 @@ function setSyncStatus(state){const el=document.getElementById('syncStatus');if(
 function saveToLocalStorage(){clearTimeout(saveDebounceTimer);saveDebounceTimer=setTimeout(()=>{persistData()},300);}
 async function persistData(){if(saveInFlight){pendingSave=true;return}saveInFlight=true;setSyncStatus('saving');const payload={data,lastUpdated:new Date().toISOString()};try{await idbSet(RECORD_KEY,payload);setSyncStatus('saved');}catch(e){try{localStorage.setItem('rts_takip_backup',JSON.stringify(payload));setSyncStatus('saved');}catch(e2){setSyncStatus('error');}}finally{saveInFlight=false;if(pendingSave){pendingSave=false;persistData();}}}
 async function loadFromLocalStorage(){setSyncStatus('loading');try{const p=await idbGet(RECORD_KEY);if(p&&p.data){data=p.data;migrateData();setSyncStatus('saved');return true;}}catch(e){}try{const b=localStorage.getItem('rts_takip_backup');if(b){const p=JSON.parse(b);if(p.data){data=p.data;migrateData();setSyncStatus('saved');return true;}}}catch(e){}setSyncStatus('error');return false;}
-function convertClothingToStatusBased(c){if(c.stockByStatus&&c.gender){if(!c.season)c.season='tum';return c;}const newC={name:c.name,type:c.type,specifications:c.specifications,season:c.season||'tum',gender:c.gender||'U',stockByStatus:{}};if(c.genders){const hasE=c.genders['E']&&c.genders['E'].sizes&&Object.keys(c.genders['E'].sizes).length>0;const hasK=c.genders['K']&&c.genders['K'].sizes&&Object.keys(c.genders['K'].sizes).length>0;if(hasE&&hasK){newC.gender='E';newC.stockByStatus['Aktif']={genders:{'E':JSON.parse(JSON.stringify(c.genders['E'])),'K':{sizes:{}}}};}else if(hasE){newC.gender='E';newC.stockByStatus['Aktif']={genders:{'E':JSON.parse(JSON.stringify(c.genders['E'])),'K':{sizes:{}}}};}else if(hasK){newC.gender='K';newC.stockByStatus['Aktif']={genders:{'K':JSON.parse(JSON.stringify(c.genders['K'])),'E':{sizes:{}}}};}else{newC.gender='U';newC.stockByStatus['Aktif']={genders:{'E':{sizes:{}},'K':{sizes:{}}}};}}else{newC.stockByStatus['Aktif']={genders:{'E':{sizes:{}},'K':{sizes:{}}}};}data.statuses.forEach(s=>{if(!newC.stockByStatus[s])newC.stockByStatus[s]={genders:{'E':{sizes:{}},'K':{sizes:{}}}};});return newC;}
+// ==================== GOOGLE SHEETS'TEN YÜKLE ====================
+async function loadFromGoogleSheets() {
+    setSyncStatus('loading');
+    const uyari = document.getElementById('sheetsWarning');
+    
+    try {
+        // 19 sekmeden veri çek (paralel)
+        const [
+            personelData, kkdData, kiyafetData, egitimData, sertifikaData,
+            gorevData, dagitimData, statusData, birimData, unvanData,
+            fiiliGorevData, gorevSablonData, mykData, liseData,
+            ustalikData, onlisansData, lisansData, mezuniyetData, okulData
+        ] = await Promise.all([
+            fetch(`${API_URL}?sheet=Personel`).then(r=>r.json()),
+            fetch(`${API_URL}?sheet=KKD`).then(r=>r.json()),
+            fetch(`${API_URL}?sheet=Kiyafet`).then(r=>r.json()),
+            fetch(`${API_URL}?sheet=Egitimler`).then(r=>r.json()),
+            fetch(`${API_URL}?sheet=Sertifikalar`).then(r=>r.json()),
+            fetch(`${API_URL}?sheet=Gorevler`).then(r=>r.json()),
+            fetch(`${API_URL}?sheet=Dagitim`).then(r=>r.json()),
+            fetch(`${API_URL}?sheet=Statusler`).then(r=>r.json()),
+            fetch(`${API_URL}?sheet=Birimler`).then(r=>r.json()),
+            fetch(`${API_URL}?sheet=Unvanlar`).then(r=>r.json()),
+            fetch(`${API_URL}?sheet=FiiliGorevler`).then(r=>r.json()),
+            fetch(`${API_URL}?sheet=GorevSablonlari`).then(r=>r.json()),
+            fetch(`${API_URL}?sheet=Muafiyet_MYK`).then(r=>r.json()),
+            fetch(`${API_URL}?sheet=Muafiyet_Lise`).then(r=>r.json()),
+            fetch(`${API_URL}?sheet=Muafiyet_Ustalik`).then(r=>r.json()),
+            fetch(`${API_URL}?sheet=Muafiyet_Onlisans`).then(r=>r.json()),
+            fetch(`${API_URL}?sheet=Muafiyet_Lisans`).then(r=>r.json()),
+            fetch(`${API_URL}?sheet=Ayar_Mezuniyet`).then(r=>r.json()),
+            fetch(`${API_URL}?sheet=Ayar_Okullar`).then(r=>r.json())
+        ]);
+        
+        // Verileri parse et ve data objesine yaz
+        data.statuses = (statusData || []).map(s => s.name).filter(Boolean);
+        data.departments = (birimData || []).map(b => b.name).filter(Boolean);
+        data.titles = (unvanData || []).map(t => t.name).filter(Boolean);
+        data.fiiliGorevler = (fiiliGorevData || []).map(f => f.name).filter(Boolean);
+        
+        data.trainings = (egitimData || []).map(t => ({
+            id: Number(t.id) || Date.now(),
+            name: t.name,
+            duration: Number(t.duration) || 12,
+            instructor: t.instructor || '',
+            hours: Number(t.hours) || 0,
+            location: t.location || '',
+            description: t.description || ''
+        }));
+        
+        data.certificates = (sertifikaData || []).map(c => ({
+            id: Number(c.id) || Date.now(),
+            name: c.name,
+            duration: Number(c.duration) || 12,
+            issuer: c.issuer || '',
+            description: c.description || ''
+        }));
+        
+        data.kkds = (kkdData || []).map(k => ({
+            name: k.name,
+            shelfLife: Number(k.shelfLife) || 12,
+            stock: Number(k.stock) || 0,
+            distributed: Number(k.distributed) || 0,
+            perPerson: Number(k.perPerson) || 1,
+            specifications: k.specifications || ''
+        }));
+        
+        data.clothing = (kiyafetData || []).map(c => ({
+            name: c.name,
+            type: c.type,
+            season: c.season || 'tum',
+            gender: c.gender || 'U',
+            specifications: c.specifications || '',
+            stockByStatus: safeParseJSON(c.stockByStatus, {})
+        }));
+        
+        data.personnel = (personelData || []).map(p => ({
+            id: Number(p.id) || Date.now(),
+            tcNo: String(p.tcNo || ''),
+            name: p.name,
+            status: p.status,
+            title: p.title,
+            department: p.department,
+            job: p.job,
+            phone: String(p.phone || ''),
+            gender: p.gender,
+            fiiliGorev: p.fiiliGorev || '',
+            lise: p.lise || '',
+            liseOkul: p.liseOkul || '',
+            onlisans: p.onlisans || '',
+            myoOkul: p.myoOkul || '',
+            universite: p.universite || '',
+            universiteOkul: p.universiteOkul || '',
+            yuksekLisans: p.yuksekLisans || '',
+            yuksekLisansOkul: p.yuksekLisansOkul || '',
+            ustalikDal: p.ustalikDal || '',
+            ustalikYil: p.ustalikYil || '',
+            mykDurum: p.mykDurum || 'Yok',
+            mykEslesenYK: p.mykEslesenYK || '',
+            mykMuafOran: Number(p.mykMuafOran) || 0,
+            mykZorunlulukVar: p.mykZorunlulukVar === true || p.mykZorunlulukVar === 'TRUE',
+            mykAranmaz: p.mykAranmaz === true || p.mykAranmaz === 'TRUE',
+            mykBelgesiVar: p.mykBelgesiVar === true || p.mykBelgesiVar === 'TRUE',
+            trainings: safeParseJSON(p.trainings, []),
+            certificates: safeParseJSON(p.certificates, []),
+            kkds: safeParseJSON(p.kkds, []),
+            clothing: safeParseJSON(p.clothing, []),
+            requiredKkds: safeParseJSON(p.requiredKkds, []),
+            requiredClothing: safeParseJSON(p.requiredClothing, [])
+        }));
+        
+        data.tasks = (gorevData || []).map(t => ({
+            id: Number(t.id) || Date.now(),
+            templateId: Number(t.templateId) || null,
+            name: t.name,
+            department: t.department,
+            persons: safeParseJSON(t.persons, []),
+            period: Number(t.period) || 30,
+            assignedAt: t.assignedAt || new Date().toISOString(),
+            nextDueDate: t.nextDueDate || new Date().toISOString(),
+            note: t.note || '',
+            lastCompletedAt: t.lastCompletedAt || null
+        }));
+        
+        data.taskTemplates = (gorevSablonData || []).map(t => ({
+            id: Number(t.id) || Date.now(),
+            name: t.name,
+            department: t.department,
+            persons: safeParseJSON(t.persons, []),
+            period: Number(t.period) || 30,
+            createdAt: t.createdAt || new Date().toISOString()
+        }));
+        
+        data.distributionHistory = (dagitimData || []).map(d => ({
+            date: d.date,
+            personnelName: d.personnelName,
+            department: d.department,
+            type: d.type,
+            itemName: d.itemName,
+            size: d.size || '',
+            quantity: Number(d.quantity) || 1,
+            status: d.status || ''
+        }));
+        
+        // Muafiyet listeleri
+        muafiyetTable = (mykData || []).map(m => ({
+            siraNo: m.siraNo,
+            ykKodu: m.ykKodu,
+            ykAdi: m.ykAdi,
+            isco: m.isco,
+            diplomaAlan: m.diplomaAlan,
+            ustalikBelgesi: m.ustalikBelgesi
+        }));
+        
+        liseMuafiyetTable = (liseData || []).map(l => ({
+            meslek: l.meslek,
+            bolum: l.bolum
+        }));
+        
+        ustalikMuafiyetTable = (ustalikData || []).map(u => ({
+            meslek: u.meslek,
+            ustalikBelgesi: u.ustalikBelgesi
+        }));
+        
+        onlisansMuafiyetTable = (onlisansData || []).map(o => ({
+            meslek: o.meslek,
+            onlisansBolumu: o.onlisansBolumu
+        }));
+        
+        lisansMuafiyetTable = (lisansData || []).map(l => ({
+            meslek: l.meslek,
+            lisansBolumu: l.lisansBolumu
+        }));
+        
+        // Mezuniyet ve okullar
+        data.mezuniyetDallari = {lise:[], onlisans:[], universite:[], yuksek_lisans:[]};
+        (mezuniyetData || []).forEach(m => {
+            if (data.mezuniyetDallari[m.tur]) data.mezuniyetDallari[m.tur].push(m.dal);
+        });
+        
+        data.okullar = {lise:[], myo:[], universite:[]};
+        (okulData || []).forEach(o => {
+            if (data.okullar[o.tur]) data.okullar[o.tur].push(o.okulAdi);
+        });
+        
+        // Muafiyet tablolarını localStorage'a kaydet (liste görüntüleme için)
+        saveMykToStorage();
+        
+        sheetsConnected = true;
+        setSyncStatus('saved');
+        
+        // Uyarıyı gizle
+        if (uyari) uyari.classList.add('hidden');
+        
+        return true;
+        
+    } catch (err) {
+        console.error('Google Sheets bağlantı hatası:', err);
+        sheetsConnected = false;
+        setSyncStatus('error');
+        
+        // Kırmızı uyarı göster
+        if (uyari) uyari.classList.remove('hidden');
+        
+        return false;
+    }
+}
+
+// JSON parse güvenli
+function safeParseJSON(str, fallback) {
+    if (!str) return fallback;
+    if (typeof str === 'object') return str;
+    try {
+        const parsed = JSON.parse(str);
+        return parsed || fallback;
+    } catch (e) {
+        return fallback;
+    }
+}
+    // Manuel yenileme
+async function manualRefreshFromSheets() {
+    if (!isAdmin) { alert('❌ Yönetici girişi gerekli!'); return; }
+    
+    if (!confirm('Google Sheets\'ten tüm veriler yeniden yüklenecek. Devam edilsin mi?')) return;
+    
+    const basarili = await loadFromGoogleSheets();
+    
+    if (basarili) {
+        updateAllStats();
+        refreshStatusDropdowns();
+        updateDepartmentDropdowns();
+        showSuccessMessage('✅ Google Sheets\'ten veriler yenilendi!');
+        updateSheetsStatusUI();
+    } else {
+        alert('❌ Google Sheets\'e bağlanılamadı!');
+    }
+}
+
+function updateSheetsStatusUI() {
+    const el = document.getElementById('sheetsConnectionStatus');
+    if (!el) return;
+    if (sheetsConnected) {
+        el.textContent = '✅ Bağlı - Son güncelleme: ' + new Date().toLocaleTimeString('tr-TR');
+        el.className = 'text-xs text-green-700 font-bold';
+    } else {
+        el.textContent = '❌ Bağlantı yok';
+        el.className = 'text-xs text-red-700 font-bold';
+    }
+}
+    // Google Sheets'e veri gönder
+async function saveToGoogleSheets(sheetName, item) {
+    if (!sheetsConnected) {
+        console.warn('Sheets bağlantısı yok, kayıt gönderilmedi');
+        return;
+    }
+    try {
+        // JSON alanları string'e çevir
+        const payload = preparePayload(sheetName, item);
+        
+        await fetch(API_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'append', sheet: sheetName, data: payload })
+        });
+        console.log('✅ Sheets\'e kaydedildi:', sheetName, item.name || item.id);
+    } catch (err) {
+        console.error('❌ Sheets kayıt hatası:', err);
+    }
+}
+
+// Google Sheets'te güncelle
+async function updateInGoogleSheets(sheetName, item, idField = 'id') {
+    if (!sheetsConnected) return;
+    try {
+        const payload = preparePayload(sheetName, item);
+        await fetch(API_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'update', sheet: sheetName, data: payload, idField: idField })
+        });
+        console.log('✅ Sheets\'te güncellendi:', sheetName, item[idField]);
+    } catch (err) {
+        console.error('❌ Sheets güncelleme hatası:', err);
+    }
+}
+
+// Google Sheets'ten sil
+async function deleteFromGoogleSheets(sheetName, id, idField = 'id') {
+    if (!sheetsConnected) return;
+    try {
+        await fetch(API_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'delete', sheet: sheetName, id: id, idField: idField })
+        });
+        console.log('✅ Sheets\'ten silindi:', sheetName, id);
+    } catch (err) {
+        console.error('❌ Sheets silme hatası:', err);
+    }
+}
+
+// JSON alanları string'e çevir (Sheets'e yazarken)
+function preparePayload(sheetName, item) {
+    const p = { ...item };
+    
+    if (sheetName === 'Personel') {
+        ['trainings','certificates','kkds','clothing','requiredKkds','requiredClothing'].forEach(k => {
+            if (p[k] && typeof p[k] === 'object') p[k] = JSON.stringify(p[k]);
+        });
+        // Boolean'ları string'e çevir
+        ['mykZorunlulukVar','mykAranmaz','mykBelgesiVar'].forEach(k => {
+            if (p[k] !== undefined) p[k] = p[k] ? 'TRUE' : 'FALSE';
+        });
+    }
+    if (sheetName === 'Kiyafet' && p.stockByStatus && typeof p.stockByStatus === 'object') {
+        p.stockByStatus = JSON.stringify(p.stockByStatus);
+    }
+    if ((sheetName === 'Gorevler' || sheetName === 'GorevSablonlari') && p.persons && typeof p.persons === 'object') {
+        p.persons = JSON.stringify(p.persons);
+    }
+    
+    return p;
+}
+    function convertClothingToStatusBased(c){if(c.stockByStatus&&c.gender){if(!c.season)c.season='tum';return c;}const newC={name:c.name,type:c.type,specifications:c.specifications,season:c.season||'tum',gender:c.gender||'U',stockByStatus:{}};if(c.genders){const hasE=c.genders['E']&&c.genders['E'].sizes&&Object.keys(c.genders['E'].sizes).length>0;const hasK=c.genders['K']&&c.genders['K'].sizes&&Object.keys(c.genders['K'].sizes).length>0;if(hasE&&hasK){newC.gender='E';newC.stockByStatus['Aktif']={genders:{'E':JSON.parse(JSON.stringify(c.genders['E'])),'K':{sizes:{}}}};}else if(hasE){newC.gender='E';newC.stockByStatus['Aktif']={genders:{'E':JSON.parse(JSON.stringify(c.genders['E'])),'K':{sizes:{}}}};}else if(hasK){newC.gender='K';newC.stockByStatus['Aktif']={genders:{'K':JSON.parse(JSON.stringify(c.genders['K'])),'E':{sizes:{}}}};}else{newC.gender='U';newC.stockByStatus['Aktif']={genders:{'E':{sizes:{}},'K':{sizes:{}}}};}}else{newC.stockByStatus['Aktif']={genders:{'E':{sizes:{}},'K':{sizes:{}}}};}data.statuses.forEach(s=>{if(!newC.stockByStatus[s])newC.stockByStatus[s]={genders:{'E':{sizes:{}},'K':{sizes:{}}}};});return newC;}
 function migrateData(){
     if(!data.certificates)data.certificates=[];
     if(!data.distributionHistory)data.distributionHistory=[];
@@ -2905,6 +3258,14 @@ function addPersonnel(){
         showSuccessMessage('Personel eklendi!');
     }
     hideModal('addPersonnelModal');
+        // Google Sheets'e kaydet (yeni veya güncelleme)
+    if (editingPersonnelId) {
+        updateInGoogleSheets('Personel', np, 'id');
+    } else {
+        saveToGoogleSheets('Personel', np);
+    }
+        // Google Sheets'e kaydet
+    saveToGoogleSheets('Personel', np);
     saveToLocalStorage();
     updateAllStats();
 }
@@ -2977,6 +3338,8 @@ function deletePersonnel(id){
     const p=data.personnel.find(x=>x.id===id);
     if(p&&confirm(p.name+' silinsin mi?')){
         data.personnel=data.personnel.filter(x=>x.id!==id);
+            // Google Sheets'ten sil
+    deleteFromGoogleSheets('Personel', id);
         saveToLocalStorage();
         updateAllStats();
         showSuccessMessage('Silindi!');
@@ -4690,18 +5053,19 @@ function printNeedsList(){
 function exportNeedsListToExcel(){alert('Excel için tabloyu kopyalayın.');}
 
 // ==================== BAŞLANGIÇ ====================
-document.addEventListener('DOMContentLoaded',async function(){
+document.addEventListener('DOMContentLoaded', async function(){
     loadSession();
     applyAuthUI();
-    const dl=await loadFromLocalStorage();
-    if(!dl){migrateData();saveToLocalStorage();}
-    loadMykFromStorage();
+    
+    // Google Sheets'ten veri yükle
+    await loadFromGoogleSheets();
+    
+    // Sonra arayüzü güncelle
     refreshStatusDropdowns();
     updateAllStats();
     updateDepartmentDropdowns();
     updateHomePersonnelStats();
     updateHomeActiveTasks();
-    window.addEventListener('beforeunload',()=>{try{localStorage.setItem('rts_takip_backup',JSON.stringify({data,lastUpdated:new Date().toISOString()}))}catch(e){}});
 });
 </script>
 </body>
