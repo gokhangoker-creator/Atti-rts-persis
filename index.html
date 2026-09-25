@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>ATTİ Raylı Sistem</title>
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <script src="https://cdn.tailwindcss.com"></script>
@@ -123,7 +123,9 @@ body.viewer-mode .nav-btn,
 body.viewer-mode .filter-btn,
 body.viewer-mode .viewer-allow,
 body.viewer-mode .lock-indicator,
-body.viewer-mode .logout-btn{pointer-events:auto!important;opacity:1!important;cursor:pointer!important}
+body.viewer-mode .logout-btn,
+body.viewer-mode .task-filter-btn,
+body.viewer-mode .complete-task-btn{pointer-events:auto!important;opacity:1!important;cursor:pointer!important}
 body.viewer-mode input:not(.viewer-allow):not(#loginModal input),
 body.viewer-mode select:not(.viewer-allow):not(#loginModal select),
 body.viewer-mode textarea:not(.viewer-allow):not(#loginModal textarea){pointer-events:none!important;opacity:.6!important;background:#f3f4f6!important}
@@ -169,11 +171,32 @@ body.viewer-mode #loginModal *{pointer-events:auto!important;opacity:1!important
 .edit-inline-actions button{border:none;border-radius:4px;padding:3px 8px;font-size:10px;font-weight:700;cursor:pointer}
 .edit-inline-save{background:#22c55e;color:#fff}
 .edit-inline-cancel{background:#e5e7eb;color:#374151}
+/* ===== AKTİF GÖREV FİLTRE BUTONLARI ===== */
+.task-filter-btn{transition:all .2s}
+.task-filter-btn.active{background:#7c3aed!important;color:#fff!important;border-color:#5b21b6!important;box-shadow:0 4px 10px rgba(124,58,237,.4);transform:translateY(-1px)}
+.task-filter-btn:hover:not(.active){background:#ede9fe!important}
+/* ===== TAMAMLANAN GÖREV - KİM YAPTI ===== */
+.completed-by-badge{display:inline-block;background:#fef3c7;color:#92400e;padding:2px 8px;border-radius:9999px;font-size:11px;font-weight:700;border:1px solid #fcd34d}
+.completed-by-badge.admin{background:#dbeafe;color:#1e40af;border-color:#93c5fd}
+.completed-by-badge.viewer{background:#fef3c7;color:#92400e;border-color:#fcd34d}
+/* ===== İZLEYİCİ TAMAMLAMA BUTONU ===== */
+.complete-task-btn{background:#22c55e;color:#fff;padding:6px 14px;border-radius:8px;font-size:12px;font-weight:700;border:none;cursor:pointer;transition:all .2s;white-space:nowrap;display:inline-flex;align-items:center;gap:4px}
+.complete-task-btn:hover{background:#16a34a;transform:translateY(-1px);box-shadow:0 4px 8px rgba(34,197,94,.3)}
+.complete-task-btn:active{transform:translateY(0)}
+.viewer-complete-hint{display:inline-block;background:#fef3c7;color:#92400e;padding:2px 8px;border-radius:6px;font-size:10px;font-weight:700;margin-left:4px}
+/* ===== GÖREV TAMAMLAMA MODAL ===== */
+.completer-checkbox-item{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:8px;cursor:pointer;font-size:13px;background:#f0fdf4;border:2px solid #bbf7d0;margin-bottom:6px;transition:all .15s}
+.completer-checkbox-item:hover{background:#dcfce7;border-color:#86efac}
+.completer-checkbox-item input{width:18px;height:18px;cursor:pointer;accent-color:#22c55e}
+.completer-checkbox-item.selected{background:#dcfce7;border-color:#22c55e;box-shadow:0 2px 6px rgba(34,197,94,.2)}
+.completer-tag{display:inline-block;background:#dcfce7;color:#166534;padding:3px 10px;border-radius:9999px;font-size:11px;font-weight:700;margin:3px;border:1px solid #86efac}
+.completer-tag.external{background:#fef3c7;color:#92400e;border-color:#fcd34d}
+.completer-tag.personnel{background:#dbeafe;color:#1e40af;border-color:#93c5fd}
+.task-completers-display{display:flex;flex-wrap:wrap;gap:2px;justify-content:center}
 </style>
 </head>
 <body class="bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 min-h-screen font-sans locked-mode">
-
-<header class="gradient-bg shadow-xl">
+    <header class="gradient-bg shadow-xl">
 <div class="container mx-auto px-6 py-4">
 <div class="flex items-center justify-between flex-wrap gap-4">
 <div class="flex items-center gap-4 flex-1">
@@ -302,6 +325,7 @@ body.viewer-mode #loginModal *{pointer-events:auto!important;opacity:1!important
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="trainingListDisplay"></div>
 </div>
 </div>
+
 <!-- ==================== STOK ==================== -->
 <div id="stock" class="section hidden">
 <div class="bg-white rounded-xl shadow-xl p-6 mb-6">
@@ -419,7 +443,6 @@ body.viewer-mode #loginModal *{pointer-events:auto!important;opacity:1!important
 </div>
 </div>
 </div>
-
 <!-- ==================== GÖREVLER ==================== -->
 <div id="tasks" class="section hidden">
 <div class="bg-white rounded-xl shadow-xl p-6 mb-6">
@@ -436,6 +459,22 @@ body.viewer-mode #loginModal *{pointer-events:auto!important;opacity:1!important
 <div class="bg-yellow-50 rounded-lg p-4 border-2 border-yellow-200"><div class="flex items-center justify-between"><div><p class="text-xs font-bold text-yellow-600 uppercase">Yaklaşan</p><p class="text-2xl font-bold text-yellow-800" id="taskUpcomingCount">0</p></div><div class="text-3xl">⏰</div></div></div>
 <div class="bg-green-50 rounded-lg p-4 border-2 border-green-200"><div class="flex items-center justify-between"><div><p class="text-xs font-bold text-green-600 uppercase">Tamamlanan</p><p class="text-2xl font-bold text-green-800" id="taskCompletedCount">0</p></div><div class="text-3xl">✅</div></div></div>
 </div>
+
+<!-- ===== AKTİF GÖREV FİLTRE ÇUBUĞU ===== -->
+<div class="mb-4 bg-violet-50 border-2 border-violet-200 rounded-lg p-3">
+<div class="flex items-center gap-2 flex-wrap">
+<span class="text-xs font-bold text-violet-800 mr-2">🔍 Filtrele:</span>
+<button onclick="setActiveTaskFilter('7gun',event)" id="taskFilterBtn_7gun" class="task-filter-btn bg-white text-violet-700 border-2 border-violet-300 px-3 py-1 rounded-lg text-xs font-bold hover:bg-violet-100">7 Gün</button>
+<button onclick="setActiveTaskFilter('15gun',event)" id="taskFilterBtn_15gun" class="task-filter-btn bg-white text-violet-700 border-2 border-violet-300 px-3 py-1 rounded-lg text-xs font-bold hover:bg-violet-100">15 Gün</button>
+<button onclick="setActiveTaskFilter('30gun',event)" id="taskFilterBtn_30gun" class="task-filter-btn bg-white text-violet-700 border-2 border-violet-300 px-3 py-1 rounded-lg text-xs font-bold hover:bg-violet-100">30 Gün</button>
+<button onclick="setActiveTaskFilter('90gun',event)" id="taskFilterBtn_90gun" class="task-filter-btn bg-white text-violet-700 border-2 border-violet-300 px-3 py-1 rounded-lg text-xs font-bold hover:bg-violet-100">90 Gün</button>
+<button onclick="setActiveTaskFilter('buay',event)" id="taskFilterBtn_buay" class="task-filter-btn bg-white text-violet-700 border-2 border-violet-300 px-3 py-1 rounded-lg text-xs font-bold hover:bg-violet-100">Bu Ay</button>
+<button onclick="setActiveTaskFilter('buyil',event)" id="taskFilterBtn_buyil" class="task-filter-btn bg-white text-violet-700 border-2 border-violet-300 px-3 py-1 rounded-lg text-xs font-bold hover:bg-violet-100">Bu Yıl</button>
+<button onclick="setActiveTaskFilter('hepsi',event)" id="taskFilterBtn_hepsi" class="task-filter-btn bg-white text-violet-700 border-2 border-violet-300 px-3 py-1 rounded-lg text-xs font-bold hover:bg-violet-100">Hepsi</button>
+<span id="activeTaskFilterInfo" class="ml-auto text-xs font-bold text-violet-900 bg-violet-200 px-3 py-1 rounded-full"></span>
+</div>
+</div>
+
 <div class="mb-6">
 <div class="flex items-center justify-between mb-3 flex-wrap gap-2">
 <h3 class="text-lg font-bold text-violet-800">📋 Aktif Görevler</h3>
@@ -449,7 +488,9 @@ body.viewer-mode #loginModal *{pointer-events:auto!important;opacity:1!important
 <tbody id="activeTaskTableBody"><tr><td colspan="9" class="text-center py-6 text-gray-500 text-sm">Henüz aktif görev yok</td></tr></tbody>
 </table>
 </div>
+<div id="activeTaskFilterEmpty" class="hidden text-center py-6 text-gray-500 text-sm bg-gray-50 rounded-lg mt-2">Bu filtreye uyan görev bulunamadı</div>
 </div>
+
 <div>
 <div class="flex items-center justify-between mb-3 flex-wrap gap-2">
 <h3 class="text-lg font-bold text-green-800">✅ Tamamlanan Görevler</h3>
@@ -458,9 +499,9 @@ body.viewer-mode #loginModal *{pointer-events:auto!important;opacity:1!important
 <div class="overflow-x-auto border-2 border-green-200 rounded-lg max-h-96 overflow-y-auto">
 <table class="task-table" id="completedTaskTable">
 <thead class="sticky top-0"><tr>
-<th style="width:20%;">Görev Adı</th><th style="width:12%;">Birim</th><th style="width:15%;">Sorumlular</th><th style="width:12%;text-align:center;">Verilme</th><th style="width:12%;text-align:center;">Tamamlanma</th><th style="width:10%;text-align:center;">Periyot</th><th style="width:9%;text-align:center;">Durum</th><th style="width:10%;text-align:center;">İşlem</th>
+<th style="width:16%;">Görev Adı</th><th style="width:9%;">Birim</th><th style="width:11%;">Sorumlular</th><th style="width:9%;text-align:center;">Verilme</th><th style="width:9%;text-align:center;">Tamamlanma</th><th style="width:7%;text-align:center;">Periyot</th><th style="width:7%;text-align:center;">Durum</th><th style="width:12%;text-align:center;">İşaretleyen</th><th style="width:12%;text-align:center;">Yapanlar</th><th style="width:8%;text-align:center;">İşlem</th>
 </tr></thead>
-<tbody id="completedTaskTableBody"><tr><td colspan="8" class="text-center py-6 text-gray-500 text-sm">Henüz tamamlanan görev yok</td></tr></tbody>
+<tbody id="completedTaskTableBody"><tr><td colspan="10" class="text-center py-6 text-gray-500 text-sm">Henüz tamamlanan görev yok</td></tr></tbody>
 </table>
 </div>
 </div>
@@ -735,10 +776,6 @@ body.viewer-mode #loginModal *{pointer-events:auto!important;opacity:1!important
 <button onclick="liseElleEkle()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-bold text-xs">➕ Ekle</button>
 </div>
 
-<div class="bg-blue-50 border-l-4 border-blue-400 p-3 mb-4 rounded">
-<h4 class="font-bold text-blue-900 mb-1 text-sm">📄 Diğer Yükleme Yöntemleri</h4>
-<p class="text-xs text-blue-800">PDF, CSV veya metin yapıştırma</p>
-</div>
 <div class="flex gap-2 mb-4 border-b-2 border-gray-200">
 <button id="tabLisePdf" onclick="switchLiseMuafiyetTab('pdf')" class="px-6 py-3 rounded-t-lg font-medium bg-blue-600 text-white">📄 PDF Yükle</button>
 <button id="tabLiseCsv" onclick="switchLiseMuafiyetTab('csv')" class="px-6 py-3 rounded-t-lg font-medium bg-gray-200 text-gray-700">📊 CSV</button>
@@ -1235,6 +1272,88 @@ body.viewer-mode #loginModal *{pointer-events:auto!important;opacity:1!important
 </div>
 </div>
 </div>
+
+<!-- ==================== GÖREV TAMAMLAMA MODAL (YENİ) ==================== -->
+<div id="taskCompletionModal" class="modal hidden fixed inset-0 bg-black bg-opacity-60 items-center justify-center z-[75]">
+<div class="bg-white rounded-xl p-6 w-[700px] max-w-[97vw] shadow-2xl relative max-h-[92vh] overflow-y-auto">
+<button onclick="hideModal('taskCompletionModal')" class="absolute top-4 right-4 text-gray-400 text-2xl font-bold">✕</button>
+<div class="text-center mb-4">
+<div class="w-16 h-16 mx-auto mb-3 rounded-full bg-gradient-to-r from-green-400 to-emerald-600 flex items-center justify-center text-white text-2xl">✅</div>
+<h3 class="text-xl font-bold">Görevi Tamamla</h3>
+<p class="text-xs text-gray-500 mt-1">Görevi yapan kişileri seçin</p>
+</div>
+
+<!-- Görev Bilgisi -->
+<div class="bg-violet-50 rounded-lg p-4 mb-4 border-2 border-violet-200">
+<div class="text-sm mb-1"><strong>📌 Görev:</strong> <span id="taskCompletionTaskName" class="font-bold text-violet-900">-</span></div>
+<div class="text-sm mb-1"><strong>🏢 Birim:</strong> <span id="taskCompletionDept">-</span></div>
+<div class="text-sm mb-1"><strong>🔄 Periyot:</strong> <span id="taskCompletionPeriod">-</span></div>
+<div class="text-sm"><strong>📅 Son Tarih:</strong> <span id="taskCompletionDueDate">-</span></div>
+</div>
+
+<!-- İşaretleyen (kullanıcı) -->
+<div class="bg-blue-50 rounded-lg p-3 mb-4 border-2 border-blue-200">
+<div class="flex items-center gap-2">
+<span class="text-sm font-bold text-blue-900">👤 İşaretleyen:</span>
+<span class="completed-by-badge admin" id="taskCompletionMarker">-</span>
+</div>
+</div>
+
+<!-- 1. Sorumlu Kişiler -->
+<div class="bg-green-50 rounded-lg p-4 mb-4 border-2 border-green-300">
+<h4 class="font-bold text-green-900 mb-3 text-sm flex items-center gap-2">
+<span class="w-6 h-6 rounded-full bg-green-600 text-white flex items-center justify-center text-xs">1</span>
+Sorumlu Kişiler (Görevin Sorumluları)
+</h4>
+<div id="taskCompleterResponsibleList" class="space-y-2 max-h-48 overflow-y-auto"></div>
+</div>
+
+<!-- 2. Personel Listesinden Seç -->
+<div class="bg-purple-50 rounded-lg p-4 mb-4 border-2 border-purple-300">
+<h4 class="font-bold text-purple-900 mb-3 text-sm flex items-center gap-2">
+<span class="w-6 h-6 rounded-full bg-purple-600 text-white flex items-center justify-center text-xs">2</span>
+Personel Listesinden Ekle (Opsiyonel)
+</h4>
+<div class="mb-2">
+<input type="text" id="taskCompleterPersonnelSearch" placeholder="🔍 Personel ara..." class="w-full border-2 border-purple-300 rounded-lg px-3 py-2 text-sm" oninput="filterCompleterPersonnelList()">
+</div>
+<div id="taskCompleterPersonnelList" class="space-y-2 max-h-48 overflow-y-auto"></div>
+</div>
+
+<!-- 3. Dışarıdan Katılan -->
+<div class="bg-amber-50 rounded-lg p-4 mb-4 border-2 border-amber-300">
+<h4 class="font-bold text-amber-900 mb-3 text-sm flex items-center gap-2">
+<span class="w-6 h-6 rounded-full bg-amber-600 text-white flex items-center justify-center text-xs">3</span>
+Dışarıdan Katılan (Opsiyonel)
+</h4>
+<div class="flex gap-2 mb-2">
+<input type="text" id="taskCompleterExternalInput" placeholder="Ad Soyad yazın..." class="flex-1 border-2 border-amber-300 rounded-lg px-3 py-2 text-sm" onkeydown="if(event.key==='Enter')addExternalCompleter()">
+<button onclick="addExternalCompleter()" class="bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded-lg font-bold text-sm whitespace-nowrap">➕ Ekle</button>
+</div>
+<div id="taskCompleterExternalList" class="flex flex-wrap gap-1 mt-2"></div>
+</div>
+
+<!-- Seçilenlerin Özeti -->
+<div class="bg-gray-50 rounded-lg p-3 mb-4 border-2 border-gray-300">
+<h4 class="font-bold text-gray-800 mb-2 text-sm">📋 Seçilenler:</h4>
+<div id="taskCompleterSummary" class="flex flex-wrap gap-1 min-h-[36px] items-center">
+<span class="text-gray-400 text-xs italic">Henüz kimse seçilmedi</span>
+</div>
+</div>
+
+<!-- Notlar -->
+<div class="mb-4">
+<label class="block text-sm font-bold text-gray-700 mb-1">📝 Not (Opsiyonel)</label>
+<textarea id="taskCompletionNote" rows="2" placeholder="Görevle ilgili not..." class="w-full border-2 border-gray-200 rounded-lg px-3 py-2 text-sm"></textarea>
+</div>
+
+<div class="flex justify-end space-x-3 pt-3 border-t-2 border-gray-200">
+<button onclick="hideModal('taskCompletionModal')" class="px-6 py-2 text-gray-600 font-medium">İptal</button>
+<button onclick="confirmTaskCompletion()" class="px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-lg font-bold">✅ Görevi Tamamla</button>
+</div>
+</div>
+</div>
+
 <!-- ==================== EĞİTİM/SERTİFİKA DETAY MODAL ==================== -->
 <div id="trainingDetailModal" class="modal hidden fixed inset-0 bg-black bg-opacity-50 items-center justify-center z-[60]">
 <div class="bg-white rounded-xl p-6 w-[1200px] max-w-[97vw] shadow-2xl relative max-h-[92vh] overflow-y-auto">
@@ -1731,6 +1850,13 @@ let lisansMuafiyetTable=[];
 
 let listeGoruntuleAktifTur='';
 
+// ===== Aktif görev filtresi (varsayılan: bu ay) =====
+let currentActiveTaskFilter='buay';
+
+// ===== YENİ: Görev tamamlama modal bağlamı =====
+let taskCompletionContext=null;
+let selectedTaskCompleters={responsible:[],personnel:[],external:[]};
+
 const ADMIN_USERNAME='gokhangoker';
 const ADMIN_PASSWORD='2621556';
 const VIEWER_USERNAME='adanarts';
@@ -1739,6 +1865,7 @@ const VIEWER_PASSWORD='123456';
 let isAdmin=false;
 let isViewer=false;
 let isLoggedIn=false;
+let currentUsername='';
 
 function loadSession(){
     try{
@@ -1747,19 +1874,19 @@ function loadSession(){
             const obj=JSON.parse(s);
             if(obj && obj.ts && (Date.now()-obj.ts)<12*60*60*1000){
                 if(obj.role==='admin' && obj.username===ADMIN_USERNAME){
-                    isAdmin=true; isViewer=false; isLoggedIn=true; return true;
+                    isAdmin=true; isViewer=false; isLoggedIn=true; currentUsername=obj.username; return true;
                 }
                 if(obj.role==='viewer' && obj.username===VIEWER_USERNAME){
-                    isAdmin=false; isViewer=true; isLoggedIn=true; return true;
+                    isAdmin=false; isViewer=true; isLoggedIn=true; currentUsername=obj.username; return true;
                 }
             }
         }
     }catch(e){}
-    isAdmin=false; isViewer=false; isLoggedIn=false;
+    isAdmin=false; isViewer=false; isLoggedIn=false; currentUsername='';
     return false;
 }
-function saveSession(role){
-    try{localStorage.setItem('rts_session',JSON.stringify({role:role,username:(role==='admin'?ADMIN_USERNAME:VIEWER_USERNAME),ts:Date.now()}))}catch(e){}
+function saveSession(role,username){
+    try{localStorage.setItem('rts_session',JSON.stringify({role:role,username:username||(role==='admin'?ADMIN_USERNAME:VIEWER_USERNAME),ts:Date.now()}))}catch(e){}
 }
 function clearSession(){
     try{localStorage.removeItem('rts_session')}catch(e){}
@@ -1773,27 +1900,27 @@ function applyAuthUI(){
     const viewerBadge=document.getElementById('viewerModeBadge');
 
     document.body.classList.remove('locked-mode','viewer-mode');
-    lock.classList.remove('locked','unlocked','viewer');
+    if(lock){lock.classList.remove('locked','unlocked','viewer');}
 
     if(isAdmin){
-        lock.classList.add('unlocked');
-        lockIcon.textContent='🔓';
-        lockText.textContent='Yönetici';
-        logoutBtn.classList.remove('hidden');
-        viewerBadge.classList.add('hidden');
+        if(lock)lock.classList.add('unlocked');
+        if(lockIcon)lockIcon.textContent='🔓';
+        if(lockText)lockText.textContent='Yönetici';
+        if(logoutBtn)logoutBtn.classList.remove('hidden');
+        if(viewerBadge)viewerBadge.classList.add('hidden');
     } else if(isViewer){
-        lock.classList.add('viewer');
-        lockIcon.textContent='👁️';
-        lockText.textContent='İzleyici';
-        logoutBtn.classList.remove('hidden');
-        viewerBadge.classList.remove('hidden');
+        if(lock)lock.classList.add('viewer');
+        if(lockIcon)lockIcon.textContent='👁️';
+        if(lockText)lockText.textContent='İzleyici';
+        if(logoutBtn)logoutBtn.classList.remove('hidden');
+        if(viewerBadge)viewerBadge.classList.remove('hidden');
         document.body.classList.add('viewer-mode');
     } else {
-        lock.classList.add('locked');
-        lockIcon.textContent='🔒';
-        lockText.textContent='Giriş Yap';
-        logoutBtn.classList.add('hidden');
-        viewerBadge.classList.add('hidden');
+        if(lock)lock.classList.add('locked');
+        if(lockIcon)lockIcon.textContent='🔒';
+        if(lockText)lockText.textContent='Giriş Yap';
+        if(logoutBtn)logoutBtn.classList.add('hidden');
+        if(viewerBadge)viewerBadge.classList.add('hidden');
         document.body.classList.add('locked-mode');
     }
 }
@@ -1819,47 +1946,60 @@ function togglePasswordVisibility(){
     if(inp.type==='password'){inp.type='text';icon.textContent='🙈';}
     else{inp.type='password';icon.textContent='👁️';}
 }
-// YENİ HALİ
 async function doLogin(){
     const username = document.getElementById('loginUsername').value.trim();
     const password = document.getElementById('loginPassword').value;
 
-    // Kullanıcı adını sahte e-postaya çevir
-    const loginEmail = username.includes('@') ? username : `${username}@atti.local`;
-
-    // Supabase ile giriş yap
-    const { data, error } = await supabaseClient.auth.signInWithPassword({
-        email: loginEmail,
-        password: password
-    });
-
-    if (error) {
-        // Giriş başarısız
-        document.getElementById('loginError').classList.remove('hidden');
+    if(username===ADMIN_USERNAME && password===ADMIN_PASSWORD){
+        isAdmin=true; isViewer=false; isLoggedIn=true; currentUsername=username;
+        saveSession('admin',username);
+        applyAuthUI();
+        hideModal('loginModal');
+        updateActiveTaskFilterUI();
+        updateActiveTaskTable();
+        showSuccessMessage('✅ Yönetici girişi başarılı!');
+        return;
+    }
+    if(username===VIEWER_USERNAME && password===VIEWER_PASSWORD){
+        isAdmin=false; isViewer=true; isLoggedIn=true; currentUsername=username;
+        saveSession('viewer',username);
+        applyAuthUI();
+        hideModal('loginModal');
+        updateActiveTaskFilterUI();
+        updateActiveTaskTable();
+        showSuccessMessage('👁️ İzleyici modu aktif!');
         return;
     }
 
-    // Giriş başarılı, kullanıcının rolünü oku
-    const roles = data.user.app_metadata?.roles || [];
-    isAdmin = roles.includes('admin');
-    isViewer = roles.includes('viewer');
-
-    // Eğer kullanıcının hiçbir rolü yoksa varsayılan olarak izleyici yap
-    if (!isAdmin && !isViewer) {
-        isViewer = true;
+    const loginEmail = username.includes('@') ? username : `${username}@atti.local`;
+    try{
+        const { data:authData, error } = await supabaseClient.auth.signInWithPassword({
+            email: loginEmail,
+            password: password
+        });
+        if (error) {
+            document.getElementById('loginError').classList.remove('hidden');
+            return;
+        }
+        const roles = (authData.user.app_metadata && authData.user.app_metadata.roles) || [];
+        isAdmin = roles.includes('admin');
+        isViewer = roles.includes('viewer');
+        if (!isAdmin && !isViewer) isViewer = true;
+        isLoggedIn = true;
+        currentUsername = username;
+        saveSession(isAdmin ? 'admin' : 'viewer', username);
+        applyAuthUI();
+        hideModal('loginModal');
+        updateActiveTaskFilterUI();
+        updateActiveTaskTable();
+        showSuccessMessage(isAdmin ? '✅ Yönetici girişi başarılı!' : '👁️ İzleyici modu aktif!');
+    }catch(err){
+        document.getElementById('loginError').classList.remove('hidden');
     }
-
-    isLoggedIn = true;
-
-    // Oturumu kaydet ve arayüzü güncelle
-    saveSession(isAdmin ? 'admin' : 'viewer');
-    applyAuthUI();
-    hideModal('loginModal');
-    showSuccessMessage(isAdmin ? '✅ Yönetici girişi başarılı!' : '👁️ İzleyici modu aktif!');
 }
 function handleLogout(){
     if(!confirm('Çıkış yapmak istediğinize emin misiniz?'))return;
-    isAdmin=false; isViewer=false; isLoggedIn=false;
+    isAdmin=false; isViewer=false; isLoggedIn=false; currentUsername='';
     clearSession();
     applyAuthUI();
     showSuccessMessage('🚪 Çıkış yapıldı.');
@@ -1892,7 +2032,6 @@ async function persistData(){
         setSyncStatus('saved');
     }catch(e){
         console.error('Supabase kaydetme hatası:',e);
-        // Yedek olarak localStorage'a da kaydet
         try{localStorage.setItem('rts_takip_backup',JSON.stringify({data,lastUpdated:new Date().toISOString()}));setSyncStatus('saved');}catch(e2){setSyncStatus('error');}
     }finally{
         saveInFlight=false;
@@ -1917,7 +2056,6 @@ async function loadFromLocalStorage(){
     }catch(e){
         console.error('Supabase yükleme hatası:',e);
     }
-    // Supabase'den yüklenemezse localStorage yedeğinden dene
     try{
         const b=localStorage.getItem('rts_takip_backup');
         if(b){
@@ -2163,22 +2301,17 @@ function fiiliGorevMeslekAdi(fiiliGorev){
 function levenshteinRatio(a,b){if(!a.length||!b.length)return 0;const matrix=Array(b.length+1).fill().map(()=>Array(a.length+1).fill(0));for(let i=0;i<=a.length;i++)matrix[0][i]=i;for(let j=0;j<=b.length;j++)matrix[j][0]=j;for(let j=1;j<=b.length;j++){for(let i=1;i<=a.length;i++){const cost=a[i-1]===b[j-1]?0:1;matrix[j][i]=Math.min(matrix[j-1][i]+1,matrix[j][i-1]+1,matrix[j-1][i-1]+cost);}}return((Math.max(a.length,b.length)-matrix[b.length][a.length])/Math.max(a.length,b.length))*100;}
 function similarity(s1,s2){const n1=normalize(s1),n2=normalize(s2);if(!n1||!n2)return 0;if(n1===n2)return 100;if(n1.includes(n2)||n2.includes(n1))return 90;const k1=n1.split(/\s+/).filter(w=>w.length>3);const k2=n2.split(/\s+/).filter(w=>w.length>3);if(!k1.length||!k2.length)return 0;const ortak=k1.filter(w=>k2.includes(w)).length;const kelimeOran=(ortak/Math.max(k1.length,k2.length))*100;const lev=levenshteinRatio(n1.substring(0,100),n2.substring(0,100));return Math.max(kelimeOran,lev*0.7);}
 
-// ==================== MESLEK EŞLEŞTİRME (DÜZELTİLMİŞ) ====================
-// Hem "meslek" hem "ykAdi" alanına bakar, ikisinden en yüksek skoru alır
+// ==================== MESLEK EŞLEŞTİRME ====================
 function meslekEslesmeOrani(fiiliGorev, kayit){
     if(!fiiliGorev||!kayit)return 0;
-    // YK kodu tam eşleşme
     const fiiliKod=fiiliGorevdenYkKodu(fiiliGorev);
     const kayitKod=(kayit.ykKodu||kayit.meslekKodu||'').toString().trim();
     if(fiiliKod&&kayitKod&&fiiliKod.toUpperCase()===kayitKod.toUpperCase())return 100;
-    // Fiili görevden meslek adını çıkar (varsa YK kodunu temizle)
     const fiiliAd=fiiliGorevMeslekAdi(fiiliGorev);
-    // Kayıttaki meslek adı (her iki alanı dene)
     const kayitAd1=kayit.meslek||'';
     const kayitAd2=kayit.ykAdi||'';
     const s1=similarity(fiiliAd,kayitAd1);
     const s2=similarity(fiiliAd,kayitAd2);
-    // YK kodunu strip edilmiş haliyle de karşılaştır
     const s3=similarity(fiiliAd, stripYkKodu(kayitAd2));
     return Math.max(s1,s2,s3);
 }
@@ -2504,8 +2637,7 @@ function deleteListeGoruntuleRow(idx){
     showSuccessMessage('🗑️ Silindi!');
 }
 
-// ==================== FİİLİ GÖREV ZORUNLULUĞU (YENİ) ====================
-// Fiili görev MYK zorunlu mesleklerden biriyle eşleşiyor mu?
+// ==================== FİİLİ GÖREV ZORUNLULUĞU ====================
 function fiiliGorevZorunlulukVarMi(){
     const fiiliGorev=document.getElementById('personnelFiiliGorev').value.trim();
     if(!fiiliGorev||muafiyetTable.length===0)return false;
@@ -2514,8 +2646,7 @@ function fiiliGorevZorunlulukVarMi(){
     return enIyiOran>=mykSettings.zorunlulukOrani;
 }
 
-// ==================== MUAFİYET HESAPLAMA (YENİ) ====================
-// Lise/Önlisans/Lisans/Ustalık bölümü fiili görevin muaf bölümüyle eşleşiyor mu?
+// ==================== MUAFİYET HESAPLAMA ====================
 function hesaplaMuafiyet(){
     const fiiliGorev=document.getElementById('personnelFiiliGorev').value.trim();
     const lise=document.getElementById('personnelLise').value.trim();
@@ -2572,21 +2703,13 @@ function hesaplaMuafiyet(){
     return false;
 }
 
-// ==================== MYK DURUMU (DÜZELTİLMİŞ MANTIK) ====================
-// KURAL:
-//  1) Fiili görev boş → ARANMAZ
-//  2) Fiili görev MYK zorunlu mesleklerle eşleşmiyorsa → ARANMAZ
-//  3) Fiili görev MYK zorunlu meslekle eşleşiyorsa → ZORUNLU
-//     a) MYK BELGESİ VAR → 📜 Sertifika
-//     b) Muafiyet (lise/önlisans/lisans/ustalık) eşleşmesi VAR → ✅ Muaf
-//     c) Hiçbiri yok → ❌ Yok
+// ==================== MYK DURUMU ====================
 function updateMykDurumu(){
     const badge=document.getElementById('mykDurumBadge');
     const aciklama=document.getElementById('mykDurumAciklama');
     const aranmazCb=document.getElementById('mykAranmaz');
     if(!badge)return;
 
-    // 1) Kullanıcı manuel "Aranmaz" işaretledi
     if(aranmazCb&&aranmazCb.checked){
         badge.className='myk-status-badge myk-status-aranmaz inline-block mb-3';
         badge.textContent='🚫 Aranmaz';
@@ -2596,7 +2719,6 @@ function updateMykDurumu(){
 
     const fiiliGorev=document.getElementById('personnelFiiliGorev').value.trim();
 
-    // 2) Fiili görev girilmedi → ARANMAZ
     if(!fiiliGorev){
         badge.className='myk-status-badge myk-status-aranmaz inline-block mb-3';
         badge.textContent='🚫 Aranmaz';
@@ -2604,19 +2726,15 @@ function updateMykDurumu(){
         return;
     }
 
-    // 3) Fiili görev MYK zorunlu mesleklerle eşleşiyor mu?
     const zorunlulukVar=fiiliGorevZorunlulukVarMi();
 
     if(!zorunlulukVar){
-        // Zorunluluk YOK → ARANMAZ
         badge.className='myk-status-badge myk-status-aranmaz inline-block mb-3';
         badge.textContent='🚫 Aranmaz';
         if(aciklama)aciklama.textContent='Bu fiili görev MYK zorunlu mesleklerle eşleşmiyor → Aranmaz.';
         return;
     }
 
-    // ZORUNLU
-    // a) MYK BELGESİ VAR → SERTİFİKA
     if(mykBelgesiVarDurum){
         badge.className='myk-status-badge myk-status-sertifika inline-block mb-3';
         badge.textContent='📜 Sertifika';
@@ -2624,7 +2742,6 @@ function updateMykDurumu(){
         return;
     }
 
-    // b) Muafiyet eşleşmesi VAR → MUAF
     const muaf=hesaplaMuafiyet();
     if(muaf){
         badge.className='myk-status-badge myk-status-muaf inline-block mb-3';
@@ -2633,7 +2750,6 @@ function updateMykDurumu(){
         return;
     }
 
-    // c) Hiçbiri yok → YOK
     badge.className='myk-status-badge myk-status-yok inline-block mb-3';
     badge.textContent='❌ Yok';
     if(aciklama)aciklama.textContent='MYK zorunlu ancak belge/mezuniyet eşleşmesi yok.';
@@ -2707,10 +2823,9 @@ function checkFiiliGorevZorunluluk(fiiliGorev){
     }
 }
 
-// ==================== MEZUNİYET DROPDOWN (DÜZELTİLMİŞ) ====================
+// ==================== MEZUNİYET DROPDOWN ====================
 function mezuniyetIdToField(tur){const map={lise:'Lise',onlisans:'OnLisans',universite:'Universite',yuksek_lisans:'YuksekLisans'};return map[tur]||'Lise';}
 
-// Fiili göreve karşılık gelen muafiyet kaydını bulur
 function fiiliGoreveKarsilikGelenMeslek(tur){
     const fiiliGorev=document.getElementById('personnelFiiliGorev').value.trim();
     if(!fiiliGorev)return null;
@@ -2726,14 +2841,12 @@ function fiiliGoreveKarsilikGelenMeslek(tur){
     return enIyi;
 }
 
-// Fiili göreve uygun muaf bölümleri getirir
 function fiiliGoreveUygunBolumler(tur){
     const kayit=fiiliGoreveKarsilikGelenMeslek(tur);
     if(!kayit)return [];
     return kayittanBolumler(kayit,tur);
 }
 
-// Fiili göreve uygun ustalık dallarını getirir
 function fiiliGoreveUygunUstaliklar(){
     const fiiliGorev=document.getElementById('personnelFiiliGorev').value.trim();
     if(!fiiliGorev||ustalikMuafiyetTable.length===0)return [];
@@ -2743,7 +2856,6 @@ function fiiliGoreveUygunUstaliklar(){
     return kayittanUstaliklar(enIyi);
 }
 
-// ============ LİSE/ÖNLİSANS/LİSANS DROPDOWN (FİİLİ GÖREVDEN BÖLÜM ÖNERİLERİ) ============
 function onMezuniyetInput(tur){
     const input=document.getElementById('personnel'+mezuniyetIdToField(tur));
     if(!input)return;
@@ -2752,14 +2864,11 @@ function onMezuniyetInput(tur){
     if(!dd)return;
     if(!val||val.length<2){dd.classList.remove('show');updateMykDurumu();return;}
 
-    // Fiili göreve uygun bölümler (öncelikli)
     const fiiliBolumler=fiiliGoreveUygunBolumler(tur);
-    // Kullanıcının yazdığı metne göre filtrele
     const fiiliFiltreli=[];
     fiiliBolumler.forEach(b=>{const sim=similarity(val,b);if(sim>=30)fiiliFiltreli.push({ad:b,oran:sim});});
     fiiliFiltreli.sort((a,b)=>b.oran-a.oran);
 
-    // Ayarlardaki kayıtlı dallar (ikincil)
     const ayarDallar=(data.mezuniyetDallari[tur]||[]).filter(d=>normalize(d).includes(normalize(val)));
 
     let html='';
@@ -2884,6 +2993,7 @@ function selectUstalikDal(deger){
     document.getElementById('ustalikDropdown').classList.remove('show');
     updateMykDurumu();
 }
+
 // ==================== PERSONEL ====================
 function showAddPersonnelModal(){
     if(!isAdmin){alert('❌ Yönetici girişi gerekli!');return}
@@ -2939,31 +3049,16 @@ function addPersonnel(){
     const ustalikYil=document.getElementById('personnelUstalikYil').value.trim();
     const mykAranmaz=document.getElementById('mykAranmaz').checked;
 
-       // MYK DURUMU HESAPLA (DÜZELTİLMİŞ MANTIK)
-    // KURAL:
-    //  - Fiili görev boş veya zorunluluk yok → Aranmaz
-    //  - MYK belgesi var → Sertifika
-    //  - Muafiyet eşleşmesi var → Muaf
-    //  - Zorunlu ama belge/muafiyet yok → Yok
     let mykDurum='Aranmaz',mykEslesenYK='',mykMuafOran=0,mykZorunlulukVar=false;
     if(!mykAranmaz && fiiliGorev){
         mykZorunlulukVar=fiiliGorevZorunlulukVarMi();
         if(mykZorunlulukVar){
-            if(mykBelgesiVarDurum){
-                mykDurum='Sertifika';
-            } else if(hesaplaMuafiyet()){
-                mykDurum='Muaf';
-            } else {
-                mykDurum='Yok';
-            }
-        } else {
-            mykDurum='Aranmaz';
-        }
-    } else if(mykAranmaz){
-        mykDurum='Aranmaz';
-    } else {
-        mykDurum='Aranmaz';
-    }
+            if(mykBelgesiVarDurum){mykDurum='Sertifika';}
+            else if(hesaplaMuafiyet()){mykDurum='Muaf';}
+            else{mykDurum='Yok';}
+        } else {mykDurum='Aranmaz';}
+    } else if(mykAranmaz){mykDurum='Aranmaz';}
+    else{mykDurum='Aranmaz';}
     if(muafiyetTable.length>0&&fiiliGorev){
         let enIyi=null,enIyiOran=0;
         muafiyetTable.forEach(r=>{const o=meslekEslesmeOrani(fiiliGorev,r);if(o>enIyiOran){enIyiOran=o;enIyi=r;}});
@@ -3067,7 +3162,6 @@ function searchPersonnel(){
     const term=document.getElementById('personnelSearchInput').value.toLowerCase();
     updatePersonnelTable(data.personnel.filter(p=>p.name.toLowerCase().includes(term)||p.tcNo.includes(term)||p.phone.includes(term)||p.department.toLowerCase().includes(term)));
 }
-
 // ==================== SEÇİM MODAL FONKSİYONLARI ====================
 function showTrainingSelectionModal(){
     const c=document.getElementById('trainingCheckboxes');
@@ -3880,6 +3974,91 @@ function saveTaskAssignment(){
     hideModal('addTaskAssignmentModal');
     showSuccessMessage('✅ Görev verildi!');
 }
+
+// ==================== GÖREV FİLTRELEME ====================
+function setActiveTaskFilter(filter,ev){
+    if(ev)ev.stopPropagation();
+    currentActiveTaskFilter=filter;
+    updateActiveTaskFilterUI();
+    updateActiveTaskTable();
+    updateHomeActiveTasks();
+}
+
+function updateActiveTaskFilterUI(){
+    const filters=['7gun','15gun','30gun','90gun','buay','buyil','hepsi'];
+    filters.forEach(f=>{
+        const btn=document.getElementById('taskFilterBtn_'+f);
+        if(!btn)return;
+        if(f===currentActiveTaskFilter){
+            btn.classList.add('active');
+        } else {
+            btn.classList.remove('active');
+        }
+    });
+    const infoEl=document.getElementById('activeTaskFilterInfo');
+    if(!infoEl)return;
+    const labels={
+        '7gun':'⏱️ 7 günden az kalanlar',
+        '15gun':'⏱️ 15 günden az kalanlar',
+        '30gun':'⏱️ 30 günden az kalanlar',
+        '90gun':'⏱️ 90 günden az kalanlar',
+        'buay':'📅 Bu ay sonuna kadar',
+        'buyil':'📆 Bu yıl sonuna kadar',
+        'hepsi':'📋 Tüm aktif görevler'
+    };
+    infoEl.textContent=labels[currentActiveTaskFilter]||'';
+}
+
+// ===== GÖREV FİLTRELEME MANTIĞI (DÜZELTİLMİŞ) =====
+// Bu Ay: nextDueDate bu ayın sonuna (bu ayın son günü 23:59:59) kadar olanlar
+// Bu Yıl: nextDueDate bu yılın sonuna (31 Aralık 23:59:59) kadar olanlar
+// Gecikmiş görevler her zaman görünür
+function filterActiveTasks(tasks){
+    if(!tasks||tasks.length===0)return [];
+    const now=new Date();
+    const filter=currentActiveTaskFilter;
+    if(filter==='hepsi')return tasks.slice();
+
+    if(filter==='buay'){
+        const endOfMonth=new Date(now.getFullYear(),now.getMonth()+1,0,23,59,59,999);
+        return tasks.filter(t=>{
+            const nd=new Date(t.nextDueDate);
+            // Gecikmiş görevler her zaman görünür
+            if(nd<now)return true;
+            // Bu ay sonuna kadar süresi olanlar
+            return nd<=endOfMonth;
+        });
+    }
+
+    if(filter==='buyil'){
+        const endOfYear=new Date(now.getFullYear(),11,31,23,59,59,999);
+        return tasks.filter(t=>{
+            const nd=new Date(t.nextDueDate);
+            // Gecikmiş görevler her zaman görünür
+            if(nd<now)return true;
+            // Bu yıl sonuna kadar süresi olanlar
+            return nd<=endOfYear;
+        });
+    }
+
+    let days=0;
+    if(filter==='7gun')days=7;
+    else if(filter==='15gun')days=15;
+    else if(filter==='30gun')days=30;
+    else if(filter==='90gun')days=90;
+    if(days<=0)return tasks.slice();
+
+    const limit=new Date(now.getTime()+days*24*60*60*1000);
+    return tasks.filter(t=>{
+        const nd=new Date(t.nextDueDate);
+        // Gecikmiş görevler her zaman görünür
+        if(nd<now)return true;
+        // Kalan gün <= belirtilen gün ise göster
+        const remaining=Math.ceil((nd-now)/(1000*60*60*24));
+        return remaining<=days;
+    });
+}
+
 function calculateTaskStatus(task){
     const now=new Date();
     const nextDue=new Date(task.nextDueDate);
@@ -3895,7 +4074,7 @@ function sortActiveTasks(){
     updateHomeActiveTasks();
     showSuccessMessage('📊 Sıralandı!');
 }
-function updateTaskPage(){updateTaskStats();updateActiveTaskTable();updateCompletedTaskTable();updateHomeActiveTasks();}
+function updateTaskPage(){updateTaskStats();updateActiveTaskFilterUI();updateActiveTaskTable();updateCompletedTaskTable();updateHomeActiveTasks();}
 function updateTaskStats(){
     const tasks=data.tasks||[];
     let a=0,o=0,u=0;
@@ -3907,9 +4086,17 @@ function updateTaskStats(){
 }
 function updateActiveTaskTable(){
     const tbody=document.getElementById('activeTaskTableBody');
+    const emptyEl=document.getElementById('activeTaskFilterEmpty');
     if(!tbody)return;
-    const tasks=(data.tasks||[]).slice().sort((a,b)=>{const as=calculateTaskStatus(a),bs=calculateTaskStatus(b);if(as.status==='overdue'&&bs.status!=='overdue')return -1;if(as.status!=='overdue'&&bs.status==='overdue')return 1;if(as.status==='overdue'&&bs.status==='overdue')return bs.days-as.days;return as.remaining-bs.remaining;});
-    if(tasks.length===0){tbody.innerHTML='<tr><td colspan="9" class="text-center py-6 text-gray-500 text-sm">Henüz aktif görev yok</td></tr>';return;}
+    const allTasks=(data.tasks||[]).slice().sort((a,b)=>{const as=calculateTaskStatus(a),bs=calculateTaskStatus(b);if(as.status==='overdue'&&bs.status!=='overdue')return -1;if(as.status!=='overdue'&&bs.status==='overdue')return 1;if(as.status==='overdue'&&bs.status==='overdue')return bs.days-as.days;return as.remaining-bs.remaining;});
+    const tasks=filterActiveTasks(allTasks);
+
+    if(tasks.length===0){
+        tbody.innerHTML='<tr><td colspan="9" class="text-center py-6 text-gray-500 text-sm">Bu filtreye uyan görev yok</td></tr>';
+        if(emptyEl)emptyEl.classList.add('hidden');
+        return;
+    }
+    if(emptyEl)emptyEl.classList.add('hidden');
     tbody.innerHTML='';
     tasks.forEach(t=>{
         const status=calculateTaskStatus(t);
@@ -3925,7 +4112,15 @@ function updateActiveTaskTable(){
         if(status.status==='overdue'){sb='<span class="task-status-badge task-status-overdue">⚠️ GECİKMİŞ</span>';rt=status.days+' gün gecikti';rc='task-overdue';}
         else if(status.status==='warning'){sb='<span class="task-status-badge task-status-warning">⏰ YAKLAŞIYOR</span>';rt=status.days+' gün kaldı';rc='task-soon';}
         else{sb='<span class="task-status-badge task-status-active">✅ AKTİF</span>';rt=status.days+' gün kaldı';rc='task-ontime';}
-        const btnHtml=isAdmin?'<button onclick="completeTask('+t.id+')" class="bg-green-500 text-white px-3 py-1 rounded text-xs font-bold">✅</button><button onclick="deleteTask('+t.id+')" class="bg-red-500 text-white px-3 py-1 rounded text-xs font-bold">🗑️</button>':'<span class="text-gray-300 text-xs">-</span>';
+
+        let btnHtml='';
+        if(isAdmin){
+            btnHtml='<button class="complete-task-btn" onclick="openTaskCompletionModal('+t.id+')" title="Yapıldı olarak işaretle">✅</button><button onclick="deleteTask('+t.id+')" class="bg-red-500 text-white px-3 py-1 rounded text-xs font-bold">🗑️</button>';
+        } else if(isViewer){
+            btnHtml='<button class="complete-task-btn" onclick="openTaskCompletionModal('+t.id+')" title="Yapıldı olarak işaretle">✅<span class="viewer-complete-hint">👁️</span></button>';
+        } else {
+            btnHtml='<span class="text-gray-300 text-xs">-</span>';
+        }
         tbody.innerHTML+='<tr><td class="font-semibold text-violet-900">📌 '+escapeHtml(t.name)+(t.note?'<div class="text-xs text-gray-500">📝 '+escapeHtml(t.note)+'</div>':'')+'</td><td><span class="px-2 py-1 bg-green-100 text-green-800 rounded text-xs font-bold">🏢 '+escapeHtml(t.department)+'</span></td><td>'+(ph||'-')+'</td><td class="text-center text-xs">'+ad+'</td><td class="text-center"><span class="task-period-badge">🔄 '+pt+'</span></td><td class="text-center text-xs"><strong>'+nd+'</strong></td><td class="text-center"><span class="task-remaining '+rc+'">'+rt+'</span></td><td class="text-center">'+sb+'</td><td class="text-center"><div class="flex gap-1 justify-center">'+btnHtml+'</div></td></tr>';
     });
 }
@@ -3933,37 +4128,271 @@ function updateCompletedTaskTable(){
     const tbody=document.getElementById('completedTaskTableBody');
     if(!tbody)return;
     const tasks=(data.completedTasks||[]).slice().sort((a,b)=>new Date(b.completedAt)-new Date(a.completedAt));
-    if(tasks.length===0){tbody.innerHTML='<tr><td colspan="8" class="text-center py-6 text-gray-500 text-sm">Henüz tamamlanan görev yok</td></tr>';return;}
+    if(tasks.length===0){tbody.innerHTML='<tr><td colspan="10" class="text-center py-6 text-gray-500 text-sm">Henüz tamamlanan görev yok</td></tr>';return;}
     tbody.innerHTML='';
     tasks.forEach(t=>{
         const ad=new Date(t.assignedAt).toLocaleDateString('tr-TR');
         const cd=new Date(t.completedAt).toLocaleDateString('tr-TR');
         const ph=t.persons.map(p=>'<span class="task-person-badge">👤 '+escapeHtml(p.name)+'</span>').join('');
         let dt='',dc='';
-        if(t.wasOverdue){dt='⚠️ '+t.overdueDays+' gün gecikmeli';dc='text-red-600';}
+        if(t.wasOverdue){dt='⚠️ '+t.overdueDays+'g gec.';dc='text-red-600';}
         else{dt='✅ Zamanında';dc='text-green-600';}
         const cid=t.completedId||t.id;
+
+        // İşaretleyen sütunu
+        let isaretleyenHtml='-';
+        if(t.completedBy){
+            const isAdminUser=(t.completedByRole==='admin');
+            isaretleyenHtml='<span class="completed-by-badge '+(isAdminUser?'admin':'viewer')+'">'+(isAdminUser?'🔓':'👁️')+' '+escapeHtml(t.completedBy)+'</span>';
+        } else {
+            isaretleyenHtml='<span class="text-gray-400 text-xs">-</span>';
+        }
+
+        // Yapanlar sütunu (yeni)
+        let yapanlarHtml='-';
+        if(t.completers&&t.completers.length>0){
+            const tags=t.completers.map(c=>{
+                let cls='completer-tag';
+                if(c.type==='external')cls+=' external';
+                else if(c.type==='personnel')cls+=' personnel';
+                return '<span class="'+cls+'">'+escapeHtml(c.name)+'</span>';
+            }).join('');
+            yapanlarHtml='<div class="task-completers-display">'+tags+'</div>';
+        } else {
+            yapanlarHtml='<span class="text-gray-400 text-xs">-</span>';
+        }
+
         const btnHtml=isAdmin?'<button onclick="deleteCompletedTask('+cid+')" class="bg-red-100 text-red-700 px-3 py-1 rounded text-xs font-bold">🗑️</button>':'';
-        tbody.innerHTML+='<tr><td class="font-semibold">📌 '+escapeHtml(t.name)+'</td><td>'+escapeHtml(t.department)+'</td><td>'+ph+'</td><td class="text-center text-xs">'+ad+'</td><td class="text-center text-xs font-bold text-green-700">'+cd+'</td><td class="text-center">'+t.period+' gün</td><td class="text-center '+dc+' text-xs font-bold">'+dt+'</td><td class="text-center">'+btnHtml+'</td></tr>';
+        tbody.innerHTML+='<tr><td class="font-semibold">📌 '+escapeHtml(t.name)+'</td><td>'+escapeHtml(t.department)+'</td><td>'+ph+'</td><td class="text-center text-xs">'+ad+'</td><td class="text-center text-xs font-bold text-green-700">'+cd+'</td><td class="text-center">'+t.period+' gün</td><td class="text-center '+dc+' text-xs font-bold">'+dt+'</td><td class="text-center">'+isaretleyenHtml+'</td><td class="text-center">'+yapanlarHtml+'</td><td class="text-center">'+btnHtml+'</td></tr>';
     });
 }
-function completeTask(id){
-    if(!isAdmin){alert('❌ Yönetici girişi gerekli!');return}
-    const task=data.tasks.find(t=>t.id===id);
-    if(!task)return;
+
+// ==================== YENİ: GÖREV TAMAMLAMA MODAL ====================
+function openTaskCompletionModal(taskId){
+    if(!isAdmin && !isViewer){alert('❌ Giriş yapmanız gerekiyor!');return}
+    const task=data.tasks.find(t=>t.id===taskId);
+    if(!task){alert('Görev bulunamadı!');return}
+
+    taskCompletionContext={
+        taskId:taskId,
+        responsiblePersons:(task.persons||[]).map(p=>({id:p.id,name:p.name})),
+        // İşaretleyen = giriş yapan kullanıcı
+        marker:currentUsername||(isAdmin?'admin':'viewer'),
+        markerRole:isAdmin?'admin':'viewer'
+    };
+    selectedTaskCompleters={responsible:[],personnel:[],external:[]};
+
+    // Görev bilgilerini doldur
+    document.getElementById('taskCompletionTaskName').textContent=task.name;
+    document.getElementById('taskCompletionDept').textContent=task.department;
+    let pt='';
+    if(task.period===1)pt='Her gün';
+    else if(task.period===7)pt='Haftalık';
+    else if(task.period===30)pt='Aylık';
+    else pt=task.period+' gün';
+    document.getElementById('taskCompletionPeriod').textContent=pt;
+    document.getElementById('taskCompletionDueDate').textContent=new Date(task.nextDueDate).toLocaleDateString('tr-TR');
+
+    // İşaretleyen badge
+    const markerEl=document.getElementById('taskCompletionMarker');
+    markerEl.textContent=(isAdmin?'🔓 ':'👁️ ')+taskCompletionContext.marker;
+    markerEl.className='completed-by-badge '+(isAdmin?'admin':'viewer');
+
+    // 1. Sorumlu kişiler listesi
+    renderCompleterResponsibleList();
+    // 2. Personel listesi
+    renderCompleterPersonnelList('');
+    // 3. Dışarıdan eklenenler
+    renderExternalCompletersList();
+    // 4. Not temizle
+    document.getElementById('taskCompletionNote').value='';
+    document.getElementById('taskCompleterPersonnelSearch').value='';
+    document.getElementById('taskCompleterExternalInput').value='';
+
+    updateCompleterSummary();
+    showModal('taskCompletionModal');
+}
+
+function renderCompleterResponsibleList(){
+    const list=document.getElementById('taskCompleterResponsibleList');
+    if(!list)return;
+    list.innerHTML='';
+    const responsible=taskCompletionContext?taskCompletionContext.responsiblePersons:[];
+    if(!responsible||responsible.length===0){
+        list.innerHTML='<div class="text-center py-3 text-gray-500 text-sm bg-white rounded border-2 border-dashed border-gray-300">Görevin tanımlı sorumlusu yok</div>';
+        return;
+    }
+    responsible.forEach(p=>{
+        const isChecked=selectedTaskCompleters.responsible.some(x=>x.id===p.id);
+        const div=document.createElement('label');
+        div.className='completer-checkbox-item'+(isChecked?' selected':'');
+        div.innerHTML='<input type="checkbox" '+(isChecked?'checked':'')+' onchange="toggleResponsibleCompleter('+p.id+',this.checked,\''+p.name.replace(/'/g,"\\'")+'\')"><span>👤 <strong>'+escapeHtml(p.name)+'</strong></span>';
+        list.appendChild(div);
+    });
+}
+
+function toggleResponsibleCompleter(id,name,checked){
+    if(checked){
+        if(!selectedTaskCompleters.responsible.some(x=>x.id===id)){
+            selectedTaskCompleters.responsible.push({id,name,type:'responsible'});
+        }
+    } else {
+        selectedTaskCompleters.responsible=selectedTaskCompleters.responsible.filter(x=>x.id!==id);
+    }
+    renderCompleterResponsibleList();
+    updateCompleterSummary();
+}
+
+function renderCompleterPersonnelList(searchTerm){
+    const list=document.getElementById('taskCompleterPersonnelList');
+    if(!list)return;
+    list.innerHTML='';
+    // Görevin sorumlularını listeden çıkar
+    const responsibleIds=new Set((taskCompletionContext?taskCompletionContext.responsiblePersons:[]).map(p=>p.id));
+    let allPersonnel=(data.personnel||[]).filter(p=>!responsibleIds.has(p.id));
+    if(searchTerm&&searchTerm.trim()){
+        const term=normalize(searchTerm);
+        allPersonnel=allPersonnel.filter(p=>normalize(p.name).includes(term)||normalize(p.department||'').includes(term));
+    }
+    if(allPersonnel.length===0){
+        list.innerHTML='<div class="text-center py-3 text-gray-500 text-sm bg-white rounded border-2 border-dashed border-gray-300">'+(searchTerm?'Arama sonucu bulunamadı':'Personel bulunamadı')+'</div>';
+        return;
+    }
+    allPersonnel.slice(0,100).forEach(p=>{
+        const isChecked=selectedTaskCompleters.personnel.some(x=>x.id===p.id);
+        const div=document.createElement('label');
+        div.className='completer-checkbox-item'+(isChecked?' selected':'');
+        div.innerHTML='<input type="checkbox" '+(isChecked?'checked':'')+' onchange="togglePersonnelCompleter('+p.id+',this.checked,\''+p.name.replace(/'/g,"\\'")+'\',\''+(p.department||'').replace(/'/g,"\\'")+'\')"><span>👤 <strong>'+escapeHtml(p.name)+'</strong> <span class="text-xs text-gray-500">('+escapeHtml(p.department||'-')+')</span></span>';
+        list.appendChild(div);
+    });
+}
+
+function togglePersonnelCompleter(id,name,department,checked){
+    if(checked){
+        if(!selectedTaskCompleters.personnel.some(x=>x.id===id)){
+            selectedTaskCompleters.personnel.push({id,name,department,type:'personnel'});
+        }
+    } else {
+        selectedTaskCompleters.personnel=selectedTaskCompleters.personnel.filter(x=>x.id!==id);
+    }
+    renderCompleterPersonnelList(document.getElementById('taskCompleterPersonnelSearch').value);
+    updateCompleterSummary();
+}
+
+function filterCompleterPersonnelList(){
+    const term=document.getElementById('taskCompleterPersonnelSearch').value;
+    renderCompleterPersonnelList(term);
+}
+
+function addExternalCompleter(){
+    const inp=document.getElementById('taskCompleterExternalInput');
+    if(!inp)return;
+    const name=inp.value.trim();
+    if(!name){alert('Ad Soyad girin!');return}
+    if(selectedTaskCompleters.external.some(x=>normalize(x.name)===normalize(name))){
+        alert('Bu kişi zaten eklendi!');
+        inp.value='';
+        return;
+    }
+    selectedTaskCompleters.external.push({name:name,type:'external'});
+    inp.value='';
+    renderExternalCompletersList();
+    updateCompleterSummary();
+}
+
+function removeExternalCompleter(idx){
+    selectedTaskCompleters.external.splice(idx,1);
+    renderExternalCompletersList();
+    updateCompleterSummary();
+}
+
+function renderExternalCompletersList(){
+    const list=document.getElementById('taskCompleterExternalList');
+    if(!list)return;
+    list.innerHTML='';
+    selectedTaskCompleters.external.forEach((x,i)=>{
+        const tag=document.createElement('span');
+        tag.className='completer-tag external';
+        tag.innerHTML=escapeHtml(x.name)+' <button onclick="removeExternalCompleter('+i+')" style="color:#b91c1c;font-weight:bold;margin-left:4px;background:none;border:none;cursor:pointer;">✕</button>';
+        list.appendChild(tag);
+    });
+}
+
+function updateCompleterSummary(){
+    const el=document.getElementById('taskCompleterSummary');
+    if(!el)return;
+    const all=[
+        ...selectedTaskCompleters.responsible.map(x=>({...x,type:'responsible'})),
+        ...selectedTaskCompleters.personnel.map(x=>({...x,type:'personnel'})),
+        ...selectedTaskCompleters.external.map(x=>({...x,type:'external'}))
+    ];
+    if(all.length===0){
+        el.innerHTML='<span class="text-gray-400 text-xs italic">Henüz kimse seçilmedi</span>';
+        return;
+    }
+    el.innerHTML=all.map(x=>{
+        let cls='completer-tag';
+        if(x.type==='external')cls+=' external';
+        else if(x.type==='personnel')cls+=' personnel';
+        return '<span class="'+cls+'">'+escapeHtml(x.name)+'</span>';
+    }).join('');
+}
+
+function confirmTaskCompletion(){
+    if(!taskCompletionContext){alert('Hata! Modal bağlamı yok.');return}
+    const taskId=taskCompletionContext.taskId;
+    const task=data.tasks.find(t=>t.id===taskId);
+    if(!task){alert('Görev bulunamadı!');return}
+
+    // Yapanları topla
+    const completers=[];
+    selectedTaskCompleters.responsible.forEach(x=>completers.push({name:x.name,type:'responsible'}));
+    selectedTaskCompleters.personnel.forEach(x=>completers.push({name:x.name,type:'personnel',department:x.department}));
+    selectedTaskCompleters.external.forEach(x=>completers.push({name:x.name,type:'external'}));
+
+    if(completers.length===0){
+        if(!confirm('Hiç kimse seçilmedi. Yine de görevi tamamlandı olarak işaretlemek istiyor musunuz?'))return;
+    }
+
     const now=new Date();
     const nextDue=new Date(task.nextDueDate);
     const wasOverdue=nextDue<now;
     const overdueDays=wasOverdue?Math.ceil((now-nextDue)/(1000*60*60*24)):0;
-    const ct={...JSON.parse(JSON.stringify(task)),completedId:Date.now()+Math.random(),completedAt:now.toISOString(),wasOverdue:wasOverdue,overdueDays:overdueDays};
+
+    const completionNote=document.getElementById('taskCompletionNote').value.trim();
+
+    const ct={
+        ...JSON.parse(JSON.stringify(task)),
+        completedId:Date.now()+Math.random(),
+        completedAt:now.toISOString(),
+        wasOverdue:wasOverdue,
+        overdueDays:overdueDays,
+        completedBy:taskCompletionContext.marker,
+        completedByRole:taskCompletionContext.markerRole,
+        completers:completers,
+        completionNote:completionNote
+    };
     if(!data.completedTasks)data.completedTasks=[];
     data.completedTasks.push(ct);
     task.lastCompletedAt=now.toISOString();
     task.nextDueDate=new Date(now.getTime()+task.period*24*60*60*1000).toISOString();
+
     saveToLocalStorage();
     updateTaskPage();
-    showSuccessMessage('✅ Görev tamamlandı!'+(wasOverdue?' ('+overdueDays+' gün gecikmeli)':''));
+    updateHomeActiveTasks();
+    hideModal('taskCompletionModal');
+
+    let msg='✅ Görev tamamlandı!';
+    if(wasOverdue)msg+=' ('+overdueDays+' gün gecikmeli)';
+    if(completers.length>0)msg+=' — '+completers.length+' kişi';
+    msg+=' — '+taskCompletionContext.marker;
+    showSuccessMessage(msg);
+
+    // Bağlamı temizle
+    taskCompletionContext=null;
+    selectedTaskCompleters={responsible:[],personnel:[],external:[]};
 }
+
 function deleteTask(id){
     if(!isAdmin){alert('❌ Yönetici girişi gerekli!');return}
     const task=data.tasks.find(t=>t.id===id);
@@ -3995,8 +4424,9 @@ function clearCompletedTasks(){
 function updateHomeActiveTasks(){
     const list=document.getElementById('homeActiveTasksList');
     if(!list)return;
-    const tasks=(data.tasks||[]).slice().sort((a,b)=>{const as=calculateTaskStatus(a),bs=calculateTaskStatus(b);if(as.status==='overdue'&&bs.status!=='overdue')return -1;if(as.status!=='overdue'&&bs.status==='overdue')return 1;if(as.status==='overdue'&&bs.status==='overdue')return bs.days-as.days;return as.remaining-bs.remaining;});
-    if(tasks.length===0){list.innerHTML='<div class="text-center py-6 text-gray-500 text-sm col-span-3">Aktif görev yok</div>';return;}
+    const allTasks=(data.tasks||[]).slice().sort((a,b)=>{const as=calculateTaskStatus(a),bs=calculateTaskStatus(b);if(as.status==='overdue'&&bs.status!=='overdue')return -1;if(as.status!=='overdue'&&bs.status==='overdue')return 1;if(as.status==='overdue'&&bs.status==='overdue')return bs.days-as.days;return as.remaining-bs.remaining;});
+    const tasks=filterActiveTasks(allTasks);
+    if(tasks.length===0){list.innerHTML='<div class="text-center py-6 text-gray-500 text-sm col-span-3">Bu filtreye uyan aktif görev yok</div>';return;}
     let html='';
     tasks.slice(0,12).forEach(t=>{
         const status=calculateTaskStatus(t);
@@ -4060,7 +4490,6 @@ function buildUpcomingListHTML(items){
     });
     return html;
 }
-
 // ==================== OLAY DİNLEYİCİLERİ ====================
 document.addEventListener('click',function(e){
     const fiiliOpt=e.target.closest('.fiili-gorev-option');
@@ -4782,6 +5211,8 @@ document.addEventListener('DOMContentLoaded',async function(){
     updateDepartmentDropdowns();
     updateHomePersonnelStats();
     updateHomeActiveTasks();
+    updateActiveTaskFilterUI();
+    updateActiveTaskTable();
     window.addEventListener('beforeunload',()=>{try{localStorage.setItem('rts_takip_backup',JSON.stringify({data,lastUpdated:new Date().toISOString()}))}catch(e){}});
 });
 </script>
