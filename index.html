@@ -1819,25 +1819,43 @@ function togglePasswordVisibility(){
     if(inp.type==='password'){inp.type='text';icon.textContent='🙈';}
     else{inp.type='password';icon.textContent='👁️';}
 }
-function doLogin(){
-    const u=document.getElementById('loginUsername').value.trim();
-    const p=document.getElementById('loginPassword').value;
+// YENİ HALİ
+async function doLogin(){
+    const username = document.getElementById('loginUsername').value.trim();
+    const password = document.getElementById('loginPassword').value;
 
-    if(u===ADMIN_USERNAME && p===ADMIN_PASSWORD){
-        isAdmin=true; isViewer=false; isLoggedIn=true;
-        saveSession('admin');
-        applyAuthUI();
-        hideModal('loginModal');
-        showSuccessMessage('✅ Yönetici girişi başarılı!');
-    } else if(u===VIEWER_USERNAME && p===VIEWER_PASSWORD){
-        isAdmin=false; isViewer=true; isLoggedIn=true;
-        saveSession('viewer');
-        applyAuthUI();
-        hideModal('loginModal');
-        showSuccessMessage('👁️ İzleyici modu aktif!');
-    } else {
+    // Kullanıcı adını sahte e-postaya çevir
+    const loginEmail = username.includes('@') ? username : `${username}@atti.local`;
+
+    // Supabase ile giriş yap
+    const { data, error } = await supabaseClient.auth.signInWithPassword({
+        email: loginEmail,
+        password: password
+    });
+
+    if (error) {
+        // Giriş başarısız
         document.getElementById('loginError').classList.remove('hidden');
+        return;
     }
+
+    // Giriş başarılı, kullanıcının rolünü oku
+    const roles = data.user.app_metadata?.roles || [];
+    isAdmin = roles.includes('admin');
+    isViewer = roles.includes('viewer');
+
+    // Eğer kullanıcının hiçbir rolü yoksa varsayılan olarak izleyici yap
+    if (!isAdmin && !isViewer) {
+        isViewer = true;
+    }
+
+    isLoggedIn = true;
+
+    // Oturumu kaydet ve arayüzü güncelle
+    saveSession(isAdmin ? 'admin' : 'viewer');
+    applyAuthUI();
+    hideModal('loginModal');
+    showSuccessMessage(isAdmin ? '✅ Yönetici girişi başarılı!' : '👁️ İzleyici modu aktif!');
 }
 function handleLogout(){
     if(!confirm('Çıkış yapmak istediğinize emin misiniz?'))return;
