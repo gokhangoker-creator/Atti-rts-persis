@@ -6,6 +6,7 @@
 <title>ATTİ Raylı Sistem</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 .fade-in{animation:fadeIn .3s}.card-hover{transition:all .3s}.card-hover:hover{transform:translateY(-5px);box-shadow:0 20px 25px -5px rgba(0,0,0,.1)}
 .gradient-bg{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%)}
@@ -1671,6 +1672,13 @@ body.viewer-mode #loginModal *{pointer-events:auto!important;opacity:1!important
 </div>
 </div>
 <script>
+// ==================== SUPABASE BAĞLANTISI ====================
+const SUPABASE_URL = 'https://ekeujtmvkhrnbkjlccjy.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_M1GQnYxnWiyc6S6MKz7HMw_IiF2wAol';
+
+const { createClient } = supabase;
+const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+// ==============================================================
 if (typeof pdfjsLib !== 'undefined') {
     pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 }
@@ -1850,8 +1858,60 @@ function idbGet(key){return openDatabase().then(db=>new Promise((res,rej)=>{cons
 let saveInFlight=false,pendingSave=false,saveDebounceTimer=null;
 function setSyncStatus(state){const el=document.getElementById('syncStatus');if(!el)return;const map={saving:{text:'⏳ Kaydediliyor...',cls:'text-yellow-200'},saved:{text:'✅ Kaydedildi',cls:'text-green-200'},error:{text:'⚠️ Hata',cls:'text-red-200'},loading:{text:'⏳ Yükleniyor...',cls:'text-blue-200'}};const i=map[state]||map.saved;el.textContent=i.text;el.className='text-xs font-medium '+i.cls;}
 function saveToLocalStorage(){clearTimeout(saveDebounceTimer);saveDebounceTimer=setTimeout(()=>{persistData()},300);}
-async function persistData(){if(saveInFlight){pendingSave=true;return}saveInFlight=true;setSyncStatus('saving');const payload={data,lastUpdated:new Date().toISOString()};try{await idbSet(RECORD_KEY,payload);setSyncStatus('saved');}catch(e){try{localStorage.setItem('rts_takip_backup',JSON.stringify(payload));setSyncStatus('saved');}catch(e2){setSyncStatus('error');}}finally{saveInFlight=false;if(pendingSave){pendingSave=false;persistData();}}}
-async function loadFromLocalStorage(){setSyncStatus('loading');try{const p=await idbGet(RECORD_KEY);if(p&&p.data){data=p.data;migrateData();setSyncStatus('saved');return true;}}catch(e){}try{const b=localStorage.getItem('rts_takip_backup');if(b){const p=JSON.parse(b);if(p.data){data=p.data;migrateData();setSyncStatus('saved');return true;}}}catch(e){}setSyncStatus('error');return false;}
+async function persistData(){
+    if(saveInFlight){pendingSave=true;return}
+    saveInFlight=true;
+    setSyncStatus('saving');
+    try{
+        const {error}=await supabaseClient
+            .from('rts_takip')
+            .update({data:data,last_updated:new Date().toISOString()})
+            .eq('id',1);
+        if(error)throw error;
+        setSyncStatus('saved');
+    }catch(e){
+        console.error('Supabase kaydetme hatası:',e);
+        // Yedek olarak localStorage'a da kaydet
+        try{localStorage.setItem('rts_takip_backup',JSON.stringify({data,lastUpdated:new Date().toISOString()}));setSyncStatus('saved');}catch(e2){setSyncStatus('error');}
+    }finally{
+        saveInFlight=false;
+        if(pendingSave){pendingSave=false;persistData();}
+    }
+}
+async function loadFromLocalStorage(){
+    setSyncStatus('loading');
+    try{
+        const {data:supabaseData,error}=await supabaseClient
+            .from('rts_takip')
+            .select('data')
+            .eq('id',1)
+            .single();
+        if(error)throw error;
+        if(supabaseData&&supabaseData.data&&Object.keys(supabaseData.data).length>0){
+            data=supabaseData.data;
+            migrateData();
+            setSyncStatus('saved');
+            return true;
+        }
+    }catch(e){
+        console.error('Supabase yükleme hatası:',e);
+    }
+    // Supabase'den yüklenemezse localStorage yedeğinden dene
+    try{
+        const b=localStorage.getItem('rts_takip_backup');
+        if(b){
+            const p=JSON.parse(b);
+            if(p.data){
+                data=p.data;
+                migrateData();
+                setSyncStatus('saved');
+                return true;
+            }
+        }
+    }catch(e){}
+    setSyncStatus('error');
+    return false;
+}
 function convertClothingToStatusBased(c){if(c.stockByStatus&&c.gender){if(!c.season)c.season='tum';return c;}const newC={name:c.name,type:c.type,specifications:c.specifications,season:c.season||'tum',gender:c.gender||'U',stockByStatus:{}};if(c.genders){const hasE=c.genders['E']&&c.genders['E'].sizes&&Object.keys(c.genders['E'].sizes).length>0;const hasK=c.genders['K']&&c.genders['K'].sizes&&Object.keys(c.genders['K'].sizes).length>0;if(hasE&&hasK){newC.gender='E';newC.stockByStatus['Aktif']={genders:{'E':JSON.parse(JSON.stringify(c.genders['E'])),'K':{sizes:{}}}};}else if(hasE){newC.gender='E';newC.stockByStatus['Aktif']={genders:{'E':JSON.parse(JSON.stringify(c.genders['E'])),'K':{sizes:{}}}};}else if(hasK){newC.gender='K';newC.stockByStatus['Aktif']={genders:{'K':JSON.parse(JSON.stringify(c.genders['K'])),'E':{sizes:{}}}};}else{newC.gender='U';newC.stockByStatus['Aktif']={genders:{'E':{sizes:{}},'K':{sizes:{}}}};}}else{newC.stockByStatus['Aktif']={genders:{'E':{sizes:{}},'K':{sizes:{}}}};}data.statuses.forEach(s=>{if(!newC.stockByStatus[s])newC.stockByStatus[s]={genders:{'E':{sizes:{}},'K':{sizes:{}}}};});return newC;}
 function migrateData(){
     if(!data.certificates)data.certificates=[];
