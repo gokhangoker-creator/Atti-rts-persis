@@ -194,6 +194,11 @@ body.viewer-mode #loginModal *{pointer-events:auto!important;opacity:1!important
 .completer-tag.external{background:#fef3c7;color:#92400e;border-color:#fcd34d}
 .completer-tag.personnel{background:#dbeafe;color:#1e40af;border-color:#93c5fd}
 .completer-tag.responsible{background:#ddd6fe;color:#5b21b6;border-color:#a78bfa}
+.completer-tag.not-joined{background:#fee2e2;color:#991b1b;border-color:#fca5a5}
+.completer-suggestion-item{display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:8px;cursor:pointer;font-size:13px;background:#fff;border:2px solid #e9d5ff;margin-bottom:6px;transition:all .15s}
+.completer-suggestion-item:hover{background:#faf5ff;border-color:#a855f7;transform:translateX(2px)}
+.completer-suggestion-item.selected{background:#f0fdf4;border-color:#86efac}
+.completer-suggestion-item.selected:hover{background:#dcfce7}
 .task-completers-display{display:flex;flex-wrap:wrap;gap:2px;justify-content:center}
 .report-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;background:linear-gradient(135deg,#3b82f6 0%,#6366f1 100%);color:#fff;border:none;transition:all .2s;box-shadow:0 2px 6px rgba(59,130,246,.3)}
 .report-btn:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(59,130,246,.5)}
@@ -341,8 +346,12 @@ body.viewer-mode #loginModal *{pointer-events:auto!important;opacity:1!important
 
 @media print{
     @page{margin:1.5cm}
-    body.print-landscape @page{size:A4 landscape}
-    body.print-portrait @page{size:A4 portrait}
+    @page {
+    size: A4 landscape;
+}
+    @page {
+    size: A4 landscape;
+}
     body *{visibility:hidden!important}
     #printPreviewModal,#printPreviewModal *{visibility:visible!important}
     #printPreviewModal{position:absolute!important;left:0;top:0;width:100%;background:#fff!important}
@@ -645,9 +654,9 @@ body.viewer-mode #loginModal *{pointer-events:auto!important;opacity:1!important
 <div class="overflow-x-auto border-2 border-green-200 rounded-lg max-h-96 overflow-y-auto">
 <table class="task-table" id="completedTaskTable">
 <thead class="sticky top-0"><tr>
-<th style="width:15%;">Görev Adı</th><th style="width:8%;">Birim</th><th style="width:10%;">Sorumlular</th><th style="width:9%;text-align:center;">Verilme</th><th style="width:9%;text-align:center;">Tamamlanma</th><th style="width:7%;text-align:center;">Periyot</th><th style="width:7%;text-align:center;">Durum</th><th style="width:11%;text-align:center;">İşaretleyen</th><th style="width:16%;text-align:center;">Yapanlar</th><th style="width:8%;text-align:center;">İşlem</th>
+<th style="width:15%;">Görev Adı</th><th style="width:8%;">Birim</th><th style="width:10%;">Sorumlular</th><th style="width:9%;text-align:center;">Verilme</th><th style="width:9%;text-align:center;">Tamamlanma</th><th style="width:7%;text-align:center;">Periyot</th><th style="width:7%;text-align:center;">Durum</th><th style="width:11%;text-align:center;">İşaretleyen</th><th style="width:12%;text-align:center;">Yapanlar</th><th style="width:12%;text-align:center;">Katılmayanlar</th><th style="width:8%;text-align:center;">Rapor</th><th style="width:8%;text-align:center;">İşlem</th>
 </tr></thead>
-<tbody id="completedTaskTableBody"><tr><td colspan="10" class="text-center py-6 text-gray-500 text-sm">Henüz tamamlanan görev yok</td></tr></tbody>
+<tbody id="completedTaskTableBody"><tr><td colspan="12" class="text-center py-6 text-gray-500 text-sm">Henüz tamamlanan görev yok</td></tr></tbody>
 </table>
 </div>
 </div>
@@ -710,7 +719,7 @@ body.viewer-mode #loginModal *{pointer-events:auto!important;opacity:1!important
 <h4 class="font-semibold mb-3 text-gray-700">📋 Görev Şablonları <span class="text-xs bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full font-bold" id="taskTemplateCount">0</span></h4>
 <div class="overflow-x-auto max-h-80 overflow-y-auto border-2 border-purple-200 rounded-lg">
 <table class="task-table" id="taskTemplateTable">
-<thead><tr><th style="width:35%;">Görev Adı</th><th style="width:20%;">Birim</th><th style="width:25%;">Sorumlular</th><th style="width:12%;text-align:center;">Periyot</th><th style="width:8%;text-align:center;">İşlem</th></tr></thead>
+<thead><tr><th style="width:30%;">Görev Adı</th><th style="width:18%;">Birim</th><th style="width:22%;">Sorumlular</th><th style="width:10%;text-align:center;">Periyot</th><th style="width:10%;text-align:center;">Rapor</th><th style="width:10%;text-align:center;">İşlem</th></tr></thead>
 <tbody id="taskTemplateTableBody"><tr><td colspan="5" class="text-center py-6 text-gray-500 text-sm">Henüz görev şablonu yok</td></tr></tbody>
 </table>
 </div>
@@ -1227,6 +1236,7 @@ body.viewer-mode #loginModal *{pointer-events:auto!important;opacity:1!important
 <div class="flex gap-2 mb-0 flex-wrap">
 <button id="reportTabBtn_range" onclick="switchReportTab('range')" class="report-tab-btn active">📅 Tarih Aralığı</button>
 <button id="reportTabBtn_monthly" onclick="switchReportTab('monthly')" class="report-tab-btn">🗓️ Aylık Rapor</button>
+<button id="reportTabBtn_stats" onclick="switchReportTab('stats')" class="report-tab-btn">📊 İstatistik Raporu</button>
 </div>
 <div id="reportTab_range" class="report-content-tab">
 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
@@ -1258,6 +1268,48 @@ body.viewer-mode #loginModal *{pointer-events:auto!important;opacity:1!important
 </div>
 <div class="flex gap-2 justify-end"><button onclick="generateMonthlyReport()" class="bg-purple-600 text-white px-6 py-3 rounded-lg font-bold">📊 Rapor Oluştur</button></div>
 </div>
+
+<!-- ==================== İSTATİSTİK RAPORU SEKMESİ ==================== -->
+<div id="reportTab_stats" class="report-content-tab hidden">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+<div class="bg-blue-50 rounded-lg p-4 border-2 border-blue-200"><label class="block text-sm font-bold text-blue-900 mb-2">📅 Başlangıç Tarihi</label><input type="date" id="statsStartDate" class="w-full border-2 border-blue-300 rounded-lg px-4 py-3 bg-white text-sm"></div>
+<div class="bg-blue-50 rounded-lg p-4 border-2 border-blue-200"><label class="block text-sm font-bold text-blue-900 mb-2">📅 Bitiş Tarihi</label><input type="date" id="statsEndDate" class="w-full border-2 border-blue-300 rounded-lg px-4 py-3 bg-white text-sm"></div>
+</div>
+<div class="bg-indigo-50 rounded-lg p-3 mb-4 border-2 border-indigo-200">
+<label class="block text-sm font-bold text-indigo-900 mb-2">🔍 Filtrele</label>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+<div>
+<label class="block text-xs font-bold text-indigo-800 mb-1">🏢 Birim</label>
+<select id="statsDepartmentFilter" class="w-full border-2 border-indigo-300 rounded-lg px-3 py-2 bg-white text-sm font-semibold">
+<option value="">-- Tüm Birimler --</option>
+</select>
+</div>
+<div>
+<label class="block text-xs font-bold text-indigo-800 mb-1">👤 Kişi (Opsiyonel)</label>
+<select id="statsPersonFilter" class="w-full border-2 border-indigo-300 rounded-lg px-3 py-2 bg-white text-sm font-semibold">
+<option value="">-- Tüm Personel --</option>
+</select>
+</div>
+</div>
+<div class="flex gap-2 mt-3 flex-wrap">
+<button onclick="setStatsDateQuick('thisMonth')" class="text-xs bg-white border-2 border-indigo-300 text-indigo-800 px-3 py-1 rounded-lg font-bold hover:bg-indigo-100">📅 Bu Ay</button>
+<button onclick="setStatsDateQuick('lastMonth')" class="text-xs bg-white border-2 border-indigo-300 text-indigo-800 px-3 py-1 rounded-lg font-bold hover:bg-indigo-100">📅 Geçen Ay</button>
+<button onclick="setStatsDateQuick('thisYear')" class="text-xs bg-white border-2 border-indigo-300 text-indigo-800 px-3 py-1 rounded-lg font-bold hover:bg-indigo-100">📅 Bu Yıl</button>
+<button onclick="setStatsDateQuick('lastYear')" class="text-xs bg-white border-2 border-indigo-300 text-indigo-800 px-3 py-1 rounded-lg font-bold hover:bg-indigo-100">📅 Geçen Yıl</button>
+<button onclick="setStatsDateQuick('clear')" class="text-xs bg-red-100 border-2 border-red-300 text-red-800 px-3 py-1 rounded-lg font-bold hover:bg-red-200">🗑️ Temizle</button>
+</div>
+</div>
+<div class="bg-green-50 rounded-lg p-3 mb-4 border-2 border-green-200">
+<label class="block text-sm font-bold text-green-900 mb-2">📋 İstatistik Kapsamı</label>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-2">
+<label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" id="statsIncludeAssigned" checked class="w-4 h-4"><span class="text-sm">Alınan görevler</span></label>
+<label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" id="statsIncludeCompleted" checked class="w-4 h-4"><span class="text-sm">Tamamlanan görevler</span></label>
+<label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" id="statsIncludeNotJoined" checked class="w-4 h-4"><span class="text-sm">Katılmayanlar</span></label>
+</div>
+</div>
+<div class="flex gap-2 justify-end"><button onclick="generateStatsReport()" class="bg-indigo-600 text-white px-6 py-3 rounded-lg font-bold">📊 İstatistik Raporu Oluştur</button></div>
+</div>
+
 <div id="reportPreviewArea" class="mt-4 hidden">
 <div class="bg-gray-50 rounded-lg p-4 border-2 border-gray-200 max-h-[50vh] overflow-y-auto" id="reportPreviewContent"></div>
 <div class="flex gap-2 justify-end mt-3 flex-wrap">
@@ -1642,7 +1694,7 @@ body.viewer-mode #loginModal *{pointer-events:auto!important;opacity:1!important
 </div>
 <div class="bg-purple-50 rounded-lg p-4 mb-4 border-2 border-purple-300">
 <h4 class="font-bold text-purple-900 mb-3 text-sm flex items-center gap-2"><span class="w-6 h-6 rounded-full bg-purple-600 text-white flex items-center justify-center text-xs">2</span>Personel Listesinden Ekle</h4>
-<div class="mb-2"><input type="text" id="taskCompleterPersonnelSearch" placeholder="🔍 Personel ara..." class="w-full border-2 border-purple-300 rounded-lg px-3 py-2 text-sm" oninput="filterCompleterPersonnelList()"></div>
+<div class="mb-2"><input type="text" id="taskCompleterPersonnelSearch" placeholder="✍️ Personel adı yazın, öneriler açılacak..." class="w-full border-2 border-purple-300 rounded-lg px-3 py-2 text-sm" oninput="filterCompleterPersonnelList()" autocomplete="off"></div>
 <div id="taskCompleterPersonnelList" class="space-y-2 max-h-48 overflow-y-auto"></div>
 </div>
 <div class="bg-amber-50 rounded-lg p-4 mb-4 border-2 border-amber-300">
@@ -1654,6 +1706,29 @@ body.viewer-mode #loginModal *{pointer-events:auto!important;opacity:1!important
 <h4 class="font-bold text-gray-800 mb-2 text-sm">📋 Seçilenler:</h4>
 <div id="taskCompleterSummary" class="flex flex-wrap gap-1 min-h-[36px] items-center"><span class="text-gray-400 text-xs italic">Henüz kimse seçilmedi</span></div>
 </div>
+<!-- GÖREV RAPORU / KONTROL FORMU -->
+<div id="taskCompletionReportSection" class="bg-blue-50 rounded-lg p-4 mb-4 border-2 border-blue-400 hidden">
+<h4 class="font-bold text-blue-900 mb-3 text-sm flex items-center gap-2">
+<span class="w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center text-xs">📎</span>
+Görev Raporu / Kontrol Formu <span class="text-red-600">*</span>
+</h4>
+<div class="bg-white rounded-lg p-3 border-2 border-blue-300 mb-3">
+<div class="text-xs text-blue-800 mb-2"><strong>ℹ️ Bilgi:</strong> Bu görev için rapor formu yüklenmesi <strong>zorunludur</strong>.</div>
+<input type="file" id="taskCompletionReportFile" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.xls,.xlsx" class="w-full text-sm border-2 border-blue-300 rounded-lg p-2 bg-white">
+<div class="text-xs text-gray-500 mt-2">📄 İzin verilen: PDF, DOC, DOCX, JPG, PNG, XLS, XLSX (Maks. 5 MB)</div>
+</div>
+<div id="taskCompletionReportFileInfo" class="hidden bg-green-50 rounded-lg p-3 border-2 border-green-300 mb-3">
+<div class="flex items-center justify-between gap-2 flex-wrap">
+<div class="flex items-center gap-2 text-sm text-green-800 font-bold">
+<span>✅</span>
+<span id="taskCompletionReportFileName">-</span>
+<span class="text-xs text-gray-500" id="taskCompletionReportFileSize">-</span>
+</div>
+<button type="button" onclick="downloadTaskCompletionReport()" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-lg text-xs font-bold">⬇️ İndir</button>
+</div>
+</div>
+</div>
+
 <div class="mb-4"><label class="block text-sm font-bold text-gray-700 mb-1">📝 Not (Opsiyonel)</label><textarea id="taskCompletionNote" rows="2" placeholder="Görevle ilgili not..." class="w-full border-2 border-gray-200 rounded-lg px-3 py-2 text-sm"></textarea></div>
 <div class="flex justify-end space-x-3 pt-3 border-t-2 border-gray-200"><button onclick="hideModal('taskCompletionModal')" class="px-6 py-2 text-gray-600 font-medium">İptal</button><button onclick="confirmTaskCompletion()" class="px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-lg font-bold">✅ Görevi Tamamla</button></div>
 </div>
@@ -1938,19 +2013,49 @@ body.viewer-mode #loginModal *{pointer-events:auto!important;opacity:1!important
 
 <!-- ==================== GÖREV MODALLARI ==================== -->
 <div id="addTaskTemplateModal" class="modal hidden fixed inset-0 bg-black bg-opacity-50 items-center justify-center z-50">
-<div class="bg-white rounded-xl p-6 w-[600px] shadow-2xl relative max-h-[90vh] overflow-y-auto">
+<div class="bg-white rounded-xl p-6 w-[750px] max-w-[97vw] shadow-2xl relative max-h-[92vh] overflow-y-auto">
 <button onclick="hideModal('addTaskTemplateModal')" class="absolute top-4 right-4 text-gray-400 text-2xl font-bold">✕</button>
 <h3 class="text-xl font-bold mb-4 text-center">📌 Yeni Görev Şablonu</h3>
 <input type="text" id="taskTemplateNameInput" placeholder="Görev adı *" class="w-full border-2 border-gray-200 rounded-lg px-4 py-3 mb-3">
 <select id="taskTemplateDepartmentSelect" class="w-full border-2 border-gray-200 rounded-lg px-4 py-3 mb-3" onchange="onTaskTemplateDepartmentChange()"><option value="">-- Birim Seçin --</option></select>
 <input type="number" id="taskTemplatePeriodInput" placeholder="Periyot (gün) *" class="w-full border-2 border-gray-200 rounded-lg px-4 py-3 mb-3">
-<div class="mb-3"><label class="block text-sm font-bold mb-2">Sorumlu Kişiler <span class="text-purple-600" id="taskTemplateSelectedPersonCount">0</span></label><div id="taskTemplatePersonList" class="person-checkbox-list"><div class="text-center py-4 text-gray-400 text-sm">Önce birim seçin</div></div></div>
+<label class="flex items-center gap-2 bg-blue-50 px-4 py-3 rounded-lg border-2 border-blue-300 cursor-pointer mb-4">
+<input type="checkbox" id="taskTemplateRequireReport" class="w-5 h-5 cursor-pointer accent-blue-600">
+<span class="text-sm font-bold text-blue-900">📎 Görev Raporu / Kontrol Formu İstenecek</span>
+</label>
+
+<!-- 1. SORUMLU KİŞİLER -->
+<div class="bg-green-50 rounded-lg p-4 mb-4 border-2 border-green-300">
+<h4 class="font-bold text-green-900 mb-3 text-sm flex items-center gap-2"><span class="w-6 h-6 rounded-full bg-green-600 text-white flex items-center justify-center text-xs">1</span>Sorumlu Kişiler <span class="text-green-600 ml-1" id="taskTemplateSelectedPersonCount">(0)</span></h4>
+<div id="taskTemplatePersonList" class="person-checkbox-list bg-white"><div class="text-center py-4 text-gray-400 text-sm">Önce birim seçin</div></div>
+</div>
+
+<!-- 2. PERSONEL LİSTESİNDEN EKLE -->
+<div class="bg-purple-50 rounded-lg p-4 mb-4 border-2 border-purple-300">
+<h4 class="font-bold text-purple-900 mb-3 text-sm flex items-center gap-2"><span class="w-6 h-6 rounded-full bg-purple-600 text-white flex items-center justify-center text-xs">2</span>Personel Listesinden Ekle</h4>
+<div class="mb-2"><input type="text" id="templateCompleterPersonnelSearch" placeholder="✍️ Personel adı yazın, öneriler açılacak..." class="w-full border-2 border-purple-300 rounded-lg px-3 py-2 text-sm" oninput="filterTemplateCompleterPersonnelList()" autocomplete="off"></div>
+<div id="templateCompleterPersonnelList" class="space-y-2 max-h-48 overflow-y-auto"><div class="text-center py-3 text-gray-500 text-sm bg-white rounded border-2 border-dashed border-gray-300">✍️ Yazmaya başlayın, öneriler burada görünecek...</div></div>
+</div>
+
+<!-- 3. DIŞARIDAN KATILAN -->
+<div class="bg-amber-50 rounded-lg p-4 mb-4 border-2 border-amber-300">
+<h4 class="font-bold text-amber-900 mb-3 text-sm flex items-center gap-2"><span class="w-6 h-6 rounded-full bg-amber-600 text-white flex items-center justify-center text-xs">3</span>Dışarıdan Katılan</h4>
+<div class="flex gap-2 mb-2"><input type="text" id="templateCompleterExternalInput" placeholder="Ad Soyad yazın..." class="flex-1 border-2 border-amber-300 rounded-lg px-3 py-2 text-sm" onkeydown="if(event.key==='Enter')addTemplateExternalCompleter()"><button onclick="addTemplateExternalCompleter()" class="bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded-lg font-bold text-sm whitespace-nowrap">➕ Ekle</button></div>
+<div id="templateCompleterExternalList" class="flex flex-wrap gap-1 mt-2"></div>
+</div>
+
+<!-- SEÇİLENLER ÖZETİ -->
+<div class="bg-gray-50 rounded-lg p-3 mb-4 border-2 border-gray-300">
+<h4 class="font-bold text-gray-800 mb-2 text-sm">📋 Seçilenler:</h4>
+<div id="templateCompleterSummary" class="flex flex-wrap gap-1 min-h-[36px] items-center"><span class="text-gray-400 text-xs italic">Henüz kimse seçilmedi</span></div>
+</div>
+
 <div class="flex justify-end space-x-3"><button onclick="hideModal('addTaskTemplateModal')" class="px-6 py-2 text-gray-600">İptal</button><button onclick="saveTaskTemplate()" class="px-6 py-2 bg-violet-500 text-white rounded-lg">Kaydet</button></div>
 </div>
 </div>
 
 <div id="addNewTaskModal" class="modal hidden fixed inset-0 bg-black bg-opacity-50 items-center justify-center z-50">
-<div class="bg-white rounded-xl p-6 w-[600px] shadow-2xl relative max-h-[90vh] overflow-y-auto">
+<div class="bg-white rounded-xl p-6 w-[750px] max-w-[97vw] shadow-2xl relative max-h-[92vh] overflow-y-auto">
 <button onclick="hideModal('addNewTaskModal')" class="absolute top-4 right-4 text-gray-400 text-2xl font-bold">✕</button>
 <h3 class="text-xl font-bold mb-4 text-center">📌 Yeni Görev Oluştur</h3>
 <input type="text" id="newTaskNameInput" placeholder="Görev adı *" class="w-full border-2 border-gray-200 rounded-lg px-4 py-3 mb-3">
@@ -1958,7 +2063,38 @@ body.viewer-mode #loginModal *{pointer-events:auto!important;opacity:1!important
 <input type="number" id="newTaskPeriodInput" placeholder="Periyot (gün) *" class="w-full border-2 border-gray-200 rounded-lg px-4 py-3 mb-3">
 <input type="date" id="newTaskAssignmentDate" class="w-full border-2 border-gray-200 rounded-lg px-4 py-3 mb-3">
 <textarea id="newTaskNote" rows="2" placeholder="Not" class="w-full border-2 border-gray-200 rounded-lg px-4 py-3 mb-3"></textarea>
-<div class="mb-3"><label class="block text-sm font-bold mb-2">Sorumlu Kişiler <span class="text-blue-600" id="newTaskSelectedPersonCount">0</span></label><div id="newTaskPersonList" class="person-checkbox-list"><div class="text-center py-4 text-gray-400 text-sm">Önce birim seçin</div></div></div>
+
+<label class="flex items-center gap-2 bg-blue-50 px-4 py-3 rounded-lg border-2 border-blue-300 cursor-pointer mb-4">
+<input type="checkbox" id="newTaskRequireReport" class="w-5 h-5 cursor-pointer accent-blue-600">
+<span class="text-sm font-bold text-blue-900">📎 Görev Raporu / Kontrol Formu İstenecek</span>
+</label>
+
+<!-- 1. SORUMLU KİŞİLER -->
+<div class="bg-green-50 rounded-lg p-4 mb-4 border-2 border-green-300">
+<h4 class="font-bold text-green-900 mb-3 text-sm flex items-center gap-2"><span class="w-6 h-6 rounded-full bg-green-600 text-white flex items-center justify-center text-xs">1</span>Sorumlu Kişiler <span class="text-green-600 ml-1" id="newTaskSelectedPersonCount">(0)</span></h4>
+<div id="newTaskPersonList" class="person-checkbox-list bg-white"><div class="text-center py-4 text-gray-400 text-sm">Önce birim seçin</div></div>
+</div>
+
+<!-- 2. PERSONEL LİSTESİNDEN EKLE -->
+<div class="bg-purple-50 rounded-lg p-4 mb-4 border-2 border-purple-300">
+<h4 class="font-bold text-purple-900 mb-3 text-sm flex items-center gap-2"><span class="w-6 h-6 rounded-full bg-purple-600 text-white flex items-center justify-center text-xs">2</span>Personel Listesinden Ekle</h4>
+<div class="mb-2"><input type="text" id="newTaskCompleterPersonnelSearch" placeholder="✍️ Personel adı yazın, öneriler açılacak..." class="w-full border-2 border-purple-300 rounded-lg px-3 py-2 text-sm" oninput="filterNewTaskCompleterPersonnelList()" autocomplete="off"></div>
+<div id="newTaskCompleterPersonnelList" class="space-y-2 max-h-48 overflow-y-auto"><div class="text-center py-3 text-gray-500 text-sm bg-white rounded border-2 border-dashed border-gray-300">✍️ Yazmaya başlayın, öneriler burada görünecek...</div></div>
+</div>
+
+<!-- 3. DIŞARIDAN KATILAN -->
+<div class="bg-amber-50 rounded-lg p-4 mb-4 border-2 border-amber-300">
+<h4 class="font-bold text-amber-900 mb-3 text-sm flex items-center gap-2"><span class="w-6 h-6 rounded-full bg-amber-600 text-white flex items-center justify-center text-xs">3</span>Dışarıdan Katılan</h4>
+<div class="flex gap-2 mb-2"><input type="text" id="newTaskCompleterExternalInput" placeholder="Ad Soyad yazın..." class="flex-1 border-2 border-amber-300 rounded-lg px-3 py-2 text-sm" onkeydown="if(event.key==='Enter')addNewTaskExternalCompleter()"><button onclick="addNewTaskExternalCompleter()" class="bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded-lg font-bold text-sm whitespace-nowrap">➕ Ekle</button></div>
+<div id="newTaskCompleterExternalList" class="flex flex-wrap gap-1 mt-2"></div>
+</div>
+
+<!-- SEÇİLENLER ÖZETİ -->
+<div class="bg-gray-50 rounded-lg p-3 mb-4 border-2 border-gray-300">
+<h4 class="font-bold text-gray-800 mb-2 text-sm">📋 Seçilenler:</h4>
+<div id="newTaskCompleterSummary" class="flex flex-wrap gap-1 min-h-[36px] items-center"><span class="text-gray-400 text-xs italic">Henüz kimse seçilmedi</span></div>
+</div>
+
 <div class="flex justify-end space-x-3"><button onclick="hideModal('addNewTaskModal')" class="px-6 py-2 text-gray-600">İptal</button><button onclick="saveNewTask()" class="px-6 py-2 bg-blue-500 text-white rounded-lg">Kaydet</button></div>
 </div>
 </div>
@@ -2036,6 +2172,8 @@ let selectedKkds=[],selectedClothing=[],selectedTrainings=[],selectedCertificate
 let renewalContext=null,currentPersonnelStatusForClothing='',currentClothingSeasonTab='all';
 let expandedPendingPersonnel=new Set(),expandedDistributionPersonnel=new Set();
 let selectedTaskTemplatePersons=[],selectedNewTaskPersons=[];
+let selectedNewTaskCompleters={responsible:[],personnel:[],external:[]};
+let selectedTaskTemplateCompleters={responsible:[],personnel:[],external:[]};
 let pendingFilters={personnel:[],department:[],status:[],itemCount:[]},activePendingFilterPopup=null;
 let mykBelgesiVarDurum=false;
 let mykMuafDurum=false;
@@ -2048,6 +2186,9 @@ let listeGoruntuleAktifTur='';
 let currentActiveTaskFilter='buay';
 let taskCompletionContext=null;
 let selectedTaskCompleters={responsible:[],personnel:[],external:[]};
+let taskCompletionReportFileData=null;
+let taskCompletionReportFileName='';
+let taskCompletionReportFileType='';
 let currentReportPreviewHTML='';
 let currentReportTab='range';
 
@@ -2754,7 +2895,23 @@ function openPrintPreview(title,meta,innerHtml){
 function closePrintPreview(){hideModal('printPreviewModal');}
 function showSection(name,ev){document.querySelectorAll('.section').forEach(s=>s.classList.add('hidden'));const t=document.getElementById(name);if(t)t.classList.remove('hidden');document.querySelectorAll('.nav-btn').forEach(b=>{b.classList.remove('border-indigo-600','text-indigo-600','bg-indigo-50');b.classList.add('text-gray-700','border-transparent')});if(ev&&ev.target){const btn=ev.target.closest('button');if(btn){btn.classList.remove('text-gray-700','border-transparent');btn.classList.add('border-indigo-600','text-indigo-600','bg-indigo-50');}}if(name==='personnel'){updatePersonnelTable();}if(name==='stock'){updateStockTables();updatePendingTables();updateDistributionHistory();}if(name==='settings'){updateTrainingList();updateClothingList();updateCertificateList();updateTaskTemplateTable();updateDepartmentDropdowns();updateMykStatus();updateLiseMuafiyetStatus();updateUstalikMuafiyetStatus();updateOnlisansMuafiyetStatus();updateLisansMuafiyetStatus();renderGorevTanimListesi();populateGorevTanimPersonelDropdown();populateGorevTanimSablonDropdown();}if(name==='training'){updateTrainingStats();updateCertificateStats();updateUpcomingTrainings();updateTrainingList();updateTrainingListDisplay();}if(name==='tasks'){updateTaskPage();}if(name==='home'){updateUpcomingTrainings();updateHomeActiveTasks();}}
 
-function normalize(s){if(!s)return '';return s.toString().toLowerCase().replace(/İ/g,'i').replace(/I/g,'ı').replace(/[çÇ]/g,'c').replace(/[ğĞ]/g,'g').replace(/[ıİ]/g,'i').replace(/[öÖ]/g,'o').replace(/[şŞ]/g,'s').replace(/[üÜ]/g,'u').replace(/\(seviye\s*\d+\)/g,'').replace(/\(\s*seviye\s*\d+\s*\)/gi,'').replace(/\s+/g,' ').trim();}
+function normalize(s){
+    if(!s)return '';
+    return s.toString()
+        .replace(/İ/g, 'i')      // Önce İ'yi değiştir
+        .replace(/I/g, 'ı')      // Sonra I'yi ı yap
+        .toLowerCase()
+        .replace(/[çÇ]/g,'c')
+        .replace(/[ğĞ]/g,'g')
+        .replace(/[ıİ]/g,'i')
+        .replace(/[öÖ]/g,'o')
+        .replace(/[şŞ]/g,'s')
+        .replace(/[üÜ]/g,'u')
+        .replace(/\(seviye\s*\d+\)/g,'')
+        .replace(/\s+/g,' ')
+        .trim()
+        .normalize('NFC');       // ← Sonda normalize et
+}
 function stripYkKodu(s){if(!s)return '';return s.toString().replace(/\b\d{2}[A-Z]{2}\d{4}-\d\b/g,'').replace(/\b\d{2}[A-Z]{2}\d{4}\b/g,'').replace(/[—\-–]+\s*/g,' ').replace(/\(seviye\s*\d+\)/gi,'').replace(/\s+/g,' ').trim();}
 function fiiliGorevdenYkKodu(fiiliGorev){if(!fiiliGorev)return null;const m=fiiliGorev.match(/\b(\d{2}[A-Z]{2}\d{4}-\d)\b/);return m?m[1]:null;}
 function fiiliGorevMeslekAdi(fiiliGorev){if(!fiiliGorev)return '';return stripYkKodu(fiiliGorev);}
@@ -4903,19 +5060,446 @@ function updateDepartmentDropdowns(){
     const sel=document.getElementById('taskTemplateDepartmentSelect');if(sel){const cv=sel.value;sel.innerHTML='<option value="">-- Birim Seçin --</option>';data.departments.slice().sort((a,b)=>a.localeCompare(b,'tr')).forEach(d=>sel.innerHTML+='<option value="'+d+'">'+d+'</option>');sel.value=cv;}
     const sel2=document.getElementById('newTaskDepartmentSelect');if(sel2){const cv2=sel2.value;sel2.innerHTML='<option value="">-- Birim Seçin --</option>';data.departments.slice().sort((a,b)=>a.localeCompare(b,'tr')).forEach(d=>sel2.innerHTML+='<option value="'+d+'">'+d+'</option>');sel2.value=cv2;}
 }
-function openAddTaskTemplateModal(){if(!isAdmin){alert('❌ Yönetici girişi gerekli!');return}document.getElementById('taskTemplateNameInput').value='';document.getElementById('taskTemplateDepartmentSelect').value='';document.getElementById('taskTemplatePeriodInput').value='';selectedTaskTemplatePersons=[];document.getElementById('taskTemplateSelectedPersonCount').textContent='0';document.getElementById('taskTemplatePersonList').innerHTML='<div class="text-center py-4 text-gray-400 text-sm">Önce birim seçin</div>';updateDepartmentDropdowns();showModal('addTaskTemplateModal');}
-function onTaskTemplateDepartmentChange(){const dept=document.getElementById('taskTemplateDepartmentSelect').value;const list=document.getElementById('taskTemplatePersonList');selectedTaskTemplatePersons=[];document.getElementById('taskTemplateSelectedPersonCount').textContent='0';if(!dept){list.innerHTML='<div class="text-center py-4 text-gray-400 text-sm">Önce birim seçin</div>';return;}const persons=data.personnel.filter(p=>p.department===dept).slice().sort((a,b)=>a.name.localeCompare(b.name,'tr'));if(persons.length===0){list.innerHTML='<div class="text-center py-4 text-gray-400 text-sm">Bu birimde personel yok</div>';return;}list.innerHTML='';persons.forEach(p=>{list.innerHTML+='<label class="person-checkbox-item"><input type="checkbox" value="'+p.id+'" data-name="'+p.name.replace(/"/g,'&quot;')+'" onchange="onTaskTemplatePersonToggle(this)"> <span>👤 <strong>'+escapeHtml(p.name)+'</strong></span></label>';});}
-function onTaskTemplatePersonToggle(cb){const id=parseInt(cb.value);const name=cb.getAttribute('data-name');if(cb.checked){if(!selectedTaskTemplatePersons.some(x=>x.id===id))selectedTaskTemplatePersons.push({id,name});}else{selectedTaskTemplatePersons=selectedTaskTemplatePersons.filter(x=>x.id!==id);}document.getElementById('taskTemplateSelectedPersonCount').textContent=selectedTaskTemplatePersons.length;}
-function saveTaskTemplate(){if(!isAdmin){alert('❌ Yönetici girişi gerekli!');return}const name=document.getElementById('taskTemplateNameInput').value.trim();const dept=document.getElementById('taskTemplateDepartmentSelect').value;const period=parseInt(document.getElementById('taskTemplatePeriodInput').value);if(!name){alert('Görev adı girin!');return}if(!dept){alert('Sorumlu birim seçin!');return}if(selectedTaskTemplatePersons.length===0){alert('En az bir sorumlu kişi seçin!');return}if(!period||period<1){alert('Geçerli periyot girin!');return}data.taskTemplates.push({id:Date.now(),name:name,department:dept,persons:selectedTaskTemplatePersons.map(x=>({id:x.id,name:x.name})),period:period,createdAt:new Date().toISOString()});saveToLocalStorage();updateTaskTemplateTable();hideModal('addTaskTemplateModal');showSuccessMessage('✅ Şablon eklendi!');}
-function updateTaskTemplateTable(){const tbody=document.getElementById('taskTemplateTableBody');const countEl=document.getElementById('taskTemplateCount');if(!tbody)return;if(!data.taskTemplates||data.taskTemplates.length===0){tbody.innerHTML='<tr><td colspan="5" class="text-center py-6 text-gray-500 text-sm">Henüz görev şablonu yok</td></tr>';if(countEl)countEl.textContent='0';return;}if(countEl)countEl.textContent=data.taskTemplates.length;tbody.innerHTML='';data.taskTemplates.forEach(t=>{const personsHtml=t.persons.map(p=>'<span class="task-person-badge">👤 '+escapeHtml(p.name)+'</span>').join('');let periodText='';if(t.period===1)periodText='Her gün';else if(t.period===7)periodText='Haftalık';else if(t.period===30)periodText='Aylık';else if(t.period===365)periodText='Yıllık';else periodText=t.period+' gün';const btnHtml=isAdmin?'<button class="btn-del-task" onclick="deleteTaskTemplate('+t.id+')">🗑️</button>':'';tbody.innerHTML+='<tr><td class="font-semibold text-violet-900">📌 '+escapeHtml(t.name)+'</td><td><span class="px-2 py-1 bg-green-100 text-green-800 rounded text-xs font-bold">🏢 '+escapeHtml(t.department)+'</span></td><td>'+(personsHtml||'-')+'</td><td class="text-center"><span class="task-period-badge">🔄 '+periodText+'</span></td><td class="text-center">'+btnHtml+'</td></tr>';});}
+function openAddTaskTemplateModal(){
+    if(!isAdmin){alert('❌ Yönetici girişi gerekli!');return}
+    document.getElementById('taskTemplateNameInput').value='';
+    document.getElementById('taskTemplateDepartmentSelect').value='';
+    document.getElementById('taskTemplatePeriodInput').value='';
+    selectedTaskTemplatePersons=[];
+    selectedTaskTemplateCompleters={responsible:[],personnel:[],external:[]};
+    document.getElementById('taskTemplateSelectedPersonCount').textContent='(0)';
+    document.getElementById('taskTemplatePersonList').innerHTML='<div class="text-center py-4 text-gray-400 text-sm">Önce birim seçin</div>';
+    document.getElementById('templateCompleterPersonnelSearch').value='';
+    document.getElementById('templateCompleterPersonnelList').innerHTML='<div class="text-center py-3 text-gray-500 text-sm bg-white rounded border-2 border-dashed border-gray-300">✍️ Yazmaya başlayın, öneriler burada görünecek...</div>';
+    document.getElementById('templateCompleterExternalList').innerHTML='';
+document.getElementById('templateCompleterExternalInput').value='';
+document.getElementById('taskTemplateRequireReport').checked=false;
+updateTemplateCompleterSummary();
+    updateDepartmentDropdowns();
+    showModal('addTaskTemplateModal');
+}
+function onTaskTemplateDepartmentChange(){
+    const dept=document.getElementById('taskTemplateDepartmentSelect').value;
+    const list=document.getElementById('taskTemplatePersonList');
+    selectedTaskTemplatePersons=[];
+    selectedTaskTemplateCompleters.responsible=[];
+    document.getElementById('taskTemplateSelectedPersonCount').textContent='(0)';
+    if(!dept){list.innerHTML='<div class="text-center py-4 text-gray-400 text-sm">Önce birim seçin</div>';updateTemplateCompleterSummary();return;}
+    const persons=data.personnel.filter(p=>p.department===dept).slice().sort((a,b)=>a.name.localeCompare(b.name,'tr'));
+    if(persons.length===0){list.innerHTML='<div class="text-center py-4 text-gray-400 text-sm">Bu birimde personel yok</div>';updateTemplateCompleterSummary();return;}
+    list.innerHTML='';
+    persons.forEach(p=>{
+        list.innerHTML+='<label class="person-checkbox-item"><input type="checkbox" value="'+p.id+'" data-name="'+p.name.replace(/"/g,'&quot;')+'" onchange="onTaskTemplatePersonToggle(this)"> <span>👤 <strong>'+escapeHtml(p.name)+'</strong></span></label>';
+    });
+    updateTemplateCompleterSummary();
+}
+function onTaskTemplatePersonToggle(cb){
+    const id=parseInt(cb.value);
+    const name=cb.getAttribute('data-name');
+    if(cb.checked){
+        if(!selectedTaskTemplatePersons.some(x=>x.id===id))selectedTaskTemplatePersons.push({id,name});
+        if(!selectedTaskTemplateCompleters.responsible.some(x=>x.id===id))selectedTaskTemplateCompleters.responsible.push({id,name,type:'responsible'});
+    }else{
+        selectedTaskTemplatePersons=selectedTaskTemplatePersons.filter(x=>x.id!==id);
+        selectedTaskTemplateCompleters.responsible=selectedTaskTemplateCompleters.responsible.filter(x=>x.id!==id);
+    }
+    document.getElementById('taskTemplateSelectedPersonCount').textContent='('+selectedTaskTemplatePersons.length+')';
+    updateTemplateCompleterSummary();
+}
+// ==================== GÖREV ŞABLONU - PERSONEL LİSTESİNDEN EKLE (ÖNERİ) ====================
+function filterTemplateCompleterPersonnelList(){
+    const searchInput=document.getElementById('templateCompleterPersonnelSearch');
+    const list=document.getElementById('templateCompleterPersonnelList');
+    if(!list)return;
+    const searchTerm=(searchInput.value||'').trim();
+    if(!searchTerm){
+        list.innerHTML='<div class="text-center py-3 text-gray-500 text-sm bg-white rounded border-2 border-dashed border-gray-300">✍️ Yazmaya başlayın, öneriler burada görünecek...</div>';
+        return;
+    }
+    const responsibleIds=new Set(selectedTaskTemplateCompleters.responsible.map(x=>x.id));
+    const term=normalize(searchTerm);
+    let allPersonnel=(data.personnel||[]).filter(p=>!responsibleIds.has(p.id));
+    allPersonnel=allPersonnel.filter(p=>normalize(p.name).includes(term)||normalize(p.department||'').includes(term));
+    if(allPersonnel.length===0){
+        list.innerHTML='<div class="text-center py-3 text-gray-500 text-sm bg-white rounded border-2 border-dashed border-gray-300">Arama sonucu bulunamadı</div>';
+        return;
+    }
+    list.innerHTML='';
+    allPersonnel.slice(0,100).sort((a,b)=>a.name.localeCompare(b.name,'tr')).forEach(p=>{
+        const isSelected=selectedTaskTemplateCompleters.personnel.some(x=>x.id===p.id);
+        const div=document.createElement('div');
+        div.className='completer-suggestion-item'+(isSelected?' selected':'');
+        div.setAttribute('data-comp-id',p.id);
+        div.setAttribute('data-comp-name',String(p.name||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&#39;').replace(/</g,'&lt;').replace(/>/g,'&gt;'));
+        div.setAttribute('data-comp-dept',String(p.department||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&#39;').replace(/</g,'&lt;').replace(/>/g,'&gt;'));
+        div.onclick=function(){ addTemplatePersonnelCompleterFromSuggestion(this); };
+        div.innerHTML='<span style="font-size:16px;">'+(isSelected?'✅':'👤')+'</span> <strong>'+escapeHtml(p.name)+'</strong> <span class="text-xs text-gray-500">('+escapeHtml(p.department||'-')+')</span>'+(isSelected?'<span class="text-xs text-green-600 font-bold ml-auto">Seçildi</span>':'<span class="text-xs text-purple-500 font-bold ml-auto">+ Ekle</span>');
+        list.appendChild(div);
+    });
+}
+
+function addTemplatePersonnelCompleterFromSuggestion(el){
+    const id=parseInt(el.getAttribute('data-comp-id'),10);
+    const name=el.getAttribute('data-comp-name')||'';
+    const department=el.getAttribute('data-comp-dept')||'';
+    if(selectedTaskTemplateCompleters.personnel.some(x=>x.id===id)){
+        selectedTaskTemplateCompleters.personnel=selectedTaskTemplateCompleters.personnel.filter(x=>x.id!==id);
+    } else {
+        selectedTaskTemplateCompleters.personnel.push({id:id,name:name,department:department,type:'personnel'});
+    }
+    updateTemplateCompleterSummary();
+    const searchInput=document.getElementById('templateCompleterPersonnelSearch');
+    if(searchInput) filterTemplateCompleterPersonnelList();
+}
+
+function removeTemplatePersonnelCompleter(id){
+    selectedTaskTemplateCompleters.personnel=selectedTaskTemplateCompleters.personnel.filter(x=>x.id!==id);
+    updateTemplateCompleterSummary();
+    const searchInput=document.getElementById('templateCompleterPersonnelSearch');
+    if(searchInput&&searchInput.value.trim()) filterTemplateCompleterPersonnelList();
+}
+
+function removeTemplateResponsibleCompleter(id){
+    selectedTaskTemplateCompleters.responsible=selectedTaskTemplateCompleters.responsible.filter(x=>x.id!==id);
+    selectedTaskTemplatePersons=selectedTaskTemplatePersons.filter(x=>x.id!==id);
+    const cb=document.querySelector('#taskTemplatePersonList input[value="'+id+'"]');
+    if(cb) cb.checked=false;
+    document.getElementById('taskTemplateSelectedPersonCount').textContent='('+selectedTaskTemplatePersons.length+')';
+    updateTemplateCompleterSummary();
+}
+
+function addTemplateExternalCompleter(){
+    const inp=document.getElementById('templateCompleterExternalInput');
+    if(!inp)return;
+    const name=inp.value.trim();
+    if(!name){alert('Ad Soyad girin!');return}
+    if(selectedTaskTemplateCompleters.external.some(x=>normalize(x.name)===normalize(name))){alert('Bu kişi zaten eklendi!');inp.value='';return;}
+    selectedTaskTemplateCompleters.external.push({name:name,type:'external'});
+    inp.value='';
+    renderTemplateExternalCompletersList();
+    updateTemplateCompleterSummary();
+}
+
+function removeTemplateExternalCompleter(idx){
+    selectedTaskTemplateCompleters.external.splice(idx,1);
+    renderTemplateExternalCompletersList();
+    updateTemplateCompleterSummary();
+}
+
+function renderTemplateExternalCompletersList(){
+    const list=document.getElementById('templateCompleterExternalList');
+    if(!list)return;
+    list.innerHTML='';
+    selectedTaskTemplateCompleters.external.forEach((x,i)=>{
+        const tag=document.createElement('span');
+        tag.className='completer-tag external';
+        tag.innerHTML=escapeHtml(x.name)+' <button onclick="removeTemplateExternalCompleter('+i+')" style="color:#b91c1c;font-weight:bold;margin-left:4px;background:none;border:none;cursor:pointer;">✕</button>';
+        list.appendChild(tag);
+    });
+}
+
+function updateTemplateCompleterSummary(){
+    const el=document.getElementById('templateCompleterSummary');
+    if(!el)return;
+    const all=[
+        ...selectedTaskTemplateCompleters.responsible.map(x=>({...x,type:'responsible'})),
+        ...selectedTaskTemplateCompleters.personnel.map(x=>({...x,type:'personnel'})),
+        ...selectedTaskTemplateCompleters.external.map(x=>({...x,type:'external'}))
+    ];
+    if(all.length===0){
+        el.innerHTML='<span class="text-gray-400 text-xs italic">Henüz kimse seçilmedi</span>';
+        return;
+    }
+    el.innerHTML=all.map(x=>{
+        let cls='completer-tag';
+        if(x.type==='external')cls+=' external';
+        else if(x.type==='personnel')cls+=' personnel';
+        else if(x.type==='responsible')cls+=' responsible';
+        let removeBtn='';
+        if(x.type==='external'){
+            const extIdx=selectedTaskTemplateCompleters.external.findIndex(e=>e.name===x.name);
+            removeBtn='<button onclick="removeTemplateExternalCompleter('+extIdx+')" style="color:#b91c1c;font-weight:bold;margin-left:4px;background:none;border:none;cursor:pointer;">✕</button>';
+        } else if(x.type==='personnel'){
+            removeBtn='<button onclick="removeTemplatePersonnelCompleter('+x.id+')" style="color:#b91c1c;font-weight:bold;margin-left:4px;background:none;border:none;cursor:pointer;">✕</button>';
+        } else if(x.type==='responsible'){
+            removeBtn='<button onclick="removeTemplateResponsibleCompleter('+x.id+')" style="color:#b91c1c;font-weight:bold;margin-left:4px;background:none;border:none;cursor:pointer;">✕</button>';
+        }
+        return '<span class="'+cls+'">'+escapeHtml(x.name)+removeBtn+'</span>';
+    }).join('');
+}
+
+// ==================== GÖREV ŞABLONU KAYDET ====================
+function saveTaskTemplate(){
+    if(!isAdmin){alert('❌ Yönetici girişi gerekli!');return}
+    const name=document.getElementById('taskTemplateNameInput').value.trim();
+    const dept=document.getElementById('taskTemplateDepartmentSelect').value;
+    const period=parseInt(document.getElementById('taskTemplatePeriodInput').value);
+    if(!name){alert('Görev adı girin!');return}
+    if(!dept){alert('Sorumlu birim seçin!');return}
+    if(!period||period<1){alert('Geçerli periyot girin!');return}
+    
+    // Sorumlu + personel listesinden + dışarıdan birleştirilir
+    const tumSorumlular=[];
+    selectedTaskTemplateCompleters.responsible.forEach(x=>tumSorumlular.push({id:x.id,name:x.name,type:'responsible'}));
+    selectedTaskTemplateCompleters.personnel.forEach(x=>tumSorumlular.push({id:x.id,name:x.name,type:'personnel',department:x.department}));
+    selectedTaskTemplateCompleters.external.forEach(x=>tumSorumlular.push({name:x.name,type:'external'}));
+    
+    if(tumSorumlular.length===0){alert('En az bir sorumlu/katılımcı seçin!');return}
+    
+   data.taskTemplates.push({
+    id:Date.now(),
+    name:name,
+    department:dept,
+    persons:tumSorumlular,
+    period:period,
+    requireReport: document.getElementById('taskTemplateRequireReport').checked,
+    createdAt:new Date().toISOString()
+});
+    saveToLocalStorage();
+    updateTaskTemplateTable();
+    hideModal('addTaskTemplateModal');
+    showSuccessMessage('✅ Şablon eklendi!');
+}
+function updateTaskTemplateTable(){
+    const tbody=document.getElementById('taskTemplateTableBody');
+    const countEl=document.getElementById('taskTemplateCount');
+    if(!tbody)return;
+    if(!data.taskTemplates||data.taskTemplates.length===0){
+        tbody.innerHTML='<tr><td colspan="6" class="text-center py-6 text-gray-500 text-sm">Henüz görev şablonu yok</td></tr>';
+        if(countEl)countEl.textContent='0';
+        return;
+    }
+    if(countEl)countEl.textContent=data.taskTemplates.length;
+    tbody.innerHTML='';
+    data.taskTemplates.forEach(t=>{
+        const personsHtml=t.persons.map(p=>'<span class="task-person-badge">👤 '+escapeHtml(p.name)+'</span>').join('');
+        let periodText='';
+        if(t.period===1)periodText='Her gün';
+        else if(t.period===7)periodText='Haftalık';
+        else if(t.period===30)periodText='Aylık';
+        else if(t.period===365)periodText='Yıllık';
+        else periodText=t.period+' gün';
+        const reportHtml = t.requireReport 
+            ? '<span class="px-2 py-1 bg-blue-100 text-blue-800 rounded text-xs font-bold">📎 İsteniyor</span>' 
+            : '<span class="px-2 py-1 bg-gray-100 text-gray-600 rounded text-xs">—</span>';
+        const btnHtml=isAdmin?'<button class="btn-del-task" onclick="deleteTaskTemplate('+t.id+')">🗑️</button>':'';
+        tbody.innerHTML+='<tr><td class="font-semibold text-violet-900">📌 '+escapeHtml(t.name)+'</td><td><span class="px-2 py-1 bg-green-100 text-green-800 rounded text-xs font-bold">🏢 '+escapeHtml(t.department)+'</span></td><td>'+(personsHtml||'-')+'</td><td class="text-center"><span class="task-period-badge">🔄 '+periodText+'</span></td><td class="text-center">'+reportHtml+'</td><td class="text-center">'+btnHtml+'</td></tr>';
+    });
+}
 function deleteTaskTemplate(id){if(!isAdmin){alert('❌ Yönetici girişi gerekli!');return}const t=data.taskTemplates.find(x=>x.id===id);if(!t)return;if(!confirm(t.name+' şablonunu silmek istediğinize emin misiniz?'))return;data.taskTemplates=data.taskTemplates.filter(x=>x.id!==id);saveToLocalStorage();updateTaskTemplateTable();showSuccessMessage('🗑️ Silindi!');}
-function openAddNewTaskModal(){if(!isAdmin){alert('❌ Yönetici girişi gerekli!');return}document.getElementById('newTaskNameInput').value='';document.getElementById('newTaskDepartmentSelect').value='';document.getElementById('newTaskPeriodInput').value='';document.getElementById('newTaskAssignmentDate').value=new Date().toISOString().split('T')[0];document.getElementById('newTaskNote').value='';selectedNewTaskPersons=[];document.getElementById('newTaskSelectedPersonCount').textContent='0';document.getElementById('newTaskPersonList').innerHTML='<div class="text-center py-4 text-gray-400 text-sm">Önce birim seçin</div>';updateDepartmentDropdowns();showModal('addNewTaskModal');}
-function onNewTaskDepartmentChange(){const dept=document.getElementById('newTaskDepartmentSelect').value;const list=document.getElementById('newTaskPersonList');selectedNewTaskPersons=[];document.getElementById('newTaskSelectedPersonCount').textContent='0';if(!dept){list.innerHTML='<div class="text-center py-4 text-gray-400 text-sm">Önce birim seçin</div>';return;}const persons=data.personnel.filter(p=>p.department===dept).slice().sort((a,b)=>a.name.localeCompare(b.name,'tr'));if(persons.length===0){list.innerHTML='<div class="text-center py-4 text-gray-400 text-sm">Bu birimde personel yok</div>';return;}list.innerHTML='';persons.forEach(p=>{list.innerHTML+='<label class="person-checkbox-item"><input type="checkbox" value="'+p.id+'" data-name="'+p.name.replace(/"/g,'&quot;')+'" onchange="onNewTaskPersonToggle(this)"> <span>👤 <strong>'+escapeHtml(p.name)+'</strong></span></label>';});}
-function onNewTaskPersonToggle(cb){const id=parseInt(cb.value);const name=cb.getAttribute('data-name');if(cb.checked){if(!selectedNewTaskPersons.some(x=>x.id===id))selectedNewTaskPersons.push({id,name});}else{selectedNewTaskPersons=selectedNewTaskPersons.filter(x=>x.id!==id);}document.getElementById('newTaskSelectedPersonCount').textContent=selectedNewTaskPersons.length;}
-function saveNewTask(){if(!isAdmin){alert('❌ Yönetici girişi gerekli!');return}const name=document.getElementById('newTaskNameInput').value.trim();const dept=document.getElementById('newTaskDepartmentSelect').value;const period=parseInt(document.getElementById('newTaskPeriodInput').value);const assignmentDate=document.getElementById('newTaskAssignmentDate').value;const note=document.getElementById('newTaskNote').value.trim();if(!name||!dept||selectedNewTaskPersons.length===0||!period||!assignmentDate){alert('Tüm zorunlu alanları doldurun!');return}const startDate=new Date(assignmentDate);const nextDueDate=new Date(startDate.getTime()+period*24*60*60*1000);data.tasks.push({id:Date.now(),templateId:null,name:name,department:dept,persons:selectedNewTaskPersons.map(x=>({id:x.id,name:x.name})),period:period,assignedAt:startDate.toISOString(),nextDueDate:nextDueDate.toISOString(),note:note,isCustom:true});saveToLocalStorage();updateTaskPage();updateHomeActiveTasks();hideModal('addNewTaskModal');showSuccessMessage('✅ Görev eklendi!');}
+function openAddNewTaskModal(){
+    if(!isAdmin){alert('❌ Yönetici girişi gerekli!');return}
+    document.getElementById('newTaskNameInput').value='';
+    document.getElementById('newTaskDepartmentSelect').value='';
+    document.getElementById('newTaskPeriodInput').value='';
+    document.getElementById('newTaskAssignmentDate').value=new Date().toISOString().split('T')[0];
+    document.getElementById('newTaskNote').value='';
+    selectedNewTaskPersons=[];
+    selectedNewTaskCompleters={responsible:[],personnel:[],external:[]};
+    document.getElementById('newTaskSelectedPersonCount').textContent='(0)';
+    document.getElementById('newTaskPersonList').innerHTML='<div class="text-center py-4 text-gray-400 text-sm">Önce birim seçin</div>';
+    document.getElementById('newTaskCompleterPersonnelSearch').value='';
+    document.getElementById('newTaskCompleterPersonnelList').innerHTML='<div class="text-center py-3 text-gray-500 text-sm bg-white rounded border-2 border-dashed border-gray-300">✍️ Yazmaya başlayın, öneriler burada görünecek...</div>';
+    document.getElementById('newTaskCompleterExternalList').innerHTML='';
+document.getElementById('newTaskCompleterExternalInput').value='';
+document.getElementById('newTaskRequireReport').checked=false;
+updateNewTaskCompleterSummary();
+    updateDepartmentDropdowns();
+    showModal('addNewTaskModal');
+}
+function onNewTaskDepartmentChange(){
+    const dept=document.getElementById('newTaskDepartmentSelect').value;
+    const list=document.getElementById('newTaskPersonList');
+    selectedNewTaskPersons=[];
+    selectedNewTaskCompleters.responsible=[];
+    document.getElementById('newTaskSelectedPersonCount').textContent='(0)';
+    if(!dept){list.innerHTML='<div class="text-center py-4 text-gray-400 text-sm">Önce birim seçin</div>';updateNewTaskCompleterSummary();return;}
+    const persons=data.personnel.filter(p=>p.department===dept).slice().sort((a,b)=>a.name.localeCompare(b.name,'tr'));
+    if(persons.length===0){list.innerHTML='<div class="text-center py-4 text-gray-400 text-sm">Bu birimde personel yok</div>';updateNewTaskCompleterSummary();return;}
+    list.innerHTML='';
+    persons.forEach(p=>{
+        list.innerHTML+='<label class="person-checkbox-item"><input type="checkbox" value="'+p.id+'" data-name="'+p.name.replace(/"/g,'&quot;')+'" onchange="onNewTaskPersonToggle(this)"> <span>👤 <strong>'+escapeHtml(p.name)+'</strong></span></label>';
+    });
+    updateNewTaskCompleterSummary();
+}
+function onNewTaskPersonToggle(cb){
+    const id=parseInt(cb.value);
+    const name=cb.getAttribute('data-name');
+    if(cb.checked){
+        if(!selectedNewTaskPersons.some(x=>x.id===id))selectedNewTaskPersons.push({id,name});
+        if(!selectedNewTaskCompleters.responsible.some(x=>x.id===id))selectedNewTaskCompleters.responsible.push({id,name,type:'responsible'});
+    }else{
+        selectedNewTaskPersons=selectedNewTaskPersons.filter(x=>x.id!==id);
+        selectedNewTaskCompleters.responsible=selectedNewTaskCompleters.responsible.filter(x=>x.id!==id);
+    }
+    document.getElementById('newTaskSelectedPersonCount').textContent='('+selectedNewTaskPersons.length+')';
+    updateNewTaskCompleterSummary();
+}
+// ==================== YENİ GÖREV - PERSONEL LİSTESİNDEN EKLE (ÖNERİ) ====================
+function filterNewTaskCompleterPersonnelList(){
+    const searchInput=document.getElementById('newTaskCompleterPersonnelSearch');
+    const list=document.getElementById('newTaskCompleterPersonnelList');
+    if(!list)return;
+    const searchTerm=(searchInput.value||'').trim();
+    if(!searchTerm){
+        list.innerHTML='<div class="text-center py-3 text-gray-500 text-sm bg-white rounded border-2 border-dashed border-gray-300">✍️ Yazmaya başlayın, öneriler burada görünecek...</div>';
+        return;
+    }
+    const responsibleIds=new Set(selectedNewTaskCompleters.responsible.map(x=>x.id));
+    const term=normalize(searchTerm);
+    let allPersonnel=(data.personnel||[]).filter(p=>!responsibleIds.has(p.id));
+    allPersonnel=allPersonnel.filter(p=>normalize(p.name).includes(term)||normalize(p.department||'').includes(term));
+    if(allPersonnel.length===0){
+        list.innerHTML='<div class="text-center py-3 text-gray-500 text-sm bg-white rounded border-2 border-dashed border-gray-300">Arama sonucu bulunamadı</div>';
+        return;
+    }
+    list.innerHTML='';
+    allPersonnel.slice(0,100).sort((a,b)=>a.name.localeCompare(b.name,'tr')).forEach(p=>{
+        const isSelected=selectedNewTaskCompleters.personnel.some(x=>x.id===p.id);
+        const div=document.createElement('div');
+        div.className='completer-suggestion-item'+(isSelected?' selected':'');
+        div.setAttribute('data-comp-id',p.id);
+        div.setAttribute('data-comp-name',String(p.name||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&#39;').replace(/</g,'&lt;').replace(/>/g,'&gt;'));
+        div.setAttribute('data-comp-dept',String(p.department||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&#39;').replace(/</g,'&lt;').replace(/>/g,'&gt;'));
+        div.onclick=function(){ addNewTaskPersonnelCompleterFromSuggestion(this); };
+        div.innerHTML='<span style="font-size:16px;">'+(isSelected?'✅':'👤')+'</span> <strong>'+escapeHtml(p.name)+'</strong> <span class="text-xs text-gray-500">('+escapeHtml(p.department||'-')+')</span>'+(isSelected?'<span class="text-xs text-green-600 font-bold ml-auto">Seçildi</span>':'<span class="text-xs text-purple-500 font-bold ml-auto">+ Ekle</span>');
+        list.appendChild(div);
+    });
+}
+
+function addNewTaskPersonnelCompleterFromSuggestion(el){
+    const id=parseInt(el.getAttribute('data-comp-id'),10);
+    const name=el.getAttribute('data-comp-name')||'';
+    const department=el.getAttribute('data-comp-dept')||'';
+    if(selectedNewTaskCompleters.personnel.some(x=>x.id===id)){
+        selectedNewTaskCompleters.personnel=selectedNewTaskCompleters.personnel.filter(x=>x.id!==id);
+    } else {
+        selectedNewTaskCompleters.personnel.push({id:id,name:name,department:department,type:'personnel'});
+    }
+    updateNewTaskCompleterSummary();
+    const searchInput=document.getElementById('newTaskCompleterPersonnelSearch');
+    if(searchInput) filterNewTaskCompleterPersonnelList();
+}
+
+function removeNewTaskPersonnelCompleter(id){
+    selectedNewTaskCompleters.personnel=selectedNewTaskCompleters.personnel.filter(x=>x.id!==id);
+    updateNewTaskCompleterSummary();
+    const searchInput=document.getElementById('newTaskCompleterPersonnelSearch');
+    if(searchInput&&searchInput.value.trim()) filterNewTaskCompleterPersonnelList();
+}
+
+function removeNewTaskResponsibleCompleter(id){
+    selectedNewTaskCompleters.responsible=selectedNewTaskCompleters.responsible.filter(x=>x.id!==id);
+    selectedNewTaskPersons=selectedNewTaskPersons.filter(x=>x.id!==id);
+    const cb=document.querySelector('#newTaskPersonList input[value="'+id+'"]');
+    if(cb) cb.checked=false;
+    document.getElementById('newTaskSelectedPersonCount').textContent='('+selectedNewTaskPersons.length+')';
+    updateNewTaskCompleterSummary();
+}
+
+function addNewTaskExternalCompleter(){
+    const inp=document.getElementById('newTaskCompleterExternalInput');
+    if(!inp)return;
+    const name=inp.value.trim();
+    if(!name){alert('Ad Soyad girin!');return}
+    if(selectedNewTaskCompleters.external.some(x=>normalize(x.name)===normalize(name))){alert('Bu kişi zaten eklendi!');inp.value='';return;}
+    selectedNewTaskCompleters.external.push({name:name,type:'external'});
+    inp.value='';
+    renderNewTaskExternalCompletersList();
+    updateNewTaskCompleterSummary();
+}
+
+function removeNewTaskExternalCompleter(idx){
+    selectedNewTaskCompleters.external.splice(idx,1);
+    renderNewTaskExternalCompletersList();
+    updateNewTaskCompleterSummary();
+}
+
+function renderNewTaskExternalCompletersList(){
+    const list=document.getElementById('newTaskCompleterExternalList');
+    if(!list)return;
+    list.innerHTML='';
+    selectedNewTaskCompleters.external.forEach((x,i)=>{
+        const tag=document.createElement('span');
+        tag.className='completer-tag external';
+        tag.innerHTML=escapeHtml(x.name)+' <button onclick="removeNewTaskExternalCompleter('+i+')" style="color:#b91c1c;font-weight:bold;margin-left:4px;background:none;border:none;cursor:pointer;">✕</button>';
+        list.appendChild(tag);
+    });
+}
+
+function updateNewTaskCompleterSummary(){
+    const el=document.getElementById('newTaskCompleterSummary');
+    if(!el)return;
+    const all=[
+        ...selectedNewTaskCompleters.responsible.map(x=>({...x,type:'responsible'})),
+        ...selectedNewTaskCompleters.personnel.map(x=>({...x,type:'personnel'})),
+        ...selectedNewTaskCompleters.external.map(x=>({...x,type:'external'}))
+    ];
+    if(all.length===0){
+        el.innerHTML='<span class="text-gray-400 text-xs italic">Henüz kimse seçilmedi</span>';
+        return;
+    }
+    el.innerHTML=all.map(x=>{
+        let cls='completer-tag';
+        if(x.type==='external')cls+=' external';
+        else if(x.type==='personnel')cls+=' personnel';
+        else if(x.type==='responsible')cls+=' responsible';
+        let removeBtn='';
+        if(x.type==='external'){
+            const extIdx=selectedNewTaskCompleters.external.findIndex(e=>e.name===x.name);
+            removeBtn='<button onclick="removeNewTaskExternalCompleter('+extIdx+')" style="color:#b91c1c;font-weight:bold;margin-left:4px;background:none;border:none;cursor:pointer;">✕</button>';
+        } else if(x.type==='personnel'){
+            removeBtn='<button onclick="removeNewTaskPersonnelCompleter('+x.id+')" style="color:#b91c1c;font-weight:bold;margin-left:4px;background:none;border:none;cursor:pointer;">✕</button>';
+        } else if(x.type==='responsible'){
+            removeBtn='<button onclick="removeNewTaskResponsibleCompleter('+x.id+')" style="color:#b91c1c;font-weight:bold;margin-left:4px;background:none;border:none;cursor:pointer;">✕</button>';
+        }
+        return '<span class="'+cls+'">'+escapeHtml(x.name)+removeBtn+'</span>';
+    }).join('');
+}
+
+// ==================== YENİ GÖREV KAYDET ====================
+function saveNewTask(){
+    if(!isAdmin){alert('❌ Yönetici girişi gerekli!');return}
+    const name=document.getElementById('newTaskNameInput').value.trim();
+    const dept=document.getElementById('newTaskDepartmentSelect').value;
+    const period=parseInt(document.getElementById('newTaskPeriodInput').value);
+    const assignmentDate=document.getElementById('newTaskAssignmentDate').value;
+    const note=document.getElementById('newTaskNote').value.trim();
+    if(!name||!dept||!period||!assignmentDate){alert('Tüm zorunlu alanları doldurun!');return}
+    
+    // Sorumlu + personel listesinden seçilenler + dışarıdan katılanlar birleştirilir
+    const tumSorumlular=[];
+    selectedNewTaskCompleters.responsible.forEach(x=>tumSorumlular.push({id:x.id,name:x.name,type:'responsible'}));
+    selectedNewTaskCompleters.personnel.forEach(x=>tumSorumlular.push({id:x.id,name:x.name,type:'personnel',department:x.department}));
+    selectedNewTaskCompleters.external.forEach(x=>tumSorumlular.push({name:x.name,type:'external'}));
+    
+    if(tumSorumlular.length===0){alert('En az bir sorumlu/katılımcı seçin!');return}
+    
+    const startDate=new Date(assignmentDate);
+    const nextDueDate=new Date(startDate.getTime()+period*24*60*60*1000);
+   data.tasks.push({
+    id:Date.now(),
+    templateId:null,
+    name:name,
+    department:dept,
+    persons:tumSorumlular,
+    period:period,
+    assignedAt:startDate.toISOString(),
+    nextDueDate:nextDueDate.toISOString(),
+    note:note,
+    isCustom:true,
+    requireReport: document.getElementById('newTaskRequireReport').checked
+});
+    
+    saveToLocalStorage();
+    updateTaskPage();
+    updateHomeActiveTasks();
+    hideModal('addNewTaskModal');
+    showSuccessMessage('✅ Görev eklendi!');
+}
 function openAddTaskAssignmentModal(){if(!isAdmin){alert('❌ Yönetici girişi gerekli!');return}const sel=document.getElementById('taskAssignmentTemplateSelect');sel.innerHTML='<option value="">-- Görev Şablonu Seçin --</option>';if(!data.taskTemplates||data.taskTemplates.length===0){sel.innerHTML='<option value="">Önce Ayarlar → Görev Şablonu Ekleyin</option>';}else{data.taskTemplates.forEach(t=>{sel.innerHTML+='<option value="'+t.id+'">📌 '+escapeHtml(t.name)+' ('+escapeHtml(t.department)+')</option>';});}document.getElementById('taskAssignmentDate').value=new Date().toISOString().split('T')[0];document.getElementById('taskAssignmentNote').value='';document.getElementById('selectedTemplateInfo').classList.add('hidden');showModal('addTaskAssignmentModal');}
 function onTaskTemplateSelect(){const templateId=parseInt(document.getElementById('taskAssignmentTemplateSelect').value);const infoDiv=document.getElementById('selectedTemplateInfo');if(!templateId){infoDiv.classList.add('hidden');return;}const template=data.taskTemplates.find(t=>t.id===templateId);if(!template){infoDiv.classList.add('hidden');return;}infoDiv.classList.remove('hidden');document.getElementById('templateInfoDept').textContent=template.department;document.getElementById('templateInfoPersons').textContent=template.persons.map(p=>p.name).join(', ');let pt='';if(template.period===1)pt='Her gün';else if(template.period===7)pt='Haftalık';else if(template.period===30)pt='Aylık';else pt=template.period+' gün';document.getElementById('templateInfoPeriod').textContent=pt;}
-function saveTaskAssignment(){if(!isAdmin){alert('❌ Yönetici girişi gerekli!');return}const templateId=parseInt(document.getElementById('taskAssignmentTemplateSelect').value);const assignmentDate=document.getElementById('taskAssignmentDate').value;const note=document.getElementById('taskAssignmentNote').value.trim();if(!templateId||!assignmentDate){alert('Şablon ve tarih seçin!');return}const template=data.taskTemplates.find(t=>t.id===templateId);if(!template){alert('Şablon bulunamadı!');return}const startDate=new Date(assignmentDate);const nextDueDate=new Date(startDate.getTime()+template.period*24*60*60*1000);data.tasks.push({id:Date.now(),templateId:template.id,name:template.name,department:template.department,persons:JSON.parse(JSON.stringify(template.persons)),period:template.period,assignedAt:startDate.toISOString(),nextDueDate:nextDueDate.toISOString(),note:note});saveToLocalStorage();updateTaskPage();updateHomeActiveTasks();hideModal('addTaskAssignmentModal');showSuccessMessage('✅ Görev verildi!');}
+function saveTaskAssignment(){if(!isAdmin){alert('❌ Yönetici girişi gerekli!');return}const templateId=parseInt(document.getElementById('taskAssignmentTemplateSelect').value);const assignmentDate=document.getElementById('taskAssignmentDate').value;const note=document.getElementById('taskAssignmentNote').value.trim();if(!templateId||!assignmentDate){alert('Şablon ve tarih seçin!');return}const template=data.taskTemplates.find(t=>t.id===templateId);if(!template){alert('Şablon bulunamadı!');return}const startDate=new Date(assignmentDate);const nextDueDate=new Date(startDate.getTime()+template.period*24*60*60*1000);data.tasks.push({id:Date.now(),templateId:template.id,name:template.name,department:template.department,persons:JSON.parse(JSON.stringify(template.persons)),period:template.period,assignedAt:startDate.toISOString(),nextDueDate:nextDueDate.toISOString(),note:note,requireReport:template.requireReport||false});saveToLocalStorage();updateTaskPage();updateHomeActiveTasks();hideModal('addTaskAssignmentModal');showSuccessMessage('✅ Görev verildi!');}
 
 function setActiveTaskFilter(filter,ev){if(ev)ev.stopPropagation();currentActiveTaskFilter=filter;updateActiveTaskFilterUI();updateActiveTaskTable();updateHomeActiveTasks();}
 function updateActiveTaskFilterUI(){const filters=['7gun','15gun','30gun','90gun','buay','buyil','hepsi'];filters.forEach(f=>{const btn=document.getElementById('taskFilterBtn_'+f);if(!btn)return;if(f===currentActiveTaskFilter)btn.classList.add('active');else btn.classList.remove('active');});const infoEl=document.getElementById('activeTaskFilterInfo');if(!infoEl)return;const labels={'7gun':'⏱️ 7 günden az kalanlar','15gun':'⏱️ 15 günden az kalanlar','30gun':'⏱️ 30 günden az kalanlar','90gun':'⏱️ 90 günden az kalanlar','buay':'📅 Bu ay aktif olanlar','buyil':'📆 Bu yıl aktif olanlar','hepsi':'📋 Tüm aktif görevler'};infoEl.textContent=labels[currentActiveTaskFilter]||'';}
@@ -4959,7 +5543,7 @@ function updateActiveTaskTable(){
 function updateCompletedTaskTable(){
     const tbody=document.getElementById('completedTaskTableBody');if(!tbody)return;
     const tasks=(data.completedTasks||[]).slice().sort((a,b)=>new Date(b.completedAt)-new Date(a.completedAt));
-    if(tasks.length===0){tbody.innerHTML='<tr><td colspan="10" class="text-center py-6 text-gray-500 text-sm">Henüz tamamlanan görev yok</td></tr>';return;}
+    if(tasks.length===0){tbody.innerHTML='<tr><td colspan="11" class="text-center py-6 text-gray-500 text-sm">Henüz tamamlanan görev yok</td></tr>';return;}
     tbody.innerHTML='';
     tasks.forEach(t=>{
         const ad=new Date(t.assignedAt).toLocaleDateString('tr-TR');const cd=new Date(t.completedAt).toLocaleDateString('tr-TR');
@@ -4972,50 +5556,346 @@ function updateCompletedTaskTable(){
         let yapanlarHtml='-';
         if(t.completers&&t.completers.length>0){const tags=t.completers.map(c=>{let cls='completer-tag';if(c.type==='external')cls+=' external';else if(c.type==='personnel')cls+=' personnel';else if(c.type==='responsible')cls+=' responsible';return '<span class="'+cls+'">'+escapeHtml(c.name)+'</span>';}).join('');yapanlarHtml='<div class="task-completers-display">'+tags+'</div>';}
         else{yapanlarHtml='<span class="text-gray-400 text-xs">-</span>';}
+        
+        // === KATILMAYANLAR HESAPLAMA ===
+        let katilmayanlarHtml='-';
+        const yapanIsimleri=new Set((t.completers||[]).map(c=>normalize(c.name)));
+        const sorumlular=(t.persons||[]);
+        const katilmayanSorumlular=sorumlular.filter(p=>!yapanIsimleri.has(normalize(p.name)));
+        if(katilmayanSorumlular.length>0){
+            const tags=katilmayanSorumlular.map(p=>'<span class="completer-tag not-joined">👤 '+escapeHtml(p.name)+'</span>').join('');
+            katilmayanlarHtml='<div class="task-completers-display">'+tags+'</div>';
+        } else {
+            katilmayanlarHtml='<span class="text-green-600 text-xs font-bold">✅ Tümü katıldı</span>';
+        }
+        
+        // === RAPOR FORMU KONTROLÜ ===
+        let raporHtml='-';
+        const raporIsteniyor = t.requireReport === true;
+        const raporVar = t.reportForm && t.reportForm.data;
+        if(raporIsteniyor){
+            if(raporVar){
+                raporHtml='<button onclick="downloadCompletedTaskReport('+cid+')" title="Raporu indir: '+escapeHtml(t.reportForm.name||'')+'" class="text-2xl hover:scale-110 transition-transform cursor-pointer bg-transparent border-none">✅</button>';
+            } else {
+                raporHtml='<button onclick="uploadCompletedTaskReport('+cid+')" title="Rapor yükle" class="text-2xl hover:scale-110 transition-transform cursor-pointer bg-transparent border-none">❌</button>';
+            }
+        } else {
+            if(raporVar){
+                raporHtml='<button onclick="downloadCompletedTaskReport('+cid+')" title="Raporu indir: '+escapeHtml(t.reportForm.name||'')+'" class="text-2xl hover:scale-110 transition-transform cursor-pointer bg-transparent border-none">✅</button>';
+            } else {
+                raporHtml='<span class="text-gray-300 text-xs">—</span>';
+            }
+        }
+        
         const btnHtml=isAdmin?'<button onclick="deleteCompletedTask('+cid+')" class="bg-red-100 text-red-700 px-3 py-1 rounded text-xs font-bold">🗑️</button>':'';
-        tbody.innerHTML+='<tr><td class="font-semibold">📌 '+escapeHtml(t.name)+'</td><td>'+escapeHtml(t.department)+'</td><td>'+ph+'</td><td class="text-center text-xs">'+ad+'</td><td class="text-center text-xs font-bold text-green-700">'+cd+'</td><td class="text-center">'+t.period+' gün</td><td class="text-center '+dc+' text-xs font-bold">'+dt+'</td><td class="text-center">'+isaretleyenHtml+'</td><td class="text-center">'+yapanlarHtml+'</td><td class="text-center">'+btnHtml+'</td></tr>';
+        tbody.innerHTML+='<tr><td class="font-semibold">📌 '+escapeHtml(t.name)+'</td><td>'+escapeHtml(t.department)+'</td><td>'+ph+'</td><td class="text-center text-xs">'+ad+'</td><td class="text-center text-xs font-bold text-green-700">'+cd+'</td><td class="text-center">'+t.period+' gün</td><td class="text-center '+dc+' text-xs font-bold">'+dt+'</td><td class="text-center">'+isaretleyenHtml+'</td><td class="text-center">'+yapanlarHtml+'</td><td class="text-center">'+katilmayanlarHtml+'</td><td class="text-center">'+raporHtml+'</td><td class="text-center">'+btnHtml+'</td></tr>';
     });
 }
 function openTaskCompletionModal(taskId){
     if(!isAdmin && !isViewer){alert('❌ Giriş yapmanız gerekiyor!');return}
     const task=data.tasks.find(t=>t.id===taskId);if(!task){alert('Görev bulunamadı!');return}
-    taskCompletionContext={taskId:taskId,responsiblePersons:(task.persons||[]).map(p=>({id:p.id,name:p.name})),marker:currentUsername||(isAdmin?'admin':'viewer'),markerRole:isAdmin?'admin':'viewer'};
+    taskCompletionContext={
+        taskId:taskId,
+        responsiblePersons:(task.persons||[]).map(p=>({id:p.id,name:p.name})),
+        marker:currentUsername||(isAdmin?'admin':'viewer'),
+        markerRole:isAdmin?'admin':'viewer',
+        requireReport: task.requireReport || false
+    };
     selectedTaskCompleters={responsible:[],personnel:[],external:[]};
+    taskCompletionReportFileData=null;
+    taskCompletionReportFileName='';
+    taskCompletionReportFileType='';
     document.getElementById('taskCompletionTaskName').textContent=task.name;
     document.getElementById('taskCompletionDept').textContent=task.department;
     let pt='';if(task.period===1)pt='Her gün';else if(task.period===7)pt='Haftalık';else if(task.period===30)pt='Aylık';else pt=task.period+' gün';
     document.getElementById('taskCompletionPeriod').textContent=pt;
     document.getElementById('taskCompletionDueDate').textContent=new Date(task.nextDueDate).toLocaleDateString('tr-TR');
     const markerEl=document.getElementById('taskCompletionMarker');markerEl.textContent=(isAdmin?'🔓 ':'👁️ ')+taskCompletionContext.marker;markerEl.className='completed-by-badge '+(isAdmin?'admin':'viewer');
+    
+    // Rapor alanını göster/gizle
+    const reportSection=document.getElementById('taskCompletionReportSection');
+    if(task.requireReport){
+        reportSection.classList.remove('hidden');
+    } else {
+        reportSection.classList.add('hidden');
+    }
+    document.getElementById('taskCompletionReportFile').value='';
+    document.getElementById('taskCompletionReportFileInfo').classList.add('hidden');
+    document.getElementById('taskCompletionReportFileName').textContent='-';
+    document.getElementById('taskCompletionReportFileSize').textContent='-';
+    
+    // Dosya seçimi listener (her açılışta yeniden bağla)
+    const fileInput=document.getElementById('taskCompletionReportFile');
+    fileInput.onchange = function(e){
+        const file=e.target.files && e.target.files[0];
+        if(!file)return;
+        if(file.size > 5*1024*1024){alert('❌ Dosya boyutu 5 MB\'dan büyük olamaz!');e.target.value='';return;}
+        const reader=new FileReader();
+        reader.onload=function(ev){
+            taskCompletionReportFileData=ev.target.result;
+            taskCompletionReportFileName=file.name;
+            taskCompletionReportFileType=file.type||'application/octet-stream';
+            document.getElementById('taskCompletionReportFileName').textContent=file.name;
+            const sizeKB=(file.size/1024).toFixed(1);
+            const sizeMB=(file.size/(1024*1024)).toFixed(2);
+            document.getElementById('taskCompletionReportFileSize').textContent='('+(file.size>1024*1024?sizeMB+' MB':sizeKB+' KB')+')';
+            document.getElementById('taskCompletionReportFileInfo').classList.remove('hidden');
+        };
+        reader.readAsDataURL(file);
+    };
+    
     renderCompleterResponsibleList();renderCompleterPersonnelList('');renderExternalCompletersList();
     document.getElementById('taskCompletionNote').value='';document.getElementById('taskCompleterPersonnelSearch').value='';document.getElementById('taskCompleterExternalInput').value='';
     updateCompleterSummary();showModal('taskCompletionModal');
 }
+
+function downloadTaskCompletionReport(){
+    if(!taskCompletionReportFileData){
+        alert('İndirilecek dosya yok!');
+        return;
+    }
+    const a=document.createElement('a');
+    a.href=taskCompletionReportFileData;
+    a.download=taskCompletionReportFileName||'gorev-raporu';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+}
 function renderCompleterResponsibleList(){const list=document.getElementById('taskCompleterResponsibleList');if(!list)return;list.innerHTML='';const responsible=taskCompletionContext?taskCompletionContext.responsiblePersons:[];if(!responsible||responsible.length===0){list.innerHTML='<div class="text-center py-3 text-gray-500 text-sm bg-white rounded border-2 border-dashed border-gray-300">Görevin tanımlı sorumlusu yok</div>';return;}responsible.forEach(p=>{const isChecked=selectedTaskCompleters.responsible.some(x=>x.id===p.id);const div=document.createElement('label');div.className='completer-checkbox-item'+(isChecked?' selected':'');const safeName=String(p.name||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&#39;').replace(/</g,'&lt;').replace(/>/g,'&gt;');div.innerHTML='<input type="checkbox" '+(isChecked?'checked':'')+' data-comp-id="'+p.id+'" data-comp-name="'+safeName+'" onchange="onResponsibleCompleterToggle(this)"><span>👤 <strong>'+escapeHtml(p.name)+'</strong></span>';list.appendChild(div);});}
 function onResponsibleCompleterToggle(cb){const id=parseInt(cb.getAttribute('data-comp-id'),10);const name=cb.getAttribute('data-comp-name')||'';const checked=cb.checked;if(checked){if(!selectedTaskCompleters.responsible.some(x=>x.id===id)){selectedTaskCompleters.responsible.push({id:id,name:name,type:'responsible'});}}else{selectedTaskCompleters.responsible=selectedTaskCompleters.responsible.filter(x=>x.id!==id);}const item=cb.closest('.completer-checkbox-item');if(item){if(checked)item.classList.add('selected');else item.classList.remove('selected');}updateCompleterSummary();}
-function renderCompleterPersonnelList(searchTerm){const list=document.getElementById('taskCompleterPersonnelList');if(!list)return;list.innerHTML='';const responsibleIds=new Set((taskCompletionContext?taskCompletionContext.responsiblePersons:[]).map(p=>p.id));let allPersonnel=(data.personnel||[]).filter(p=>!responsibleIds.has(p.id));if(searchTerm&&searchTerm.trim()){const term=normalize(searchTerm);allPersonnel=allPersonnel.filter(p=>normalize(p.name).includes(term)||normalize(p.department||'').includes(term));}if(allPersonnel.length===0){list.innerHTML='<div class="text-center py-3 text-gray-500 text-sm bg-white rounded border-2 border-dashed border-gray-300">'+(searchTerm?'Arama sonucu bulunamadı':'Personel bulunamadı')+'</div>';return;}allPersonnel.slice(0,100).sort((a,b)=>a.name.localeCompare(b.name,'tr')).forEach(p=>{const isChecked=selectedTaskCompleters.personnel.some(x=>x.id===p.id);const div=document.createElement('label');div.className='completer-checkbox-item'+(isChecked?' selected':'');const safeName=String(p.name||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&#39;').replace(/</g,'&lt;').replace(/>/g,'&gt;');const safeDept=String(p.department||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&#39;').replace(/</g,'&lt;').replace(/>/g,'&gt;');div.innerHTML='<input type="checkbox" '+(isChecked?'checked':'')+' data-comp-id="'+p.id+'" data-comp-name="'+safeName+'" data-comp-dept="'+safeDept+'" onchange="onPersonnelCompleterToggle(this)"><span>👤 <strong>'+escapeHtml(p.name)+'</strong> <span class="text-xs text-gray-500">('+escapeHtml(p.department||'-')+')</span></span>';list.appendChild(div);});}
+function renderCompleterPersonnelList(searchTerm){
+    const list=document.getElementById('taskCompleterPersonnelList');
+    if(!list)return;
+    list.innerHTML='';
+    const responsibleIds=new Set((taskCompletionContext?taskCompletionContext.responsiblePersons:[]).map(p=>p.id));
+    let allPersonnel=(data.personnel||[]).filter(p=>!responsibleIds.has(p.id));
+    
+    // Arama yoksa: Bilgilendirme mesajı göster (liste gösterme)
+    if(!searchTerm||!searchTerm.trim()){
+        list.innerHTML='<div class="text-center py-3 text-gray-500 text-sm bg-white rounded border-2 border-dashed border-gray-300">✍️ Yazmaya başlayın, öneriler burada görünecek...</div>';
+        return;
+    }
+    
+    const term=normalize(searchTerm);
+    allPersonnel=allPersonnel.filter(p=>normalize(p.name).includes(term)||normalize(p.department||'').includes(term));
+    
+    if(allPersonnel.length===0){
+        list.innerHTML='<div class="text-center py-3 text-gray-500 text-sm bg-white rounded border-2 border-dashed border-gray-300">Arama sonucu bulunamadı</div>';
+        return;
+    }
+    
+    // Öneri listesi olarak göster (tıklanabilir div'ler)
+    allPersonnel.slice(0,100).sort((a,b)=>a.name.localeCompare(b.name,'tr')).forEach(p=>{
+        const isSelected=selectedTaskCompleters.personnel.some(x=>x.id===p.id);
+        const div=document.createElement('div');
+        div.className='completer-suggestion-item'+(isSelected?' selected':'');
+        div.setAttribute('data-comp-id',p.id);
+        div.setAttribute('data-comp-name',String(p.name||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&#39;').replace(/</g,'&lt;').replace(/>/g,'&gt;'));
+        div.setAttribute('data-comp-dept',String(p.department||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&#39;').replace(/</g,'&lt;').replace(/>/g,'&gt;'));
+        div.onclick=function(){ addPersonnelCompleterFromSuggestion(this); };
+        div.innerHTML='<span style="font-size:16px;">'+(isSelected?'✅':'👤')+'</span> <strong>'+escapeHtml(p.name)+'</strong> <span class="text-xs text-gray-500">('+escapeHtml(p.department||'-')+')</span>'+(isSelected?'<span class="text-xs text-green-600 font-bold ml-auto">Seçildi</span>':'<span class="text-xs text-purple-500 font-bold ml-auto">+ Ekle</span>');
+        list.appendChild(div);
+    });
+}
+
+function addPersonnelCompleterFromSuggestion(el){
+    const id=parseInt(el.getAttribute('data-comp-id'),10);
+    const name=el.getAttribute('data-comp-name')||'';
+    const department=el.getAttribute('data-comp-dept')||'';
+    if(selectedTaskCompleters.personnel.some(x=>x.id===id)){
+        // Zaten seçiliyse çıkar
+        selectedTaskCompleters.personnel=selectedTaskCompleters.personnel.filter(x=>x.id!==id);
+    } else {
+        selectedTaskCompleters.personnel.push({id:id,name:name,department:department,type:'personnel'});
+    }
+    updateCompleterSummary();
+    // Arama kutusunu temizle ve listeyi yeniden render et
+    const searchInput=document.getElementById('taskCompleterPersonnelSearch');
+    if(searchInput){
+        renderCompleterPersonnelList(searchInput.value);
+    }
+}
 function onPersonnelCompleterToggle(cb){const id=parseInt(cb.getAttribute('data-comp-id'),10);const name=cb.getAttribute('data-comp-name')||'';const department=cb.getAttribute('data-comp-dept')||'';const checked=cb.checked;if(checked){if(!selectedTaskCompleters.personnel.some(x=>x.id===id)){selectedTaskCompleters.personnel.push({id:id,name:name,department:department,type:'personnel'});}}else{selectedTaskCompleters.personnel=selectedTaskCompleters.personnel.filter(x=>x.id!==id);}const item=cb.closest('.completer-checkbox-item');if(item){if(checked)item.classList.add('selected');else item.classList.remove('selected');}updateCompleterSummary();}
 function filterCompleterPersonnelList(){const term=document.getElementById('taskCompleterPersonnelSearch').value;renderCompleterPersonnelList(term);}
 function addExternalCompleter(){const inp=document.getElementById('taskCompleterExternalInput');if(!inp)return;const name=inp.value.trim();if(!name){alert('Ad Soyad girin!');return}if(selectedTaskCompleters.external.some(x=>normalize(x.name)===normalize(name))){alert('Bu kişi zaten eklendi!');inp.value='';return;}selectedTaskCompleters.external.push({name:name,type:'external'});inp.value='';renderExternalCompletersList();updateCompleterSummary();}
 function removeExternalCompleter(idx){selectedTaskCompleters.external.splice(idx,1);renderExternalCompletersList();updateCompleterSummary();}
 function renderExternalCompletersList(){const list=document.getElementById('taskCompleterExternalList');if(!list)return;list.innerHTML='';selectedTaskCompleters.external.forEach((x,i)=>{const tag=document.createElement('span');tag.className='completer-tag external';tag.innerHTML=escapeHtml(x.name)+' <button onclick="removeExternalCompleter('+i+')" style="color:#b91c1c;font-weight:bold;margin-left:4px;background:none;border:none;cursor:pointer;">✕</button>';list.appendChild(tag);});}
-function updateCompleterSummary(){const el=document.getElementById('taskCompleterSummary');if(!el)return;const all=[...selectedTaskCompleters.responsible.map(x=>({...x,type:'responsible'})),...selectedTaskCompleters.personnel.map(x=>({...x,type:'personnel'})),...selectedTaskCompleters.external.map(x=>({...x,type:'external'}))];if(all.length===0){el.innerHTML='<span class="text-gray-400 text-xs italic">Henüz kimse seçilmedi</span>';return;}el.innerHTML=all.map(x=>{let cls='completer-tag';if(x.type==='external')cls+=' external';else if(x.type==='personnel')cls+=' personnel';else if(x.type==='responsible')cls+=' responsible';return '<span class="'+cls+'">'+escapeHtml(x.name)+'</span>';}).join('');}
+function updateCompleterSummary(){
+    const el=document.getElementById('taskCompleterSummary');
+    if(!el)return;
+    const all=[
+        ...selectedTaskCompleters.responsible.map(x=>({...x,type:'responsible'})),
+        ...selectedTaskCompleters.personnel.map(x=>({...x,type:'personnel'})),
+        ...selectedTaskCompleters.external.map(x=>({...x,type:'external'}))
+    ];
+    if(all.length===0){
+        el.innerHTML='<span class="text-gray-400 text-xs italic">Henüz kimse seçilmedi</span>';
+        return;
+    }
+    el.innerHTML=all.map(x=>{
+        let cls='completer-tag';
+        if(x.type==='external')cls+=' external';
+        else if(x.type==='personnel')cls+=' personnel';
+        else if(x.type==='responsible')cls+=' responsible';
+        let removeBtn='';
+        if(x.type==='external'){
+            const extIdx=selectedTaskCompleters.external.findIndex(e=>e.name===x.name);
+            removeBtn='<button onclick="removeExternalCompleter('+extIdx+')" style="color:#b91c1c;font-weight:bold;margin-left:4px;background:none;border:none;cursor:pointer;">✕</button>';
+        } else if(x.type==='personnel'){
+            removeBtn='<button onclick="removePersonnelCompleter('+x.id+')" style="color:#b91c1c;font-weight:bold;margin-left:4px;background:none;border:none;cursor:pointer;">✕</button>';
+        } else if(x.type==='responsible'){
+            removeBtn='<button onclick="removeResponsibleCompleter('+x.id+')" style="color:#b91c1c;font-weight:bold;margin-left:4px;background:none;border:none;cursor:pointer;">✕</button>';
+        }
+        return '<span class="'+cls+'">'+escapeHtml(x.name)+removeBtn+'</span>';
+    }).join('');
+}
+
+function removePersonnelCompleter(id){
+    selectedTaskCompleters.personnel=selectedTaskCompleters.personnel.filter(x=>x.id!==id);
+    updateCompleterSummary();
+    const searchInput=document.getElementById('taskCompleterPersonnelSearch');
+    if(searchInput&&searchInput.value.trim()){
+        renderCompleterPersonnelList(searchInput.value);
+    }
+}
+
+function removeResponsibleCompleter(id){
+    selectedTaskCompleters.responsible=selectedTaskCompleters.responsible.filter(x=>x.id!==id);
+    const cb=document.querySelector('#taskCompleterResponsibleList input[data-comp-id="'+id+'"]');
+    if(cb){
+        cb.checked=false;
+        const item=cb.closest('.completer-checkbox-item');
+        if(item)item.classList.remove('selected');
+    }
+    updateCompleterSummary();
+}
 function confirmTaskCompletion(){
     if(!taskCompletionContext){alert('Hata!');return}
-    const taskId=taskCompletionContext.taskId;const task=data.tasks.find(t=>t.id===taskId);if(!task){alert('Görev bulunamadı!');return}
-    const completers=[];selectedTaskCompleters.responsible.forEach(x=>completers.push({name:x.name,type:'responsible'}));selectedTaskCompleters.personnel.forEach(x=>completers.push({name:x.name,type:'personnel',department:x.department}));selectedTaskCompleters.external.forEach(x=>completers.push({name:x.name,type:'external'}));
+    const taskId=taskCompletionContext.taskId;
+    const task=data.tasks.find(t=>t.id===taskId);
+    if(!task){alert('Görev bulunamadı!');return}
+    
+    // Rapor zorunluluğu kontrolü
+    if(taskCompletionContext.requireReport && !taskCompletionReportFileData){
+        if(!confirm('⚠️ UYARI!\n\nBu görev için "Görev Raporu / Kontrol Formu" yüklenmesi zorunludur.\n\nRapor yüklenmedi. Yine de görevi tamamlandı olarak işaretlemek istiyor musunuz?')){
+            return;
+        }
+        // Kullanıcı yine de tamamlamak istedi - rapor olmadan kaydet
+    }
+    
+    const completers=[];
+    selectedTaskCompleters.responsible.forEach(x=>completers.push({name:x.name,type:'responsible'}));
+    selectedTaskCompleters.personnel.forEach(x=>completers.push({name:x.name,type:'personnel',department:x.department}));
+    selectedTaskCompleters.external.forEach(x=>completers.push({name:x.name,type:'external'}));
     if(completers.length===0){if(!confirm('Hiç kimse seçilmedi. Yine de görevi tamamlandı olarak işaretlemek istiyor musunuz?'))return;}
-    const now=new Date();const nextDue=new Date(task.nextDueDate);const wasOverdue=nextDue<now;const overdueDays=wasOverdue?Math.ceil((now-nextDue)/(1000*60*60*24)):0;
+    
+    const now=new Date();
+    const nextDue=new Date(task.nextDueDate);
+    const wasOverdue=nextDue<now;
+    const overdueDays=wasOverdue?Math.ceil((now-nextDue)/(1000*60*60*24)):0;
     const completionNote=document.getElementById('taskCompletionNote').value.trim();
-    const ct={...JSON.parse(JSON.stringify(task)),completedId:Date.now()+Math.random(),completedAt:now.toISOString(),wasOverdue:wasOverdue,overdueDays:overdueDays,completedBy:taskCompletionContext.marker,completedByRole:taskCompletionContext.markerRole,completers:completers,completionNote:completionNote};
+    
+    // Rapor formu verileri
+    const hasReport = !!taskCompletionReportFileData;
+    const reportData = hasReport ? {
+        data: taskCompletionReportFileData,
+        name: taskCompletionReportFileName,
+        type: taskCompletionReportFileType,
+        size: taskCompletionReportFileData ? Math.round((taskCompletionReportFileData.length * 3/4) / 1024) : 0,
+        uploadedAt: now.toISOString()
+    } : null;
+    
+    const ct={
+        ...JSON.parse(JSON.stringify(task)),
+        completedId:Date.now()+Math.random(),
+        completedAt:now.toISOString(),
+        wasOverdue:wasOverdue,
+        overdueDays:overdueDays,
+        completedBy:taskCompletionContext.marker,
+        completedByRole:taskCompletionContext.markerRole,
+        completers:completers,
+        completionNote:completionNote,
+        requireReport: taskCompletionContext.requireReport,
+        reportForm: reportData
+    };
+    
     if(!data.completedTasks)data.completedTasks=[];
-    data.completedTasks.push(ct);task.lastCompletedAt=now.toISOString();task.nextDueDate=new Date(now.getTime()+task.period*24*60*60*1000).toISOString();
-    saveToLocalStorage();updateTaskPage();updateHomeActiveTasks();hideModal('taskCompletionModal');
-    let msg='✅ Görev tamamlandı!';if(wasOverdue)msg+=' ('+overdueDays+' gün gecikmeli)';if(completers.length>0)msg+=' — '+completers.length+' kişi';msg+=' — '+taskCompletionContext.marker;
-    showSuccessMessage(msg);taskCompletionContext=null;selectedTaskCompleters={responsible:[],personnel:[],external:[]};
+    data.completedTasks.push(ct);
+    task.lastCompletedAt=now.toISOString();
+    task.nextDueDate=new Date(now.getTime()+task.period*24*60*60*1000).toISOString();
+    
+    // Görevin kendisinden de rapor verisini temizleyelim (artık completedTask'ta)
+    // (gerekirse task.requireReport korunur çünkü periyodik görev)
+    
+    saveToLocalStorage();
+    updateTaskPage();
+    updateHomeActiveTasks();
+    hideModal('taskCompletionModal');
+    
+    let msg='✅ Görev tamamlandı!';
+    if(wasOverdue)msg+=' ('+overdueDays+' gün gecikmeli)';
+    if(completers.length>0)msg+=' — '+completers.length+' kişi';
+    if(hasReport)msg+=' — 📎 Rapor yüklendi';
+    else if(taskCompletionContext.requireReport)msg+=' — ⚠️ Rapor EKLENMEDİ';
+    msg+=' — '+taskCompletionContext.marker;
+    showSuccessMessage(msg);
+    
+    taskCompletionContext=null;
+    selectedTaskCompleters={responsible:[],personnel:[],external:[]};
+    taskCompletionReportFileData=null;
+    taskCompletionReportFileName='';
+    taskCompletionReportFileType='';
 }
 function deleteTask(id){if(!isAdmin){alert('❌ Yönetici girişi gerekli!');return}const task=data.tasks.find(t=>t.id===id);if(!task)return;if(!confirm(task.name+' görevini silmek istediğinize emin misiniz?'))return;data.tasks=data.tasks.filter(t=>t.id!==id);saveToLocalStorage();updateTaskPage();showSuccessMessage('🗑️ Silindi!');}
 function deleteCompletedTask(id){if(!isAdmin){alert('❌ Yönetici girişi gerekli!');return}if(!confirm('Bu tamamlanan görev kaydını silmek istediğinize emin misiniz?'))return;data.completedTasks=data.completedTasks.filter(t=>t.completedId!==id && t.id!==id);saveToLocalStorage();updateTaskPage();showSuccessMessage('🗑️ Silindi!');}
+
+// ==================== TAMAMLANAN GÖREV RAPORU YÜKLE / İNDİR ====================
+function downloadCompletedTaskReport(completedId){
+    const ct=data.completedTasks.find(t=>t.completedId===completedId || t.id===completedId);
+    if(!ct || !ct.reportForm || !ct.reportForm.data){
+        alert('Bu görev için yüklü rapor bulunamadı!');
+        return;
+    }
+    const a=document.createElement('a');
+    a.href=ct.reportForm.data;
+    a.download=ct.reportForm.name||('gorev-raporu-'+(ct.name||'')+'.dat');
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    showSuccessMessage('📥 Rapor indirildi: '+ct.reportForm.name);
+}
+
+function uploadCompletedTaskReport(completedId){
+    if(!isAdmin && !isViewer){alert('❌ Giriş yapmanız gerekiyor!');return}
+    const ct=data.completedTasks.find(t=>t.completedId===completedId || t.id===completedId);
+    if(!ct){alert('Görev kaydı bulunamadı!');return}
+    
+    // Geçici file input oluştur
+    const input=document.createElement('input');
+    input.type='file';
+    input.accept='.pdf,.doc,.docx,.jpg,.jpeg,.png,.xls,.xlsx';
+    input.onchange=function(e){
+        const file=e.target.files && e.target.files[0];
+        if(!file)return;
+        if(file.size > 5*1024*1024){alert('❌ Dosya boyutu 5 MB\'dan büyük olamaz!');return;}
+        const reader=new FileReader();
+        reader.onload=function(ev){
+            ct.reportForm={
+                data:ev.target.result,
+                name:file.name,
+                type:file.type||'application/octet-stream',
+                size:Math.round(file.size/1024),
+                uploadedAt:new Date().toISOString(),
+                uploadedBy:currentUsername||'bilinmiyor'
+            };
+            saveToLocalStorage();
+            updateCompletedTaskTable();
+            showSuccessMessage('✅ Rapor yüklendi: '+file.name);
+        };
+        reader.readAsDataURL(file);
+    };
+    input.click();
+}
 function clearCompletedTasks(){if(!isAdmin){alert('❌ Yönetici girişi gerekli!');return}if(!confirm('Tüm tamamlanan görevler silinsin mi?'))return;data.completedTasks=[];saveToLocalStorage();updateTaskPage();showSuccessMessage('🗑️ Temizlendi!');}
 
 function getUniqueColumnValues(dataArr, key){const set = new Set();dataArr.forEach(item => {const val = item[key];if(val === null || val === undefined) return;const strVal = String(val).trim();if(strVal === '') return;set.add(strVal);});return [...set].sort((a,b) => a.localeCompare(b, 'tr', {numeric:true}));}
@@ -5048,11 +5928,626 @@ function editCertificate(id){if(!isAdmin){alert('❌ Yönetici girişi gerekli!'
 function deleteCertificate(id){if(!isAdmin){alert('❌ Yönetici girişi gerekli!');return}if(!confirm('Silinsin mi?')) return;data.certificates = data.certificates.filter(c => c.id !== id);saveToLocalStorage();updateCertificateList();updateAllStats();}
 function updateCertificateList(){const l = document.getElementById('certificateList');if(!l) return;l.innerHTML = '';if(!data.certificates || data.certificates.length === 0){l.innerHTML = '<div class="text-gray-500 text-sm text-center py-2">Henüz sertifika yok</div>';return;}data.certificates.forEach(c => {const btnHtml = isAdmin ? '<button onclick="editCertificate(' + c.id + ')" class="text-green-600 text-xs font-bold">✏️</button><button onclick="deleteCertificate(' + c.id + ')" class="text-red-500 text-xs font-bold ml-1">🗑️</button>' : '';l.innerHTML += '<div class="flex justify-between items-center p-2 bg-cyan-50 rounded text-sm"><div><strong>' + escapeHtml(c.name) + '</strong><br><span class="text-xs text-gray-600">' + (c.duration||12) + 'ay | ' + escapeHtml(c.issuer || '-') + '</span></div><div class="flex gap-1">' + btnHtml + '</div></div>';});}
 
-function openReportModal(){if(!isAdmin && !isViewer){alert('❌ Giriş yapmanız gerekiyor!'); return}const now = new Date();const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);const lastDay = new Date(now.getFullYear(), now.getMonth()+1, 0);document.getElementById('reportStartDate').value = firstDay.toISOString().split('T')[0];document.getElementById('reportEndDate').value = lastDay.toISOString().split('T')[0];populateReportYearSelect();document.getElementById('reportMonthSelect').value = String(now.getMonth()+1);document.getElementById('reportPreviewArea').classList.add('hidden');document.getElementById('reportPreviewContent').innerHTML = '';currentReportPreviewHTML = '';switchReportTab('range');showModal('reportModal');}
+function openReportModal(){
+    if(!isAdmin && !isViewer){alert('❌ Giriş yapmanız gerekiyor!'); return}
+    const now = new Date();
+    const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
+    const lastDay = new Date(now.getFullYear(), now.getMonth()+1, 0);
+    document.getElementById('reportStartDate').value = firstDay.toISOString().split('T')[0];
+    document.getElementById('reportEndDate').value = lastDay.toISOString().split('T')[0];
+    document.getElementById('statsStartDate').value = firstDay.toISOString().split('T')[0];
+    document.getElementById('statsEndDate').value = lastDay.toISOString().split('T')[0];
+    populateReportYearSelect();
+    document.getElementById('reportMonthSelect').value = String(now.getMonth()+1);
+    document.getElementById('reportPreviewArea').classList.add('hidden');
+    document.getElementById('reportPreviewContent').innerHTML = '';
+    currentReportPreviewHTML = '';
+    switchReportTab('range');
+    showModal('reportModal');
+}
+
+function populateStatsFilters(){
+    const deptSel = document.getElementById('statsDepartmentFilter');
+    const personSel = document.getElementById('statsPersonFilter');
+    if(deptSel){
+        const cur = deptSel.value;
+        deptSel.innerHTML = '<option value="">-- Tüm Birimler --</option>';
+        (data.departments||[]).slice().sort((a,b)=>a.localeCompare(b,'tr')).forEach(d => {
+            deptSel.innerHTML += '<option value="'+escapeHtml(d)+'">'+escapeHtml(d)+'</option>';
+        });
+        deptSel.value = cur;
+    }
+    if(personSel){
+        const cur = personSel.value;
+        personSel.innerHTML = '<option value="">-- Tüm Personel --</option>';
+        (data.personnel||[]).slice().sort((a,b)=>a.name.localeCompare(b.name,'tr')).forEach(p => {
+            personSel.innerHTML += '<option value="'+escapeHtml(p.name)+'">'+escapeHtml(p.name)+' ('+escapeHtml(p.department||'-')+')</option>';
+        });
+        personSel.value = cur;
+    }
+}
+
+function setStatsDateQuick(type){
+    const startInput = document.getElementById('statsStartDate');
+    const endInput = document.getElementById('statsEndDate');
+    const now = new Date();
+    if(type === 'clear'){ startInput.value = ''; endInput.value = ''; return; }
+    let start, end;
+    if(type === 'thisMonth'){
+        start = new Date(now.getFullYear(), now.getMonth(), 1);
+        end = new Date(now.getFullYear(), now.getMonth()+1, 0);
+    } else if(type === 'lastMonth'){
+        start = new Date(now.getFullYear(), now.getMonth()-1, 1);
+        end = new Date(now.getFullYear(), now.getMonth(), 0);
+    } else if(type === 'thisYear'){
+        start = new Date(now.getFullYear(), 0, 1);
+        end = new Date(now.getFullYear(), 11, 31);
+    } else if(type === 'lastYear'){
+        start = new Date(now.getFullYear()-1, 0, 1);
+        end = new Date(now.getFullYear()-1, 11, 31);
+    }
+    startInput.value = start.toISOString().split('T')[0];
+    endInput.value = end.toISOString().split('T')[0];
+}
 function populateReportYearSelect(){const sel = document.getElementById('reportYearSelect');if(!sel) return;const years = new Set();(data.tasks||[]).forEach(t => { if(t.assignedAt) years.add(new Date(t.assignedAt).getFullYear()); if(t.nextDueDate) years.add(new Date(t.nextDueDate).getFullYear()); });(data.completedTasks||[]).forEach(t => { if(t.assignedAt) years.add(new Date(t.assignedAt).getFullYear()); if(t.completedAt) years.add(new Date(t.completedAt).getFullYear()); });years.add(new Date().getFullYear());const sortedYears = [...years].sort((a,b) => b-a);sel.innerHTML = '';sortedYears.forEach(y => { sel.innerHTML += '<option value="' + y + '">' + y + '</option>'; });}
-function switchReportTab(tab){currentReportTab = tab;const btnRange = document.getElementById('reportTabBtn_range');const btnMonthly = document.getElementById('reportTabBtn_monthly');const contentRange = document.getElementById('reportTab_range');const contentMonthly = document.getElementById('reportTab_monthly');if(tab === 'range'){ btnRange.classList.add('active'); btnMonthly.classList.remove('active'); contentRange.classList.remove('hidden'); contentMonthly.classList.add('hidden'); }else { btnMonthly.classList.add('active'); btnRange.classList.remove('active'); contentMonthly.classList.remove('hidden'); contentRange.classList.add('hidden'); }document.getElementById('reportPreviewArea').classList.add('hidden');currentReportPreviewHTML = '';}
+function switchReportTab(tab){
+    currentReportTab = tab;
+    const btnRange = document.getElementById('reportTabBtn_range');
+    const btnMonthly = document.getElementById('reportTabBtn_monthly');
+    const btnStats = document.getElementById('reportTabBtn_stats');
+    const contentRange = document.getElementById('reportTab_range');
+    const contentMonthly = document.getElementById('reportTab_monthly');
+    const contentStats = document.getElementById('reportTab_stats');
+    [btnRange, btnMonthly, btnStats].forEach(b => { if(b) b.classList.remove('active'); });
+    [contentRange, contentMonthly, contentStats].forEach(c => { if(c) c.classList.add('hidden'); });
+    if(tab === 'range'){
+        btnRange.classList.add('active');
+        contentRange.classList.remove('hidden');
+    } else if(tab === 'monthly'){
+        btnMonthly.classList.add('active');
+        contentMonthly.classList.remove('hidden');
+    } else if(tab === 'stats'){
+        btnStats.classList.add('active');
+        contentStats.classList.remove('hidden');
+        populateStatsFilters();
+    }
+    document.getElementById('reportPreviewArea').classList.add('hidden');
+    currentReportPreviewHTML = '';
+}
 function generateRangeReport(){if(!isAdmin && !isViewer){alert('❌ Giriş yapmanız gerekiyor!'); return}const startStr = document.getElementById('reportStartDate').value;const endStr = document.getElementById('reportEndDate').value;if(!startStr || !endStr){alert('Lütfen başlangıç ve bitiş tarihini seçin!'); return}const startDate = new Date(startStr + 'T00:00:00');const endDate = new Date(endStr + 'T23:59:59');if(startDate > endDate){alert('Başlangıç tarihi bitiş tarihinden sonra olamaz!'); return}const incActive = document.getElementById('reportIncludeActive').checked;const incCompleted = document.getElementById('reportIncludeCompleted').checked;const incOverdue = document.getElementById('reportIncludeOverdue').checked;let html = '';html += '<div style="font-family:Arial,sans-serif;font-size:12px;color:#000;padding:10px;">';html += '<div style="text-align:center;border-bottom:2px solid #333;padding-bottom:10px;margin-bottom:14px;">';html += '<h1 style="font-size:20px;margin:0 0 4px;font-weight:bold;">ATTİ RAYLI SİSTEM</h1>';html += '<h2 style="font-size:14px;margin:0;font-weight:normal;">Görev Raporu</h2>';html += '<div style="font-size:11px;color:#555;margin-top:6px;">Rapor Tarih Aralığı: <strong>' + startDate.toLocaleDateString('tr-TR') + ' - ' + endDate.toLocaleDateString('tr-TR') + '</strong></div>';html += '<div style="font-size:10px;color:#777;margin-top:3px;">Oluşturulma: ' + new Date().toLocaleString('tr-TR') + '</div>';html += '</div>';let activeTasks = [];if(incActive){ activeTasks = (data.tasks||[]).filter(t => { const nd = new Date(t.nextDueDate); const as = new Date(t.assignedAt || nd); return (as <= endDate && nd >= startDate) || (nd < new Date()); }); }let completedTasks = [];if(incCompleted){ completedTasks = (data.completedTasks||[]).filter(t => { const cd = new Date(t.completedAt); return cd >= startDate && cd <= endDate; }); }let overdueTasks = [];if(incOverdue){ const now = new Date(); overdueTasks = (data.tasks||[]).filter(t => new Date(t.nextDueDate) < now); }html += '<div style="background:#f0f4ff;border:1px solid #c7d2fe;padding:10px;border-radius:6px;margin-bottom:14px;">';html += '<div style="display:flex;gap:20px;flex-wrap:wrap;font-size:11px;">';html += '<span><strong>📋 Aktif Görev:</strong> ' + activeTasks.length + '</span>';html += '<span><strong>✅ Tamamlanan:</strong> ' + completedTasks.length + '</span>';html += '<span><strong>⚠️ Gecikmiş:</strong> ' + overdueTasks.length + '</span>';html += '</div></div>';if(incActive && activeTasks.length > 0){html += '<h3 style="background:#7c3aed;color:#fff;padding:6px 10px;margin:14px 0 8px;font-size:12px;border-radius:4px;">📋 AKTİF GÖREVLER (' + activeTasks.length + ')</h3>';html += '<table style="width:100%;border-collapse:collapse;font-size:11px;">';html += '<thead><tr style="background:#ede9fe;">';html += '<th style="border:1px solid #999;padding:5px;text-align:left;">Görev</th><th style="border:1px solid #999;padding:5px;text-align:left;">Birim</th><th style="border:1px solid #999;padding:5px;text-align:left;">Sorumlular</th><th style="border:1px solid #999;padding:5px;text-align:center;">Verilme</th><th style="border:1px solid #999;padding:5px;text-align:center;">Bitiş</th><th style="border:1px solid #999;padding:5px;text-align:center;">Periyot</th><th style="border:1px solid #999;padding:5px;text-align:center;">Durum</th></tr></thead><tbody>';activeTasks.sort((a,b) => new Date(a.nextDueDate) - new Date(b.nextDueDate));activeTasks.forEach(t => {const status = calculateTaskStatus(t);let stTxt = 'AKTİF', stColor = '#16a34a';if(status.status === 'overdue'){ stTxt = 'GECİKMİŞ'; stColor = '#dc2626'; }else if(status.status === 'warning'){ stTxt = 'YAKLAŞIYOR'; stColor = '#d97706'; }const persons = t.persons.map(p => p.name).join(', ');html += '<tr><td style="border:1px solid #999;padding:5px;">' + escapeHtml(t.name) + '</td><td style="border:1px solid #999;padding:5px;">' + escapeHtml(t.department) + '</td><td style="border:1px solid #999;padding:5px;">' + escapeHtml(persons) + '</td><td style="border:1px solid #999;padding:5px;text-align:center;">' + new Date(t.assignedAt).toLocaleDateString('tr-TR') + '</td><td style="border:1px solid #999;padding:5px;text-align:center;">' + new Date(t.nextDueDate).toLocaleDateString('tr-TR') + '</td><td style="border:1px solid #999;padding:5px;text-align:center;">' + t.period + ' gün</td><td style="border:1px solid #999;padding:5px;text-align:center;color:' + stColor + ';font-weight:bold;">' + stTxt + '</td></tr>';});html += '</tbody></table>';}if(incOverdue && overdueTasks.length > 0){html += '<h3 style="background:#dc2626;color:#fff;padding:6px 10px;margin:14px 0 8px;font-size:12px;border-radius:4px;">⚠️ GECİKMİŞ GÖREVLER (' + overdueTasks.length + ')</h3>';html += '<table style="width:100%;border-collapse:collapse;font-size:11px;">';html += '<thead><tr style="background:#fee2e2;"><th style="border:1px solid #999;padding:5px;text-align:left;">Görev</th><th style="border:1px solid #999;padding:5px;text-align:left;">Birim</th><th style="border:1px solid #999;padding:5px;text-align:left;">Sorumlular</th><th style="border:1px solid #999;padding:5px;text-align:center;">Bitiş</th><th style="border:1px solid #999;padding:5px;text-align:center;">Gecikme</th></tr></thead><tbody>';overdueTasks.forEach(t => {const status = calculateTaskStatus(t);const persons = t.persons.map(p => p.name).join(', ');html += '<tr><td style="border:1px solid #999;padding:5px;">' + escapeHtml(t.name) + '</td><td style="border:1px solid #999;padding:5px;">' + escapeHtml(t.department) + '</td><td style="border:1px solid #999;padding:5px;">' + escapeHtml(persons) + '</td><td style="border:1px solid #999;padding:5px;text-align:center;">' + new Date(t.nextDueDate).toLocaleDateString('tr-TR') + '</td><td style="border:1px solid #999;padding:5px;text-align:center;color:#dc2626;font-weight:bold;">' + status.days + ' gün</td></tr>';});html += '</tbody></table>';}if(incCompleted && completedTasks.length > 0){html += '<h3 style="background:#16a34a;color:#fff;padding:6px 10px;margin:14px 0 8px;font-size:12px;border-radius:4px;">✅ TAMAMLANAN GÖREVLER (' + completedTasks.length + ')</h3>';html += '<table style="width:100%;border-collapse:collapse;font-size:11px;">';html += '<thead><tr style="background:#dcfce7;"><th style="border:1px solid #999;padding:5px;text-align:left;">Görev</th><th style="border:1px solid #999;padding:5px;text-align:left;">Birim</th><th style="border:1px solid #999;padding:5px;text-align:left;">Sorumlular</th><th style="border:1px solid #999;padding:5px;text-align:center;">Tamamlanma</th><th style="border:1px solid #999;padding:5px;text-align:left;">Yapanlar</th><th style="border:1px solid #999;padding:5px;text-align:center;">İşaretleyen</th><th style="border:1px solid #999;padding:5px;text-align:center;">Durum</th></tr></thead><tbody>';completedTasks.sort((a,b) => new Date(b.completedAt) - new Date(a.completedAt));completedTasks.forEach(t => {const persons = (t.persons||[]).map(p => p.name).join(', ');const yapanlar = (t.completers||[]).map(c => c.name).join(', ');let durum = 'Zamanında', durumColor = '#16a34a';if(t.wasOverdue){ durum = t.overdueDays + 'g gecikmeli'; durumColor = '#dc2626'; }html += '<tr><td style="border:1px solid #999;padding:5px;">' + escapeHtml(t.name) + '</td><td style="border:1px solid #999;padding:5px;">' + escapeHtml(t.department) + '</td><td style="border:1px solid #999;padding:5px;">' + escapeHtml(persons) + '</td><td style="border:1px solid #999;padding:5px;text-align:center;">' + new Date(t.completedAt).toLocaleDateString('tr-TR') + '</td><td style="border:1px solid #999;padding:5px;">' + escapeHtml(yapanlar || '-') + '</td><td style="border:1px solid #999;padding:5px;text-align:center;">' + escapeHtml(t.completedBy || '-') + '</td><td style="border:1px solid #999;padding:5px;text-align:center;color:' + durumColor + ';font-weight:bold;">' + durum + '</td></tr>';});html += '</tbody></table>';}if(!incActive && !incCompleted && !incOverdue){ html += '<div style="text-align:center;padding:20px;color:#999;">Hiçbir içerik seçilmedi.</div>'; }html += '<div style="margin-top:20px;text-align:center;font-size:10px;color:#777;border-top:1px solid #ccc;padding-top:8px;">ATTİ Raylı Sistem - RTS Takip | Hazırlayan: Gökhan GÖKER</div></div>';currentReportPreviewHTML = html;document.getElementById('reportPreviewContent').innerHTML = html;document.getElementById('reportPreviewArea').classList.remove('hidden');}
+// ==================== İSTATİSTİK RAPORU ====================
+function generateStatsReport(){
+    if(!isAdmin && !isViewer){alert('❌ Giriş yapmanız gerekiyor!'); return}
+    const startStr = document.getElementById('statsStartDate').value;
+    const endStr = document.getElementById('statsEndDate').value;
+    const deptFilter = document.getElementById('statsDepartmentFilter').value;
+    const personFilter = document.getElementById('statsPersonFilter').value;
+    const incAssigned = document.getElementById('statsIncludeAssigned').checked;
+    const incCompleted = document.getElementById('statsIncludeCompleted').checked;
+    const incNotJoined = document.getElementById('statsIncludeNotJoined').checked;
+    
+    let startDate = startStr ? new Date(startStr + 'T00:00:00') : new Date(2000,0,1);
+    let endDate = endStr ? new Date(endStr + 'T23:59:59') : new Date(2100,0,1);
+    if(startDate > endDate){ alert('Başlangıç tarihi bitiş tarihinden sonra olamaz!'); return; }
+    
+    const allTasks = data.tasks || [];
+    const allCompleted = data.completedTasks || [];
+    
+    // === KİŞİ BAZLI İSTATİSTİK ===
+    // Key: kişi adı. Değer: {name, department, assigned, completed, notJoined, totalDelayDays, delayCount}
+    const statsMap = {};
+    
+    function ensurePerson(name, dept){
+        if(!statsMap[name]){
+            statsMap[name] = {
+                name: name,
+                department: dept || '-',
+                assigned: 0,           // Aldığı görev sayısı (periyodik olarak atanmış her görev 1 kez sayılır)
+                completed: 0,          // Tamamladığı görev sayısı
+                notJoined: 0,          // Katılmadığı görev sayısı
+                totalDelayDays: 0,
+                delayCount: 0,
+                onTimeCount: 0
+            };
+        }
+    }
+    
+    // 1) Sorumlu olarak atanmış görevler (data.tasks içindeki persons)
+    allTasks.forEach(t => {
+        const assignedAt = new Date(t.assignedAt || t.nextDueDate);
+        if(assignedAt < startDate || assignedAt > endDate) return;
+        (t.persons || []).forEach(p => {
+            if(!p || !p.name) return;
+            if(personFilter && p.name !== personFilter) return;
+            ensurePerson(p.name, p.department);
+            if(deptFilter && statsMap[p.name].department !== deptFilter) return;
+            statsMap[p.name].assigned++;
+        });
+    });
+    
+    // 2) Tamamlanan görevler (data.completedTasks içindeki completers)
+    allCompleted.forEach(ct => {
+        const completedAt = new Date(ct.completedAt);
+        if(completedAt < startDate || completedAt > endDate) return;
+        const wasOverdue = ct.wasOverdue || false;
+        const overdueDays = ct.overdueDays || 0;
+        const yapanIsimleri = new Set((ct.completers||[]).map(c => normalize(c.name)));
+        
+        // 2a) Yapanlar (completers)
+        (ct.completers || []).forEach(c => {
+            if(!c || !c.name) return;
+            if(personFilter && c.name !== personFilter) return;
+            ensurePerson(c.name, c.department);
+            if(deptFilter && statsMap[c.name].department !== deptFilter) return;
+            statsMap[c.name].completed++;
+            if(wasOverdue){
+                statsMap[c.name].delayCount++;
+                statsMap[c.name].totalDelayDays += overdueDays;
+            } else {
+                statsMap[c.name].onTimeCount++;
+            }
+        });
+        
+        // 2b) Sorumlu olup katılmayanlar (persons içinde olup completers'da olmayanlar)
+        (ct.persons || []).forEach(p => {
+            if(!p || !p.name) return;
+            if(personFilter && p.name !== personFilter) return;
+            if(yapanIsimleri.has(normalize(p.name))) return; // Yapmış, geç
+            ensurePerson(p.name, p.department);
+            if(deptFilter && statsMap[p.name].department !== deptFilter) return;
+            statsMap[p.name].notJoined++;
+        });
+    });
+    
+    // 3) Şu anda aktif olup gecikmiş görevlerdeki kişiler (data.tasks içinde)
+    allTasks.forEach(t => {
+        const nextDue = new Date(t.nextDueDate);
+        if(nextDue >= new Date()) return; // Gecikmemiş, geç
+        if(nextDue < startDate || nextDue > endDate) return;
+        // Bu aktif görev gecikmiş durumda - sorumlular hâlâ "aldı" olarak sayıldı, katılmayan olarak da işaretleyelim
+        const wasCompleted = allCompleted.some(ct => ct.id === t.id);
+        if(wasCompleted) return;
+        (t.persons || []).forEach(p => {
+            if(!p || !p.name) return;
+            if(personFilter && p.name !== personFilter) return;
+            ensurePerson(p.name, p.department);
+            if(deptFilter && statsMap[p.name].department !== deptFilter) return;
+            // Aktif gecikmiş görevi "tamamlanmamış" olarak işaretleyelim (notJoined değil, ayrı sayalım)
+            if(!statsMap[p.name].incomplete) statsMap[p.name].incomplete = 0;
+            statsMap[p.name].incomplete++;
+        });
+    });
+    
+    // === TOPLAM İSTATİSTİKLER ===
+    const totalTasksInRange = allTasks.filter(t => {
+        const d = new Date(t.assignedAt || t.nextDueDate);
+        return d >= startDate && d <= endDate;
+    }).length;
+    
+    const totalCompletedInRange = allCompleted.filter(ct => {
+        const d = new Date(ct.completedAt);
+        return d >= startDate && d <= endDate;
+    }).length;
+    
+    const totalCompletedOnTime = allCompleted.filter(ct => {
+        const d = new Date(ct.completedAt);
+        return d >= startDate && d <= endDate && !ct.wasOverdue;
+    }).length;
+    
+    const totalCompletedLate = allCompleted.filter(ct => {
+        const d = new Date(ct.completedAt);
+        return d >= startDate && d <= endDate && ct.wasOverdue;
+    }).length;
+    
+    const totalActiveOverdue = allTasks.filter(t => {
+        const nextDue = new Date(t.nextDueDate);
+        const wasCompleted = allCompleted.some(ct => ct.id === t.id);
+        return !wasCompleted && nextDue < new Date() && nextDue >= startDate && nextDue <= endDate;
+    }).length;
+    
+    const totalActive = allTasks.filter(t => {
+        const nextDue = new Date(t.nextDueDate);
+        const wasCompleted = allCompleted.some(ct => ct.id === t.id);
+        return !wasCompleted && nextDue >= new Date() && nextDue >= startDate && nextDue <= endDate;
+    }).length;
+    
+    // Ortalama tamamlanma süresi hesaplama (assignedAt -> completedAt arası gün)
+    let totalCompletionDays = 0;
+    let totalCompletionCount = 0;
+    allCompleted.forEach(ct => {
+        const d = new Date(ct.completedAt);
+        if(d < startDate || d > endDate) return;
+        const a = new Date(ct.assignedAt || ct.completedAt);
+        const diffDays = Math.max(0, (d - a) / (1000*60*60*24));
+        totalCompletionDays += diffDays;
+        totalCompletionCount++;
+    });
+    const avgCompletionDays = totalCompletionCount > 0 ? (totalCompletionDays / totalCompletionCount) : 0;
+    
+    // Ortalama gecikme süresi
+    let totalDelaySum = 0;
+    let delayTaskCount = 0;
+    allCompleted.forEach(ct => {
+        const d = new Date(ct.completedAt);
+        if(d < startDate || d > endDate) return;
+        if(ct.wasOverdue && ct.overdueDays){
+            totalDelaySum += ct.overdueDays;
+            delayTaskCount++;
+        }
+    });
+    const avgDelayDays = delayTaskCount > 0 ? (totalDelaySum / delayTaskCount) : 0;
+    
+    // === HTML OLUŞTUR ===
+    const filterInfo = (startStr || endStr) ? ((startStr||'...') + ' - ' + (endStr||'...')) : 'Tüm Zamanlar';
+    let html = '<div style="font-family:Arial,sans-serif;font-size:11px;color:#000;padding:10px;">';
+    
+    // Başlık
+    html += '<div style="text-align:center;border-bottom:2px solid #333;padding-bottom:8px;margin-bottom:12px;">';
+    html += '<h1 style="font-size:18px;margin:0;font-weight:bold;">ATTİ RAYLI SİSTEM</h1>';
+    html += '<h2 style="font-size:13px;margin:4px 0 0;font-weight:normal;">Görev İstatistik Raporu</h2>';
+    html += '<div style="font-size:11px;margin-top:4px;">Tarih Aralığı: <strong>' + filterInfo + '</strong>';
+    if(deptFilter) html += ' | Birim: <strong>' + escapeHtml(deptFilter) + '</strong>';
+    if(personFilter) html += ' | Kişi: <strong>' + escapeHtml(personFilter) + '</strong>';
+    html += '</div>';
+    html += '<div style="font-size:10px;color:#666;margin-top:4px;">Oluşturulma: ' + new Date().toLocaleString('tr-TR') + '</div>';
+    html += '</div>';
+    
+    // Özet kartları
+    html += '<div style="background:#eef2ff;border:1px solid #c7d2fe;padding:10px;border-radius:6px;margin-bottom:14px;">';
+    html += '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;font-size:11px;">';
+    html += '<div><strong>📋 Toplam Atanan Görev:</strong> ' + totalTasksInRange + '</div>';
+    html += '<div><strong>✅ Toplam Tamamlanan:</strong> ' + totalCompletedInRange + '</div>';
+    html += '<div><strong>⏱️ Ortalama Süre:</strong> ' + avgCompletionDays.toFixed(1) + ' gün</div>';
+    html += '<div><strong>🟢 Zamanında:</strong> ' + totalCompletedOnTime + '</div>';
+    html += '<div><strong>⚠️ Gecikmeli:</strong> ' + totalCompletedLate + '</div>';
+    html += '<div><strong>🔴 Ortalama Gecikme:</strong> ' + avgDelayDays.toFixed(1) + ' gün</div>';
+    html += '<div><strong>🔄 Aktif:</strong> ' + totalActive + '</div>';
+    html += '<div><strong>🚫 Tamamlanmayan (gecikmiş aktif):</strong> ' + totalActiveOverdue + '</div>';
+    html += '<div><strong>👥 İstatistikteki Kişi:</strong> ' + Object.keys(statsMap).length + '</div>';
+    html += '</div></div>';
+    
+    // Kişi bazlı tablo
+    const personList = Object.values(statsMap).sort((a,b) => b.assigned - a.assigned || a.name.localeCompare(b.name,'tr'));
+    
+    if(personList.length === 0){
+        html += '<div style="text-align:center;padding:20px;color:#999;">Seçilen kriterlere uyan kayıt bulunamadı.</div>';
+    } else {
+        html += '<h3 style="background:#4f46e5;color:#fff;padding:6px 10px;margin:14px 0 8px;font-size:12px;border-radius:4px;">👥 KİŞİ BAZLI İSTATİSTİKLER</h3>';
+        html += '<table style="width:100%;border-collapse:collapse;font-size:10px;">';
+        html += '<thead><tr style="background:#e0e7ff;">';
+        html += '<th style="border:1px solid #333;padding:5px;text-align:left;width:30px;">#</th>';
+        html += '<th style="border:1px solid #333;padding:5px;text-align:left;">Ad Soyad</th>';
+        html += '<th style="border:1px solid #333;padding:5px;text-align:left;">Birim</th>';
+        if(incAssigned) html += '<th style="border:1px solid #333;padding:5px;text-align:center;">Alınan</th>';
+        if(incCompleted) html += '<th style="border:1px solid #333;padding:5px;text-align:center;">Tamamlanan</th>';
+        if(incCompleted) html += '<th style="border:1px solid #333;padding:5px;text-align:center;">Zamanında</th>';
+        if(incCompleted) html += '<th style="border:1px solid #333;padding:5px;text-align:center;">Gecikmeli</th>';
+        if(incNotJoined) html += '<th style="border:1px solid #333;padding:5px;text-align:center;">Katılmadı</th>';
+        if(incNotJoined) html += '<th style="border:1px solid #333;padding:5px;text-align:center;">Ort. Gecikme (gün)</th>';
+        html += '<th style="border:1px solid #333;padding:5px;text-align:center;">Başarı %</th>';
+        html += '</tr></thead><tbody>';
+        
+        personList.forEach((p, i) => {
+            const basari = p.assigned > 0 ? ((p.completed / p.assigned) * 100) : 0;
+            const basariColor = basari >= 80 ? '#16a34a' : basari >= 50 ? '#d97706' : '#dc2626';
+            const avgDelay = p.delayCount > 0 ? (p.totalDelayDays / p.delayCount).toFixed(1) : '0';
+            
+            html += '<tr>';
+            html += '<td style="border:1px solid #333;padding:5px;text-align:center;">' + (i+1) + '</td>';
+            html += '<td style="border:1px solid #333;padding:5px;"><strong>' + escapeHtml(p.name) + '</strong></td>';
+            html += '<td style="border:1px solid #333;padding:5px;">' + escapeHtml(p.department) + '</td>';
+            if(incAssigned) html += '<td style="border:1px solid #333;padding:5px;text-align:center;font-weight:bold;">' + p.assigned + '</td>';
+            if(incCompleted) html += '<td style="border:1px solid #333;padding:5px;text-align:center;font-weight:bold;color:#16a34a;">' + p.completed + '</td>';
+            if(incCompleted) html += '<td style="border:1px solid #333;padding:5px;text-align:center;color:#16a34a;">' + p.onTimeCount + '</td>';
+            if(incCompleted) html += '<td style="border:1px solid #333;padding:5px;text-align:center;color:#dc2626;">' + p.delayCount + '</td>';
+            if(incNotJoined) html += '<td style="border:1px solid #333;padding:5px;text-align:center;font-weight:bold;color:#dc2626;">' + p.notJoined + '</td>';
+            if(incNotJoined) html += '<td style="border:1px solid #333;padding:5px;text-align:center;">' + avgDelay + '</td>';
+            html += '<td style="border:1px solid #333;padding:5px;text-align:center;font-weight:bold;color:' + basariColor + ';">' + basari.toFixed(1) + '%</td>';
+            html += '</tr>';
+        });
+        
+        // Toplam satırı
+        const totals = personList.reduce((acc, p) => {
+            acc.assigned += p.assigned;
+            acc.completed += p.completed;
+            acc.onTimeCount += p.onTimeCount;
+            acc.delayCount += p.delayCount;
+            acc.notJoined += p.notJoined;
+            acc.totalDelayDays += p.totalDelayDays;
+            return acc;
+        }, {assigned:0,completed:0,onTimeCount:0,delayCount:0,notJoined:0,totalDelayDays:0});
+        const totalBasari = totals.assigned > 0 ? ((totals.completed / totals.assigned) * 100) : 0;
+        const totalAvgDelay = totals.delayCount > 0 ? (totals.totalDelayDays / totals.delayCount).toFixed(1) : '0';
+        
+        html += '<tr style="background:#fef3c7;font-weight:bold;">';
+        html += '<td colspan="3" style="border:1px solid #333;padding:5px;text-align:right;">TOPLAM:</td>';
+        if(incAssigned) html += '<td style="border:1px solid #333;padding:5px;text-align:center;">' + totals.assigned + '</td>';
+        if(incCompleted) html += '<td style="border:1px solid #333;padding:5px;text-align:center;">' + totals.completed + '</td>';
+        if(incCompleted) html += '<td style="border:1px solid #333;padding:5px;text-align:center;">' + totals.onTimeCount + '</td>';
+        if(incCompleted) html += '<td style="border:1px solid #333;padding:5px;text-align:center;">' + totals.delayCount + '</td>';
+        if(incNotJoined) html += '<td style="border:1px solid #333;padding:5px;text-align:center;">' + totals.notJoined + '</td>';
+        if(incNotJoined) html += '<td style="border:1px solid #333;padding:5px;text-align:center;">' + totalAvgDelay + '</td>';
+        html += '<td style="border:1px solid #333;padding:5px;text-align:center;">' + totalBasari.toFixed(1) + '%</td>';
+        html += '</tr>';
+        html += '</tbody></table>';
+    }
+    
+    html += '<div style="margin-top:20px;text-align:center;font-size:10px;color:#777;border-top:1px solid #ccc;padding-top:8px;">ATTİ Raylı Sistem - RTS Takip | Hazırlayan: Gökhan GÖKER</div>';
+    html += '</div>';
+    
+    currentReportPreviewHTML = html;
+    document.getElementById('reportPreviewContent').innerHTML = html;
+    document.getElementById('reportPreviewArea').classList.remove('hidden');
+}
+
+
+
 function generateMonthlyReport(){if(!isAdmin && !isViewer){alert('❌ Giriş yapmanız gerekiyor!'); return}const year = parseInt(document.getElementById('reportYearSelect').value);const month = parseInt(document.getElementById('reportMonthSelect').value);if(!year || !month){alert('Yıl ve ay seçin!'); return}const startDate = new Date(year, month-1, 1, 0, 0, 0, 0);const endDate = new Date(year, month, 0, 23, 59, 59, 999);const monthNames = ['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];const monthName = monthNames[month-1];const incActive = document.getElementById('reportMonthlyIncludeActive').checked;const incCompleted = document.getElementById('reportMonthlyIncludeCompleted').checked;const incDue = document.getElementById('reportMonthlyIncludeDue').checked;let html = '';html += '<div style="font-family:Arial,sans-serif;font-size:12px;color:#000;padding:10px;">';html += '<div style="text-align:center;border-bottom:2px solid #333;padding-bottom:10px;margin-bottom:14px;">';html += '<h1 style="font-size:20px;margin:0 0 4px;font-weight:bold;">ATTİ RAYLI SİSTEM</h1>';html += '<h2 style="font-size:14px;margin:0;font-weight:normal;">Aylık Görev Raporu - ' + monthName + ' ' + year + '</h2>';html += '<div style="font-size:10px;color:#777;margin-top:3px;">Oluşturulma: ' + new Date().toLocaleString('tr-TR') + '</div></div>';let startedTasks = [];if(incActive){ startedTasks = (data.tasks||[]).filter(t => { const as = new Date(t.assignedAt||t.nextDueDate); return as >= startDate && as <= endDate; }); }let completedTasks = [];if(incCompleted){ completedTasks = (data.completedTasks||[]).filter(t => { const cd = new Date(t.completedAt); return cd >= startDate && cd <= endDate; }); }let dueTasks = [];if(incDue){ dueTasks = (data.tasks||[]).filter(t => { const nd = new Date(t.nextDueDate); return nd >= startDate && nd <= endDate; }); }html += '<div style="background:#f0f4ff;border:1px solid #c7d2fe;padding:10px;border-radius:6px;margin-bottom:14px;"><div style="display:flex;gap:20px;flex-wrap:wrap;font-size:11px;">';html += '<span><strong>📅 ' + monthName + ' Başlayan:</strong> ' + startedTasks.length + '</span>';html += '<span><strong>✅ ' + monthName + ' Tamamlanan:</strong> ' + completedTasks.length + '</span>';html += '<span><strong>📌 ' + monthName + ' Süresi Dolan:</strong> ' + dueTasks.length + '</span>';html += '</div></div>';if(incActive && startedTasks.length > 0){html += '<h3 style="background:#3b82f6;color:#fff;padding:6px 10px;margin:14px 0 8px;font-size:12px;border-radius:4px;">📅 BU AY BAŞLAYAN GÖREVLER (' + startedTasks.length + ')</h3>';html += '<table style="width:100%;border-collapse:collapse;font-size:11px;"><thead><tr style="background:#dbeafe;"><th style="border:1px solid #999;padding:5px;text-align:left;">Görev</th><th style="border:1px solid #999;padding:5px;text-align:left;">Birim</th><th style="border:1px solid #999;padding:5px;text-align:left;">Sorumlular</th><th style="border:1px solid #999;padding:5px;text-align:center;">Verilme</th><th style="border:1px solid #999;padding:5px;text-align:center;">Bitiş</th><th style="border:1px solid #999;padding:5px;text-align:center;">Periyot</th></tr></thead><tbody>';startedTasks.sort((a,b) => new Date(a.assignedAt) - new Date(b.assignedAt));startedTasks.forEach(t => {const persons = t.persons.map(p => p.name).join(', ');html += '<tr><td style="border:1px solid #999;padding:5px;">' + escapeHtml(t.name) + '</td><td style="border:1px solid #999;padding:5px;">' + escapeHtml(t.department) + '</td><td style="border:1px solid #999;padding:5px;">' + escapeHtml(persons) + '</td><td style="border:1px solid #999;padding:5px;text-align:center;">' + new Date(t.assignedAt).toLocaleDateString('tr-TR') + '</td><td style="border:1px solid #999;padding:5px;text-align:center;">' + new Date(t.nextDueDate).toLocaleDateString('tr-TR') + '</td><td style="border:1px solid #999;padding:5px;text-align:center;">' + t.period + ' gün</td></tr>';});html += '</tbody></table>';}if(incDue && dueTasks.length > 0){html += '<h3 style="background:#f59e0b;color:#fff;padding:6px 10px;margin:14px 0 8px;font-size:12px;border-radius:4px;">📌 BU AY SÜRESİ DOLAN GÖREVLER (' + dueTasks.length + ')</h3>';html += '<table style="width:100%;border-collapse:collapse;font-size:11px;"><thead><tr style="background:#fef3c7;"><th style="border:1px solid #999;padding:5px;text-align:left;">Görev</th><th style="border:1px solid #999;padding:5px;text-align:left;">Birim</th><th style="border:1px solid #999;padding:5px;text-align:left;">Sorumlular</th><th style="border:1px solid #999;padding:5px;text-align:center;">Bitiş</th><th style="border:1px solid #999;padding:5px;text-align:center;">Durum</th></tr></thead><tbody>';dueTasks.forEach(t => {const status = calculateTaskStatus(t);const persons = t.persons.map(p => p.name).join(', ');let durumTxt = 'Aktif', durumColor = '#16a34a';if(status.status === 'overdue'){ durumTxt = 'GECİKMİŞ'; durumColor = '#dc2626'; }html += '<tr><td style="border:1px solid #999;padding:5px;">' + escapeHtml(t.name) + '</td><td style="border:1px solid #999;padding:5px;">' + escapeHtml(t.department) + '</td><td style="border:1px solid #999;padding:5px;">' + escapeHtml(persons) + '</td><td style="border:1px solid #999;padding:5px;text-align:center;">' + new Date(t.nextDueDate).toLocaleDateString('tr-TR') + '</td><td style="border:1px solid #999;padding:5px;text-align:center;color:' + durumColor + ';font-weight:bold;">' + durumTxt + '</td></tr>';});html += '</tbody></table>';}if(incCompleted && completedTasks.length > 0){html += '<h3 style="background:#16a34a;color:#fff;padding:6px 10px;margin:14px 0 8px;font-size:12px;border-radius:4px;">✅ BU AY TAMAMLANAN GÖREVLER (' + completedTasks.length + ')</h3>';html += '<table style="width:100%;border-collapse:collapse;font-size:11px;"><thead><tr style="background:#dcfce7;"><th style="border:1px solid #999;padding:5px;text-align:left;">Görev</th><th style="border:1px solid #999;padding:5px;text-align:left;">Birim</th><th style="border:1px solid #999;padding:5px;text-align:center;">Tamamlanma</th><th style="border:1px solid #999;padding:5px;text-align:left;">Yapanlar</th><th style="border:1px solid #999;padding:5px;text-align:center;">İşaretleyen</th><th style="border:1px solid #999;padding:5px;text-align:center;">Durum</th></tr></thead><tbody>';completedTasks.sort((a,b) => new Date(b.completedAt) - new Date(a.completedAt));completedTasks.forEach(t => {const yapanlar = (t.completers||[]).map(c => c.name).join(', ');let durum = 'Zamanında', durumColor = '#16a34a';if(t.wasOverdue){ durum = t.overdueDays + 'g gec.'; durumColor = '#dc2626'; }html += '<tr><td style="border:1px solid #999;padding:5px;">' + escapeHtml(t.name) + '</td><td style="border:1px solid #999;padding:5px;">' + escapeHtml(t.department) + '</td><td style="border:1px solid #999;padding:5px;text-align:center;">' + new Date(t.completedAt).toLocaleDateString('tr-TR') + '</td><td style="border:1px solid #999;padding:5px;">' + escapeHtml(yapanlar || '-') + '</td><td style="border:1px solid #999;padding:5px;text-align:center;">' + escapeHtml(t.completedBy || '-') + '</td><td style="border:1px solid #999;padding:5px;text-align:center;color:' + durumColor + ';font-weight:bold;">' + durum + '</td></tr>';});html += '</tbody></table>';}if(!incActive && !incCompleted && !incDue){ html += '<div style="text-align:center;padding:20px;color:#999;">Hiçbir içerik seçilmedi.</div>'; }html += '<div style="margin-top:20px;text-align:center;font-size:10px;color:#777;border-top:1px solid #ccc;padding-top:8px;">ATTİ Raylı Sistem - RTS Takip | Hazırlayan: Gökhan GÖKER</div></div>';currentReportPreviewHTML = html;document.getElementById('reportPreviewContent').innerHTML = html;document.getElementById('reportPreviewArea').classList.remove('hidden');}
+// ==================== İSTATİSTİK RAPORU ====================
+function generateStatsReport(){
+    if(!isAdmin && !isViewer){alert('❌ Giriş yapmanız gerekiyor!'); return}
+    const startStr = document.getElementById('statsStartDate').value;
+    const endStr = document.getElementById('statsEndDate').value;
+    const deptFilter = document.getElementById('statsDepartmentFilter').value;
+    const personFilter = document.getElementById('statsPersonFilter').value;
+    const incAssigned = document.getElementById('statsIncludeAssigned').checked;
+    const incCompleted = document.getElementById('statsIncludeCompleted').checked;
+    const incNotJoined = document.getElementById('statsIncludeNotJoined').checked;
+    
+    let startDate = startStr ? new Date(startStr + 'T00:00:00') : new Date(2000,0,1);
+    let endDate = endStr ? new Date(endStr + 'T23:59:59') : new Date(2100,0,1);
+    if(startDate > endDate){ alert('Başlangıç tarihi bitiş tarihinden sonra olamaz!'); return; }
+    
+    const allTasks = data.tasks || [];
+    const allCompleted = data.completedTasks || [];
+    
+    // === KİŞİ BAZLI İSTATİSTİK ===
+    // Key: kişi adı. Değer: {name, department, assigned, completed, notJoined, totalDelayDays, delayCount}
+    const statsMap = {};
+    
+    function ensurePerson(name, dept){
+        if(!statsMap[name]){
+            statsMap[name] = {
+                name: name,
+                department: dept || '-',
+                assigned: 0,           // Aldığı görev sayısı (periyodik olarak atanmış her görev 1 kez sayılır)
+                completed: 0,          // Tamamladığı görev sayısı
+                notJoined: 0,          // Katılmadığı görev sayısı
+                totalDelayDays: 0,
+                delayCount: 0,
+                onTimeCount: 0
+            };
+        }
+    }
+    
+    // 1) Sorumlu olarak atanmış görevler (data.tasks içindeki persons)
+    allTasks.forEach(t => {
+        const assignedAt = new Date(t.assignedAt || t.nextDueDate);
+        if(assignedAt < startDate || assignedAt > endDate) return;
+        (t.persons || []).forEach(p => {
+            if(!p || !p.name) return;
+            if(personFilter && p.name !== personFilter) return;
+            ensurePerson(p.name, p.department);
+            if(deptFilter && statsMap[p.name].department !== deptFilter) return;
+            statsMap[p.name].assigned++;
+        });
+    });
+    
+    // 2) Tamamlanan görevler (data.completedTasks içindeki completers)
+    allCompleted.forEach(ct => {
+        const completedAt = new Date(ct.completedAt);
+        if(completedAt < startDate || completedAt > endDate) return;
+        const wasOverdue = ct.wasOverdue || false;
+        const overdueDays = ct.overdueDays || 0;
+        const yapanIsimleri = new Set((ct.completers||[]).map(c => normalize(c.name)));
+        
+        // 2a) Yapanlar (completers)
+        (ct.completers || []).forEach(c => {
+            if(!c || !c.name) return;
+            if(personFilter && c.name !== personFilter) return;
+            ensurePerson(c.name, c.department);
+            if(deptFilter && statsMap[c.name].department !== deptFilter) return;
+            statsMap[c.name].completed++;
+            if(wasOverdue){
+                statsMap[c.name].delayCount++;
+                statsMap[c.name].totalDelayDays += overdueDays;
+            } else {
+                statsMap[c.name].onTimeCount++;
+            }
+        });
+        
+        // 2b) Sorumlu olup katılmayanlar (persons içinde olup completers'da olmayanlar)
+        (ct.persons || []).forEach(p => {
+            if(!p || !p.name) return;
+            if(personFilter && p.name !== personFilter) return;
+            if(yapanIsimleri.has(normalize(p.name))) return; // Yapmış, geç
+            ensurePerson(p.name, p.department);
+            if(deptFilter && statsMap[p.name].department !== deptFilter) return;
+            statsMap[p.name].notJoined++;
+        });
+    });
+    
+    // 3) Şu anda aktif olup gecikmiş görevlerdeki kişiler (data.tasks içinde)
+    allTasks.forEach(t => {
+        const nextDue = new Date(t.nextDueDate);
+        if(nextDue >= new Date()) return; // Gecikmemiş, geç
+        if(nextDue < startDate || nextDue > endDate) return;
+        // Bu aktif görev gecikmiş durumda - sorumlular hâlâ "aldı" olarak sayıldı, katılmayan olarak da işaretleyelim
+        const wasCompleted = allCompleted.some(ct => ct.id === t.id);
+        if(wasCompleted) return;
+        (t.persons || []).forEach(p => {
+            if(!p || !p.name) return;
+            if(personFilter && p.name !== personFilter) return;
+            ensurePerson(p.name, p.department);
+            if(deptFilter && statsMap[p.name].department !== deptFilter) return;
+            // Aktif gecikmiş görevi "tamamlanmamış" olarak işaretleyelim (notJoined değil, ayrı sayalım)
+            if(!statsMap[p.name].incomplete) statsMap[p.name].incomplete = 0;
+            statsMap[p.name].incomplete++;
+        });
+    });
+    
+    // === TOPLAM İSTATİSTİKLER ===
+    const totalTasksInRange = allTasks.filter(t => {
+        const d = new Date(t.assignedAt || t.nextDueDate);
+        return d >= startDate && d <= endDate;
+    }).length;
+    
+    const totalCompletedInRange = allCompleted.filter(ct => {
+        const d = new Date(ct.completedAt);
+        return d >= startDate && d <= endDate;
+    }).length;
+    
+    const totalCompletedOnTime = allCompleted.filter(ct => {
+        const d = new Date(ct.completedAt);
+        return d >= startDate && d <= endDate && !ct.wasOverdue;
+    }).length;
+    
+    const totalCompletedLate = allCompleted.filter(ct => {
+        const d = new Date(ct.completedAt);
+        return d >= startDate && d <= endDate && ct.wasOverdue;
+    }).length;
+    
+    const totalActiveOverdue = allTasks.filter(t => {
+        const nextDue = new Date(t.nextDueDate);
+        const wasCompleted = allCompleted.some(ct => ct.id === t.id);
+        return !wasCompleted && nextDue < new Date() && nextDue >= startDate && nextDue <= endDate;
+    }).length;
+    
+    const totalActive = allTasks.filter(t => {
+        const nextDue = new Date(t.nextDueDate);
+        const wasCompleted = allCompleted.some(ct => ct.id === t.id);
+        return !wasCompleted && nextDue >= new Date() && nextDue >= startDate && nextDue <= endDate;
+    }).length;
+    
+    // Ortalama tamamlanma süresi hesaplama (assignedAt -> completedAt arası gün)
+    let totalCompletionDays = 0;
+    let totalCompletionCount = 0;
+    allCompleted.forEach(ct => {
+        const d = new Date(ct.completedAt);
+        if(d < startDate || d > endDate) return;
+        const a = new Date(ct.assignedAt || ct.completedAt);
+        const diffDays = Math.max(0, (d - a) / (1000*60*60*24));
+        totalCompletionDays += diffDays;
+        totalCompletionCount++;
+    });
+    const avgCompletionDays = totalCompletionCount > 0 ? (totalCompletionDays / totalCompletionCount) : 0;
+    
+    // Ortalama gecikme süresi
+    let totalDelaySum = 0;
+    let delayTaskCount = 0;
+    allCompleted.forEach(ct => {
+        const d = new Date(ct.completedAt);
+        if(d < startDate || d > endDate) return;
+        if(ct.wasOverdue && ct.overdueDays){
+            totalDelaySum += ct.overdueDays;
+            delayTaskCount++;
+        }
+    });
+    const avgDelayDays = delayTaskCount > 0 ? (totalDelaySum / delayTaskCount) : 0;
+    
+    // === HTML OLUŞTUR ===
+    const filterInfo = (startStr || endStr) ? ((startStr||'...') + ' - ' + (endStr||'...')) : 'Tüm Zamanlar';
+    let html = '<div style="font-family:Arial,sans-serif;font-size:11px;color:#000;padding:10px;">';
+    
+    // Başlık
+    html += '<div style="text-align:center;border-bottom:2px solid #333;padding-bottom:8px;margin-bottom:12px;">';
+    html += '<h1 style="font-size:18px;margin:0;font-weight:bold;">ATTİ RAYLI SİSTEM</h1>';
+    html += '<h2 style="font-size:13px;margin:4px 0 0;font-weight:normal;">Görev İstatistik Raporu</h2>';
+    html += '<div style="font-size:11px;margin-top:4px;">Tarih Aralığı: <strong>' + filterInfo + '</strong>';
+    if(deptFilter) html += ' | Birim: <strong>' + escapeHtml(deptFilter) + '</strong>';
+    if(personFilter) html += ' | Kişi: <strong>' + escapeHtml(personFilter) + '</strong>';
+    html += '</div>';
+    html += '<div style="font-size:10px;color:#666;margin-top:4px;">Oluşturulma: ' + new Date().toLocaleString('tr-TR') + '</div>';
+    html += '</div>';
+    
+    // Özet kartları
+    html += '<div style="background:#eef2ff;border:1px solid #c7d2fe;padding:10px;border-radius:6px;margin-bottom:14px;">';
+    html += '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;font-size:11px;">';
+    html += '<div><strong>📋 Toplam Atanan Görev:</strong> ' + totalTasksInRange + '</div>';
+    html += '<div><strong>✅ Toplam Tamamlanan:</strong> ' + totalCompletedInRange + '</div>';
+    html += '<div><strong>⏱️ Ortalama Süre:</strong> ' + avgCompletionDays.toFixed(1) + ' gün</div>';
+    html += '<div><strong>🟢 Zamanında:</strong> ' + totalCompletedOnTime + '</div>';
+    html += '<div><strong>⚠️ Gecikmeli:</strong> ' + totalCompletedLate + '</div>';
+    html += '<div><strong>🔴 Ortalama Gecikme:</strong> ' + avgDelayDays.toFixed(1) + ' gün</div>';
+    html += '<div><strong>🔄 Aktif:</strong> ' + totalActive + '</div>';
+    html += '<div><strong>🚫 Tamamlanmayan (gecikmiş aktif):</strong> ' + totalActiveOverdue + '</div>';
+    html += '<div><strong>👥 İstatistikteki Kişi:</strong> ' + Object.keys(statsMap).length + '</div>';
+    html += '</div></div>';
+    
+    // Kişi bazlı tablo
+    const personList = Object.values(statsMap).sort((a,b) => b.assigned - a.assigned || a.name.localeCompare(b.name,'tr'));
+    
+    if(personList.length === 0){
+        html += '<div style="text-align:center;padding:20px;color:#999;">Seçilen kriterlere uyan kayıt bulunamadı.</div>';
+    } else {
+        html += '<h3 style="background:#4f46e5;color:#fff;padding:6px 10px;margin:14px 0 8px;font-size:12px;border-radius:4px;">👥 KİŞİ BAZLI İSTATİSTİKLER</h3>';
+        html += '<table style="width:100%;border-collapse:collapse;font-size:10px;">';
+        html += '<thead><tr style="background:#e0e7ff;">';
+        html += '<th style="border:1px solid #333;padding:5px;text-align:left;width:30px;">#</th>';
+        html += '<th style="border:1px solid #333;padding:5px;text-align:left;">Ad Soyad</th>';
+        html += '<th style="border:1px solid #333;padding:5px;text-align:left;">Birim</th>';
+        if(incAssigned) html += '<th style="border:1px solid #333;padding:5px;text-align:center;">Alınan</th>';
+        if(incCompleted) html += '<th style="border:1px solid #333;padding:5px;text-align:center;">Tamamlanan</th>';
+        if(incCompleted) html += '<th style="border:1px solid #333;padding:5px;text-align:center;">Zamanında</th>';
+        if(incCompleted) html += '<th style="border:1px solid #333;padding:5px;text-align:center;">Gecikmeli</th>';
+        if(incNotJoined) html += '<th style="border:1px solid #333;padding:5px;text-align:center;">Katılmadı</th>';
+        if(incNotJoined) html += '<th style="border:1px solid #333;padding:5px;text-align:center;">Ort. Gecikme (gün)</th>';
+        html += '<th style="border:1px solid #333;padding:5px;text-align:center;">Başarı %</th>';
+        html += '</tr></thead><tbody>';
+        
+        personList.forEach((p, i) => {
+            const basari = p.assigned > 0 ? ((p.completed / p.assigned) * 100) : 0;
+            const basariColor = basari >= 80 ? '#16a34a' : basari >= 50 ? '#d97706' : '#dc2626';
+            const avgDelay = p.delayCount > 0 ? (p.totalDelayDays / p.delayCount).toFixed(1) : '0';
+            
+            html += '<tr>';
+            html += '<td style="border:1px solid #333;padding:5px;text-align:center;">' + (i+1) + '</td>';
+            html += '<td style="border:1px solid #333;padding:5px;"><strong>' + escapeHtml(p.name) + '</strong></td>';
+            html += '<td style="border:1px solid #333;padding:5px;">' + escapeHtml(p.department) + '</td>';
+            if(incAssigned) html += '<td style="border:1px solid #333;padding:5px;text-align:center;font-weight:bold;">' + p.assigned + '</td>';
+            if(incCompleted) html += '<td style="border:1px solid #333;padding:5px;text-align:center;font-weight:bold;color:#16a34a;">' + p.completed + '</td>';
+            if(incCompleted) html += '<td style="border:1px solid #333;padding:5px;text-align:center;color:#16a34a;">' + p.onTimeCount + '</td>';
+            if(incCompleted) html += '<td style="border:1px solid #333;padding:5px;text-align:center;color:#dc2626;">' + p.delayCount + '</td>';
+            if(incNotJoined) html += '<td style="border:1px solid #333;padding:5px;text-align:center;font-weight:bold;color:#dc2626;">' + p.notJoined + '</td>';
+            if(incNotJoined) html += '<td style="border:1px solid #333;padding:5px;text-align:center;">' + avgDelay + '</td>';
+            html += '<td style="border:1px solid #333;padding:5px;text-align:center;font-weight:bold;color:' + basariColor + ';">' + basari.toFixed(1) + '%</td>';
+            html += '</tr>';
+        });
+        
+        // Toplam satırı
+        const totals = personList.reduce((acc, p) => {
+            acc.assigned += p.assigned;
+            acc.completed += p.completed;
+            acc.onTimeCount += p.onTimeCount;
+            acc.delayCount += p.delayCount;
+            acc.notJoined += p.notJoined;
+            acc.totalDelayDays += p.totalDelayDays;
+            return acc;
+        }, {assigned:0,completed:0,onTimeCount:0,delayCount:0,notJoined:0,totalDelayDays:0});
+        const totalBasari = totals.assigned > 0 ? ((totals.completed / totals.assigned) * 100) : 0;
+        const totalAvgDelay = totals.delayCount > 0 ? (totals.totalDelayDays / totals.delayCount).toFixed(1) : '0';
+        
+        html += '<tr style="background:#fef3c7;font-weight:bold;">';
+        html += '<td colspan="3" style="border:1px solid #333;padding:5px;text-align:right;">TOPLAM:</td>';
+        if(incAssigned) html += '<td style="border:1px solid #333;padding:5px;text-align:center;">' + totals.assigned + '</td>';
+        if(incCompleted) html += '<td style="border:1px solid #333;padding:5px;text-align:center;">' + totals.completed + '</td>';
+        if(incCompleted) html += '<td style="border:1px solid #333;padding:5px;text-align:center;">' + totals.onTimeCount + '</td>';
+        if(incCompleted) html += '<td style="border:1px solid #333;padding:5px;text-align:center;">' + totals.delayCount + '</td>';
+        if(incNotJoined) html += '<td style="border:1px solid #333;padding:5px;text-align:center;">' + totals.notJoined + '</td>';
+        if(incNotJoined) html += '<td style="border:1px solid #333;padding:5px;text-align:center;">' + totalAvgDelay + '</td>';
+        html += '<td style="border:1px solid #333;padding:5px;text-align:center;">' + totalBasari.toFixed(1) + '%</td>';
+        html += '</tr>';
+        html += '</tbody></table>';
+    }
+    
+    html += '<div style="margin-top:20px;text-align:center;font-size:10px;color:#777;border-top:1px solid #ccc;padding-top:8px;">ATTİ Raylı Sistem - RTS Takip | Hazırlayan: Gökhan GÖKER</div>';
+    html += '</div>';
+    
+    currentReportPreviewHTML = html;
+    document.getElementById('reportPreviewContent').innerHTML = html;
+    document.getElementById('reportPreviewArea').classList.remove('hidden');
+}
+
 function printReport(){if(!currentReportPreviewHTML){alert('Önce rapor oluşturun!'); return}openPrintPreview('Görev Raporu','ATTİ Raylı Sistem',currentReportPreviewHTML);}
 
 function askDistributionType(){if(!isAdmin && !isViewer){alert('❌ Giriş yapmanız gerekiyor!'); return}showModal('distTypeAskModal');}
