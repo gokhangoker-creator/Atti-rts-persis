@@ -43,6 +43,8 @@
 .setting-list-item .btn-del:hover{background:#fecaca;color:#7f1d1d}
 .setting-list-item .btn-edit{background:#dbeafe;color:#1e40af;border:none;border-radius:6px;padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap;margin-right:4px}
 .setting-list-item .btn-edit:hover{background:#bfdbfe;color:#1e3a8a}
+.setting-list-item .btn-muaf{background:#dcfce7;color:#166534;border:none;border-radius:6px;padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap;margin-right:4px}
+.setting-list-item .btn-muaf:hover{background:#bbf7d0;color:#14532d}
 .clothing-list-row{display:flex;align-items:center;justify-content:space-between;padding:8px 10px;border:1px solid #e5e7eb;border-radius:8px;background:#f0fdfa;font-size:13px;margin-bottom:6px;gap:8px;flex-wrap:wrap}
 .clothing-list-row:hover{background:#ccfbf1}
 .clothing-list-row .cname{font-weight:600;color:#115e59;word-break:break-word;font-size:13px}
@@ -161,6 +163,14 @@ body.viewer-mode #loginModal *{pointer-events:auto!important;opacity:1!important
 .liste-tablo .btn-del-liste{background:#fee2e2;color:#b91c1c;border:none;border-radius:4px;padding:3px 8px;font-size:10px;font-weight:700;cursor:pointer}
 .liste-tablo .btn-edit-liste{background:#dbeafe;color:#1e40af;border:none;border-radius:4px;padding:3px 8px;font-size:10px;font-weight:700;cursor:pointer;margin-right:3px}
 .liste-tablo .btn-edit-liste:hover{background:#bfdbfe}
+.liste-tablo .btn-muaf-liste{background:#dcfce7;color:#166534;border:none;border-radius:4px;padding:3px 8px;font-size:10px;font-weight:700;cursor:pointer;margin-right:3px}
+.liste-tablo .btn-muaf-liste:hover{background:#bbf7d0}
+.liste-tablo .btn-sertifika-liste{background:#dbeafe;color:#1e40af;border:none;border-radius:4px;padding:3px 8px;font-size:10px;font-weight:700;cursor:pointer;margin-right:3px}
+.liste-tablo .btn-sertifika-liste:hover{background:#bfdbfe}
+.liste-tablo .btn-yok-liste{background:#fee2e2;color:#991b1b;border:none;border-radius:4px;padding:3px 8px;font-size:10px;font-weight:700;cursor:pointer;margin-right:3px}
+.liste-tablo .btn-yok-liste:hover{background:#fecaca}
+.liste-tablo .btn-aranmaz-liste{background:#f3f4f6;color:#4b5563;border:none;border-radius:4px;padding:3px 8px;font-size:10px;font-weight:700;cursor:pointer;margin-right:3px}
+.liste-tablo .btn-aranmaz-liste:hover{background:#e5e7eb}
 .edit-inline-input{width:100%;border:1px solid #a855f7;border-radius:4px;padding:4px 6px;font-size:12px;background:#faf5ff}
 .edit-inline-actions{display:flex;gap:3px;justify-content:center;margin-top:3px}
 .edit-inline-actions button{border:none;border-radius:4px;padding:3px 8px;font-size:10px;font-weight:700;cursor:pointer}
@@ -1853,7 +1863,9 @@ body.viewer-mode #loginModal *{pointer-events:auto!important;opacity:1!important
 </div>
 <div id="mykAccordionBody" class="accordion-body">
 <div id="mykDurumBadge" class="myk-status-badge myk-status-aranmaz inline-block mb-3">🚫 Aranmaz</div>
-<label class="flex items-center gap-2 bg-blue-50 px-3 py-2 rounded-lg border-2 border-blue-300 cursor-pointer text-sm font-bold text-blue-800 mb-2"><input type="checkbox" id="mykBelgesiVar" class="w-4 h-4" onchange="onMykBelgesiVarChange()">📜 MYK Belgesi Var</label>
+<label class="flex items-center gap-2 bg-green-50 px-3 py-2 rounded-lg border-2 border-green-300 cursor-pointer text-sm font-bold text-green-800 mb-2"><input type="checkbox" id="mykMuaf" class="w-4 h-4" onchange="onMykMuafChange()">✅ Muaf</label>
+<label class="flex items-center gap-2 bg-blue-50 px-3 py-2 rounded-lg border-2 border-blue-300 cursor-pointer text-sm font-bold text-blue-800 mb-2"><input type="checkbox" id="mykBelgesiVar" class="w-4 h-4" onchange="onMykBelgesiVarChange()">📜 MYK Belgesi Var (Sertifika)</label>
+<label class="flex items-center gap-2 bg-red-50 px-3 py-2 rounded-lg border-2 border-red-300 cursor-pointer text-sm font-bold text-red-800 mb-2"><input type="checkbox" id="mykYok" class="w-4 h-4" onchange="onMykYokChange()">❌ Yok</label>
 <label class="flex items-center gap-2 bg-gray-50 px-3 py-2 rounded-lg border-2 border-gray-300 cursor-pointer text-sm font-bold text-gray-700"><input type="checkbox" id="mykAranmaz" class="w-4 h-4" onchange="onMykAranmazChange()">🚫 MYK Aranmaz</label>
 <div id="mykDurumAciklama" class="text-xs text-gray-600 mt-2">Fiili görev girilmedi</div>
 </div>
@@ -2026,6 +2038,8 @@ let expandedPendingPersonnel=new Set(),expandedDistributionPersonnel=new Set();
 let selectedTaskTemplatePersons=[],selectedNewTaskPersons=[];
 let pendingFilters={personnel:[],department:[],status:[],itemCount:[]},activePendingFilterPopup=null;
 let mykBelgesiVarDurum=false;
+let mykMuafDurum=false;
+let mykYokDurum=false;
 let currentMezuniyetTab='lise';
 let muafiyetTable=[];
 let mykSettings={eslesmeOrani:70,zorunlulukOrani:70};
@@ -2745,9 +2759,79 @@ function stripYkKodu(s){if(!s)return '';return s.toString().replace(/\b\d{2}[A-Z
 function fiiliGorevdenYkKodu(fiiliGorev){if(!fiiliGorev)return null;const m=fiiliGorev.match(/\b(\d{2}[A-Z]{2}\d{4}-\d)\b/);return m?m[1]:null;}
 function fiiliGorevMeslekAdi(fiiliGorev){if(!fiiliGorev)return '';return stripYkKodu(fiiliGorev);}
 function levenshteinRatio(a,b){if(!a.length||!b.length)return 0;const matrix=Array(b.length+1).fill().map(()=>Array(a.length+1).fill(0));for(let i=0;i<=a.length;i++)matrix[0][i]=i;for(let j=0;j<=b.length;j++)matrix[j][0]=j;for(let j=1;j<=b.length;j++){for(let i=1;i<=a.length;i++){const cost=a[i-1]===b[j-1]?0:1;matrix[j][i]=Math.min(matrix[j-1][i]+1,matrix[j][i-1]+1,matrix[j-1][i-1]+cost);}}return((Math.max(a.length,b.length)-matrix[b.length][a.length])/Math.max(a.length,b.length))*100;}
-function similarity(s1,s2){const n1=normalize(s1),n2=normalize(s2);if(!n1||!n2)return 0;if(n1===n2)return 100;if(n1.includes(n2)||n2.includes(n1))return 90;const k1=n1.split(/\s+/).filter(w=>w.length>3);const k2=n2.split(/\s+/).filter(w=>w.length>3);if(!k1.length||!k2.length)return 0;const ortak=k1.filter(w=>k2.includes(w)).length;const kelimeOran=(ortak/Math.max(k1.length,k2.length))*100;const lev=levenshteinRatio(n1.substring(0,100),n2.substring(0,100));return Math.max(kelimeOran,lev*0.7);}
+function similarity(s1,s2){const n1=normalize(s1),n2=normalize(s2);if(!n1||!n2)return 0;if(n1===n2)return 100;if(n1.includes(n2)||n2.includes(n1))return 90;const k1=n1.split(/\s+/).filter(w=>w.length>3);const k2=n2.split(/\s+/).filter(w=>w.length>3);if(!k1.length||!k2.length)return 0;const ortak=k1.filter(w=>k2.includes(w)).length;const kelimeOran=(ortak/Math.max(k1.length,k2.length))*100;const lev=levenshteinRatio(n1.substring(0,100),n2.substring(0,100));const base=Math.max(kelimeOran,lev*0.7);
+    // ✅ Parantez içindeki sayıları (581, 582, 215 vb.) temizleyip tekrar dene
+    const n1Temiz = n1.replace(/\(\s*\d+\s*\)/g,'').replace(/\s+/g,' ').trim();
+    const n2Temiz = n2.replace(/\(\s*\d+\s*\)/g,'').replace(/\s+/g,' ').trim();
+    if(n1Temiz && n2Temiz && n1Temiz !== n1 || n2Temiz !== n2){
+        if(n1Temiz === n2Temiz) return Math.max(base, 100);
+        if(n1Temiz.includes(n2Temiz) || n2Temiz.includes(n1Temiz)) return Math.max(base, 90);
+        const k1t = n1Temiz.split(/\s+/).filter(w=>w.length>3);
+        const k2t = n2Temiz.split(/\s+/).filter(w=>w.length>3);
+        if(k1t.length && k2t.length){
+            const ortakT = k1t.filter(w=>k2t.includes(w)).length;
+            const kelimeOranT = (ortakT/Math.max(k1t.length,k2t.length))*100;
+            const levT = levenshteinRatio(n1Temiz.substring(0,100),n2Temiz.substring(0,100));
+            return Math.max(base, kelimeOranT, levT*0.7);
+        }
+    }
+    return base;}
+// ✅ YENİ: Sertifika adı ile fiili görev eşleşme kontrolü
+function sertifikaMykIleEslesiyorMu(sertifikaAdi, fiiliGorev) {
+    if(!sertifikaAdi || !fiiliGorev) return false;
+    
+    // 1. YK Kodu kontrolü (örn: "17UY0301-3" veya "07UY0301-3")
+    const fiiliKod = fiiliGorevdenYkKodu(fiiliGorev);
+    if(fiiliKod){
+        const kodNorm = fiiliKod.toUpperCase().replace(/\s/g,'');
+        const sertNorm = sertifikaAdi.toUpperCase().replace(/\s/g,'');
+        if(sertNorm.includes(kodNorm)) return true;
+    }
+    
+    // 2. Meslek adı benzerliği (yüksek eşleşme aranır)
+    const fiiliMeslekAdi = fiiliGorevMeslekAdi(fiiliGorev);
+    const oran = similarity(fiiliMeslekAdi, sertifikaAdi);
+    
+    // Zorunluluk oranı ile karşılaştır (varsayılan %70)
+    return oran >= mykSettings.zorunlulukOrani;
+}
 function meslekEslesmeOrani(fiiliGorev, kayit){if(!fiiliGorev||!kayit)return 0;const fiiliKod=fiiliGorevdenYkKodu(fiiliGorev);const kayitKod=(kayit.ykKodu||kayit.meslekKodu||'').toString().trim();if(fiiliKod&&kayitKod&&fiiliKod.toUpperCase()===kayitKod.toUpperCase())return 100;const fiiliAd=fiiliGorevMeslekAdi(fiiliGorev);const kayitAd1=kayit.meslek||'';const kayitAd2=kayit.ykAdi||'';const s1=similarity(fiiliAd,kayitAd1);const s2=similarity(fiiliAd,kayitAd2);const s3=similarity(fiiliAd,stripYkKodu(kayitAd2));return Math.max(s1,s2,s3);}
-function extractBolumler(text){if(!text)return[];if(Array.isArray(text))return text.map(s=>s.toString().trim()).filter(s=>s.length>2);let parts=text.toString().split(/[,;]/).map(s=>s.trim()).filter(s=>s.length>2);const unique=[...new Set(parts.map(s=>s.replace(/\s+/g,' ').trim()).filter(s=>s.length>2))];return unique.filter(s=>s.length>=2&&!/^\d+$/.test(s)).slice(0,200);}
+function extractBolumler(text){
+    if(!text)return[];
+    if(Array.isArray(text))return text.map(s=>s.toString().trim()).filter(s=>s.length>2);
+    const str = text.toString();
+    
+    // ✅ Önce parantezli grupları ayrı ayrı ele al
+    // Örn: "İnşaat Teknolojisi Alanı ve Dalları (581, 582, 215) (Tamamı)"
+    // → ["İnşaat Teknolojisi Alanı ve Dalları", "581", "582", "215", "Tamamı"]
+    
+    const bolumler = [];
+    
+    // 1. Ana metni (parantezsiz) al
+    const parantezsiz = str.replace(/\([^)]*\)/g, ' ').replace(/\s+/g,' ').trim();
+    if(parantezsiz.length > 2) bolumler.push(parantezsiz);
+    
+    // 2. Parantez içindeki her şeyi ayrı ayrı al (virgülle ayrılmışsa böl)
+    const parantezMatches = str.match(/\(([^)]+)\)/g) || [];
+    parantezMatches.forEach(p => {
+        const icerik = p.replace(/^\(|\)$/g, '').trim();
+        // Virgülle ayrılmışsa
+        icerik.split(/[,;]/).forEach(part => {
+            const temiz = part.trim();
+            if(temiz.length >= 1) bolumler.push(temiz);
+        });
+    });
+    
+    // 3. Ana metni virgül/noktalı virgülle de böl (parantez dışı)
+    str.split(/[,;]/).forEach(part => {
+        const temiz = part.replace(/\([^)]*\)/g, '').replace(/\s+/g,' ').trim();
+        if(temiz.length > 2) bolumler.push(temiz);
+    });
+    
+    // Tekrarları kaldır ve temizle
+    const unique=[...new Set(bolumler.map(s=>s.replace(/\s+/g,' ').trim()).filter(s=>s.length>=1))];
+    return unique.filter(s=>!/^\d+$/.test(s) || s.length>=2).slice(0,200);
+}
 function extractUstalikDallari(text){if(!text)return[];if(Array.isArray(text))return text.map(s=>s.toString().trim()).filter(s=>s.length>2);let parts=text.toString().split(/[,;]/).map(s=>s.trim()).filter(s=>s.length>2);const unique=[...new Set(parts.map(s=>s.replace(/\s+/g,' ').trim()).filter(s=>s.length>2))];return unique.slice(0,200);}
 function kayittanBolumler(kayit,tur){if(!kayit)return [];let b='';if(tur==='lise')b=kayit.bolum||'';else if(tur==='onlisans')b=kayit.onlisansBolumu||'';else if(tur==='universite')b=kayit.lisansBolumu||'';else if(tur==='yuksek_lisans')b=kayit.lisansBolumu||'';return extractBolumler(b);}
 function kayittanUstaliklar(kayit){if(!kayit)return [];return extractUstalikDallari(kayit.ustalikBelgesi||'');}
@@ -2790,7 +2874,219 @@ function updateLiseMuafiyetStatus(){const el=document.getElementById('liseMuafiy
 function openLiseMuafiyetModal(){if(!isAdmin){alert('❌ Yönetici girişi gerekli!');return}document.getElementById('lisePdfInput').value='';document.getElementById('liseCsvInput').value='';document.getElementById('liseManualInput').value='';document.getElementById('lisePdfProgress').classList.add('hidden');switchLiseMuafiyetTab('pdf');renderLiseMuafiyetOzet();showModal('liseMuafiyetModal');}
 function switchLiseMuafiyetTab(tab){['pdf','csv','manual'].forEach(t=>{const el=document.getElementById('lise'+t.charAt(0).toUpperCase()+t.slice(1)+'Tab');const btn=document.getElementById('tabLise'+t.charAt(0).toUpperCase()+t.slice(1));if(!el||!btn)return;if(t===tab){el.classList.remove('hidden');btn.classList.add('bg-blue-600','text-white');btn.classList.remove('bg-gray-200','text-gray-700');}else{el.classList.add('hidden');btn.classList.remove('bg-blue-600','text-white');btn.classList.add('bg-gray-200','text-gray-700');}});}
 function liseElleEkle(){if(!isAdmin){alert('❌ Yönetici girişi gerekli!');return}const meslek=document.getElementById('liseYeniMeslek').value.trim();const bolum=document.getElementById('liseYeniBolum').value.trim();if(!meslek||!bolum){alert('Meslek ve Bölüm zorunlu!');return}liseMuafiyetTable.push({meslek:meslek,bolum:bolum});saveMykToStorage();updateLiseMuafiyetStatus();renderLiseMuafiyetOzet();document.getElementById('liseYeniMeslek').value='';document.getElementById('liseYeniBolum').value='';showSuccessMessage('✅ Lise muafiyet kaydı eklendi!');}
-function renderLiseMuafiyetOzet(){const el=document.getElementById('liseMuafiyetOzet');const cnt=document.getElementById('liseMuafiyetCount');if(cnt)cnt.textContent=liseMuafiyetTable.length;if(!el)return;if(liseMuafiyetTable.length===0){el.innerHTML='<div class="text-center py-6 text-gray-500 text-sm bg-gray-50 rounded-lg">Henüz liste yüklenmedi</div>';return;}let tbl='<table class="liste-tablo"><thead><tr><th style="width:40px;">#</th><th style="width:35%;">Meslek</th><th>Muaf Olduğu Bölüm/Alan/Dal</th><th style="width:120px;">İşlem</th></tr></thead><tbody>';liseMuafiyetTable.forEach((r,i)=>{tbl+='<tr><td>'+(i+1)+'</td><td><strong>'+(r.meslek||'-')+'</strong></td><td>'+(r.bolum||'-')+'</td><td class="text-center"><button class="btn-edit-liste" onclick="editLiseMuafiyetRow('+i+')">✏️</button><button class="btn-del-liste" onclick="deleteLiseMuafiyetRow('+i+')">🗑️</button></td></tr>';});tbl+='</tbody></table>';el.innerHTML=tbl;}
+function renderLiseMuafiyetOzet(){const el=document.getElementById('liseMuafiyetOzet');const cnt=document.getElementById('liseMuafiyetCount');if(cnt)cnt.textContent=liseMuafiyetTable.length;if(!el)return;if(liseMuafiyetTable.length===0){el.innerHTML='<div class="text-center py-6 text-gray-500 text-sm bg-gray-50 rounded-lg">Henüz liste yüklenmedi</div>';return;}let tbl='<table class="liste-tablo"><thead><tr><th style="width:40px;">#</th><th style="width:35%;">Meslek</th><th>Muaf Olduğu Bölüm/Alan/Dal</th><th style="width:200px;">İşlem</th></tr></thead><tbody>';liseMuafiyetTable.forEach((r,i)=>{tbl+='<tr><td>'+(i+1)+'</td><td><strong>'+(r.meslek||'-')+'</strong></td><td>'+(r.bolum||'-')+'</td><td class="text-center"><button class="btn-muaf-liste" onclick="liseMuafiyetMuafButonu('+i+')" title="MYK Durumunu Muaf yapar">✅ Muaf</button><button class="btn-sertifika-liste" onclick="liseMuafiyetSertifikaButonu('+i+')" title="MYK Durumunu Sertifika yapar">📜 Sertifika</button><button class="btn-yok-liste" onclick="liseMuafiyetYokButonu('+i+')" title="MYK Durumunu Yok yapar">❌ Yok</button><button class="btn-aranmaz-liste" onclick="liseMuafiyetAranmazButonu('+i+')" title="MYK Durumunu Aranmaz yapar">🚫 Aranmaz</button><button class="btn-edit-liste" onclick="editLiseMuafiyetRow('+i+')">✏️</button><button class="btn-del-liste" onclick="deleteLiseMuafiyetRow('+i+')">🗑️</button></td></tr>';});tbl+='</tbody></table>';el.innerHTML=tbl;}
+
+// ✅ YENİ: Lise Muafiyet listesindeki butonlar
+// Tıklandığında personel ekle sayfasındaki MYK durumu ilgili değere ayarlanır ve bölüm/dal bilgisi personele yazılır.
+function liseMuafiyetMuafButonu(idx){
+    if(!isAdmin && !isViewer){alert('❌ Giriş yapmanız gerekiyor!');return}
+    const kayit = liseMuafiyetTable[idx];
+    if(!kayit){alert('Kayıt bulunamadı!');return}
+    
+    if(document.getElementById('addPersonnelModal').classList.contains('hidden')){
+        showAddPersonnelModal();
+    }
+    
+    // MYK durumunu Muaf olarak ayarla
+    document.getElementById('mykMuaf').checked = true;
+    mykMuafDurum = true;
+    document.getElementById('mykBelgesiVar').checked = false;
+    mykBelgesiVarDurum = false;
+    document.getElementById('mykYok').checked = false;
+    mykYokDurum = false;
+    document.getElementById('mykAranmaz').checked = false;
+    
+    updateMykDurumu();
+    
+    let bolumDegeri = kayit.bolum || '';
+    const liseInput = document.getElementById('personnelLise');
+    if(liseInput){
+        if(!liseInput.value || confirm('Lise bölüm/dal alanı "' + liseInput.value + '" olarak dolu. Değiştirmek ister misiniz?')){
+            liseInput.value = bolumDegeri;
+        }
+    }
+    
+    const mezuniyetBody = document.getElementById('mezuniyetAccordionBody');
+    const mezuniyetHeader = document.getElementById('mezuniyetAccordionHeader');
+    if(mezuniyetBody && !mezuniyetBody.classList.contains('open')){
+        mezuniyetBody.classList.add('open');
+        if(mezuniyetHeader) mezuniyetHeader.classList.add('open');
+    }
+    
+    const mykBody = document.getElementById('mykAccordionBody');
+    const mykHeader = document.getElementById('mykAccordionHeader');
+    if(mykBody && !mykBody.classList.contains('open')){
+        mykBody.classList.add('open');
+        if(mykHeader) mykHeader.classList.add('open');
+    }
+    
+    updateMezuniyetAccordionBadges();
+    updateMykAccordionBadges();
+    updateGorevTanimAccordionBadges();
+    
+    showSuccessMessage('✅ MYK durumu "Muaf" olarak ayarlandı. Lise bölüm/dal alanı dolduruldu: ' + bolumDegeri);
+    hideModal('liseMuafiyetModal');
+    if(document.getElementById('listeGoruntuleModal') && !document.getElementById('listeGoruntuleModal').classList.contains('hidden')){
+        hideModal('listeGoruntuleModal');
+    }
+}
+
+function liseMuafiyetSertifikaButonu(idx){
+    if(!isAdmin && !isViewer){alert('❌ Giriş yapmanız gerekiyor!');return}
+    const kayit = liseMuafiyetTable[idx];
+    if(!kayit){alert('Kayıt bulunamadı!');return}
+    
+    if(document.getElementById('addPersonnelModal').classList.contains('hidden')){
+        showAddPersonnelModal();
+    }
+    
+    document.getElementById('mykMuaf').checked = false;
+    mykMuafDurum = false;
+    document.getElementById('mykBelgesiVar').checked = true;
+    mykBelgesiVarDurum = true;
+    document.getElementById('mykYok').checked = false;
+    mykYokDurum = false;
+    document.getElementById('mykAranmaz').checked = false;
+    
+    updateMykDurumu();
+    
+    let bolumDegeri = kayit.bolum || '';
+    const liseInput = document.getElementById('personnelLise');
+    if(liseInput){
+        if(!liseInput.value || confirm('Lise bölüm/dal alanı "' + liseInput.value + '" olarak dolu. Değiştirmek ister misiniz?')){
+            liseInput.value = bolumDegeri;
+        }
+    }
+    
+    const mezuniyetBody = document.getElementById('mezuniyetAccordionBody');
+    const mezuniyetHeader = document.getElementById('mezuniyetAccordionHeader');
+    if(mezuniyetBody && !mezuniyetBody.classList.contains('open')){
+        mezuniyetBody.classList.add('open');
+        if(mezuniyetHeader) mezuniyetHeader.classList.add('open');
+    }
+    
+    const mykBody = document.getElementById('mykAccordionBody');
+    const mykHeader = document.getElementById('mykAccordionHeader');
+    if(mykBody && !mykBody.classList.contains('open')){
+        mykBody.classList.add('open');
+        if(mykHeader) mykHeader.classList.add('open');
+    }
+    
+    updateMezuniyetAccordionBadges();
+    updateMykAccordionBadges();
+    updateGorevTanimAccordionBadges();
+    
+    showSuccessMessage('✅ MYK durumu "Sertifika" olarak ayarlandı. Lise bölüm/dal alanı dolduruldu: ' + bolumDegeri);
+    hideModal('liseMuafiyetModal');
+    if(document.getElementById('listeGoruntuleModal') && !document.getElementById('listeGoruntuleModal').classList.contains('hidden')){
+        hideModal('listeGoruntuleModal');
+    }
+}
+
+function liseMuafiyetYokButonu(idx){
+    if(!isAdmin && !isViewer){alert('❌ Giriş yapmanız gerekiyor!');return}
+    const kayit = liseMuafiyetTable[idx];
+    if(!kayit){alert('Kayıt bulunamadı!');return}
+    
+    if(document.getElementById('addPersonnelModal').classList.contains('hidden')){
+        showAddPersonnelModal();
+    }
+    
+    document.getElementById('mykMuaf').checked = false;
+    mykMuafDurum = false;
+    document.getElementById('mykBelgesiVar').checked = false;
+    mykBelgesiVarDurum = false;
+    document.getElementById('mykYok').checked = true;
+    mykYokDurum = true;
+    document.getElementById('mykAranmaz').checked = false;
+    
+    updateMykDurumu();
+    
+    let bolumDegeri = kayit.bolum || '';
+    const liseInput = document.getElementById('personnelLise');
+    if(liseInput){
+        if(!liseInput.value || confirm('Lise bölüm/dal alanı "' + liseInput.value + '" olarak dolu. Değiştirmek ister misiniz?')){
+            liseInput.value = bolumDegeri;
+        }
+    }
+    
+    const mezuniyetBody = document.getElementById('mezuniyetAccordionBody');
+    const mezuniyetHeader = document.getElementById('mezuniyetAccordionHeader');
+    if(mezuniyetBody && !mezuniyetBody.classList.contains('open')){
+        mezuniyetBody.classList.add('open');
+        if(mezuniyetHeader) mezuniyetHeader.classList.add('open');
+    }
+    
+    const mykBody = document.getElementById('mykAccordionBody');
+    const mykHeader = document.getElementById('mykAccordionHeader');
+    if(mykBody && !mykBody.classList.contains('open')){
+        mykBody.classList.add('open');
+        if(mykHeader) mykHeader.classList.add('open');
+    }
+    
+    updateMezuniyetAccordionBadges();
+    updateMykAccordionBadges();
+    updateGorevTanimAccordionBadges();
+    
+    showSuccessMessage('✅ MYK durumu "Yok" olarak ayarlandı. Lise bölüm/dal alanı dolduruldu: ' + bolumDegeri);
+    hideModal('liseMuafiyetModal');
+    if(document.getElementById('listeGoruntuleModal') && !document.getElementById('listeGoruntuleModal').classList.contains('hidden')){
+        hideModal('listeGoruntuleModal');
+    }
+}
+
+function liseMuafiyetAranmazButonu(idx){
+    if(!isAdmin && !isViewer){alert('❌ Giriş yapmanız gerekiyor!');return}
+    const kayit = liseMuafiyetTable[idx];
+    if(!kayit){alert('Kayıt bulunamadı!');return}
+    
+    if(document.getElementById('addPersonnelModal').classList.contains('hidden')){
+        showAddPersonnelModal();
+    }
+    
+    document.getElementById('mykMuaf').checked = false;
+    mykMuafDurum = false;
+    document.getElementById('mykBelgesiVar').checked = false;
+    mykBelgesiVarDurum = false;
+    document.getElementById('mykYok').checked = false;
+    mykYokDurum = false;
+    document.getElementById('mykAranmaz').checked = true;
+    
+    updateMykDurumu();
+    
+    let bolumDegeri = kayit.bolum || '';
+    const liseInput = document.getElementById('personnelLise');
+    if(liseInput){
+        if(!liseInput.value || confirm('Lise bölüm/dal alanı "' + liseInput.value + '" olarak dolu. Değiştirmek ister misiniz?')){
+            liseInput.value = bolumDegeri;
+        }
+    }
+    
+    const mezuniyetBody = document.getElementById('mezuniyetAccordionBody');
+    const mezuniyetHeader = document.getElementById('mezuniyetAccordionHeader');
+    if(mezuniyetBody && !mezuniyetBody.classList.contains('open')){
+        mezuniyetBody.classList.add('open');
+        if(mezuniyetHeader) mezuniyetHeader.classList.add('open');
+    }
+    
+    const mykBody = document.getElementById('mykAccordionBody');
+    const mykHeader = document.getElementById('mykAccordionHeader');
+    if(mykBody && !mykBody.classList.contains('open')){
+        mykBody.classList.add('open');
+        if(mykHeader) mykHeader.classList.add('open');
+    }
+    
+    updateMezuniyetAccordionBadges();
+    updateMykAccordionBadges();
+    updateGorevTanimAccordionBadges();
+    
+    showSuccessMessage('✅ MYK durumu "Aranmaz" olarak ayarlandı. Lise bölüm/dal alanı dolduruldu: ' + bolumDegeri);
+    hideModal('liseMuafiyetModal');
+    if(document.getElementById('listeGoruntuleModal') && !document.getElementById('listeGoruntuleModal').classList.contains('hidden')){
+        hideModal('listeGoruntuleModal');
+    }
+}
+
 function deleteLiseMuafiyetRow(idx){if(!isAdmin){alert('❌ Yönetici girişi gerekli!');return}if(!confirm('Bu kaydı silmek istediğinize emin misiniz?'))return;liseMuafiyetTable.splice(idx,1);saveMykToStorage();updateLiseMuafiyetStatus();renderLiseMuafiyetOzet();showSuccessMessage('🗑️ Silindi!');}
 function editLiseMuafiyetRow(idx){if(!isAdmin){alert('❌ Yönetici girişi gerekli!');return}const r=liseMuafiyetTable[idx];if(!r)return;const el=document.getElementById('liseMuafiyetOzet');const tblBody=el.querySelector('tbody');if(!tblBody)return;const tr=tblBody.children[idx];if(!tr)return;tr.innerHTML='<td>'+(idx+1)+'</td><td><input type="text" id="editLiseMeslek_'+idx+'" class="edit-inline-input" value="'+escapeHtml(r.meslek||'')+'"></td><td><input type="text" id="editLiseBolum_'+idx+'" class="edit-inline-input" value="'+escapeHtml(r.bolum||'')+'"></td><td class="text-center"><div class="edit-inline-actions"><button class="edit-inline-save" onclick="saveLiseMuafiyetEdit('+idx+')">💾</button><button class="edit-inline-cancel" onclick="renderLiseMuafiyetOzet()">✕</button></div></td>';}
 function saveLiseMuafiyetEdit(idx){if(!isAdmin){alert('❌ Yönetici girişi gerekli!');return}const r=liseMuafiyetTable[idx];if(!r)return;const m=document.getElementById('editLiseMeslek_'+idx).value.trim();const b=document.getElementById('editLiseBolum_'+idx).value.trim();if(!m){alert('Meslek boş olamaz!');return;}r.meslek=m;r.bolum=b;saveMykToStorage();updateLiseMuafiyetStatus();renderLiseMuafiyetOzet();showSuccessMessage('✅ Kaydedildi!');}
@@ -2818,7 +3114,7 @@ function updateOnlisansMuafiyetStatus(){const el=document.getElementById('onlisa
 function openOnlisansMuafiyetModal(){if(!isAdmin){alert('❌ Yönetici girişi gerekli!');return}document.getElementById('onlisansPdfInput').value='';document.getElementById('onlisansCsvInput').value='';document.getElementById('onlisansManualInput').value='';document.getElementById('onlisansPdfProgress').classList.add('hidden');switchOnlisansMuafiyetTab('pdf');renderOnlisansMuafiyetOzet();showModal('onlisansMuafiyetModal');}
 function switchOnlisansMuafiyetTab(tab){['pdf','csv','manual'].forEach(t=>{const el=document.getElementById('onlisans'+t.charAt(0).toUpperCase()+t.slice(1)+'Tab');const btn=document.getElementById('tabOnlisans'+t.charAt(0).toUpperCase()+t.slice(1));if(!el||!btn)return;if(t===tab){el.classList.remove('hidden');btn.classList.add('bg-cyan-600','text-white');btn.classList.remove('bg-gray-200','text-gray-700');}else{el.classList.add('hidden');btn.classList.remove('bg-cyan-600','text-white');btn.classList.add('bg-gray-200','text-gray-700');}});}
 function onlisansElleEkle(){if(!isAdmin){alert('❌ Yönetici girişi gerekli!');return}const meslek=document.getElementById('onlisansYeniMeslek').value.trim();const bolum=document.getElementById('onlisansYeniBolum').value.trim();if(!meslek||!bolum){alert('Meslek ve Bölüm zorunlu!');return}onlisansMuafiyetTable.push({meslek:meslek,onlisansBolumu:bolum});saveMykToStorage();updateOnlisansMuafiyetStatus();renderOnlisansMuafiyetOzet();document.getElementById('onlisansYeniMeslek').value='';document.getElementById('onlisansYeniBolum').value='';showSuccessMessage('✅ Önlisans muafiyet kaydı eklendi!');}
-function renderOnlisansMuafiyetOzet(){const el=document.getElementById('onlisansMuafiyetOzet');const cnt=document.getElementById('onlisansMuafiyetCount');if(cnt)cnt.textContent=onlisansMuafiyetTable.length;if(!el)return;if(onlisansMuafiyetTable.length===0){el.innerHTML='<div class="text-center py-6 text-gray-500 text-sm bg-gray-50 rounded-lg">Henüz liste yüklenmedi</div>';return;}let tbl='<table class="liste-tablo"><thead><tr><th style="width:40px;">#</th><th style="width:35%;">Meslek</th><th>Önlisans Bölümü</th><th style="width:120px;">İşlem</th></tr></thead><tbody>';onlisansMuafiyetTable.forEach((r,i)=>{tbl+='<tr><td>'+(i+1)+'</td><td><strong>'+(r.meslek||'-')+'</strong></td><td>'+(r.onlisansBolumu||'-')+'</td><td class="text-center"><button class="btn-edit-liste" onclick="editOnlisansMuafiyetRow('+i+')">✏️</button><button class="btn-del-liste" onclick="deleteOnlisansMuafiyetRow('+i+')">🗑️</button></td></tr>';});tbl+='</tbody></table>';el.innerHTML=tbl;}
+function renderOnlisansMuafiyetOzet(){const el=document.getElementById('onlisansMuafiyetOzet');const cnt=document.getElementById('onlisansMuafiyetCount');if(cnt)cnt.textContent=onlisansMuafiyetTable.length;if(!el)return;if(onlisansMuafiyetTable.length===0){el.innerHTML='<div class="text-center py-6 text-gray-500 text-sm bg-gray-50 rounded-lg">Henüz liste yüklenmedi</div>';return;}let tbl='<table class="liste-tablo"><thead><tr><th style="width:40px;">#</th><th style="width:35%;">Meslek</th><th>Önlisans Bölümü</th><th style="width:200px;">İşlem</th></tr></thead><tbody>';onlisansMuafiyetTable.forEach((r,i)=>{tbl+='<tr><td>'+(i+1)+'</td><td><strong>'+(r.meslek||'-')+'</strong></td><td>'+(r.onlisansBolumu||'-')+'</td><td class="text-center"><button class="btn-muaf-liste" onclick="onlisansMuafiyetMuafButonu('+i+')" title="MYK Durumunu Muaf yapar">✅ Muaf</button><button class="btn-sertifika-liste" onclick="onlisansMuafiyetSertifikaButonu('+i+')" title="MYK Durumunu Sertifika yapar">📜 Sertifika</button><button class="btn-yok-liste" onclick="onlisansMuafiyetYokButonu('+i+')" title="MYK Durumunu Yok yapar">❌ Yok</button><button class="btn-aranmaz-liste" onclick="onlisansMuafiyetAranmazButonu('+i+')" title="MYK Durumunu Aranmaz yapar">🚫 Aranmaz</button><button class="btn-edit-liste" onclick="editOnlisansMuafiyetRow('+i+')">✏️</button><button class="btn-del-liste" onclick="deleteOnlisansMuafiyetRow('+i+')">🗑️</button></td></tr>';});tbl+='</tbody></table>';el.innerHTML=tbl;}
 function deleteOnlisansMuafiyetRow(idx){if(!isAdmin){alert('❌ Yönetici girişi gerekli!');return}if(!confirm('Bu kaydı silmek istediğinize emin misiniz?'))return;onlisansMuafiyetTable.splice(idx,1);saveMykToStorage();updateOnlisansMuafiyetStatus();renderOnlisansMuafiyetOzet();showSuccessMessage('🗑️ Silindi!');}
 function editOnlisansMuafiyetRow(idx){if(!isAdmin){alert('❌ Yönetici girişi gerekli!');return}const r=onlisansMuafiyetTable[idx];if(!r)return;const el=document.getElementById('onlisansMuafiyetOzet');const tblBody=el.querySelector('tbody');if(!tblBody)return;const tr=tblBody.children[idx];if(!tr)return;tr.innerHTML='<td>'+(idx+1)+'</td><td><input type="text" id="editOnlisansMeslek_'+idx+'" class="edit-inline-input" value="'+escapeHtml(r.meslek||'')+'"></td><td><input type="text" id="editOnlisansBolum_'+idx+'" class="edit-inline-input" value="'+escapeHtml(r.onlisansBolumu||'')+'"></td><td class="text-center"><div class="edit-inline-actions"><button class="edit-inline-save" onclick="saveOnlisansMuafiyetEdit('+idx+')">💾</button><button class="edit-inline-cancel" onclick="renderOnlisansMuafiyetOzet()">✕</button></div></td>';}
 function saveOnlisansMuafiyetEdit(idx){if(!isAdmin){alert('❌ Yönetici girişi gerekli!');return}const r=onlisansMuafiyetTable[idx];if(!r)return;const m=document.getElementById('editOnlisansMeslek_'+idx).value.trim();const b=document.getElementById('editOnlisansBolum_'+idx).value.trim();if(!m){alert('Meslek boş olamaz!');return;}r.meslek=m;r.onlisansBolumu=b;saveMykToStorage();updateOnlisansMuafiyetStatus();renderOnlisansMuafiyetOzet();showSuccessMessage('✅ Kaydedildi!');}
@@ -2832,7 +3128,7 @@ function updateLisansMuafiyetStatus(){const el=document.getElementById('lisansMu
 function openLisansMuafiyetModal(){if(!isAdmin){alert('❌ Yönetici girişi gerekli!');return}document.getElementById('lisansPdfInput').value='';document.getElementById('lisansCsvInput').value='';document.getElementById('lisansManualInput').value='';document.getElementById('lisansPdfProgress').classList.add('hidden');switchLisansMuafiyetTab('pdf');renderLisansMuafiyetOzet();showModal('lisansMuafiyetModal');}
 function switchLisansMuafiyetTab(tab){['pdf','csv','manual'].forEach(t=>{const el=document.getElementById('lisans'+t.charAt(0).toUpperCase()+t.slice(1)+'Tab');const btn=document.getElementById('tabLisans'+t.charAt(0).toUpperCase()+t.slice(1));if(!el||!btn)return;if(t===tab){el.classList.remove('hidden');btn.classList.add('bg-indigo-600','text-white');btn.classList.remove('bg-gray-200','text-gray-700');}else{el.classList.add('hidden');btn.classList.remove('bg-indigo-600','text-white');btn.classList.add('bg-gray-200','text-gray-700');}});}
 function lisansElleEkle(){if(!isAdmin){alert('❌ Yönetici girişi gerekli!');return}const meslek=document.getElementById('lisansYeniMeslek').value.trim();const bolum=document.getElementById('lisansYeniBolum').value.trim();if(!meslek||!bolum){alert('Meslek ve Bölüm zorunlu!');return}lisansMuafiyetTable.push({meslek:meslek,lisansBolumu:bolum});saveMykToStorage();updateLisansMuafiyetStatus();renderLisansMuafiyetOzet();document.getElementById('lisansYeniMeslek').value='';document.getElementById('lisansYeniBolum').value='';showSuccessMessage('✅ Lisans muafiyet kaydı eklendi!');}
-function renderLisansMuafiyetOzet(){const el=document.getElementById('lisansMuafiyetOzet');const cnt=document.getElementById('lisansMuafiyetCount');if(cnt)cnt.textContent=lisansMuafiyetTable.length;if(!el)return;if(lisansMuafiyetTable.length===0){el.innerHTML='<div class="text-center py-6 text-gray-500 text-sm bg-gray-50 rounded-lg">Henüz liste yüklenmedi</div>';return;}let tbl='<table class="liste-tablo"><thead><tr><th style="width:40px;">#</th><th style="width:35%;">Meslek</th><th>Lisans Bölümü</th><th style="width:120px;">İşlem</th></tr></thead><tbody>';lisansMuafiyetTable.forEach((r,i)=>{tbl+='<tr><td>'+(i+1)+'</td><td><strong>'+(r.meslek||'-')+'</strong></td><td>'+(r.lisansBolumu||'-')+'</td><td class="text-center"><button class="btn-edit-liste" onclick="editLisansMuafiyetRow('+i+')">✏️</button><button class="btn-del-liste" onclick="deleteLisansMuafiyetRow('+i+')">🗑️</button></td></tr>';});tbl+='</tbody></table>';el.innerHTML=tbl;}
+function renderLisansMuafiyetOzet(){const el=document.getElementById('lisansMuafiyetOzet');const cnt=document.getElementById('lisansMuafiyetCount');if(cnt)cnt.textContent=lisansMuafiyetTable.length;if(!el)return;if(lisansMuafiyetTable.length===0){el.innerHTML='<div class="text-center py-6 text-gray-500 text-sm bg-gray-50 rounded-lg">Henüz liste yüklenmedi</div>';return;}let tbl='<table class="liste-tablo"><thead><tr><th style="width:40px;">#</th><th style="width:35%;">Meslek</th><th>Lisans Bölümü</th><th style="width:200px;">İşlem</th></tr></thead><tbody>';lisansMuafiyetTable.forEach((r,i)=>{tbl+='<tr><td>'+(i+1)+'</td><td><strong>'+(r.meslek||'-')+'</strong></td><td>'+(r.lisansBolumu||'-')+'</td><td class="text-center"><button class="btn-muaf-liste" onclick="lisansMuafiyetMuafButonu('+i+')" title="MYK Durumunu Muaf yapar">✅ Muaf</button><button class="btn-sertifika-liste" onclick="lisansMuafiyetSertifikaButonu('+i+')" title="MYK Durumunu Sertifika yapar">📜 Sertifika</button><button class="btn-yok-liste" onclick="lisansMuafiyetYokButonu('+i+')" title="MYK Durumunu Yok yapar">❌ Yok</button><button class="btn-aranmaz-liste" onclick="lisansMuafiyetAranmazButonu('+i+')" title="MYK Durumunu Aranmaz yapar">🚫 Aranmaz</button><button class="btn-edit-liste" onclick="editLisansMuafiyetRow('+i+')">✏️</button><button class="btn-del-liste" onclick="deleteLisansMuafiyetRow('+i+')">🗑️</button></td></tr>';});tbl+='</tbody></table>';el.innerHTML=tbl;}
 function deleteLisansMuafiyetRow(idx){if(!isAdmin){alert('❌ Yönetici girişi gerekli!');return}if(!confirm('Bu kaydı silmek istediğinize emin misiniz?'))return;lisansMuafiyetTable.splice(idx,1);saveMykToStorage();updateLisansMuafiyetStatus();renderLisansMuafiyetOzet();showSuccessMessage('🗑️ Silindi!');}
 function editLisansMuafiyetRow(idx){if(!isAdmin){alert('❌ Yönetici girişi gerekli!');return}const r=lisansMuafiyetTable[idx];if(!r)return;const el=document.getElementById('lisansMuafiyetOzet');const tblBody=el.querySelector('tbody');if(!tblBody)return;const tr=tblBody.children[idx];if(!tr)return;tr.innerHTML='<td>'+(idx+1)+'</td><td><input type="text" id="editLisansMeslek_'+idx+'" class="edit-inline-input" value="'+escapeHtml(r.meslek||'')+'"></td><td><input type="text" id="editLisansBolum_'+idx+'" class="edit-inline-input" value="'+escapeHtml(r.lisansBolumu||'')+'"></td><td class="text-center"><div class="edit-inline-actions"><button class="edit-inline-save" onclick="saveLisansMuafiyetEdit('+idx+')">💾</button><button class="edit-inline-cancel" onclick="renderLisansMuafiyetOzet()">✕</button></div></td>';}
 function saveLisansMuafiyetEdit(idx){if(!isAdmin){alert('❌ Yönetici girişi gerekli!');return}const r=lisansMuafiyetTable[idx];if(!r)return;const m=document.getElementById('editLisansMeslek_'+idx).value.trim();const b=document.getElementById('editLisansBolum_'+idx).value.trim();if(!m){alert('Meslek boş olamaz!');return;}r.meslek=m;r.lisansBolumu=b;saveMykToStorage();updateLisansMuafiyetStatus();renderLisansMuafiyetOzet();showSuccessMessage('✅ Kaydedildi!');}
@@ -2843,7 +3139,245 @@ function loadLisansMuafiyetManual(){if(!isAdmin){alert('❌ Yönetici girişi ge
 function clearLisansMuafiyetTable(){if(!isAdmin){alert('❌ Yönetici girişi gerekli!');return}if(!confirm('Lisans Muafiyet Listesi silinsin mi?'))return;lisansMuafiyetTable=[];saveMykToStorage();updateLisansMuafiyetStatus();renderLisansMuafiyetOzet();showSuccessMessage('🗑️ Temizlendi.');}
 
 function openListeGoruntule(tur){listeGoruntuleAktifTur=tur;const basliklar={lise:{icon:'🏫',title:'Lise Muafiyet Listesi',alt:'Meslekler ve muaf oldukları lise bölüm/alan/dalları'},onlisans:{icon:'🎓',title:'Önlisans Muafiyet Listesi',alt:'Meslekler ve muaf oldukları önlisans bölümleri'},universite:{icon:'🎓',title:'Lisans Muafiyet Listesi',alt:'Meslekler ve muaf oldukları lisans bölümleri'},yuksek_lisans:{icon:'🎓',title:'Yüksek Lisans Muafiyet Listesi',alt:'Meslekler ve muaf oldukları yüksek lisans bölümleri'},ustalik:{icon:'🔧',title:'Ustalık Belgesi Muafiyet Listesi',alt:'Meslekler ve muaf oldukları ustalık belgeleri'}};const b=basliklar[tur]||basliklar.lise;document.getElementById('listeGoruntuleIcon').textContent=b.icon;document.getElementById('listeGoruntuleTitle').textContent=b.title;document.getElementById('listeGoruntuleAltBaslik').textContent=b.alt;document.getElementById('listeGoruntuleSearch').value='';renderListeGoruntule();showModal('listeGoruntuleModal');}
-function renderListeGoruntule(){const el=document.getElementById('listeGoruntuleContent');if(!el)return;const tur=listeGoruntuleAktifTur;let tablo=[];let sutun1='Meslek';let sutun2='Bölüm/Alan/Dal';let key1='meslek';let key2='bolum';if(tur==='lise'){tablo=liseMuafiyetTable;sutun2='Muaf Olduğu Bölüm/Alan/Dal';key2='bolum';}else if(tur==='onlisans'){tablo=onlisansMuafiyetTable;sutun2='Önlisans Bölümü';key2='onlisansBolumu';}else if(tur==='universite'||tur==='yuksek_lisans'){tablo=lisansMuafiyetTable;sutun2='Lisans Bölümü';key2='lisansBolumu';}else if(tur==='ustalik'){tablo=ustalikMuafiyetTable;sutun2='Ustalık Belgesi';key2='ustalikBelgesi';}const search=(document.getElementById('listeGoruntuleSearch').value||'').toLowerCase().trim();let filtreli=tablo;if(search){filtreli=tablo.filter(r=>{const s1=(r[key1]||'').toString().toLowerCase();const s2=(r[key2]||'').toString().toLowerCase();return s1.includes(search)||s2.includes(search);});}document.getElementById('listeGoruntuleCount').textContent=filtreli.length;if(filtreli.length===0){el.innerHTML='<div class="text-center py-8 text-gray-500">'+(tablo.length===0?'Bu liste henüz yüklenmedi.':'Aramaya uyan kayıt bulunamadı.')+'</div>';return;}let tbl='<table class="liste-tablo"><thead><tr><th style="width:40px;">#</th><th style="width:35%;">'+sutun1+'</th><th>'+sutun2+'</th><th style="width:60px;">İşlem</th></tr></thead><tbody>';filtreli.forEach((r,i)=>{const idx=tablo.indexOf(r);tbl+='<tr><td>'+(i+1)+'</td><td><strong>'+escapeHtml(r[key1]||'-')+'</strong></td><td>'+escapeHtml(r[key2]||'-')+'</td>';if(isAdmin){tbl+='<td><button class="btn-del-liste" onclick="deleteListeGoruntuleRow('+idx+')">🗑️</button></td>';}else{tbl+='<td>-</td>';}tbl+='</tr>';});tbl+='</tbody></table>';el.innerHTML=tbl;}
+function renderListeGoruntule(){const el=document.getElementById('listeGoruntuleContent');if(!el)return;const tur=listeGoruntuleAktifTur;let tablo=[];let sutun1='Meslek';let sutun2='Bölüm/Alan/Dal';let key1='meslek';let key2='bolum';if(tur==='lise'){tablo=liseMuafiyetTable;sutun2='Muaf Olduğu Bölüm/Alan/Dal';key2='bolum';}else if(tur==='onlisans'){tablo=onlisansMuafiyetTable;sutun2='Önlisans Bölümü';key2='onlisansBolumu';}else if(tur==='universite'||tur==='yuksek_lisans'){tablo=lisansMuafiyetTable;sutun2='Lisans Bölümü';key2='lisansBolumu';}else if(tur==='ustalik'){tablo=ustalikMuafiyetTable;sutun2='Ustalık Belgesi';key2='ustalikBelgesi';}const search=(document.getElementById('listeGoruntuleSearch').value||'').toLowerCase().trim();let filtreli=tablo;if(search){filtreli=tablo.filter(r=>{const s1=(r[key1]||'').toString().toLowerCase();const s2=(r[key2]||'').toString().toLowerCase();return s1.includes(search)||s2.includes(search);});}document.getElementById('listeGoruntuleCount').textContent=filtreli.length;if(filtreli.length===0){el.innerHTML='<div class="text-center py-8 text-gray-500">'+(tablo.length===0?'Bu liste henüz yüklenmedi.':'Aramaya uyan kayıt bulunamadı.')+'</div>';return;}let tbl='<table class="liste-tablo"><thead><tr><th style="width:40px;">#</th><th style="width:35%;">'+sutun1+'</th><th>'+sutun2+'</th><th style="width:320px;">İşlem</th></tr></thead><tbody>';filtreli.forEach((r,i)=>{const idx=tablo.indexOf(r);tbl+='<tr><td>'+(i+1)+'</td><td><strong>'+escapeHtml(r[key1]||'-')+'</strong></td><td>'+escapeHtml(r[key2]||'-')+'</td>';if(isAdmin){tbl+='<td class="text-center"><button class="btn-muaf-liste" onclick="listeGoruntuleMuafButonu(\''+tur+'\','+idx+')" title="MYK Durumunu Muaf yapar">✅ Muaf</button><button class="btn-sertifika-liste" onclick="listeGoruntuleSertifikaButonu(\''+tur+'\','+idx+')" title="MYK Durumunu Sertifika yapar">📜 Sertifika</button><button class="btn-yok-liste" onclick="listeGoruntuleYokButonu(\''+tur+'\','+idx+')" title="MYK Durumunu Yok yapar">❌ Yok</button><button class="btn-aranmaz-liste" onclick="listeGoruntuleAranmazButonu(\''+tur+'\','+idx+')" title="MYK Durumunu Aranmaz yapar">🚫 Aranmaz</button><button class="btn-del-liste" onclick="deleteListeGoruntuleRow('+idx+')">🗑️</button></td>';}else{tbl+='<td>-</td>';}tbl+='</tr>';});tbl+='</tbody></table>';el.innerHTML=tbl;}
+
+// ✅ YENİ: Liste görüntüleme modalındaki Muaf butonu
+function listeGoruntuleMuafButonu(tur, idx){
+    if(!isAdmin && !isViewer){alert('❌ Giriş yapmanız gerekiyor!');return}
+    let kayit = null;
+    if(tur === 'lise'){kayit = liseMuafiyetTable[idx];}
+    else if(tur === 'onlisans'){kayit = onlisansMuafiyetTable[idx];}
+    else if(tur === 'universite' || tur === 'yuksek_lisans'){kayit = lisansMuafiyetTable[idx];}
+    else if(tur === 'ustalik'){kayit = ustalikMuafiyetTable[idx];}
+    if(!kayit){alert('Kayıt bulunamadı!');return}
+    
+    if(document.getElementById('addPersonnelModal').classList.contains('hidden')){
+        showAddPersonnelModal();
+    }
+    
+    document.getElementById('mykMuaf').checked = true;
+    mykMuafDurum = true;
+    document.getElementById('mykBelgesiVar').checked = false;
+    mykBelgesiVarDurum = false;
+    document.getElementById('mykYok').checked = false;
+    mykYokDurum = false;
+    document.getElementById('mykAranmaz').checked = false;
+    
+    updateMykDurumu();
+    
+    let bolumDegeri = '';
+    let inputId = '';
+    let accordionBodyId = '';
+    let accordionHeaderId = '';
+    
+    if(tur === 'lise'){bolumDegeri = kayit.bolum || '';inputId = 'personnelLise';accordionBodyId = 'mezuniyetAccordionBody';accordionHeaderId = 'mezuniyetAccordionHeader';}
+    else if(tur === 'onlisans'){bolumDegeri = kayit.onlisansBolumu || '';inputId = 'personnelOnLisans';accordionBodyId = 'mezuniyetAccordionBody';accordionHeaderId = 'mezuniyetAccordionHeader';}
+    else if(tur === 'universite' || tur === 'yuksek_lisans'){bolumDegeri = kayit.lisansBolumu || '';inputId = tur === 'universite' ? 'personnelUniversite' : 'personnelYuksekLisans';accordionBodyId = 'mezuniyetAccordionBody';accordionHeaderId = 'mezuniyetAccordionHeader';}
+    else if(tur === 'ustalik'){bolumDegeri = kayit.ustalikBelgesi || '';inputId = 'personnelUstalikDal';accordionBodyId = 'ustalikAccordionBody';accordionHeaderId = 'ustalikAccordionHeader';}
+    
+    const input = document.getElementById(inputId);
+    if(input){
+        if(!input.value || confirm('Bu alan "' + input.value + '" olarak dolu. Değiştirmek ister misiniz?')){
+            input.value = bolumDegeri;
+        }
+    }
+    
+    if(accordionBodyId && accordionHeaderId){
+        const body = document.getElementById(accordionBodyId);
+        const header = document.getElementById(accordionHeaderId);
+        if(body && !body.classList.contains('open')){body.classList.add('open');if(header) header.classList.add('open');}
+    }
+    
+    const mykBody = document.getElementById('mykAccordionBody');
+    const mykHeader = document.getElementById('mykAccordionHeader');
+    if(mykBody && !mykBody.classList.contains('open')){mykBody.classList.add('open');if(mykHeader) mykHeader.classList.add('open');}
+    
+    updateMezuniyetAccordionBadges();
+    updateUstalikAccordionBadges();
+    updateMykAccordionBadges();
+    updateGorevTanimAccordionBadges();
+    
+    showSuccessMessage('✅ MYK durumu "Muaf" olarak ayarlandı. İlgili alan dolduruldu: ' + bolumDegeri);
+    hideModal('listeGoruntuleModal');
+}
+
+function listeGoruntuleSertifikaButonu(tur, idx){
+    if(!isAdmin && !isViewer){alert('❌ Giriş yapmanız gerekiyor!');return}
+    let kayit = null;
+    if(tur === 'lise'){kayit = liseMuafiyetTable[idx];}
+    else if(tur === 'onlisans'){kayit = onlisansMuafiyetTable[idx];}
+    else if(tur === 'universite' || tur === 'yuksek_lisans'){kayit = lisansMuafiyetTable[idx];}
+    else if(tur === 'ustalik'){kayit = ustalikMuafiyetTable[idx];}
+    if(!kayit){alert('Kayıt bulunamadı!');return}
+    
+    if(document.getElementById('addPersonnelModal').classList.contains('hidden')){
+        showAddPersonnelModal();
+    }
+    
+    document.getElementById('mykMuaf').checked = false;
+    mykMuafDurum = false;
+    document.getElementById('mykBelgesiVar').checked = true;
+    mykBelgesiVarDurum = true;
+    document.getElementById('mykYok').checked = false;
+    mykYokDurum = false;
+    document.getElementById('mykAranmaz').checked = false;
+    
+    updateMykDurumu();
+    
+    let bolumDegeri = '';
+    let inputId = '';
+    let accordionBodyId = '';
+    let accordionHeaderId = '';
+    
+    if(tur === 'lise'){bolumDegeri = kayit.bolum || '';inputId = 'personnelLise';accordionBodyId = 'mezuniyetAccordionBody';accordionHeaderId = 'mezuniyetAccordionHeader';}
+    else if(tur === 'onlisans'){bolumDegeri = kayit.onlisansBolumu || '';inputId = 'personnelOnLisans';accordionBodyId = 'mezuniyetAccordionBody';accordionHeaderId = 'mezuniyetAccordionHeader';}
+    else if(tur === 'universite' || tur === 'yuksek_lisans'){bolumDegeri = kayit.lisansBolumu || '';inputId = tur === 'universite' ? 'personnelUniversite' : 'personnelYuksekLisans';accordionBodyId = 'mezuniyetAccordionBody';accordionHeaderId = 'mezuniyetAccordionHeader';}
+    else if(tur === 'ustalik'){bolumDegeri = kayit.ustalikBelgesi || '';inputId = 'personnelUstalikDal';accordionBodyId = 'ustalikAccordionBody';accordionHeaderId = 'ustalikAccordionHeader';}
+    
+    const input = document.getElementById(inputId);
+    if(input){
+        if(!input.value || confirm('Bu alan "' + input.value + '" olarak dolu. Değiştirmek ister misiniz?')){
+            input.value = bolumDegeri;
+        }
+    }
+    
+    if(accordionBodyId && accordionHeaderId){
+        const body = document.getElementById(accordionBodyId);
+        const header = document.getElementById(accordionHeaderId);
+        if(body && !body.classList.contains('open')){body.classList.add('open');if(header) header.classList.add('open');}
+    }
+    
+    const mykBody = document.getElementById('mykAccordionBody');
+    const mykHeader = document.getElementById('mykAccordionHeader');
+    if(mykBody && !mykBody.classList.contains('open')){mykBody.classList.add('open');if(mykHeader) mykHeader.classList.add('open');}
+    
+    updateMezuniyetAccordionBadges();
+    updateUstalikAccordionBadges();
+    updateMykAccordionBadges();
+    updateGorevTanimAccordionBadges();
+    
+    showSuccessMessage('✅ MYK durumu "Sertifika" olarak ayarlandı. İlgili alan dolduruldu: ' + bolumDegeri);
+    hideModal('listeGoruntuleModal');
+}
+
+function listeGoruntuleYokButonu(tur, idx){
+    if(!isAdmin && !isViewer){alert('❌ Giriş yapmanız gerekiyor!');return}
+    let kayit = null;
+    if(tur === 'lise'){kayit = liseMuafiyetTable[idx];}
+    else if(tur === 'onlisans'){kayit = onlisansMuafiyetTable[idx];}
+    else if(tur === 'universite' || tur === 'yuksek_lisans'){kayit = lisansMuafiyetTable[idx];}
+    else if(tur === 'ustalik'){kayit = ustalikMuafiyetTable[idx];}
+    if(!kayit){alert('Kayıt bulunamadı!');return}
+    
+    if(document.getElementById('addPersonnelModal').classList.contains('hidden')){
+        showAddPersonnelModal();
+    }
+    
+    document.getElementById('mykMuaf').checked = false;
+    mykMuafDurum = false;
+    document.getElementById('mykBelgesiVar').checked = false;
+    mykBelgesiVarDurum = false;
+    document.getElementById('mykYok').checked = true;
+    mykYokDurum = true;
+    document.getElementById('mykAranmaz').checked = false;
+    
+    updateMykDurumu();
+    
+    let bolumDegeri = '';
+    let inputId = '';
+    let accordionBodyId = '';
+    let accordionHeaderId = '';
+    
+    if(tur === 'lise'){bolumDegeri = kayit.bolum || '';inputId = 'personnelLise';accordionBodyId = 'mezuniyetAccordionBody';accordionHeaderId = 'mezuniyetAccordionHeader';}
+    else if(tur === 'onlisans'){bolumDegeri = kayit.onlisansBolumu || '';inputId = 'personnelOnLisans';accordionBodyId = 'mezuniyetAccordionBody';accordionHeaderId = 'mezuniyetAccordionHeader';}
+    else if(tur === 'universite' || tur === 'yuksek_lisans'){bolumDegeri = kayit.lisansBolumu || '';inputId = tur === 'universite' ? 'personnelUniversite' : 'personnelYuksekLisans';accordionBodyId = 'mezuniyetAccordionBody';accordionHeaderId = 'mezuniyetAccordionHeader';}
+    else if(tur === 'ustalik'){bolumDegeri = kayit.ustalikBelgesi || '';inputId = 'personnelUstalikDal';accordionBodyId = 'ustalikAccordionBody';accordionHeaderId = 'ustalikAccordionHeader';}
+    
+    const input = document.getElementById(inputId);
+    if(input){
+        if(!input.value || confirm('Bu alan "' + input.value + '" olarak dolu. Değiştirmek ister misiniz?')){
+            input.value = bolumDegeri;
+        }
+    }
+    
+    if(accordionBodyId && accordionHeaderId){
+        const body = document.getElementById(accordionBodyId);
+        const header = document.getElementById(accordionHeaderId);
+        if(body && !body.classList.contains('open')){body.classList.add('open');if(header) header.classList.add('open');}
+    }
+    
+    const mykBody = document.getElementById('mykAccordionBody');
+    const mykHeader = document.getElementById('mykAccordionHeader');
+    if(mykBody && !mykBody.classList.contains('open')){mykBody.classList.add('open');if(mykHeader) mykHeader.classList.add('open');}
+    
+    updateMezuniyetAccordionBadges();
+    updateUstalikAccordionBadges();
+    updateMykAccordionBadges();
+    updateGorevTanimAccordionBadges();
+    
+    showSuccessMessage('✅ MYK durumu "Yok" olarak ayarlandı. İlgili alan dolduruldu: ' + bolumDegeri);
+    hideModal('listeGoruntuleModal');
+}
+
+function listeGoruntuleAranmazButonu(tur, idx){
+    if(!isAdmin && !isViewer){alert('❌ Giriş yapmanız gerekiyor!');return}
+    let kayit = null;
+    if(tur === 'lise'){kayit = liseMuafiyetTable[idx];}
+    else if(tur === 'onlisans'){kayit = onlisansMuafiyetTable[idx];}
+    else if(tur === 'universite' || tur === 'yuksek_lisans'){kayit = lisansMuafiyetTable[idx];}
+    else if(tur === 'ustalik'){kayit = ustalikMuafiyetTable[idx];}
+    if(!kayit){alert('Kayıt bulunamadı!');return}
+    
+    if(document.getElementById('addPersonnelModal').classList.contains('hidden')){
+        showAddPersonnelModal();
+    }
+    
+    document.getElementById('mykMuaf').checked = false;
+    mykMuafDurum = false;
+    document.getElementById('mykBelgesiVar').checked = false;
+    mykBelgesiVarDurum = false;
+    document.getElementById('mykYok').checked = false;
+    mykYokDurum = false;
+    document.getElementById('mykAranmaz').checked = true;
+    
+    updateMykDurumu();
+    
+    let bolumDegeri = '';
+    let inputId = '';
+    let accordionBodyId = '';
+    let accordionHeaderId = '';
+    
+    if(tur === 'lise'){bolumDegeri = kayit.bolum || '';inputId = 'personnelLise';accordionBodyId = 'mezuniyetAccordionBody';accordionHeaderId = 'mezuniyetAccordionHeader';}
+    else if(tur === 'onlisans'){bolumDegeri = kayit.onlisansBolumu || '';inputId = 'personnelOnLisans';accordionBodyId = 'mezuniyetAccordionBody';accordionHeaderId = 'mezuniyetAccordionHeader';}
+    else if(tur === 'universite' || tur === 'yuksek_lisans'){bolumDegeri = kayit.lisansBolumu || '';inputId = tur === 'universite' ? 'personnelUniversite' : 'personnelYuksekLisans';accordionBodyId = 'mezuniyetAccordionBody';accordionHeaderId = 'mezuniyetAccordionHeader';}
+    else if(tur === 'ustalik'){bolumDegeri = kayit.ustalikBelgesi || '';inputId = 'personnelUstalikDal';accordionBodyId = 'ustalikAccordionBody';accordionHeaderId = 'ustalikAccordionHeader';}
+    
+    const input = document.getElementById(inputId);
+    if(input){
+        if(!input.value || confirm('Bu alan "' + input.value + '" olarak dolu. Değiştirmek ister misiniz?')){
+            input.value = bolumDegeri;
+        }
+    }
+    
+    if(accordionBodyId && accordionHeaderId){
+        const body = document.getElementById(accordionBodyId);
+        const header = document.getElementById(accordionHeaderId);
+        if(body && !body.classList.contains('open')){body.classList.add('open');if(header) header.classList.add('open');}
+    }
+    
+    const mykBody = document.getElementById('mykAccordionBody');
+    const mykHeader = document.getElementById('mykAccordionHeader');
+    if(mykBody && !mykBody.classList.contains('open')){mykBody.classList.add('open');if(mykHeader) mykHeader.classList.add('open');}
+    
+    updateMezuniyetAccordionBadges();
+    updateUstalikAccordionBadges();
+    updateMykAccordionBadges();
+    updateGorevTanimAccordionBadges();
+    
+    showSuccessMessage('✅ MYK durumu "Aranmaz" olarak ayarlandı. İlgili alan dolduruldu: ' + bolumDegeri);
+    hideModal('listeGoruntuleModal');
+}
+
 function filterListeGoruntule(){renderListeGoruntule();}
 function deleteListeGoruntuleRow(idx){if(!isAdmin){alert('❌ Yönetici girişi gerekli!');return}const tur=listeGoruntuleAktifTur;if(!confirm('Bu kaydı silmek istediğinize emin misiniz?'))return;if(tur==='lise'){liseMuafiyetTable.splice(idx,1);updateLiseMuafiyetStatus();}else if(tur==='onlisans'){onlisansMuafiyetTable.splice(idx,1);updateOnlisansMuafiyetStatus();}else if(tur==='universite'||tur==='yuksek_lisans'){lisansMuafiyetTable.splice(idx,1);updateLisansMuafiyetStatus();}else if(tur==='ustalik'){ustalikMuafiyetTable.splice(idx,1);updateUstalikMuafiyetStatus();}saveMykToStorage();renderListeGoruntule();showSuccessMessage('🗑️ Silindi!');}
 
@@ -2856,27 +3390,199 @@ function hesaplaMuafiyet(){
     const yuksek=document.getElementById('personnelYuksekLisans').value.trim();
     const ustalik=document.getElementById('personnelUstalikDal').value.trim();
     if(!fiiliGorev)return false;
-    if(lise&&liseMuafiyetTable.length>0){for(const r of liseMuafiyetTable){const meslekOran=meslekEslesmeOrani(fiiliGorev,r);if(meslekOran<mykSettings.zorunlulukOrani)continue;const bolumler=kayittanBolumler(r,'lise');for(const b of bolumler){if(similarity(lise,b)>=mykSettings.eslesmeOrani)return true;}}}
-    if(ustalik&&ustalikMuafiyetTable.length>0){for(const r of ustalikMuafiyetTable){const meslekOran=meslekEslesmeOrani(fiiliGorev,r);if(meslekOran<mykSettings.zorunlulukOrani)continue;const belgeler=kayittanUstaliklar(r);for(const b of belgeler){if(similarity(ustalik,b)>=mykSettings.eslesmeOrani)return true;}}}
-    if(onlisans&&onlisansMuafiyetTable.length>0){for(const r of onlisansMuafiyetTable){const meslekOran=meslekEslesmeOrani(fiiliGorev,r);if(meslekOran<mykSettings.zorunlulukOrani)continue;const bolumler=kayittanBolumler(r,'onlisans');for(const b of bolumler){if(similarity(onlisans,b)>=mykSettings.eslesmeOrani)return true;}}}
-    if(universite&&lisansMuafiyetTable.length>0){for(const r of lisansMuafiyetTable){const meslekOran=meslekEslesmeOrani(fiiliGorev,r);if(meslekOran<mykSettings.zorunlulukOrani)continue;const bolumler=kayittanBolumler(r,'universite');for(const b of bolumler){if(similarity(universite,b)>=mykSettings.eslesmeOrani)return true;}}}
-    if(muafiyetTable.length>0){let enIyi=null,enIyiOran=0;muafiyetTable.forEach(r=>{const o=meslekEslesmeOrani(fiiliGorev,r);if(o>enIyiOran){enIyiOran=o;enIyi=r;}});if(enIyi&&enIyiOran>=mykSettings.zorunlulukOrani){const mezuniyetAlanlari=[lise,onlisans,universite,yuksek].filter(x=>x);let mezuniyetEslesme=false;mezuniyetAlanlari.forEach(m=>{if(!mezuniyetEslesme){const oran=similarity(m,enIyi.diplomaAlan||'');if(oran>=mykSettings.eslesmeOrani)mezuniyetEslesme=true;}});let ustalikEslesme=false;if(ustalik){const oran=similarity(ustalik,enIyi.ustalikBelgesi||'');if(oran>=mykSettings.eslesmeOrani)ustalikEslesme=true;}if(mezuniyetEslesme||ustalikEslesme)return true;}}
+    
+    if(lise&&liseMuafiyetTable.length>0){
+        for(const r of liseMuafiyetTable){
+            const meslekOran=meslekEslesmeOrani(fiiliGorev,r);
+            if(meslekOran<mykSettings.zorunlulukOrani)continue;
+            const bolumler=kayittanBolumler(r,'lise');
+            for(const b of bolumler){
+                if(similarity(lise,b)>=mykSettings.eslesmeOrani)return true;
+                const liseTemiz = lise.replace(/\(\s*\d+\s*\)/g,'').replace(/\s+/g,' ').trim();
+                const bTemiz = b.replace(/\(\s*\d+\s*\)/g,'').replace(/\s+/g,' ').trim();
+                if(liseTemiz && bTemiz && similarity(liseTemiz,bTemiz)>=mykSettings.eslesmeOrani)return true;
+            }
+        }
+    }
+    
+    if(ustalik&&ustalikMuafiyetTable.length>0){
+        for(const r of ustalikMuafiyetTable){
+            const meslekOran=meslekEslesmeOrani(fiiliGorev,r);
+            if(meslekOran<mykSettings.zorunlulukOrani)continue;
+            const belgeler=kayittanUstaliklar(r);
+            for(const b of belgeler){
+                if(similarity(ustalik,b)>=mykSettings.eslesmeOrani)return true;
+            }
+        }
+    }
+    
+    if(onlisans&&onlisansMuafiyetTable.length>0){
+        for(const r of onlisansMuafiyetTable){
+            const meslekOran=meslekEslesmeOrani(fiiliGorev,r);
+            if(meslekOran<mykSettings.zorunlulukOrani)continue;
+            const bolumler=kayittanBolumler(r,'onlisans');
+            for(const b of bolumler){
+                if(similarity(onlisans,b)>=mykSettings.eslesmeOrani)return true;
+            }
+        }
+    }
+    
+    if(universite&&lisansMuafiyetTable.length>0){
+        for(const r of lisansMuafiyetTable){
+            const meslekOran=meslekEslesmeOrani(fiiliGorev,r);
+            if(meslekOran<mykSettings.zorunlulukOrani)continue;
+            const bolumler=kayittanBolumler(r,'universite');
+            for(const b of bolumler){
+                if(similarity(universite,b)>=mykSettings.eslesmeOrani)return true;
+            }
+        }
+    }
+    
+    if(muafiyetTable.length>0){
+        let enIyi=null,enIyiOran=0;
+        muafiyetTable.forEach(r=>{
+            const o=meslekEslesmeOrani(fiiliGorev,r);
+            if(o>enIyiOran){enIyiOran=o;enIyi=r;}
+        });
+        if(enIyi&&enIyiOran>=mykSettings.zorunlulukOrani){
+            const mezuniyetAlanlari=[lise,onlisans,universite,yuksek].filter(x=>x);
+            let mezuniyetEslesme=false;
+            mezuniyetAlanlari.forEach(m=>{
+                if(!mezuniyetEslesme){
+                    const oran=similarity(m,enIyi.diplomaAlan||'');
+                    if(oran>=mykSettings.eslesmeOrani)mezuniyetEslesme=true;
+                }
+            });
+            let ustalikEslesme=false;
+            if(ustalik){
+                const oran=similarity(ustalik,enIyi.ustalikBelgesi||'');
+                if(oran>=mykSettings.eslesmeOrani)ustalikEslesme=true;
+            }
+            if(mezuniyetEslesme||ustalikEslesme)return true;
+        }
+    }
     return false;
 }
 function updateMykDurumu(){
-    const badge=document.getElementById('mykDurumBadge');const aciklama=document.getElementById('mykDurumAciklama');const aranmazCb=document.getElementById('mykAranmaz');
+    const badge=document.getElementById('mykDurumBadge');
+    const aciklama=document.getElementById('mykDurumAciklama');
     if(!badge)return;
-    if(aranmazCb&&aranmazCb.checked){badge.className='myk-status-badge myk-status-aranmaz inline-block mb-3';badge.textContent='🚫 Aranmaz';if(aciklama)aciklama.textContent='MYK belgesi aranmayacak.';updateMykAccordionBadges();return;}
+    
+    // Manuel checkbox'ları kontrol et
+    const muafCb=document.getElementById('mykMuaf');
+    const sertifikaCb=document.getElementById('mykBelgesiVar');
+    const yokCb=document.getElementById('mykYok');
+    const aranmazCb=document.getElementById('mykAranmaz');
+    
+    if(muafCb&&muafCb.checked){
+        badge.className='myk-status-badge myk-status-muaf inline-block mb-3';
+        badge.textContent='✅ Muaf';
+        if(aciklama)aciklama.textContent='MYK durumu manuel olarak "Muaf" seçildi.';
+        updateMykAccordionBadges();
+        return;
+    }
+    
+    if(sertifikaCb&&sertifikaCb.checked){
+        badge.className='myk-status-badge myk-status-sertifika inline-block mb-3';
+        badge.textContent='📜 Sertifika';
+        if(aciklama)aciklama.textContent='MYK belgesi mevcut (Sertifika).';
+        updateMykAccordionBadges();
+        return;
+    }
+    
+    if(yokCb&&yokCb.checked){
+        badge.className='myk-status-badge myk-status-yok inline-block mb-3';
+        badge.textContent='❌ Yok';
+        if(aciklama)aciklama.textContent='MYK belgesi yok.';
+        updateMykAccordionBadges();
+        return;
+    }
+    
+    if(aranmazCb&&aranmazCb.checked){
+        badge.className='myk-status-badge myk-status-aranmaz inline-block mb-3';
+        badge.textContent='🚫 Aranmaz';
+        if(aciklama)aciklama.textContent='MYK belgesi aranmayacak.';
+        updateMykAccordionBadges();
+        return;
+    }
+    
+    // Hiçbiri seçili değilse otomatik hesapla
     const fiiliGorev=document.getElementById('personnelFiiliGorev').value.trim();
-    if(!fiiliGorev){badge.className='myk-status-badge myk-status-aranmaz inline-block mb-3';badge.textContent='🚫 Aranmaz';if(aciklama)aciklama.textContent='Fiili görev girilmedi.';updateMykAccordionBadges();return;}
+    if(!fiiliGorev){
+        badge.className='myk-status-badge myk-status-aranmaz inline-block mb-3';
+        badge.textContent='🚫 Aranmaz';
+        if(aciklama)aciklama.textContent='Fiili görev girilmedi.';
+        updateMykAccordionBadges();
+        return;
+    }
+    
     const zorunlulukVar=fiiliGorevZorunlulukVarMi();
-    if(!zorunlulukVar){badge.className='myk-status-badge myk-status-aranmaz inline-block mb-3';badge.textContent='🚫 Aranmaz';if(aciklama)aciklama.textContent='MYK zorunlu mesleklerle eşleşmiyor.';updateMykAccordionBadges();return;}
-    if(mykBelgesiVarDurum){badge.className='myk-status-badge myk-status-sertifika inline-block mb-3';badge.textContent='📜 Sertifika';if(aciklama)aciklama.textContent='MYK belgesi mevcut.';updateMykAccordionBadges();return;}
-    if(hesaplaMuafiyet()){badge.className='myk-status-badge myk-status-muaf inline-block mb-3';badge.textContent='✅ Muaf';if(aciklama)aciklama.textContent='Muafiyet listesinden eşleşme var.';updateMykAccordionBadges();return;}
-    badge.className='myk-status-badge myk-status-yok inline-block mb-3';badge.textContent='❌ Yok';if(aciklama)aciklama.textContent='MYK zorunlu ancak eşleşme yok.';updateMykAccordionBadges();
+    if(!zorunlulukVar){
+        badge.className='myk-status-badge myk-status-aranmaz inline-block mb-3';
+        badge.textContent='🚫 Aranmaz';
+        if(aciklama)aciklama.textContent='MYK zorunlu mesleklerle eşleşmiyor.';
+        updateMykAccordionBadges();
+        return;
+    }
+    
+    if(hesaplaMuafiyet()){
+        badge.className='myk-status-badge myk-status-muaf inline-block mb-3';
+        badge.textContent='✅ Muaf';
+        if(aciklama)aciklama.textContent='Muafiyet listesinden eşleşme var.';
+        updateMykAccordionBadges();
+        return;
+    }
+    
+    badge.className='myk-status-badge myk-status-yok inline-block mb-3';
+    badge.textContent='❌ Yok';
+    if(aciklama)aciklama.textContent='MYK zorunlu ancak eşleşme yok.';
+    updateMykAccordionBadges();
 }
-function onMykBelgesiVarChange(){const cb=document.getElementById('mykBelgesiVar');mykBelgesiVarDurum=cb.checked;if(cb.checked){document.getElementById('mykAranmaz').checked=false;}updateMykDurumu();}
-function onMykAranmazChange(){const cb=document.getElementById('mykAranmaz');if(cb.checked){document.getElementById('mykBelgesiVar').checked=false;mykBelgesiVarDurum=false;}updateMykDurumu();}
+function onMykMuafChange(){
+    const cb=document.getElementById('mykMuaf');
+    if(cb.checked){
+        mykMuafDurum=true;
+        document.getElementById('mykBelgesiVar').checked=false;mykBelgesiVarDurum=false;
+        document.getElementById('mykYok').checked=false;mykYokDurum=false;
+        document.getElementById('mykAranmaz').checked=false;
+    } else {
+        mykMuafDurum=false;
+    }
+    updateMykDurumu();
+}
+function onMykBelgesiVarChange(){
+    const cb=document.getElementById('mykBelgesiVar');
+    if(cb.checked){
+        mykBelgesiVarDurum=true;
+        document.getElementById('mykMuaf').checked=false;mykMuafDurum=false;
+        document.getElementById('mykYok').checked=false;mykYokDurum=false;
+        document.getElementById('mykAranmaz').checked=false;
+    } else {
+        mykBelgesiVarDurum=false;
+    }
+    updateMykDurumu();
+}
+function onMykYokChange(){
+    const cb=document.getElementById('mykYok');
+    if(cb.checked){
+        mykYokDurum=true;
+        document.getElementById('mykMuaf').checked=false;mykMuafDurum=false;
+        document.getElementById('mykBelgesiVar').checked=false;mykBelgesiVarDurum=false;
+        document.getElementById('mykAranmaz').checked=false;
+    } else {
+        mykYokDurum=false;
+    }
+    updateMykDurumu();
+}
+function onMykAranmazChange(){
+    const cb=document.getElementById('mykAranmaz');
+    if(cb.checked){
+        document.getElementById('mykMuaf').checked=false;mykMuafDurum=false;
+        document.getElementById('mykBelgesiVar').checked=false;mykBelgesiVarDurum=false;
+        document.getElementById('mykYok').checked=false;mykYokDurum=false;
+    }
+    updateMykDurumu();
+}
 function openFiiliGorevModal(){if(!isAdmin){alert('❌ Yönetici girişi gerekli!');return}updateFiiliGorevList();document.getElementById('fiiliGorevInput').value='';showModal('fiiliGorevModal');}
 function updateFiiliGorevList(){const l=document.getElementById('fiiliGorevList');const c=document.getElementById('fiiliGorevCount');if(!l)return;l.innerHTML='';if(!data.fiiliGorevler||data.fiiliGorevler.length===0){l.innerHTML='<div class="text-center py-4 text-gray-500 text-sm bg-gray-50 rounded">Henüz fiili görev eklenmemiş</div>';if(c)c.textContent='0';return;}if(c)c.textContent=data.fiiliGorevler.length;data.fiiliGorevler.slice().sort((a,b)=>a.localeCompare(b,'tr')).forEach((g)=>{const i=data.fiiliGorevler.indexOf(g);l.innerHTML+='<div class="setting-list-item"><span class="item-text">💼 '+escapeHtml(g)+'</span><button class="btn-del" onclick="deleteFiiliGorev('+i+')">🗑️ Sil</button></div>';});}
 function addFiiliGorev(){if(!isAdmin){alert('❌ Yönetici girişi gerekli!');return}const v=document.getElementById('fiiliGorevInput').value.trim();if(!v){alert('Fiili görev adı girin!');return}if(data.fiiliGorevler.includes(v)){alert('Bu görev zaten var!');return}data.fiiliGorevler.push(v);document.getElementById('fiiliGorevInput').value='';saveToLocalStorage();updateFiiliGorevList();showSuccessMessage('✅ Eklendi!');}
@@ -2891,22 +3597,75 @@ function mezuniyetIdToField(tur){const map={lise:'Lise',onlisans:'OnLisans',univ
 function fiiliGoreveKarsilikGelenMeslek(tur){const fiiliGorev=document.getElementById('personnelFiiliGorev').value.trim();if(!fiiliGorev)return null;let tablo=[];if(tur==='lise')tablo=liseMuafiyetTable;else if(tur==='onlisans')tablo=onlisansMuafiyetTable;else if(tur==='universite')tablo=lisansMuafiyetTable;else if(tur==='yuksek_lisans')tablo=lisansMuafiyetTable;if(!tablo||tablo.length===0)return null;let enIyi=null,enIyiOran=0;tablo.forEach(r=>{const oran=meslekEslesmeOrani(fiiliGorev,r);if(oran>enIyiOran){enIyiOran=oran;enIyi=r;}});if(!enIyi||enIyiOran<mykSettings.zorunlulukOrani)return null;return enIyi;}
 function fiiliGoreveUygunBolumler(tur){const kayit=fiiliGoreveKarsilikGelenMeslek(tur);if(!kayit)return [];return kayittanBolumler(kayit,tur);}
 function fiiliGoreveUygunUstaliklar(){const fiiliGorev=document.getElementById('personnelFiiliGorev').value.trim();if(!fiiliGorev||ustalikMuafiyetTable.length===0)return [];let enIyi=null,enIyiOran=0;ustalikMuafiyetTable.forEach(r=>{const oran=meslekEslesmeOrani(fiiliGorev,r);if(oran>enIyiOran){enIyiOran=oran;enIyi=r;}});if(!enIyi||enIyiOran<mykSettings.zorunlulukOrani)return [];return kayittanUstaliklar(enIyi);}
+
+// ✅ SADECE KAYITLI BÖLÜM/DALLARDAN ÖNERİ GELİYOR (Muafiyet tablosu ve fiili görev bölümleri HARİÇ)
 function onMezuniyetInput(tur){
-    const input=document.getElementById('personnel'+mezuniyetIdToField(tur));if(!input)return;const val=input.value.trim();const dd=document.getElementById('mezuniyetDropdown_'+tur);if(!dd)return;if(!val||val.length<2){dd.classList.remove('show');updateMykDurumu();return;}
-    const fiiliBolumler=fiiliGoreveUygunBolumler(tur);const fiiliFiltreli=[];fiiliBolumler.forEach(b=>{const sim=similarity(val,b);if(sim>=30)fiiliFiltreli.push({ad:b,oran:sim});});fiiliFiltreli.sort((a,b)=>b.oran-a.oran);
-    const ayarDallar=(data.mezuniyetDallari[tur]||[]).filter(d=>normalize(d).includes(normalize(val))).sort((a,b)=>a.localeCompare(b,'tr'));
-    let html='';
-    if(fiiliFiltreli.length>0){html+='<div class="px-3 py-1 text-xs font-bold text-indigo-700 bg-indigo-50 border-b">🎯 Fiili Göreve Uygun Bölümler</div>';fiiliFiltreli.slice(0,20).forEach(o=>{html+='<div class="myk-combo-item mezuniyet-dal-option" data-tur="'+tur+'" data-value="'+escapeHtml(o.ad)+'"><div class="code">%'+Math.round(o.oran)+'</div><div class="desc">'+escapeHtml(o.ad)+'</div></div>';});}
-    else if(fiiliBolumler.length>0){html+='<div class="px-3 py-1 text-xs font-bold text-indigo-700 bg-indigo-50 border-b">🎯 Fiili Göreve Uygun Tüm Bölümler</div>';fiiliBolumler.slice(0,50).forEach(b=>{html+='<div class="myk-combo-item mezuniyet-dal-option" data-tur="'+tur+'" data-value="'+escapeHtml(b)+'"><div class="desc">'+escapeHtml(b)+'</div></div>';});}
-    if(ayarDallar.length>0){html+='<div class="px-3 py-1 text-xs font-bold text-emerald-700 bg-emerald-50 border-b">🎓 Kayıtlı Bölüm/Dallar</div>';ayarDallar.slice(0,10).forEach(d=>{html+='<div class="myk-combo-item mezuniyet-dal-option" data-tur="'+tur+'" data-value="'+escapeHtml(d)+'"><div class="desc">'+escapeHtml(d)+'</div></div>';});}
-    if(!html){const fiiliGorev=document.getElementById('personnelFiiliGorev').value.trim();if(!fiiliGorev){html='<div class="myk-combo-empty">Önce "Fiili Görev" alanını doldurun</div>';}else{html='<div class="myk-combo-empty">Fiili göreve karşılık gelen muafiyet kaydı bulunamadı.</div>';}}
-    dd.innerHTML=html;dd.classList.add('show');updateMykDurumu();
+    const input=document.getElementById('personnel'+mezuniyetIdToField(tur));
+    if(!input)return;
+    const val=input.value.trim();
+    const dd=document.getElementById('mezuniyetDropdown_'+tur);
+    if(!dd)return;
+    
+    if(!val||val.length<2){dd.classList.remove('show');updateMykDurumu();return;}
+    
+    // ✅ SADECE kayıtlı ayar dallarından öneri göster
+    const ayarDallar = (data.mezuniyetDallari[tur]||[]);
+    
+    const filtreli = ayarDallar.filter(d => {
+        const sim = similarity(val, d);
+        return sim >= 25 || normalize(d).includes(normalize(val));
+    });
+    
+    filtreli.sort((a,b) => similarity(val, b) - similarity(val, a));
+    
+    let html = '';
+    
+    if(filtreli.length > 0){
+        html += '<div class="px-3 py-1 text-xs font-bold text-emerald-700 bg-emerald-50 border-b">📚 Kayıtlı Bölüm/Dallar</div>';
+        filtreli.slice(0, 100).forEach(d => {
+            const oran = similarity(val, d);
+            html += '<div class="myk-combo-item mezuniyet-dal-option" data-tur="'+tur+'" data-value="'+escapeHtml(d)+'"><div class="code">📚 %'+Math.round(oran)+'</div><div class="desc">'+escapeHtml(d)+'</div></div>';
+        });
+    } else {
+        html = '<div class="myk-combo-empty">Kayıtlı bölüm/dal bulunamadı.<br><span style="font-size:10px;color:#9ca3af;">Ayarlar → Mezuniyet Bölüm/Dal Yönetimi\'nden ekleyin.</span></div>';
+    }
+    
+    dd.innerHTML = html;
+    dd.classList.add('show');
+    updateMykDurumu();
 }
-function toggleMezuniyetDropdown(tur,e){if(e)e.stopPropagation();const dd=document.getElementById('mezuniyetDropdown_'+tur);if(!dd)return;if(dd.classList.contains('show')){dd.classList.remove('show');return;}let html='';const fiiliBolumler=fiiliGoreveUygunBolumler(tur);if(fiiliBolumler.length>0){html+='<div class="px-3 py-1 text-xs font-bold text-indigo-700 bg-indigo-50 border-b">🎯 Fiili Göreve Uygun Bölümler</div>';fiiliBolumler.slice(0,100).forEach(b=>{html+='<div class="myk-combo-item mezuniyet-dal-option" data-tur="'+tur+'" data-value="'+escapeHtml(b)+'"><div class="desc">'+escapeHtml(b)+'</div></div>';});}const ayarDallar=(data.mezuniyetDallari[tur]||[]).slice().sort((a,b)=>a.localeCompare(b,'tr'));const benzersiz=new Set(fiiliBolumler.map(x=>normalize(x)));const kalanAyar=ayarDallar.filter(d=>!benzersiz.has(normalize(d)));if(kalanAyar.length>0){html+='<div class="px-3 py-1 text-xs font-bold text-emerald-700 bg-emerald-50 border-b">🎓 Kayıtlı Bölüm/Dallar</div>';kalanAyar.forEach(d=>{html+='<div class="myk-combo-item mezuniyet-dal-option" data-tur="'+tur+'" data-value="'+escapeHtml(d)+'"><div class="desc">'+escapeHtml(d)+'</div></div>';});}if(!html){html='<div class="myk-combo-empty">Sonuç yok</div>';}dd.innerHTML=html;dd.classList.add('show');}
 function selectMezuniyetDal(tur,deger){const input=document.getElementById('personnel'+mezuniyetIdToField(tur));if(input)input.value=deger;const dd=document.getElementById('mezuniyetDropdown_'+tur);if(dd)dd.classList.remove('show');updateMykDurumu();updateMezuniyetAccordionBadges();}
 
 function onUstalikInput(){const inp=document.getElementById('personnelUstalikDal');if(!inp)return;const val=inp.value.trim();const dd=document.getElementById('ustalikDropdown');if(!dd)return;if(!val||val.length<2){dd.classList.remove('show');updateMykDurumu();return;}const fiiliUstaliklar=fiiliGoreveUygunUstaliklar();const filtreli=[];fiiliUstaliklar.forEach(b=>{const sim=similarity(val,b);if(sim>=30)filtreli.push({ad:b,oran:sim});});filtreli.sort((a,b)=>b.oran-a.oran);let html='';if(filtreli.length>0){html+='<div class="px-3 py-1 text-xs font-bold text-indigo-700 bg-indigo-50 border-b">🔧 Fiili Göreve Uygun Ustalık Dalları</div>';filtreli.forEach(o=>{html+='<div class="myk-combo-item ustalik-dal-option" data-value="'+escapeHtml(o.ad)+'"><div class="code">%'+Math.round(o.oran)+'</div><div class="desc">'+escapeHtml(o.ad)+'</div></div>';});}else if(fiiliUstaliklar.length>0){html+='<div class="px-3 py-1 text-xs font-bold text-indigo-700 bg-indigo-50 border-b">🔧 Fiili Göreve Uygun Ustalık Dalları</div>';fiiliUstaliklar.slice(0,50).forEach(b=>{html+='<div class="myk-combo-item ustalik-dal-option" data-value="'+escapeHtml(b)+'"><div class="desc">'+escapeHtml(b)+'</div></div>';});}if(!html){html='<div class="myk-combo-empty">Sonuç yok</div>';}dd.innerHTML=html;dd.classList.add('show');updateMykDurumu();}
-function toggleUstalikDropdown(e){if(e)e.stopPropagation();const dd=document.getElementById('ustalikDropdown');if(!dd)return;if(dd.classList.contains('show')){dd.classList.remove('show');return;}let html='';const fiiliUstaliklar=fiiliGoreveUygunUstaliklar();if(fiiliUstaliklar.length>0){html+='<div class="px-3 py-1 text-xs font-bold text-indigo-700 bg-indigo-50 border-b">🔧 Fiili Göreve Uygun Ustalık Dalları</div>';fiiliUstaliklar.slice(0,50).forEach(b=>{html+='<div class="myk-combo-item ustalik-dal-option" data-value="'+escapeHtml(b)+'"><div class="desc">'+escapeHtml(b)+'</div></div>';});}if(muafiyetTable.length>0){const tumu=new Set(fiiliUstaliklar.map(x=>normalize(x)));const ekDallar=[];muafiyetTable.forEach(r=>extractUstalikDallari(r.ustalikBelgesi).forEach(d=>{if(!tumu.has(normalize(d))){tumu.add(normalize(d));ekDallar.push(d);}}));if(ekDallar.length>0){html+='<div class="px-3 py-1 text-xs font-bold text-purple-700 bg-purple-50 border-b">🔧 MYK Tablosundan Diğer Dallar</div>';ekDallar.slice(0,100).sort((a,b)=>a.localeCompare(b,'tr')).forEach(d=>{html+='<div class="myk-combo-item ustalik-dal-option" data-value="'+escapeHtml(d)+'"><div class="desc">'+escapeHtml(d)+'</div></div>';});}}if(!html){html='<div class="myk-combo-empty">Sonuç yok</div>';}dd.innerHTML=html;dd.classList.add('show');}
+
+// ✅ SADECE KAYITLI BÖLÜM/DALLARDAN ÖNERİ GELİYOR
+function toggleMezuniyetDropdown(tur,e){
+    if(e)e.stopPropagation();
+    const dd=document.getElementById('mezuniyetDropdown_'+tur);
+    if(!dd)return;
+    
+    if(dd.classList.contains('show')){
+        dd.classList.remove('show');
+        return;
+    }
+    
+    // ✅ SADECE kayıtlı ayar dallarından öneri göster
+    const ayarDallar = (data.mezuniyetDallari[tur]||[]);
+    
+    let html = '';
+    
+    if(ayarDallar.length > 0){
+        html += '<div class="px-3 py-1 text-xs font-bold text-emerald-700 bg-emerald-50 border-b">📚 Kayıtlı Bölüm/Dallar (' + ayarDallar.length + ')</div>';
+        ayarDallar.slice().sort((a,b)=>a.localeCompare(b,'tr')).slice(0, 200).forEach(d => {
+            html += '<div class="myk-combo-item mezuniyet-dal-option" data-tur="'+tur+'" data-value="'+escapeHtml(d)+'"><div class="desc">📚 '+escapeHtml(d)+'</div></div>';
+        });
+    } else {
+        html = '<div class="myk-combo-empty">Kayıtlı bölüm/dal bulunamadı.<br><span style="font-size:10px;color:#9ca3af;">Ayarlar → Mezuniyet Bölüm/Dal Yönetimi\'nden ekleyin.</span></div>';
+    }
+    
+    dd.innerHTML = html;
+    dd.classList.add('show');
+}
 function selectUstalikDal(deger){const inp=document.getElementById('personnelUstalikDal');if(inp)inp.value=deger;document.getElementById('ustalikDropdown').classList.remove('show');updateMykDurumu();updateUstalikAccordionBadges();}
 
 function showAddPersonnelModal(){
@@ -2915,11 +3674,15 @@ function showAddPersonnelModal(){
     document.getElementById('personnelModalTitle').textContent='👤 Yeni Personel Ekle';
     document.getElementById('personnelSaveButton').textContent='Ekle';
     document.getElementById('personnelSaveButton').onclick=addPersonnel;
-    selectedKkds=[];selectedClothing=[];selectedTrainings=[];selectedCertificates=[];mykBelgesiVarDurum=false;
+    selectedKkds=[];selectedClothing=[];selectedTrainings=[];selectedCertificates=[];
+    mykBelgesiVarDurum=false;mykMuafDurum=false;mykYokDurum=false;
     personelGorevTanimSablonId=null;personelGorevTanimFields=[];personelGorevTanimSignatures=[];personelGorevTanimTebligYapildi=false;personelGorevTanimRevNo=0;
     ['personnelTcNo','personnelName','personnelJob','personnelPhone','personnelFiiliGorev','personnelLise','personnelOnLisans','personnelUniversite','personnelYuksekLisans','personnelUstalikDal','personnelUstalikYil'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
     ['personnelLiseOkul','personnelMyoOkul','personnelUniversiteOkul','personnelYuksekLisansOkul'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
-    document.getElementById('mykBelgesiVar').checked=false;document.getElementById('mykAranmaz').checked=false;
+    document.getElementById('mykMuaf').checked=false;
+    document.getElementById('mykBelgesiVar').checked=false;
+    document.getElementById('mykYok').checked=false;
+    document.getElementById('mykAranmaz').checked=false;
     document.getElementById('fiiliGorevZorunlulukUyari').classList.add('hidden');
     document.getElementById('personnelGorevTanimSablon').value='';
     document.getElementById('personelGorevTanimFieldsContainer').innerHTML='<div class="text-center py-6 text-gray-500 text-sm bg-gray-50 rounded-lg">Şablon seçin, alanlar burada görünecek</div>';
@@ -2968,10 +3731,23 @@ function addPersonnel(){
     const ustalikDal=document.getElementById('personnelUstalikDal').value.trim();
     const ustalikYil=document.getElementById('personnelUstalikYil').value.trim();
     const mykAranmaz=document.getElementById('mykAranmaz').checked;
+    const mykMuaf=document.getElementById('mykMuaf').checked;
+    const mykBelgesiVar=document.getElementById('mykBelgesiVar').checked;
+    const mykYok=document.getElementById('mykYok').checked;
+    
     let mykDurum='Aranmaz',mykEslesenYK='',mykMuafOran=0,mykZorunlulukVar=false;
-    if(!mykAranmaz && fiiliGorev){mykZorunlulukVar=fiiliGorevZorunlulukVarMi();if(mykZorunlulukVar){if(mykBelgesiVarDurum){mykDurum='Sertifika';}else if(hesaplaMuafiyet()){mykDurum='Muaf';}else{mykDurum='Yok';}}else{mykDurum='Aranmaz';}}else if(mykAranmaz){mykDurum='Aranmaz';}else{mykDurum='Aranmaz';}
+    
+    if(mykMuaf){mykDurum='Muaf';}
+    else if(mykBelgesiVar){mykDurum='Sertifika';}
+    else if(mykYok){mykDurum='Yok';}
+    else if(mykAranmaz){mykDurum='Aranmaz';}
+    else {
+        if(fiiliGorev){mykZorunlulukVar=fiiliGorevZorunlulukVarMi();if(mykZorunlulukVar){if(hesaplaMuafiyet()){mykDurum='Muaf';}else{mykDurum='Yok';}}else{mykDurum='Aranmaz';}}else{mykDurum='Aranmaz';}
+    }
+    
     if(muafiyetTable.length>0&&fiiliGorev){let enIyi=null,enIyiOran=0;muafiyetTable.forEach(r=>{const o=meslekEslesmeOrani(fiiliGorev,r);if(o>enIyiOran){enIyiOran=o;enIyi=r;}});if(enIyi){mykEslesenYK=(enIyi.ykKodu||'')+' - '+(enIyi.ykAdi||'');mykMuafOran=enIyiOran;}}
-    const np={id:editingPersonnelId||Date.now(),tcNo,name,status,title,department,job,phone,gender,trainings:[],certificates:[],kkds:[],clothing:[],requiredKkds:[],requiredClothing:[],fiiliGorev,lise,liseOkul,onlisans,myoOkul,universite,universiteOkul,yuksekLisans,yuksekLisansOkul,ustalikDal,ustalikYil,mykDurum,mykEslesenYK,mykMuafOran,mykZorunlulukVar,mykAranmaz,mykBelgesiVar:mykBelgesiVarDurum,
+    
+    const np={id:editingPersonnelId||Date.now(),tcNo,name,status,title,department,job,phone,gender,trainings:[],certificates:[],kkds:[],clothing:[],requiredKkds:[],requiredClothing:[],fiiliGorev,lise,liseOkul,onlisans,myoOkul,universite,universiteOkul,yuksekLisans,yuksekLisansOkul,ustalikDal,ustalikYil,mykDurum,mykEslesenYK,mykMuafOran,mykZorunlulukVar,mykAranmaz,mykBelgesiVar:mykBelgesiVar,mykMuaf:mykMuaf,mykYok:mykYok,
         gorevTanimSablonId:personelGorevTanimSablonId,
         gorevTanimSablonAdi:(personelGorevTanimSablonId && document.getElementById('personnelGorevTanimSablon').selectedOptions[0])?document.getElementById('personnelGorevTanimSablon').selectedOptions[0].textContent:'',
         gorevTanimFields:JSON.parse(JSON.stringify(personelGorevTanimFields)),
@@ -3028,7 +3804,11 @@ function editPersonnel(id){
     document.getElementById('personnelUstalikDal').value=p.ustalikDal||'';
     document.getElementById('personnelUstalikYil').value=p.ustalikYil||'';
     mykBelgesiVarDurum=p.mykBelgesiVar||false;
+    mykMuafDurum=p.mykMuaf||false;
+    mykYokDurum=p.mykYok||false;
+    document.getElementById('mykMuaf').checked=mykMuafDurum;
     document.getElementById('mykBelgesiVar').checked=mykBelgesiVarDurum;
+    document.getElementById('mykYok').checked=mykYokDurum;
     document.getElementById('mykAranmaz').checked=p.mykAranmaz||false;
     personelGorevTanimSablonId = p.gorevTanimSablonId || null;
     personelGorevTanimFields = p.gorevTanimFields ? JSON.parse(JSON.stringify(p.gorevTanimFields)) : [];
@@ -3103,7 +3883,19 @@ function showCertificateSelectionModal(){
     showModal('certificateSelectionModal');
 }
 function toggleCertificateDate(i,show){const w=document.getElementById('cert-date-wrapper-'+i);if(w){if(show)w.classList.remove('hidden');else w.classList.add('hidden');}}
-function confirmCertificateSelection(){selectedCertificates=[];document.querySelectorAll('.certificate-checkbox:checked').forEach(cb=>{const i=parseInt(cb.value);const d=document.getElementById('cert-date-'+i);const gd=d&&d.value?d.value:new Date().toISOString().split('T')[0];selectedCertificates.push({index:i,givenDate:gd});});updateSelectionDisplays();hideModal('certificateSelectionModal');if(selectedCertificates.length>0){mykBelgesiVarDurum=true;document.getElementById('mykBelgesiVar').checked=true;updateMykDurumu();}updateAlinacaklarAccordionBadges();}
+function confirmCertificateSelection(){
+    selectedCertificates=[];
+    document.querySelectorAll('.certificate-checkbox:checked').forEach(cb=>{
+        const i=parseInt(cb.value);
+        const d=document.getElementById('cert-date-'+i);
+        const gd=d&&d.value?d.value:new Date().toISOString().split('T')[0];
+        selectedCertificates.push({index:i,givenDate:gd});
+    });
+    updateSelectionDisplays();
+    hideModal('certificateSelectionModal');
+    updateMykDurumu();
+    updateAlinacaklarAccordionBadges();
+}
 function removeCertificateSelection(i){selectedCertificates=selectedCertificates.filter(x=>x.index!==i);updateSelectionDisplays();updateAlinacaklarAccordionBadges();}
 
 function showKkdSelectionModal(){const c=document.getElementById('kddCheckboxes');c.innerHTML='';data.kkds.forEach((k,i)=>{const av=k.stock-k.distributed,ok=av>0,ch=selectedKkds.includes(i);c.innerHTML+='<label class="flex items-center p-3 '+(ok?'bg-orange-50':'bg-gray-50')+' rounded-lg border-2 cursor-pointer"><input type="checkbox" value="'+i+'" class="kkd-checkbox mr-3" '+(!ok?'disabled':'')+' '+(ch?'checked':'')+'><div><div class="font-medium '+(ok?'text-orange-800':'text-gray-400')+'">'+escapeHtml(k.name)+'</div><div class="text-sm '+(ok?'text-orange-600':'text-gray-400')+'">Stok: '+av+' | Kişi başı: '+(k.perPerson||1)+'</div></div></label>';});showModal('kddSelectionModal');}
