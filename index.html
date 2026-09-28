@@ -227,7 +227,6 @@ body.viewer-mode #loginModal *{pointer-events:auto!important;opacity:1!important
 .egitim-tablo .btn-mini-del{background:#fee2e2;color:#b91c1c}
 .egitim-tablo .btn-mini-del:hover{background:#fecaca}
 
-/* ===== PERSONEL TABLO FİLTRE ===== */
 .personnel-table thead th{position:relative;cursor:pointer;user-select:none}
 .personnel-table thead th:hover{background:#dbeafe}
 .personnel-table thead th.filter-active{background:#fef3c7!important;color:#92400e!important}
@@ -235,7 +234,6 @@ body.viewer-mode #loginModal *{pointer-events:auto!important;opacity:1!important
 .personnel-table thead th .th-filter-btn{display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;margin-left:4px;background:#fff;border:1px solid #9ca3af;border-radius:3px;cursor:pointer;font-size:8px;padding:0;vertical-align:middle}
 .personnel-table thead th .th-filter-btn:hover{background:#e0e7ff}
 
-/* ===== AYARLAR SOL MENÜ ===== */
 .settings-sidebar{width:280px;flex-shrink:0}
 .settings-menu-item{display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:10px;cursor:pointer;font-size:14px;font-weight:600;transition:all .2s;margin-bottom:6px;border:2px solid transparent;background:#fff}
 .settings-menu-item:hover{background:#f0f4ff;border-color:#c7d2fe}
@@ -246,7 +244,6 @@ body.viewer-mode #loginModal *{pointer-events:auto!important;opacity:1!important
 .settings-panel{display:none}
 .settings-panel.active{display:block}
 
-/* ===== GÖREV TANIM ŞABLONU STİLLERİ ===== */
 .gorev-tanim-field{background:#f8fafc;border:2px solid #e2e8f0;border-radius:10px;padding:12px;margin-bottom:10px;transition:all .2s}
 .gorev-tanim-field:hover{border-color:#a5b4fc;box-shadow:0 2px 8px rgba(99,102,241,.1)}
 .gorev-tanim-field .field-header{display:flex;align-items:center;gap:8px;margin-bottom:8px}
@@ -287,7 +284,6 @@ body.viewer-mode #loginModal *{pointer-events:auto!important;opacity:1!important
 .gorev-tanim-kart .btn-delete:hover{background:#dc2626}
 .gorev-tanim-kart .kart-info{font-size:12px;color:#6b7280;margin-top:6px}
 
-/* ===== YAZDIRMA ÖZEL ===== */
 .gorev-tanim-print-area{font-family:Arial,sans-serif;font-size:12px;color:#000;padding:20px;line-height:1.6;background:#fff}
 .gorev-tanim-print-area h1{text-align:center;font-size:16px;font-weight:bold;margin:0 0 4px;text-transform:uppercase}
 .gorev-tanim-print-area h2{text-align:center;font-size:13px;font-weight:bold;margin:0 0 16px}
@@ -302,7 +298,6 @@ body.viewer-mode #loginModal *{pointer-events:auto!important;opacity:1!important
 .gorev-tanim-print-area .print-sig-name{font-size:10px;color:#333}
 .gorev-tanim-print-area .print-teblig-check{text-align:center;margin-top:16px;padding:8px;border:2px solid #000;font-size:11px;font-weight:bold}
 
-/* ===== AKORDİYON STİLLERİ ===== */
 .accordion-header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:linear-gradient(135deg,#e0e7ff 0%,#c7d2fe 100%);border:2px solid #a5b4fc;border-radius:10px;cursor:pointer;font-weight:700;font-size:14px;color:#3730a3;transition:all .2s;user-select:none;margin-bottom:0}
 .accordion-header:hover{background:linear-gradient(135deg,#c7d2fe 0%,#a5b4fc 100%);box-shadow:0 2px 8px rgba(99,102,241,.2)}
 .accordion-header.open{background:linear-gradient(135deg,#818cf8 0%,#6366f1 100%);color:#fff;border-radius:10px 10px 0 0;border-color:#4f46e5}
@@ -329,7 +324,6 @@ body.viewer-mode #loginModal *{pointer-events:auto!important;opacity:1!important
 .pt-gorev-var{background:#dcfce7;color:#166534;border:1px solid #86efac}
 .pt-gorev-teblig{background:#dbeafe;color:#1e40af;border:1px solid #93c5fd}
 
-/* ===== YAZDIRMA YÖNÜ ===== */
 .print-orientation-btns{display:flex;gap:6px;align-items:center;background:#f0f4ff;padding:6px 10px;border-radius:8px;border:2px solid #c7d2fe}
 .print-orientation-btn{padding:6px 14px;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer;border:2px solid #a5b4fc;background:#fff;color:#3730a3;transition:all .15s}
 .print-orientation-btn:hover{background:#e0e7ff}
@@ -541,6 +535,7 @@ body.viewer-mode #loginModal *{pointer-events:auto!important;opacity:1!important
 <select id="clothingPendingSeasonFilter" class="viewer-allow text-xs border-2 border-orange-300 rounded-lg px-2 py-1 bg-white" onchange="updatePendingTables()"><option value="">Tüm Sezon</option><option value="yazlik">☀️ Yazlık</option><option value="kislik">❄️ Kışlık</option></select>
 <select id="clothingPendingSortFilter" class="viewer-allow text-xs border-2 border-purple-300 rounded-lg px-2 py-1 bg-white" onchange="updatePendingTables()"><option value="default">Varsayılan</option><option value="name">👤 Alfabetik</option><option value="department">🏢 Birime Göre</option></select>
 <button onclick="refreshAllClothingPending()" class="admin-only-btn bg-blue-600 text-white px-3 py-2 rounded-lg text-xs font-bold">🔄 Yenile</button>
+<button onclick="openClothingPendingPrintModal()" class="viewer-allow bg-emerald-600 text-white px-3 py-2 rounded-lg text-xs font-bold">🖨️ Yazdır</button>
 </div>
 </div>
 <div class="overflow-x-auto"><table class="w-full table-auto" id="pendingTable">
@@ -560,8 +555,11 @@ body.viewer-mode #loginModal *{pointer-events:auto!important;opacity:1!important
 <div class="bg-white rounded-xl shadow-xl p-6">
 <div class="flex items-center justify-between mb-4 flex-wrap gap-3">
 <div class="flex items-center"><div class="p-3 rounded-full bg-green-100 text-green-600 text-2xl mr-4">✅</div><h3 class="text-xl font-bold">Yıllara Göre Dağıtım</h3></div>
+<div class="flex items-center gap-2 flex-wrap">
+<button onclick="openDistributionPrintFilterModal()" class="viewer-allow bg-emerald-600 text-white px-3 py-2 rounded-lg text-xs font-bold">🖨️ Yazdır</button>
 </div>
-<div class="overflow-x-auto mb-3"><table class="w-full table-auto">
+</div>
+<div class="overflow-x-auto mb-3"><table class="w-full table-auto" id="distributionHistoryTableContainer">
 <thead class="bg-green-50"><tr>
 <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase" style="width:40px;"></th>
 <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Personel</th>
@@ -909,7 +907,7 @@ body.viewer-mode #loginModal *{pointer-events:auto!important;opacity:1!important
 </div>
 </div>
 
-<!-- ==================== GÖREV TANIM YAZDIRMA MODAL (YATAY/DİKEY SEÇENEKLİ) ==================== -->
+<!-- ==================== GÖREV TANIM YAZDIRMA MODAL ==================== -->
 <div id="gorevTanimYazdirModal" class="modal hidden fixed inset-0 bg-black bg-opacity-70 items-center justify-center z-[96]">
 <div class="bg-white rounded-xl p-6 w-[1100px] max-w-[97vw] shadow-2xl relative max-h-[95vh] overflow-y-auto">
 <button onclick="hideModal('gorevTanimYazdirModal')" class="no-print absolute top-4 right-4 text-gray-400 text-2xl font-bold">✕</button>
@@ -954,6 +952,106 @@ body.viewer-mode #loginModal *{pointer-events:auto!important;opacity:1!important
 </button>
 </div>
 <div class="flex justify-end"><button onclick="hideModal('distTypeAskModal')" class="px-6 py-2 text-gray-600 font-medium hover:bg-gray-100 rounded-lg">İptal</button></div>
+</div>
+</div>
+
+<!-- ==================== DAĞITIM YAZDIRMA FİLTRE MODAL ==================== -->
+<div id="distributionPrintFilterModal" class="modal hidden fixed inset-0 bg-black bg-opacity-60 items-center justify-center z-[95]">
+<div class="bg-white rounded-xl p-6 w-[900px] max-w-[97vw] shadow-2xl relative max-h-[94vh] overflow-y-auto">
+<button onclick="hideModal('distributionPrintFilterModal')" class="absolute top-4 right-4 text-gray-400 text-2xl font-bold">✕</button>
+<div class="text-center mb-5">
+<div class="w-16 h-16 mx-auto mb-3 rounded-full bg-gradient-to-r from-emerald-500 to-teal-600 flex items-center justify-center text-white text-2xl">🖨️</div>
+<h3 class="text-xl font-bold">Yazdırma Filtreleri</h3>
+<p class="text-xs text-gray-500 mt-1">Tarih aralığı ve personel seçimi yapın</p>
+</div>
+
+<!-- Tarih Aralığı -->
+<div class="bg-blue-50 rounded-lg p-4 mb-4 border-2 border-blue-200">
+<h4 class="font-bold text-blue-900 mb-3 text-sm">📅 Tarih Aralığı (Boş bırakılırsa tüm tarihler)</h4>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+<div>
+<label class="block text-xs font-bold text-blue-800 mb-1">Başlangıç Tarihi</label>
+<input type="date" id="distributionPrintStartDate" class="w-full border-2 border-blue-300 rounded-lg px-3 py-2 bg-white text-sm">
+</div>
+<div>
+<label class="block text-xs font-bold text-blue-800 mb-1">Bitiş Tarihi</label>
+<input type="date" id="distributionPrintEndDate" class="w-full border-2 border-blue-300 rounded-lg px-3 py-2 bg-white text-sm">
+</div>
+</div>
+<div class="flex gap-2 mt-3 flex-wrap">
+<button onclick="setDateRangeQuick('thisMonth')" class="text-xs bg-white border-2 border-blue-300 text-blue-800 px-3 py-1 rounded-lg font-bold hover:bg-blue-100">📅 Bu Ay</button>
+<button onclick="setDateRangeQuick('lastMonth')" class="text-xs bg-white border-2 border-blue-300 text-blue-800 px-3 py-1 rounded-lg font-bold hover:bg-blue-100">📅 Geçen Ay</button>
+<button onclick="setDateRangeQuick('thisYear')" class="text-xs bg-white border-2 border-blue-300 text-blue-800 px-3 py-1 rounded-lg font-bold hover:bg-blue-100">📅 Bu Yıl</button>
+<button onclick="setDateRangeQuick('lastYear')" class="text-xs bg-white border-2 border-blue-300 text-blue-800 px-3 py-1 rounded-lg font-bold hover:bg-blue-100">📅 Geçen Yıl</button>
+<button onclick="setDateRangeQuick('clear')" class="text-xs bg-red-100 border-2 border-red-300 text-red-800 px-3 py-1 rounded-lg font-bold hover:bg-red-200">🗑️ Temizle</button>
+</div>
+</div>
+
+<!-- Birim + Statü Filtresi -->
+<div class="bg-blue-50 rounded-lg p-4 mb-4 border-2 border-blue-200">
+<h4 class="font-bold text-blue-900 mb-3 text-sm">🔍 Filtrele</h4>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+<div>
+<label class="block text-xs font-bold text-blue-800 mb-1">🏢 Birim Seçimi</label>
+<select id="distributionPrintDepartmentFilter" class="w-full border-2 border-blue-300 rounded-lg px-3 py-2 bg-white text-sm font-semibold">
+<option value="">-- Tüm Birimler --</option>
+</select>
+</div>
+<div>
+<label class="block text-xs font-bold text-blue-800 mb-1">📊 Statü Seçimi</label>
+<select id="distributionPrintStatusFilter" class="w-full border-2 border-blue-300 rounded-lg px-3 py-2 bg-white text-sm font-semibold">
+<option value="">-- Tüm Statüler --</option>
+</select>
+</div>
+</div>
+</div>
+
+<!-- Personel Seçimi -->
+<div class="bg-purple-50 rounded-lg p-4 mb-4 border-2 border-purple-200">
+<div class="flex items-center justify-between mb-3 flex-wrap gap-2">
+<h4 class="font-bold text-purple-900 text-sm">👥 Personel Seçimi</h4>
+<div class="flex gap-2">
+<button onclick="selectAllPersonnelForPrint(true)" class="text-xs bg-purple-600 text-white px-3 py-1 rounded-lg font-bold">✅ Tümünü Seç</button>
+<button onclick="selectAllPersonnelForPrint(false)" class="text-xs bg-gray-500 text-white px-3 py-1 rounded-lg font-bold">❌ Temizle</button>
+</div>
+</div>
+<div class="mb-2">
+<input type="text" id="distributionPrintSearchInput" placeholder="🔍 Personel ara..." class="w-full border-2 border-purple-300 rounded-lg px-3 py-2 text-sm" oninput="filterPersonnelForPrint()">
+</div>
+<div class="bg-white rounded-lg border-2 border-purple-200 p-3 max-h-64 overflow-y-auto">
+<div id="distributionPrintPersonnelList" class="space-y-1"></div>
+</div>
+<div class="mt-2 text-xs text-purple-800 font-bold text-right">Seçili: <span id="distributionPrintSelectedCount">0</span> personel</div>
+</div>
+
+<!-- Yazdırma Türü -->
+<div class="bg-amber-50 rounded-lg p-4 mb-4 border-2 border-amber-200">
+<h4 class="font-bold text-amber-900 mb-3 text-sm">📋 Yazdırma Türü</h4>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+<label class="flex items-center gap-3 bg-white p-3 rounded-lg border-2 border-amber-300 cursor-pointer hover:bg-amber-100">
+<input type="radio" name="printType" value="name" checked class="w-4 h-4">
+<div>
+<div class="font-bold text-amber-900 text-sm">👥 İsim Listesi</div>
+<div class="text-xs text-amber-700">Personel bazlı özet</div>
+</div>
+</label>
+<label class="flex items-center gap-3 bg-white p-3 rounded-lg border-2 border-amber-300 cursor-pointer hover:bg-amber-100">
+<input type="radio" name="printType" value="material" class="w-4 h-4">
+<div>
+<div class="font-bold text-amber-900 text-sm">📦 Malzeme Listesi</div>
+<div class="text-xs text-amber-700">Ürün bazlı özet</div>
+</div>
+</label>
+</div>
+</div>
+
+<div class="flex justify-between items-center flex-wrap gap-2">
+<div class="text-xs text-gray-500">💡 Filtreler boş bırakılırsa tüm kayıtlar yazdırılır</div>
+<div class="flex gap-2">
+<button onclick="hideModal('distributionPrintFilterModal')" class="px-6 py-2 bg-gray-500 text-white rounded-lg font-medium hover:bg-gray-600">İptal</button>
+<button onclick="confirmDistributionPrint()" class="px-6 py-2 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-lg font-bold">🖨️ Yazdır</button>
+</div>
+</div>
 </div>
 </div>
 
@@ -1651,7 +1749,6 @@ body.viewer-mode #loginModal *{pointer-events:auto!important;opacity:1!important
 </div>
 <div id="fiiliGorevZorunlulukUyari" class="hidden bg-orange-50 border-2 border-orange-400 rounded-lg p-3 mt-3"><h5 class="text-sm font-bold text-orange-800 mb-1">⚠️ Bu görev için MYK Belgesi ZORUNLUDUR</h5><p id="fiiliGorevZorunlulukDetay" class="text-xs text-orange-700">-</p></div>
 
-<!-- GÖREV TANIMLARI AKORDİYON -->
 <div class="mt-6 mb-2">
 <div id="gorevTanimAccordionHeader" class="accordion-header no-data" onclick="toggleGorevTanimAccordion()">
 <span>📋 Görev Tanımları</span>
@@ -1673,7 +1770,6 @@ body.viewer-mode #loginModal *{pointer-events:auto!important;opacity:1!important
 <div class="text-center py-6 text-gray-500 text-sm bg-gray-50 rounded-lg">Şablon seçin, alanlar burada görünecek</div>
 </div>
 
-<!-- İMZA ALANLARI SEÇİLEBİLİR -->
 <div class="bg-amber-50 rounded-lg p-4 mb-4 border-2 border-amber-200">
 <h4 class="font-bold text-amber-900 mb-3 text-sm">✍️ İmza Alanları (Seçilebilir)</h4>
 <div id="personelGorevTanimSignaturesContainer" class="space-y-2"></div>
@@ -1695,7 +1791,6 @@ body.viewer-mode #loginModal *{pointer-events:auto!important;opacity:1!important
 </div>
 </div>
 
-<!-- MEZUNİYET BİLGİLERİ AKORDİYON -->
 <div class="mt-3 mb-2">
 <div id="mezuniyetAccordionHeader" class="accordion-header" onclick="toggleAccordion('mezuniyetAccordion')">
 <span>🎓 Mezuniyet Bilgileri</span>
@@ -1957,9 +2052,10 @@ let personelGorevTanimRevNo = 0;
 
 let personnelTableFilterState = {activeFilters:{},sortColumn:null,sortDirection:'asc',openPanelColumn:null};
 
-// ===== Yazdırma yönü state =====
 let gorevTanimPrintOrientation = 'portrait';
 let generalPrintOrientation = 'portrait';
+
+let distributionPrintSelectedPersonnel = new Set();
 
 const ADMIN_USERNAME='gokhangoker';
 const ADMIN_PASSWORD='2621556';
@@ -2054,7 +2150,6 @@ function importDataFromFile(e){if(!isAdmin){alert('❌ Yönetici girişi gerekli
 function onTcNoInput(input){let val = input.value.replace(/\D/g, '');if(val.length > 11) val = val.substring(0, 11);input.value = val;}
 function generateAutoTcNo(){const existingTcs = new Set();(data.personnel || []).forEach(p => {if(p.tcNo) existingTcs.add(String(p.tcNo).trim());});let counter = 1;while(counter <= 99999999999){const candidate = String(counter).padStart(11, '0');if(!existingTcs.has(candidate)) return candidate;counter++;}return String(Date.now()).slice(-11).padStart(11, '0');}
 
-// ==================== YAZDIRMA YÖNÜ ====================
 function setGorevTanimOrientation(orientation){
     gorevTanimPrintOrientation = orientation;
     document.getElementById('gorevTanimOrientationPortrait').classList.toggle('active', orientation === 'portrait');
@@ -2065,50 +2160,12 @@ function setPrintOrientation(orientation){
     document.getElementById('printOrientationPortrait').classList.toggle('active', orientation === 'portrait');
     document.getElementById('printOrientationLandscape').classList.toggle('active', orientation === 'landscape');
 }
-function applyPrintOrientation(orientation){
-    document.body.classList.remove('print-portrait','print-landscape');
-    document.body.classList.add(orientation === 'landscape' ? 'print-landscape' : 'print-portrait');
-    let styleEl = document.getElementById('print-orientation-style');
-    if(!styleEl){
-        styleEl = document.createElement('style');
-        styleEl.id = 'print-orientation-style';
-        document.head.appendChild(styleEl);
-    }
-    styleEl.innerHTML = '@media print{ @page{ size:A4 ' + orientation + '; margin:1.5cm; } }';
-}
 function printGorevTanim(){
     const printContents = document.getElementById('gorevTanimPrintArea').innerHTML;
     if(!printContents || printContents.trim() === ''){ alert('Yazdırılacak içerik yok!'); return; }
-    
     const orientation = gorevTanimPrintOrientation === 'landscape' ? 'landscape' : 'portrait';
-    
     const printWindow = window.open('', '_blank', 'width=900,height=700');
-    printWindow.document.write(`
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <meta charset="UTF-8">
-            <title>Görev Tanımı Yazdır</title>
-            <style>
-                @page { size: A4 ${orientation}; margin: 1.5cm; }
-                body { font-family: Arial, sans-serif; font-size: 12px; color: #000; margin: 0; padding: 20px; }
-                h1 { text-align: center; font-size: 16px; font-weight: bold; margin: 0 0 4px; text-transform: uppercase; }
-                h2 { text-align: center; font-size: 13px; font-weight: bold; margin: 0 0 16px; }
-                .info-grid { display: flex; justify-content: space-between; font-size: 11px; border-bottom: 1px solid #000; padding-bottom: 8px; margin-bottom: 16px; }
-                .print-field { margin-bottom: 14px; }
-                .print-field-label { font-weight: bold; font-size: 11px; text-decoration: underline; margin-bottom: 4px; }
-                .print-field-value { white-space: pre-wrap; font-size: 11px; text-align: justify; }
-                .print-signatures { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 30px; padding-top: 16px; border-top: 2px solid #000; }
-                .print-sig-box { text-align: center; }
-                .print-sig-role { font-weight: bold; font-size: 11px; margin-bottom: 6px; }
-                .print-sig-line { border-bottom: 1px solid #000; height: 50px; margin: 0 auto 4px; width: 80%; }
-                .print-sig-name { font-size: 10px; color: #333; }
-                .print-teblig-check { text-align: center; margin-top: 16px; padding: 8px; border: 2px solid #000; font-size: 11px; font-weight: bold; }
-            </style>
-        </head>
-        <body>${printContents}</body>
-        </html>
-    `);
+    printWindow.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Görev Tanımı Yazdır</title><style>@page { size: A4 ' + orientation + '; margin: 1.5cm; }body { font-family: Arial, sans-serif; font-size: 12px; color: #000; margin: 0; padding: 20px; }h1 { text-align: center; font-size: 16px; font-weight: bold; margin: 0 0 4px; text-transform: uppercase; }h2 { text-align: center; font-size: 13px; font-weight: bold; margin: 0 0 16px; }.info-grid { display: flex; justify-content: space-between; font-size: 11px; border-bottom: 1px solid #000; padding-bottom: 8px; margin-bottom: 16px; }.print-field { margin-bottom: 14px; }.print-field-label { font-weight: bold; font-size: 11px; text-decoration: underline; margin-bottom: 4px; }.print-field-value { white-space: pre-wrap; font-size: 11px; text-align: justify; }.print-signatures { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 30px; padding-top: 16px; border-top: 2px solid #000; }.print-sig-box { text-align: center; }.print-sig-role { font-weight: bold; font-size: 11px; margin-bottom: 6px; }.print-sig-line { border-bottom: 1px solid #000; height: 50px; margin: 0 auto 4px; width: 80%; }.print-sig-name { font-size: 10px; color: #333; }.print-teblig-check { text-align: center; margin-top: 16px; padding: 8px; border: 2px solid #000; font-size: 11px; font-weight: bold; }</style></head><body>' + printContents + '</body></html>');
     printWindow.document.close();
     printWindow.focus();
     setTimeout(() => { printWindow.print(); printWindow.close(); }, 300);
@@ -2116,34 +2173,14 @@ function printGorevTanim(){
 function doPrint(){
     const printContents = document.getElementById('printPreviewArea').innerHTML;
     if(!printContents || printContents.trim() === ''){ alert('Yazdırılacak içerik yok!'); return; }
-    
     const orientation = generalPrintOrientation === 'landscape' ? 'landscape' : 'portrait';
-    
     const printWindow = window.open('', '_blank', 'width=900,height=700');
-    printWindow.document.write(`
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <meta charset="UTF-8">
-            <title>Yazdır</title>
-            <style>
-                @page { size: A4 ${orientation}; margin: 1cm; }
-                body { font-family: Arial, sans-serif; font-size: 11px; color: #000; margin: 0; padding: 10px; }
-                table { width: 100%; border-collapse: collapse; }
-                th, td { border: 1px solid #333; padding: 4px 6px; }
-                th { background: #e0e7ff; font-weight: bold; text-transform: uppercase; font-size: 10px; }
-                .center { text-align: center; }
-            </style>
-        </head>
-        <body>${printContents}</body>
-        </html>
-    `);
+    printWindow.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Yazdır</title><style>@page { size: A4 ' + orientation + '; margin: 1cm; }body { font-family: Arial, sans-serif; font-size: 11px; color: #000; margin: 0; padding: 10px; }table { width: 100%; border-collapse: collapse; }th, td { border: 1px solid #333; padding: 4px 6px; }th { background: #e0e7ff; font-weight: bold; text-transform: uppercase; font-size: 10px; }.center { text-align: center; }</style></head><body>' + printContents + '</body></html>');
     printWindow.document.close();
     printWindow.focus();
     setTimeout(() => { printWindow.print(); printWindow.close(); }, 300);
 }
 
-// ==================== AKORDİYON ====================
 function toggleAccordion(accordionId){
     const body = document.getElementById(accordionId + 'Body');
     const header = document.getElementById(accordionId + 'Header');
@@ -2189,7 +2226,6 @@ function switchSettingsPanel(panelId){
     }
 }
 
-// ==================== PERSONEL TABLO FİLTRE ====================
 function openPersonnelColFilter(event, col){
     event.stopPropagation();
     event.preventDefault();
@@ -2207,7 +2243,6 @@ function openPersonnelColFilter(event, col){
     title.innerHTML = '<span>🔍 ' + (colNames[col] || col) + '</span><button title="Kapat">✕</button>';
     title.querySelector('button').onclick = (e) => { e.stopPropagation(); panel.remove(); personnelTableFilterState.openPanelColumn = null; };
     panel.appendChild(title);
-    // Sıralama
     const sortAsc = document.createElement('label');
     sortAsc.className = 'col-filter-item sort-option' + (personnelTableFilterState.sortColumn === col && personnelTableFilterState.sortDirection === 'asc' ? ' active' : '');
     sortAsc.innerHTML = '<span>⬆️ A\'dan Z\'ye (Artan)</span>';
@@ -2218,12 +2253,10 @@ function openPersonnelColFilter(event, col){
     sortDesc.innerHTML = '<span>⬇️ Z\'den A\'ya (Azalan)</span>';
     sortDesc.onclick = () => { personnelTableFilterState.sortColumn = col; personnelTableFilterState.sortDirection = 'desc'; applyPersonnelFilter(); panel.remove(); personnelTableFilterState.openPanelColumn = null; };
     panel.appendChild(sortDesc);
-    // Ayraç
     const divider = document.createElement('div');
     divider.style.borderTop = '1px solid #e5e7eb';
     divider.style.margin = '6px 0';
     panel.appendChild(divider);
-    // Değer listesi
     const values = new Set();
     data.personnel.forEach(p => { let v = p[col]; if(v === null || v === undefined || v === '') return; values.add(String(v)); });
     const valsArr = [...values].sort((a,b) => a.localeCompare(b, 'tr'));
@@ -2296,7 +2329,6 @@ function applyPersonnelFilter(){
         });
     }
     updatePersonnelTable(arr);
-    // Aktif filtreleri tablo başlıklarına yansıt
     document.querySelectorAll('.personnel-table thead th').forEach(th => {
         const col = th.getAttribute('data-col');
         if(col && s.activeFilters[col] && s.activeFilters[col].size > 0) th.classList.add('filter-active');
@@ -2313,7 +2345,6 @@ function clearPersonnelFilters(){
     showSuccessMessage('✅ Filtreler temizlendi!');
 }
 
-// ==================== GÖREV TANIM ŞABLONU ====================
 function renderGorevTanimListesi(){
     const list = document.getElementById('gorevTanimList');
     const countEl = document.getElementById('gorevTanimCount');
@@ -2327,20 +2358,7 @@ function renderGorevTanimListesi(){
         kart.className = 'gorev-tanim-kart';
         const fieldCount = (s.fields || []).length;
         const sigCount = (s.signatures || []).filter(x => x.enabled).length;
-        kart.innerHTML = `
-            <div class="kart-header">
-                <div class="kart-title">📋 ${escapeHtml(s.ad || 'İsimsiz Şablon')}</div>
-                <div class="kart-actions">
-                    <button class="btn-print" onclick="gorevTanimYazdirSablon(${idx})">🖨️ Yazdır</button>
-                    <button class="btn-edit" onclick="openGorevTanimEditor(${idx})">✏️ Düzenle</button>
-                    <button class="btn-delete" onclick="deleteGorevTanimSablon(${idx})">🗑️ Sil</button>
-                </div>
-            </div>
-            <div class="kart-info">
-                📄 ${fieldCount} alan • ✍️ ${sigCount} imza alanı • 📅 ${s.revizyonTarih || '-'}
-                ${s.tebligYapildi ? ' • <span style="color:#16a34a;font-weight:bold;">✅ Tebliğ Yapıldı</span>' : ''}
-            </div>
-        `;
+        kart.innerHTML = '<div class="kart-header"><div class="kart-title">📋 ' + escapeHtml(s.ad || 'İsimsiz Şablon') + '</div><div class="kart-actions"><button class="btn-print" onclick="gorevTanimYazdirSablon(' + idx + ')">🖨️ Yazdır</button><button class="btn-edit" onclick="openGorevTanimEditor(' + idx + ')">✏️ Düzenle</button><button class="btn-delete" onclick="deleteGorevTanimSablon(' + idx + ')">🗑️ Sil</button></div></div><div class="kart-info">📄 ' + fieldCount + ' alan • ✍️ ' + sigCount + ' imza alanı • 📅 ' + (s.revizyonTarih || '-') + (s.tebligYapildi ? ' • <span style="color:#16a34a;font-weight:bold;">✅ Tebliğ Yapıldı</span>' : '') + '</div>';
         list.appendChild(kart);
     });
 }
@@ -2394,14 +2412,7 @@ function renderGorevTanimFields(){
     gorevTanimFields.forEach((field, idx) => {
         const div = document.createElement('div');
         div.className = 'gorev-tanim-field';
-        div.innerHTML = `
-            <div class="field-header">
-                <span class="field-drag">⋮⋮</span>
-                <div class="field-label"><input type="text" value="${escapeHtml(field.label || '')}" onchange="updateGorevTanimFieldLabel(${idx}, this.value)" placeholder="Alan adı"></div>
-                <div class="field-actions"><button class="btn-remove-field" onclick="removeGorevTanimField(${idx})">🗑️ Kaldır</button></div>
-            </div>
-            <div class="field-content"><textarea onchange="updateGorevTanimFieldValue(${idx}, this.value)" placeholder="Alan içeriğini yazın...">${escapeHtml(field.value || '')}</textarea></div>
-        `;
+        div.innerHTML = '<div class="field-header"><span class="field-drag">⋮⋮</span><div class="field-label"><input type="text" value="' + escapeHtml(field.label || '') + '" onchange="updateGorevTanimFieldLabel(' + idx + ', this.value)" placeholder="Alan adı"></div><div class="field-actions"><button class="btn-remove-field" onclick="removeGorevTanimField(' + idx + ')">🗑️ Kaldır</button></div></div><div class="field-content"><textarea onchange="updateGorevTanimFieldValue(' + idx + ', this.value)" placeholder="Alan içeriğini yazın...">' + escapeHtml(field.value || '') + '</textarea></div>';
         container.appendChild(div);
     });
 }
@@ -2413,7 +2424,7 @@ function renderGorevTanimSignatures(){
     gorevTanimSignatures.forEach((sig, idx) => {
         const div = document.createElement('div');
         div.className = 'gorev-tanim-signature';
-        div.innerHTML = `<input type="checkbox" ${sig.enabled ? 'checked' : ''} onchange="toggleGorevTanimSignature(${idx}, this.checked)"><span class="sig-role">${escapeHtml(sig.role)}</span>`;
+        div.innerHTML = '<input type="checkbox" ' + (sig.enabled ? 'checked' : '') + ' onchange="toggleGorevTanimSignature(' + idx + ', this.checked)"><span class="sig-role">' + escapeHtml(sig.role) + '</span>';
         container.appendChild(div);
     });
 }
@@ -2430,20 +2441,20 @@ function previewGorevTanim(){
     const sablonAdi = document.getElementById('gorevTanimSablonAdi').value || 'Görev Tanımı';
     const enabledSignatures = gorevTanimSignatures.filter(s => s.enabled);
     let html = '';
-    html += `<h2>ATTİ RAYLI SİSTEM</h2>`;
-    html += `<h3>${escapeHtml(sablonAdi)}</h3>`;
+    html += '<h2>ATTİ RAYLI SİSTEM</h2>';
+    html += '<h3>' + escapeHtml(sablonAdi) + '</h3>';
     gorevTanimFields.forEach(f => {
         if(!f.label && !f.value) return;
-        html += `<div class="preview-field">`;
-        if(f.label) html += `<div class="preview-field-label">${escapeHtml(f.label)}</div>`;
-        if(f.value) html += `<div class="preview-field-value">${escapeHtml(f.value)}</div>`;
-        html += `</div>`;
+        html += '<div class="preview-field">';
+        if(f.label) html += '<div class="preview-field-label">' + escapeHtml(f.label) + '</div>';
+        if(f.value) html += '<div class="preview-field-value">' + escapeHtml(f.value) + '</div>';
+        html += '</div>';
     });
-    if(gorevTanimTebligYapildi){html += `<div class="tebliğ-check">✅ TEBLİĞ YAPILDI</div>`;}
+    if(gorevTanimTebligYapildi){html += '<div class="tebliğ-check">✅ TEBLİĞ YAPILDI</div>';}
     if(enabledSignatures.length > 0){
-        html += `<div class="preview-signatures">`;
-        enabledSignatures.forEach(s => {html += `<div class="preview-sig-box"><div class="preview-sig-role">${escapeHtml(s.role)}</div><div class="preview-sig-line"></div><div class="preview-sig-name">Adı Soyadı / İmza</div></div>`;});
-        html += `</div>`;
+        html += '<div class="preview-signatures">';
+        enabledSignatures.forEach(s => {html += '<div class="preview-sig-box"><div class="preview-sig-role">' + escapeHtml(s.role) + '</div><div class="preview-sig-line"></div><div class="preview-sig-name">Adı Soyadı / İmza</div></div>';});
+        html += '</div>';
     }
     preview.innerHTML = html;
 }
@@ -2488,7 +2499,7 @@ function populateGorevTanimPersonelDropdown(){
     const cv = sel.value;
     sel.innerHTML = '<option value="">-- Personel Seçin --</option>';
     const sorted = (data.personnel || []).slice().sort((a,b) => (a.name||'').localeCompare(b.name||'','tr'));
-    sorted.forEach(p => {sel.innerHTML += `<option value="${p.id}">${escapeHtml(p.name)} (${escapeHtml(p.department || '-')})</option>`;});
+    sorted.forEach(p => {sel.innerHTML += '<option value="' + p.id + '">' + escapeHtml(p.name) + ' (' + escapeHtml(p.department || '-') + ')</option>';});
     sel.value = cv;
 }
 
@@ -2497,7 +2508,7 @@ function populateGorevTanimSablonDropdown(){
     if(!sel) return;
     const cv = sel.value;
     sel.innerHTML = '<option value="">-- Şablon Seçin --</option>';
-    (data.gorevTanimSablonlari || []).forEach((s, i) => {sel.innerHTML += `<option value="${i}">${escapeHtml(s.ad)}</option>`;});
+    (data.gorevTanimSablonlari || []).forEach((s, i) => {sel.innerHTML += '<option value="' + i + '">' + escapeHtml(s.ad) + '</option>';});
     sel.value = cv;
 }
 
@@ -2506,7 +2517,7 @@ function populatePersonelGorevTanimSablonDropdown(){
     if(!sel) return;
     const cv = sel.value;
     sel.innerHTML = '<option value="">-- Görev Tanım Şablonu Seçin --</option>';
-    (data.gorevTanimSablonlari || []).forEach((s, i) => {sel.innerHTML += `<option value="${i}">${escapeHtml(s.ad)}</option>`;});
+    (data.gorevTanimSablonlari || []).forEach((s, i) => {sel.innerHTML += '<option value="' + i + '">' + escapeHtml(s.ad) + '</option>';});
     sel.value = cv;
 }
 
@@ -2529,7 +2540,6 @@ function onPersonelGorevTanimSablonChange(){
     personelGorevTanimSignatures = JSON.parse(JSON.stringify(sablon.signatures || []));
     personelGorevTanimTebligYapildi = false;
     personelGorevTanimRevNo = 0;
-    // İmza alanlarının hepsini varsayılan kapalı yap
     personelGorevTanimSignatures.forEach(s => s.enabled = false);
     const info = document.getElementById('gorevTanimSablonInfo');
     info.classList.remove('hidden');
@@ -2549,7 +2559,7 @@ function renderPersonelGorevTanimFields(){
     personelGorevTanimFields.forEach((field, idx) => {
         const div = document.createElement('div');
         div.className = 'personel-gorev-field';
-        div.innerHTML = `<div class="pgf-label">${escapeHtml(field.label || 'Alan ' + (idx+1))}</div><textarea onchange="onPersonelGorevTanimFieldChange(${idx}, this.value)" placeholder="İçerik...">${escapeHtml(field.value || '')}</textarea>`;
+        div.innerHTML = '<div class="pgf-label">' + escapeHtml(field.label || 'Alan ' + (idx+1)) + '</div><textarea onchange="onPersonelGorevTanimFieldChange(' + idx + ', this.value)" placeholder="İçerik...">' + escapeHtml(field.value || '') + '</textarea>';
         container.appendChild(div);
     });
 }
@@ -2564,7 +2574,6 @@ function onPersonelGorevTanimFieldChange(idx, value){
     }
 }
 
-// PERSONEL İMZA ALANLARI - SEÇİLEBİLİR
 function renderPersonelGorevTanimSignatures(){
     const container = document.getElementById('personelGorevTanimSignaturesContainer');
     if(!container) return;
@@ -2577,7 +2586,7 @@ function renderPersonelGorevTanimSignatures(){
         const div = document.createElement('label');
         div.className = 'gorev-tanim-signature';
         div.style.cursor = 'pointer';
-        div.innerHTML = `<input type="checkbox" ${sig.enabled ? 'checked' : ''} onchange="togglePersonelGorevTanimSignature(${idx}, this.checked)"><span class="sig-role">${escapeHtml(sig.role)}</span>`;
+        div.innerHTML = '<input type="checkbox" ' + (sig.enabled ? 'checked' : '') + ' onchange="togglePersonelGorevTanimSignature(' + idx + ', this.checked)"><span class="sig-role">' + escapeHtml(sig.role) + '</span>';
         container.appendChild(div);
     });
 }
@@ -2591,7 +2600,6 @@ function togglePersonelGorevTanimSignature(idx, checked){
 
 function onPersonelTebligChange(){const cb = document.getElementById('personelGorevTanimTebligYapildi');personelGorevTanimTebligYapildi = cb.checked;updateGorevTanimAccordionBadges();}
 
-// PERSONEL GÖREV TANIM ÖNİZLEME
 function gorevTanimPersonelOnizle(){
     if(personelGorevTanimFields.length === 0){alert('Önce şablon seçin!');return}
     const personelAdi = document.getElementById('personnelName').value.trim() || 'Personel';
@@ -2636,7 +2644,6 @@ function gorevTanimPersonelOnizle(){
     showModal('gorevTanimYazdirModal');
 }
 
-// PERSONEL EKLE SAYFASINDAN DİREKT YAZDIR
 function gorevTanimPersonelYazdirDirekt(){
     if(personelGorevTanimFields.length === 0){alert('Önce şablon seçin!');return}
     gorevTanimPersonelOnizle();
@@ -2679,34 +2686,34 @@ function gorevTanimYazdir(personel, sablon){
     const enabledSignatures = signatures.filter(s => s.enabled);
     const today = new Date().toLocaleDateString('tr-TR');
     let html = '';
-    html += `<h1>ATTİ RAYLI SİSTEM</h1>`;
-    html += `<h2>${escapeHtml(sablonAdi)}</h2>`;
-    html += `<div class="info-grid">`;
-    html += `<span><strong>Doküman No:</strong> ${escapeHtml(sablon.dokumanNo || '-')}</span>`;
-    html += `<span><strong>Revizyon:</strong> Şablon: ${escapeHtml(sablon.dokumanNo || '-')}${personel ? ' | Personel: Rev.' + String(revNo).padStart(2,'0') : ''}</span>`;
-    html += `<span><strong>Yazdırma:</strong> ${today}</span>`;
-    html += `</div>`;
+    html += '<h1>ATTİ RAYLI SİSTEM</h1>';
+    html += '<h2>' + escapeHtml(sablonAdi) + '</h2>';
+    html += '<div class="info-grid">';
+    html += '<span><strong>Doküman No:</strong> ' + escapeHtml(sablon.dokumanNo || '-') + '</span>';
+    html += '<span><strong>Revizyon:</strong> Şablon: ' + escapeHtml(sablon.dokumanNo || '-') + (personel ? ' | Personel: Rev.' + String(revNo).padStart(2,'0') : '') + '</span>';
+    html += '<span><strong>Yazdırma:</strong> ' + today + '</span>';
+    html += '</div>';
     if(personel){
-        html += `<div style="margin-bottom:12px;padding:8px;background:#f0f9ff;border:1px solid #0369a1;font-size:11px;"><strong>Personel:</strong> ${escapeHtml(personel.name)} | <strong>Birim:</strong> ${escapeHtml(personel.department||'-')} | <strong>Fiili Görev:</strong> ${escapeHtml(personel.fiiliGorev||'-')}</div>`;
+        html += '<div style="margin-bottom:12px;padding:8px;background:#f0f9ff;border:1px solid #0369a1;font-size:11px;"><strong>Personel:</strong> ' + escapeHtml(personel.name) + ' | <strong>Birim:</strong> ' + escapeHtml(personel.department||'-') + ' | <strong>Fiili Görev:</strong> ' + escapeHtml(personel.fiiliGorev||'-') + '</div>';
     }
     fields.forEach(f => {
         if(!f.label && !f.value) return;
-        html += `<div class="print-field">`;
-        if(f.label) html += `<div class="print-field-label">${escapeHtml(f.label)}</div>`;
-        if(f.value) html += `<div class="print-field-value">${escapeHtml(f.value)}</div>`;
-        html += `</div>`;
+        html += '<div class="print-field">';
+        if(f.label) html += '<div class="print-field-label">' + escapeHtml(f.label) + '</div>';
+        if(f.value) html += '<div class="print-field-value">' + escapeHtml(f.value) + '</div>';
+        html += '</div>';
     });
-    if(tebligYapildi){html += `<div class="print-teblig-check">☑ TEBLİĞ EDİLDİ</div>`;}
+    if(tebligYapildi){html += '<div class="print-teblig-check">☑ TEBLİĞ EDİLDİ</div>';}
     if(enabledSignatures.length > 0){
-        html += `<div class="print-signatures" style="grid-template-columns:repeat(${Math.min(enabledSignatures.length, 3)},1fr);">`;
+        html += '<div class="print-signatures" style="grid-template-columns:repeat(' + Math.min(enabledSignatures.length, 3) + ',1fr);">';
         enabledSignatures.forEach(s => {
             let nameInfo = 'Adı Soyadı';
             let fiiliGorevInfo = 'Fiili Görevi';
             if(s.role === 'Tebellüğ Eden' && personel){nameInfo = personel.name || 'Adı Soyadı';fiiliGorevInfo = personel.fiiliGorev || personel.job || 'Fiili Görevi';}
             else if(personel){fiiliGorevInfo = personel.fiiliGorev || personel.job || 'Fiili Görevi';}
-            html += `<div class="print-sig-box"><div class="print-sig-role">${escapeHtml(s.role)}</div><div class="print-sig-line"></div><div class="print-sig-name">${escapeHtml(nameInfo)}</div><div class="print-sig-name" style="font-size:9px;color:#666;">${escapeHtml(fiiliGorevInfo)}</div><div class="print-sig-name" style="margin-top:4px;font-size:9px;color:#666;">İmza</div></div>`;
+            html += '<div class="print-sig-box"><div class="print-sig-role">' + escapeHtml(s.role) + '</div><div class="print-sig-line"></div><div class="print-sig-name">' + escapeHtml(nameInfo) + '</div><div class="print-sig-name" style="font-size:9px;color:#666;">' + escapeHtml(fiiliGorevInfo) + '</div><div class="print-sig-name" style="margin-top:4px;font-size:9px;color:#666;">İmza</div></div>';
         });
-        html += `</div>`;
+        html += '</div>';
     }
     printArea.innerHTML = html;
     gorevTanimPrintOrientation = 'portrait';
@@ -3274,6 +3281,370 @@ function distributeKdd(pid,kddName){
     saveToLocalStorage();updateAllStats();showSuccessMessage(p.name+' - '+kddName+' verildi!');
 }
 function distributeKddByIndex(pid,kddIdx){if(!isAdmin){alert('❌ Yönetici girişi gerekli!');return}const k=data.kkds[kddIdx];if(!k)return;distributeKdd(pid,k.name);}
+
+// ==================== KIYAFET DAĞITIM BEKLEYENLER YAZDIRMA ====================
+function openClothingPendingPrintModal(){
+    if(!isAdmin && !isViewer){alert('❌ Giriş yapmanız gerekiyor!');return}
+    const pendingGroups = getPendingGroupsForFilter();
+    if(pendingGroups.length === 0){
+        alert('Yazdırılacak bekleyen kıyafet yok!');
+        return;
+    }
+    renderClothingPendingPrintModal(pendingGroups);
+    showModal('clothingPendingPrintChoiceModal');
+}
+
+function renderClothingPendingPrintModal(pendingGroups){
+    const existingModal = document.getElementById('clothingPendingPrintChoiceModal');
+    if(existingModal) existingModal.remove();
+    
+    const modal = document.createElement('div');
+    modal.id = 'clothingPendingPrintChoiceModal';
+    modal.className = 'modal hidden fixed inset-0 bg-black bg-opacity-60 items-center justify-center z-[95]';
+    modal.innerHTML = `
+        <div class="bg-white rounded-xl p-6 w-[800px] max-w-[97vw] shadow-2xl relative max-h-[94vh] overflow-y-auto">
+            <button onclick="hideModal('clothingPendingPrintChoiceModal')" class="absolute top-4 right-4 text-gray-400 text-2xl font-bold">✕</button>
+            <div class="text-center mb-5">
+                <div class="w-16 h-16 mx-auto mb-3 rounded-full bg-gradient-to-r from-teal-500 to-cyan-600 flex items-center justify-center text-white text-2xl">🖨️</div>
+                <h3 class="text-xl font-bold">Kıyafet Dağıtım Bekleyenler Yazdır</h3>
+                <p class="text-xs text-gray-500 mt-1">Yazdırma türü ve personel seçimi</p>
+            </div>
+
+            <div class="bg-amber-50 rounded-lg p-4 mb-4 border-2 border-amber-200">
+                <h4 class="font-bold text-amber-900 mb-3 text-sm">📋 Yazdırma Türü</h4>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    <label class="flex items-center gap-3 bg-white p-3 rounded-lg border-2 border-amber-300 cursor-pointer hover:bg-amber-100">
+                        <input type="radio" name="pendingPrintType" value="name" checked class="w-4 h-4">
+                        <div>
+                            <div class="font-bold text-amber-900 text-sm">👥 İsim Listesi</div>
+                            <div class="text-xs text-amber-700">Personel bazlı özet</div>
+                        </div>
+                    </label>
+                    <label class="flex items-center gap-3 bg-white p-3 rounded-lg border-2 border-amber-300 cursor-pointer hover:bg-amber-100">
+                        <input type="radio" name="pendingPrintType" value="material" class="w-4 h-4">
+                        <div>
+                            <div class="font-bold text-amber-900 text-sm">📦 Malzeme Listesi</div>
+                            <div class="text-xs text-amber-700">Malzeme bazlı özet</div>
+                        </div>
+                    </label>
+                    <label class="flex items-center gap-3 bg-white p-3 rounded-lg border-2 border-amber-300 cursor-pointer hover:bg-amber-100">
+                        <input type="radio" name="pendingPrintType" value="form" class="w-4 h-4">
+                        <div>
+                            <div class="font-bold text-amber-900 text-sm">📄 Teslim Formu</div>
+                            <div class="text-xs text-amber-700">İmzalı form (her kişi için)</div>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <div class="bg-blue-50 rounded-lg p-4 mb-4 border-2 border-blue-200">
+                <h4 class="font-bold text-blue-900 mb-3 text-sm">🔍 Filtrele</h4>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-blue-800 mb-1">🏢 Birim Seçimi</label>
+                        <select id="pendingPrintDepartmentFilter" class="w-full border-2 border-blue-300 rounded-lg px-3 py-2 bg-white text-sm font-semibold" onchange="applyPendingPrintFilters()">
+                            <option value="">-- Tüm Birimler --</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-blue-800 mb-1">📊 Statü Seçimi</label>
+                        <select id="pendingPrintStatusFilter" class="w-full border-2 border-blue-300 rounded-lg px-3 py-2 bg-white text-sm font-semibold" onchange="applyPendingPrintFilters()">
+                            <option value="">-- Tüm Statüler --</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="mt-2 text-xs text-blue-700">
+                    💡 Filtre seçince personel listesi otomatik güncellenir
+                </div>
+            </div>
+
+            <div class="bg-purple-50 rounded-lg p-4 mb-4 border-2 border-purple-200">
+                <div class="flex items-center justify-between mb-3 flex-wrap gap-2">
+                    <h4 class="font-bold text-purple-900 text-sm">👥 Personel Seçimi</h4>
+                    <div class="flex gap-2">
+                        <button onclick="selectAllPendingPersonnelForPrint(true)" class="text-xs bg-purple-600 text-white px-3 py-1 rounded-lg font-bold">✅ Tümünü Seç</button>
+                        <button onclick="selectAllPendingPersonnelForPrint(false)" class="text-xs bg-gray-500 text-white px-3 py-1 rounded-lg font-bold">❌ Temizle</button>
+                    </div>
+                </div>
+                <div id="pendingPrintPersonnelList" class="bg-white rounded-lg border-2 border-purple-200 p-3 max-h-64 overflow-y-auto space-y-1"></div>
+                <div class="mt-2 text-xs text-purple-800 font-bold text-right">Seçili: <span id="pendingPrintSelectedCount">0</span> personel</div>
+            </div>
+
+            <div class="flex justify-end gap-2 flex-wrap">
+                <button onclick="hideModal('clothingPendingPrintChoiceModal')" class="px-6 py-2 bg-gray-500 text-white rounded-lg font-medium hover:bg-gray-600">İptal</button>
+                <button onclick="confirmClothingPendingPrint()" class="px-6 py-2 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-lg font-bold">🖨️ Yazdır</button>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(modal);
+    
+    populatePendingPrintFilters(pendingGroups);
+    
+    window.pendingPrintSelectedPersonnel = new Set();
+    pendingGroups.forEach(g => window.pendingPrintSelectedPersonnel.add(g.personnelId));
+    
+    renderPendingPersonnelPrintList(pendingGroups);
+    updatePendingPrintSelectedCount();
+}
+
+function populatePendingPrintFilters(pendingGroups){
+    const deptSelect = document.getElementById('pendingPrintDepartmentFilter');
+    const statusSelect = document.getElementById('pendingPrintStatusFilter');
+    
+    if(deptSelect){
+        const currentVal = deptSelect.value;
+        deptSelect.innerHTML = '<option value="">-- Tüm Birimler --</option>';
+        const uniqueDepts = [...new Set(pendingGroups.map(g => g.department).filter(d => d && d.trim()))].sort((a,b) => a.localeCompare(b,'tr'));
+        uniqueDepts.forEach(d => {
+            deptSelect.innerHTML += '<option value="' + escapeHtml(d) + '">' + escapeHtml(d) + '</option>';
+        });
+        deptSelect.value = currentVal;
+    }
+    
+    if(statusSelect){
+        const currentVal = statusSelect.value;
+        statusSelect.innerHTML = '<option value="">-- Tüm Statüler --</option>';
+        const uniqueStatuses = [...new Set(pendingGroups.map(g => g.status).filter(s => s && s.trim()))].sort((a,b) => a.localeCompare(b,'tr'));
+        uniqueStatuses.forEach(s => {
+            statusSelect.innerHTML += '<option value="' + escapeHtml(s) + '">' + escapeHtml(s) + '</option>';
+        });
+        statusSelect.value = currentVal;
+    }
+}
+
+function applyPendingPrintFilters(){
+    const allGroups = getPendingGroupsForFilter();
+    const deptFilter = document.getElementById('pendingPrintDepartmentFilter').value;
+    const statusFilter = document.getElementById('pendingPrintStatusFilter').value;
+    
+    let filtered = allGroups;
+    if(deptFilter) filtered = filtered.filter(g => g.department === deptFilter);
+    if(statusFilter) filtered = filtered.filter(g => g.status === statusFilter);
+    
+    const previousSelected = new Set(window.pendingPrintSelectedPersonnel || []);
+    
+    renderPendingPersonnelPrintList(filtered);
+    
+    window.pendingPrintSelectedPersonnel = new Set();
+    filtered.forEach(g => {
+        if(previousSelected.has(g.personnelId)){
+            window.pendingPrintSelectedPersonnel.add(g.personnelId);
+        }
+    });
+    
+    document.querySelectorAll('#pendingPrintPersonnelList input[type=checkbox]').forEach(cb => {
+        const pid = parseInt(cb.getAttribute('data-pid'));
+        cb.checked = window.pendingPrintSelectedPersonnel.has(pid);
+    });
+    
+    updatePendingPrintSelectedCount();
+}
+
+function renderPendingPersonnelPrintList(pendingGroups){
+    const container = document.getElementById('pendingPrintPersonnelList');
+    if(!container) return;
+    container.innerHTML = '';
+    
+    pendingGroups.sort((a,b) => a.personnel.localeCompare(b.personnel, 'tr')).forEach(grp => {
+        const isChecked = window.pendingPrintSelectedPersonnel.has(grp.personnelId);
+        container.innerHTML += `
+            <label class="flex items-center gap-3 p-2 rounded-lg hover:bg-purple-50 cursor-pointer">
+                <input type="checkbox" ${isChecked ? 'checked' : ''} data-pid="${grp.personnelId}" onchange="togglePendingPersonnelPrint(this)" class="w-4 h-4 accent-purple-600">
+                <span class="text-sm font-medium">👤 ${escapeHtml(grp.personnel)} <span class="text-xs text-gray-500">(${escapeHtml(grp.department || '-')}) — ${grp.items.length} kalem</span></span>
+            </label>
+        `;
+    });
+}
+
+function togglePendingPersonnelPrint(cb){
+    const pid = parseInt(cb.getAttribute('data-pid'));
+    if(cb.checked){
+        window.pendingPrintSelectedPersonnel.add(pid);
+    } else {
+        window.pendingPrintSelectedPersonnel.delete(pid);
+    }
+    updatePendingPrintSelectedCount();
+}
+
+function selectAllPendingPersonnelForPrint(select){
+    const checkboxes = document.querySelectorAll('#pendingPrintPersonnelList input[type=checkbox]');
+    window.pendingPrintSelectedPersonnel.clear();
+    checkboxes.forEach(cb => {
+        cb.checked = select;
+        if(select){
+            const pid = parseInt(cb.getAttribute('data-pid'));
+            window.pendingPrintSelectedPersonnel.add(pid);
+        }
+    });
+    updatePendingPrintSelectedCount();
+}
+
+function updatePendingPrintSelectedCount(){
+    const el = document.getElementById('pendingPrintSelectedCount');
+    if(el) el.textContent = window.pendingPrintSelectedPersonnel.size;
+}
+
+function confirmClothingPendingPrint(){
+    if(window.pendingPrintSelectedPersonnel.size === 0){
+        alert('❌ En az bir personel seçin!');
+        return;
+    }
+    
+    const printType = document.querySelector('input[name="pendingPrintType"]:checked').value;
+    
+    const allGroups = getPendingGroupsForFilter();
+    const deptFilter = document.getElementById('pendingPrintDepartmentFilter').value;
+    const statusFilter = document.getElementById('pendingPrintStatusFilter').value;
+    
+    let filteredGroups = allGroups;
+    if(deptFilter) filteredGroups = filteredGroups.filter(g => g.department === deptFilter);
+    if(statusFilter) filteredGroups = filteredGroups.filter(g => g.status === statusFilter);
+    
+    const selectedGroups = filteredGroups.filter(g => window.pendingPrintSelectedPersonnel.has(g.personnelId));
+    
+    if(selectedGroups.length === 0){
+        alert('Seçilen personel için bekleyen malzeme yok!');
+        return;
+    }
+    
+    hideModal('clothingPendingPrintChoiceModal');
+    
+    if(printType === 'name'){
+        printPendingAsNameList(selectedGroups);
+    } else if(printType === 'material'){
+        printPendingAsMaterialList(selectedGroups);
+    } else {
+        printPendingAsForm(selectedGroups);
+    }
+}
+
+function printPendingAsNameList(groups){
+    let html = '<div style="font-family:Arial,sans-serif;font-size:11px;color:#000;padding:10px;">';
+    html += '<div style="text-align:center;border-bottom:2px solid #333;padding-bottom:8px;margin-bottom:12px;">';
+    html += '<h1 style="font-size:18px;margin:0;font-weight:bold;">ATTİ RAYLI SİSTEM</h1>';
+    html += '<h2 style="font-size:13px;margin:4px 0 0;font-weight:normal;">Kıyafet Dağıtım Bekleyenler - İsim Listesi</h2>';
+    html += '<div style="font-size:10px;color:#666;margin-top:4px;">Oluşturulma: ' + new Date().toLocaleString('tr-TR') + ' | Toplam: ' + groups.length + ' personel</div>';
+    html += '</div>';
+    html += '<table style="width:100%;border-collapse:collapse;font-size:11px;"><thead><tr style="background:#d1fae5;">';
+    html += '<th style="border:1px solid #333;padding:6px;text-align:left;width:40px;">#</th>';
+    html += '<th style="border:1px solid #333;padding:6px;text-align:left;">Ad Soyad</th>';
+    html += '<th style="border:1px solid #333;padding:6px;text-align:left;">Birim</th>';
+    html += '<th style="border:1px solid #333;padding:6px;text-align:center;width:60px;">Kalem</th>';
+    html += '<th style="border:1px solid #333;padding:6px;text-align:left;">Bekleyen Malzemeler</th>';
+    html += '</tr></thead><tbody>';
+    groups.forEach((g, i) => {
+        const items = g.items.map(it => it.clothName + ' (' + (it.gender==='E'?'E':'K') + '-' + it.size + ')').join(', ');
+        html += '<tr>';
+        html += '<td style="border:1px solid #333;padding:6px;text-align:center;">' + (i+1) + '</td>';
+        html += '<td style="border:1px solid #333;padding:6px;"><strong>' + escapeHtml(g.personnel) + '</strong></td>';
+        html += '<td style="border:1px solid #333;padding:6px;">' + escapeHtml(g.department || '-') + '</td>';
+        html += '<td style="border:1px solid #333;padding:6px;text-align:center;font-weight:bold;">' + g.items.length + '</td>';
+        html += '<td style="border:1px solid #333;padding:6px;font-size:10px;">' + escapeHtml(items) + '</td>';
+        html += '</tr>';
+    });
+    html += '</tbody></table>';
+    html += '<div style="margin-top:20px;text-align:center;font-size:10px;color:#777;border-top:1px solid #ccc;padding-top:8px;">ATTİ Raylı Sistem - RTS Takip | Hazırlayan: Gökhan GÖKER</div>';
+    html += '</div>';
+    openPrintPreview('Kıyafet Dağıtım Bekleyenler - İsim Listesi', groups.length + ' personel', html);
+}
+
+function printPendingAsMaterialList(groups){
+    const materialMap = {};
+    groups.forEach(g => {
+        g.items.forEach(it => {
+            const key = it.clothName + '_' + it.gender + '_' + it.size;
+            if(!materialMap[key]) materialMap[key] = {name: it.clothName, gender: it.gender, size: it.size, total: 0, personnelList: []};
+            materialMap[key].total += (it.pp || 1);
+            materialMap[key].personnelList.push(g.personnel);
+        });
+    });
+    
+    let html = '<div style="font-family:Arial,sans-serif;font-size:11px;color:#000;padding:10px;">';
+    html += '<div style="text-align:center;border-bottom:2px solid #333;padding-bottom:8px;margin-bottom:12px;">';
+    html += '<h1 style="font-size:18px;margin:0;font-weight:bold;">ATTİ RAYLI SİSTEM</h1>';
+    html += '<h2 style="font-size:13px;margin:4px 0 0;font-weight:normal;">Kıyafet Dağıtım Bekleyenler - Malzeme Listesi</h2>';
+    html += '<div style="font-size:10px;color:#666;margin-top:4px;">Oluşturulma: ' + new Date().toLocaleString('tr-TR') + '</div>';
+    html += '</div>';
+    html += '<table style="width:100%;border-collapse:collapse;font-size:11px;"><thead><tr style="background:#d1fae5;">';
+    html += '<th style="border:1px solid #333;padding:6px;text-align:left;width:40px;">#</th>';
+    html += '<th style="border:1px solid #333;padding:6px;text-align:left;">Malzeme</th>';
+    html += '<th style="border:1px solid #333;padding:6px;text-align:center;width:70px;">Cinsiyet</th>';
+    html += '<th style="border:1px solid #333;padding:6px;text-align:center;width:70px;">Beden</th>';
+    html += '<th style="border:1px solid #333;padding:6px;text-align:center;width:90px;">Toplam Adet</th>';
+    html += '<th style="border:1px solid #333;padding:6px;text-align:left;">Alan Personeller</th>';
+    html += '</tr></thead><tbody>';
+    let i = 0, grand = 0;
+    Object.values(materialMap).sort((a,b) => a.name.localeCompare(b.name, 'tr')).forEach(m => {
+        i++; grand += m.total;
+        html += '<tr>';
+        html += '<td style="border:1px solid #333;padding:6px;text-align:center;">' + i + '</td>';
+        html += '<td style="border:1px solid #333;padding:6px;"><strong>' + escapeHtml(m.name) + '</strong></td>';
+        html += '<td style="border:1px solid #333;padding:6px;text-align:center;">' + (m.gender === 'E' ? '👨 E' : '👩 K') + '</td>';
+        html += '<td style="border:1px solid #333;padding:6px;text-align:center;font-weight:bold;">' + m.size + '</td>';
+        html += '<td style="border:1px solid #333;padding:6px;text-align:center;font-weight:bold;">' + m.total + '</td>';
+        html += '<td style="border:1px solid #333;padding:6px;font-size:10px;">' + escapeHtml(m.personnelList.join(', ')) + '</td>';
+        html += '</tr>';
+    });
+    html += '<tr style="background:#fef3c7;font-weight:bold;">';
+    html += '<td colspan="4" style="border:1px solid #333;padding:6px;text-align:right;">TOPLAM:</td>';
+    html += '<td style="border:1px solid #333;padding:6px;text-align:center;">' + grand + '</td>';
+    html += '<td style="border:1px solid #333;padding:6px;"></td>';
+    html += '</tr>';
+    html += '</tbody></table>';
+    html += '<div style="margin-top:20px;text-align:center;font-size:10px;color:#777;border-top:1px solid #ccc;padding-top:8px;">ATTİ Raylı Sistem - RTS Takip | Hazırlayan: Gökhan GÖKER</div>';
+    html += '</div>';
+    openPrintPreview('Kıyafet Dağıtım Bekleyenler - Malzeme Listesi', groups.length + ' personel', html);
+}
+
+function printPendingAsForm(groups){
+    let allFormsHtml = '';
+    groups.forEach((g, idx) => {
+        if(idx > 0) allFormsHtml += '<div style="page-break-before: always;"></div>';
+        
+        allFormsHtml += '<div style="font-family:Arial,sans-serif;font-size:12px;padding:20px;color:#000;">';
+        allFormsHtml += '<div style="text-align:center;margin-bottom:16px;">';
+        allFormsHtml += '<h1 style="font-size:18px;margin:0;font-weight:bold;">ATTİ RAYLI SİSTEM</h1>';
+        allFormsHtml += '<h2 style="font-size:14px;margin:4px 0 0;">Malzeme Teslim Formu</h2>';
+        allFormsHtml += '</div>';
+        
+        allFormsHtml += '<div style="margin-bottom:12px;padding:8px;background:#f0f9ff;border:1px solid #0369a1;font-size:11px;">';
+        allFormsHtml += '<strong>Personel:</strong> ' + escapeHtml(g.personnel) + ' | <strong>Birim:</strong> ' + escapeHtml(g.department || '-') + ' | <strong>Tarih:</strong> ' + new Date().toLocaleDateString('tr-TR');
+        allFormsHtml += '</div>';
+        
+        allFormsHtml += '<table style="width:100%;border-collapse:collapse;font-size:11px;"><thead><tr>';
+        allFormsHtml += '<th style="border:1px solid #000;padding:6px;background:#e0e7ff;width:40px;text-align:center;">#</th>';
+        allFormsHtml += '<th style="border:1px solid #000;padding:6px;background:#e0e7ff;text-align:left;">Malzeme</th>';
+        allFormsHtml += '<th style="border:1px solid #000;padding:6px;background:#e0e7ff;width:80px;text-align:center;">Cinsiyet</th>';
+        allFormsHtml += '<th style="border:1px solid #000;padding:6px;background:#e0e7ff;width:70px;text-align:center;">Beden</th>';
+        allFormsHtml += '<th style="border:1px solid #000;padding:6px;background:#e0e7ff;width:60px;text-align:center;">Adet</th>';
+        allFormsHtml += '<th style="border:1px solid #000;padding:6px;background:#e0e7ff;width:120px;text-align:center;">İmza</th>';
+        allFormsHtml += '</tr></thead><tbody>';
+        g.items.forEach((it, i) => {
+            allFormsHtml += '<tr>';
+            allFormsHtml += '<td style="border:1px solid #000;padding:6px;text-align:center;">' + (i+1) + '</td>';
+            allFormsHtml += '<td style="border:1px solid #000;padding:6px;">' + escapeHtml(it.clothName) + '</td>';
+            allFormsHtml += '<td style="border:1px solid #000;padding:6px;text-align:center;">' + (it.gender === 'E' ? '👨 E' : '👩 K') + '</td>';
+            allFormsHtml += '<td style="border:1px solid #000;padding:6px;text-align:center;font-weight:bold;">' + it.size + '</td>';
+            allFormsHtml += '<td style="border:1px solid #000;padding:6px;text-align:center;">' + (it.pp || 1) + '</td>';
+            allFormsHtml += '<td style="border:1px solid #000;padding:6px;">&nbsp;</td>';
+            allFormsHtml += '</tr>';
+        });
+        allFormsHtml += '</tbody></table>';
+        
+        allFormsHtml += '<div style="margin-top:18px;padding:10px;border:1px solid #000;background:#f9fafb;font-size:11px;line-height:1.5;text-align:justify;">';
+        allFormsHtml += '<strong>YASAL UYARI:</strong> Yukarıda belirtilen malzemeleri 4857 sayılı İş Kanunu ve işyeri çalışma kurallarına uygun olarak, yalnızca işyerinde ve işim gereği kullanmak üzere eksiksiz ve sağlam olarak teslim aldığımı beyan ve taahhüt ederim.';
+        allFormsHtml += '</div>';
+        
+        allFormsHtml += '<div style="margin-top:40px;display:flex;justify-content:space-between;gap:40px;">';
+        allFormsHtml += '<div style="flex:1;text-align:center;"><div style="border-top:1px solid #000;padding-top:6px;font-weight:bold;font-size:12px;">TESLİM EDEN</div><div style="margin-top:50px;font-size:11px;">Ad Soyad / İmza</div></div>';
+        allFormsHtml += '<div style="flex:1;text-align:center;"><div style="border-top:1px solid #000;padding-top:6px;font-weight:bold;font-size:12px;">TESLİM ALAN</div><div style="margin-top:50px;font-size:11px;">' + escapeHtml(g.personnel) + '<br>İmza</div></div>';
+        allFormsHtml += '</div>';
+        allFormsHtml += '</div>';
+    });
+    
+    openPrintPreview('Kıyafet Teslim Formu', groups.length + ' personel (her kişi ayrı sayfa)', allFormsHtml);
+}
+
 function refreshAllClothingPending(){if(!isAdmin){alert('❌ Yönetici girişi gerekli!');return}if(!confirm('Liste yenilenecek. Onaylıyor musunuz?'))return;data.personnel.forEach(p=>{if(p.clothing&&p.clothing.length>0){p.clothing=[];}});expandedPendingPersonnel.clear();saveToLocalStorage();updateAllStats();showSuccessMessage('🔄 Liste yenilendi!');}
 
 function updateDistributionHistory(){
@@ -3314,7 +3685,419 @@ function deletePersonnelDistributionHistory(personnelName){if(!isAdmin){alert('�
 function deleteDistributionByYear(){if(!isAdmin){alert('❌ Yönetici girişi gerekli!');return}const year=document.getElementById('distributionYearFilter').value;if(!year){alert('Lütfen önce bir yıl seçin!');return}const count=data.distributionHistory.filter(h=>new Date(h.date).getFullYear()==parseInt(year)).length;if(count===0){alert(year+' yılına ait kayıt yok.');return}if(!confirm(year+' YILINA AİT TÜM KAYITLAR ('+count+') SİLİNECEK! Emin misiniz?'))return;data.distributionHistory=data.distributionHistory.filter(h=>new Date(h.date).getFullYear()!=parseInt(year));saveToLocalStorage();updateDistributionHistory();showSuccessMessage('🗑️ '+count+' kayıt silindi!');}
 function clearAllDistributionHistory(){if(!isAdmin){alert('❌ Yönetici girişi gerekli!');return}const count=(data.distributionHistory||[]).length;if(count===0){alert('Silinecek kayıt yok.');return}if(!confirm('TÜM DAĞITIM GEÇMİŞİ ('+count+' kayıt) SİLİNECEK! Emin misiniz?'))return;if(!confirm('SON ONAY: '+count+' kayıt kalıcı olarak silinecek.'))return;data.distributionHistory=[];saveToLocalStorage();updateDistributionHistory();showSuccessMessage('🗑️ Tüm geçmiş silindi!');}
 
-function openDistributionListModal(){openClothingDistributionListModal();}
+// ==================== DAĞITIM YAZDIRMA FİLTRE (YENİ) ====================
+function openDistributionPrintFilterModal(){
+    if(!isAdmin && !isViewer){alert('❌ Giriş yapmanız gerekiyor!');return}
+    
+    const history = data.distributionHistory || [];
+    if(history.length === 0){
+        alert('Yazdırılacak dağıtım kaydı yok!');
+        return;
+    }
+    
+    // Varsayılan: tüm personel seçili
+    distributionPrintSelectedPersonnel = new Set();
+    const uniquePersonnel = [...new Set(history.map(h => h.personnelName))].sort((a,b) => a.localeCompare(b,'tr'));
+    uniquePersonnel.forEach(p => distributionPrintSelectedPersonnel.add(p));
+    
+    // Yıl seçiliyse otomatik tarih aralığı doldur
+    const selectedYear = document.getElementById('distributionYearFilter').value;
+    if(selectedYear){
+        document.getElementById('distributionPrintStartDate').value = selectedYear + '-01-01';
+        document.getElementById('distributionPrintEndDate').value = selectedYear + '-12-31';
+    } else {
+        document.getElementById('distributionPrintStartDate').value = '';
+        document.getElementById('distributionPrintEndDate').value = '';
+    }
+    document.getElementById('distributionPrintSearchInput').value = '';
+    
+    // Birim ve Statü dropdown'larını doldur
+    const deptSelect = document.getElementById('distributionPrintDepartmentFilter');
+    if(deptSelect){
+        deptSelect.innerHTML = '<option value="">-- Tüm Birimler --</option>';
+        const uniqueDepts = [...new Set(history.map(h => h.department).filter(d => d && d.trim()))].sort((a,b) => a.localeCompare(b,'tr'));
+        uniqueDepts.forEach(d => {
+            deptSelect.innerHTML += '<option value="' + escapeHtml(d) + '">' + escapeHtml(d) + '</option>';
+        });
+    }
+    
+    const statusSelect = document.getElementById('distributionPrintStatusFilter');
+    if(statusSelect){
+        statusSelect.innerHTML = '<option value="">-- Tüm Statüler --</option>';
+        const uniqueStatuses = [...new Set(history.map(h => h.status).filter(s => s && s.trim()))].sort((a,b) => a.localeCompare(b,'tr'));
+        uniqueStatuses.forEach(s => {
+            statusSelect.innerHTML += '<option value="' + escapeHtml(s) + '">' + escapeHtml(s) + '</option>';
+        });
+    }
+    
+    // Personel listesini çiz
+    renderPersonnelListForPrint(uniquePersonnel);
+    updateSelectedCountForPrint();
+    
+    showModal('distributionPrintFilterModal');
+}
+
+function renderPersonnelListForPrint(personnelList){
+    const container = document.getElementById('distributionPrintPersonnelList');
+    if(!container) return;
+    
+    const searchTerm = (document.getElementById('distributionPrintSearchInput').value || '').toLowerCase().trim();
+    const filtered = searchTerm 
+        ? personnelList.filter(p => p.toLowerCase().includes(searchTerm))
+        : personnelList;
+    
+    if(filtered.length === 0){
+        container.innerHTML = '<div class="text-center py-4 text-gray-500 text-sm">Personel bulunamadı</div>';
+        return;
+    }
+    
+    container.innerHTML = '';
+    filtered.forEach(personnelName => {
+        const isChecked = distributionPrintSelectedPersonnel.has(personnelName);
+        const safeName = escapeHtml(personnelName);
+        container.innerHTML += '<label class="flex items-center gap-3 p-2 rounded-lg hover:bg-purple-50 cursor-pointer">' +
+            '<input type="checkbox" ' + (isChecked ? 'checked' : '') + ' data-personnel="' + safeName.replace(/"/g,'&quot;') + '" onchange="togglePersonnelForPrint(this)" class="w-4 h-4 accent-purple-600">' +
+            '<span class="text-sm font-medium">👤 ' + safeName + '</span>' +
+            '</label>';
+    });
+}
+
+function togglePersonnelForPrint(cb){
+    const name = cb.getAttribute('data-personnel');
+    if(cb.checked){
+        distributionPrintSelectedPersonnel.add(name);
+    } else {
+        distributionPrintSelectedPersonnel.delete(name);
+    }
+    updateSelectedCountForPrint();
+}
+
+function selectAllPersonnelForPrint(select){
+    const history = data.distributionHistory || [];
+    const uniquePersonnel = [...new Set(history.map(h => h.personnelName))];
+    
+    if(select){
+        uniquePersonnel.forEach(p => distributionPrintSelectedPersonnel.add(p));
+    } else {
+        distributionPrintSelectedPersonnel.clear();
+    }
+    
+    document.querySelectorAll('#distributionPrintPersonnelList input[type=checkbox]').forEach(cb => {
+        cb.checked = select;
+    });
+    
+    updateSelectedCountForPrint();
+}
+
+function filterPersonnelForPrint(){
+    const history = data.distributionHistory || [];
+    const uniquePersonnel = [...new Set(history.map(h => h.personnelName))].sort((a,b) => a.localeCompare(b,'tr'));
+    renderPersonnelListForPrint(uniquePersonnel);
+}
+
+function updateSelectedCountForPrint(){
+    const el = document.getElementById('distributionPrintSelectedCount');
+    if(el) el.textContent = distributionPrintSelectedPersonnel.size;
+}
+
+function setDateRangeQuick(type){
+    const startInput = document.getElementById('distributionPrintStartDate');
+    const endInput = document.getElementById('distributionPrintEndDate');
+    const now = new Date();
+    
+    if(type === 'clear'){
+        startInput.value = '';
+        endInput.value = '';
+        return;
+    }
+    
+    let start, end;
+    if(type === 'thisMonth'){
+        start = new Date(now.getFullYear(), now.getMonth(), 1);
+        end = new Date(now.getFullYear(), now.getMonth()+1, 0);
+    } else if(type === 'lastMonth'){
+        start = new Date(now.getFullYear(), now.getMonth()-1, 1);
+        end = new Date(now.getFullYear(), now.getMonth(), 0);
+    } else if(type === 'thisYear'){
+        start = new Date(now.getFullYear(), 0, 1);
+        end = new Date(now.getFullYear(), 11, 31);
+    } else if(type === 'lastYear'){
+        start = new Date(now.getFullYear()-1, 0, 1);
+        end = new Date(now.getFullYear()-1, 11, 31);
+    }
+    
+    startInput.value = start.toISOString().split('T')[0];
+    endInput.value = end.toISOString().split('T')[0];
+}
+
+function confirmDistributionPrint(){
+    const startDate = document.getElementById('distributionPrintStartDate').value;
+    const endDate = document.getElementById('distributionPrintEndDate').value;
+    const printType = document.querySelector('input[name="printType"]:checked').value;
+    const deptFilter = document.getElementById('distributionPrintDepartmentFilter').value;
+    const statusFilter = document.getElementById('distributionPrintStatusFilter').value;
+    
+    if(distributionPrintSelectedPersonnel.size === 0){
+        alert('❌ En az bir personel seçin!');
+        return;
+    }
+    
+    let start = null, end = null;
+    if(startDate) start = new Date(startDate + 'T00:00:00');
+    if(endDate) end = new Date(endDate + 'T23:59:59');
+    
+    if(start && end && start > end){
+        alert('❌ Başlangıç tarihi bitiş tarihinden sonra olamaz!');
+        return;
+    }
+    
+    hideModal('distributionPrintFilterModal');
+    
+    if(printType === 'name'){
+        printDistributionAsNameListFiltered(start, end, deptFilter, statusFilter);
+    } else {
+        printDistributionAsMaterialListFiltered(start, end, deptFilter, statusFilter);
+    }
+}
+
+function printDistributionAsNameListFiltered(startDate, endDate, deptFilter, statusFilter){
+    let history = data.distributionHistory || [];
+    history = history.filter(h => distributionPrintSelectedPersonnel.has(h.personnelName));
+    if(deptFilter) history = history.filter(h => h.department === deptFilter);
+    if(statusFilter) history = history.filter(h => h.status === statusFilter);
+    if(startDate) history = history.filter(h => new Date(h.date) >= startDate);
+    if(endDate) history = history.filter(h => new Date(h.date) <= endDate);
+    
+    if(history.length === 0){
+        alert('Seçilen filtrelere uyan kayıt bulunamadı!');
+        return;
+    }
+    
+    const grouped = {};
+    history.forEach(h => {
+        if(!grouped[h.personnelName]) grouped[h.personnelName] = {
+            name: h.personnelName,
+            dept: h.department,
+            count: 0,
+            items: [],
+            dates: []
+        };
+        grouped[h.personnelName].count += (h.quantity || 1);
+        grouped[h.personnelName].items.push(h);
+        grouped[h.personnelName].dates.push(new Date(h.date));
+    });
+    
+    let filterInfo = '';
+    if(startDate && endDate) filterInfo = startDate.toLocaleDateString('tr-TR') + ' - ' + endDate.toLocaleDateString('tr-TR');
+    else if(startDate) filterInfo = startDate.toLocaleDateString('tr-TR') + ' ve sonrası';
+    else if(endDate) filterInfo = endDate.toLocaleDateString('tr-TR') + ' ve öncesi';
+    else filterInfo = 'Tüm Tarihler';
+    
+    let html = '<div style="font-family:Arial,sans-serif;font-size:11px;color:#000;padding:10px;">';
+    html += '<div style="text-align:center;border-bottom:2px solid #333;padding-bottom:8px;margin-bottom:12px;">';
+    html += '<h1 style="font-size:18px;margin:0;font-weight:bold;">ATTİ RAYLI SİSTEM</h1>';
+    html += '<h2 style="font-size:13px;margin:4px 0 0;font-weight:normal;">Personel Bazlı Dağıtım Özeti</h2>';
+    html += '<div style="font-size:11px;margin-top:4px;">Tarih Aralığı: <strong>' + filterInfo + '</strong></div>';
+    html += '<div style="font-size:11px;">Seçili Personel: <strong>' + distributionPrintSelectedPersonnel.size + '</strong> | Kayıt: <strong>' + history.length + '</strong></div>';
+    html += '<div style="font-size:10px;color:#666;margin-top:4px;">Oluşturulma: ' + new Date().toLocaleString('tr-TR') + '</div>';
+    html += '</div>';
+    html += '<table style="width:100%;border-collapse:collapse;font-size:11px;"><thead><tr style="background:#dbeafe;">';
+    html += '<th style="border:1px solid #333;padding:6px;text-align:left;width:40px;">#</th>';
+    html += '<th style="border:1px solid #333;padding:6px;text-align:left;">Ad Soyad</th>';
+    html += '<th style="border:1px solid #333;padding:6px;text-align:left;">Birim</th>';
+    html += '<th style="border:1px solid #333;padding:6px;text-align:center;width:90px;">Toplam Malzeme</th>';
+    html += '<th style="border:1px solid #333;padding:6px;text-align:left;">Alınan Malzemeler</th>';
+    html += '<th style="border:1px solid #333;padding:6px;text-align:center;width:100px;">Dağıtım Tarihi</th>';
+    html += '</tr></thead><tbody>';
+    let i = 0;
+    Object.values(grouped).sort((a,b) => a.name.localeCompare(b.name,'tr')).forEach(g => {
+        i++;
+        const itemSummary = g.items.map(it => it.itemName + ' (' + (it.quantity||1) + ')').join(', ');
+        const sortedDates = g.dates.slice().sort((a,b) => b - a);
+        const lastDate = sortedDates[0] ? sortedDates[0].toLocaleDateString('tr-TR') : '-';
+        const firstDate = sortedDates[sortedDates.length-1] ? sortedDates[sortedDates.length-1].toLocaleDateString('tr-TR') : '-';
+        const dateDisplay = (firstDate === lastDate) ? lastDate : (firstDate + ' - ' + lastDate);
+        
+        html += '<tr><td style="border:1px solid #333;padding:6px;">' + i + '</td>';
+        html += '<td style="border:1px solid #333;padding:6px;"><strong>' + escapeHtml(g.name) + '</strong></td>';
+        html += '<td style="border:1px solid #333;padding:6px;">' + escapeHtml(g.dept || '-') + '</td>';
+        html += '<td style="border:1px solid #333;padding:6px;text-align:center;font-weight:bold;">' + g.count + '</td>';
+        html += '<td style="border:1px solid #333;padding:6px;font-size:10px;">' + escapeHtml(itemSummary) + '</td>';
+        html += '<td style="border:1px solid #333;padding:6px;text-align:center;font-size:10px;">' + dateDisplay + '</td>';
+        html += '</tr>';
+    });
+    html += '</tbody></table>';
+    html += '<div style="margin-top:20px;text-align:center;font-size:10px;color:#777;border-top:1px solid #ccc;padding-top:8px;">ATTİ Raylı Sistem - RTS Takip | Hazırlayan: Gökhan GÖKER</div>';
+    html += '</div>';
+    
+    openPrintPreview('Personel Bazlı Dağıtım Özeti', Object.keys(grouped).length + ' personel | ' + filterInfo, html);
+}
+
+function printDistributionAsMaterialListFiltered(startDate, endDate, deptFilter, statusFilter){
+    let history = data.distributionHistory || [];
+    history = history.filter(h => distributionPrintSelectedPersonnel.has(h.personnelName));
+    if(deptFilter) history = history.filter(h => h.department === deptFilter);
+    if(statusFilter) history = history.filter(h => h.status === statusFilter);
+    if(startDate) history = history.filter(h => new Date(h.date) >= startDate);
+    if(endDate) history = history.filter(h => new Date(h.date) <= endDate);
+    
+    if(history.length === 0){
+        alert('Seçilen filtrelere uyan kayıt bulunamadı!');
+        return;
+    }
+    
+    const materialMap = {};
+    history.forEach(h => {
+        const key = (h.type || 'Diger') + '_' + h.itemName + '_' + h.personnelName;
+        if(!materialMap[key]) {
+            materialMap[key] = {
+                type: h.type || 'Diğer',
+                name: h.itemName,
+                personnel: h.personnelName,
+                department: h.department || '-',
+                total: 0,
+                dates: []
+            };
+        }
+        materialMap[key].total += (h.quantity || 1);
+        materialMap[key].dates.push(new Date(h.date));
+    });
+    
+    let filterInfo = '';
+    if(startDate && endDate) filterInfo = startDate.toLocaleDateString('tr-TR') + ' - ' + endDate.toLocaleDateString('tr-TR');
+    else if(startDate) filterInfo = startDate.toLocaleDateString('tr-TR') + ' ve sonrası';
+    else if(endDate) filterInfo = endDate.toLocaleDateString('tr-TR') + ' ve öncesi';
+    else filterInfo = 'Tüm Tarihler';
+    
+    let html = '<div style="font-family:Arial,sans-serif;font-size:11px;color:#000;padding:10px;">';
+    html += '<div style="text-align:center;border-bottom:2px solid #333;padding-bottom:8px;margin-bottom:12px;">';
+    html += '<h1 style="font-size:18px;margin:0;font-weight:bold;">ATTİ RAYLI SİSTEM</h1>';
+    html += '<h2 style="font-size:13px;margin:4px 0 0;font-weight:normal;">Malzeme Bazlı Dağıtım Özeti</h2>';
+    html += '<div style="font-size:11px;margin-top:4px;">Tarih Aralığı: <strong>' + filterInfo + '</strong></div>';
+    html += '<div style="font-size:11px;">Seçili Personel: <strong>' + distributionPrintSelectedPersonnel.size + '</strong> | Kayıt: <strong>' + history.length + '</strong></div>';
+    html += '<div style="font-size:10px;color:#666;margin-top:4px;">Oluşturulma: ' + new Date().toLocaleString('tr-TR') + '</div>';
+    html += '</div>';
+    
+    const sortedItems = Object.values(materialMap).sort((a,b) => {
+        const mComp = a.name.localeCompare(b.name, 'tr');
+        if(mComp !== 0) return mComp;
+        return a.personnel.localeCompare(b.personnel, 'tr');
+    });
+    
+    html += '<table style="width:100%;border-collapse:collapse;font-size:11px;"><thead><tr style="background:#dbeafe;">';
+    html += '<th style="border:1px solid #333;padding:6px;text-align:left;width:40px;">#</th>';
+    html += '<th style="border:1px solid #333;padding:6px;text-align:left;">Tür</th>';
+    html += '<th style="border:1px solid #333;padding:6px;text-align:left;">Malzeme</th>';
+    html += '<th style="border:1px solid #333;padding:6px;text-align:left;">Ad Soyad</th>';
+    html += '<th style="border:1px solid #333;padding:6px;text-align:left;">Birim</th>';
+    html += '<th style="border:1px solid #333;padding:6px;text-align:center;width:90px;">Toplam Adet</th>';
+    html += '<th style="border:1px solid #333;padding:6px;text-align:center;width:100px;">Dağıtım Tarihi</th>';
+    html += '</tr></thead><tbody>';
+    
+    let i = 0, grand = 0;
+    let currentMaterial = '';
+    
+    sortedItems.forEach(m => {
+        i++; 
+        grand += m.total;
+        
+        const sortedDates = m.dates.slice().sort((a,b) => b - a);
+        const lastDate = sortedDates[0] ? sortedDates[0].toLocaleDateString('tr-TR') : '-';
+        const firstDate = sortedDates[sortedDates.length-1] ? sortedDates[sortedDates.length-1].toLocaleDateString('tr-TR') : '-';
+        const dateDisplay = (firstDate === lastDate) ? lastDate : (firstDate + ' - ' + lastDate);
+        
+        if(m.name !== currentMaterial && currentMaterial !== ''){
+            html += '<tr><td colspan="7" style="border:1px solid #333;padding:2px;background:#f3f4f6;height:4px;"></td></tr>';
+        }
+        currentMaterial = m.name;
+        
+        const typeIcon = m.type === 'KKD' ? '🦺 KKD' : '👕 Kıyafet';
+        
+        html += '<tr>';
+        html += '<td style="border:1px solid #333;padding:6px;text-align:center;">' + i + '</td>';
+        html += '<td style="border:1px solid #333;padding:6px;">' + typeIcon + '</td>';
+        html += '<td style="border:1px solid #333;padding:6px;"><strong>' + escapeHtml(m.name) + '</strong></td>';
+        html += '<td style="border:1px solid #333;padding:6px;">' + escapeHtml(m.personnel) + '</td>';
+        html += '<td style="border:1px solid #333;padding:6px;">' + escapeHtml(m.department) + '</td>';
+        html += '<td style="border:1px solid #333;padding:6px;text-align:center;font-weight:bold;">' + m.total + '</td>';
+        html += '<td style="border:1px solid #333;padding:6px;text-align:center;font-size:10px;">' + dateDisplay + '</td>';
+        html += '</tr>';
+    });
+    
+    html += '<tr style="background:#fef3c7;font-weight:bold;">';
+    html += '<td colspan="5" style="border:1px solid #333;padding:6px;text-align:right;">TOPLAM:</td>';
+    html += '<td style="border:1px solid #333;padding:6px;text-align:center;">' + grand + '</td>';
+    html += '<td style="border:1px solid #333;padding:6px;"></td>';
+    html += '</tr>';
+    html += '</tbody></table>';
+    html += '<div style="margin-top:20px;text-align:center;font-size:10px;color:#777;border-top:1px solid #ccc;padding-top:8px;">ATTİ Raylı Sistem - RTS Takip | Hazırlayan: Gökhan GÖKER</div>';
+    html += '</div>';
+    
+    openPrintPreview('Malzeme Bazlı Dağıtım Özeti', filterInfo, html);
+}
+
+// ==================== KDD DAĞITIM LİSTESİ ====================
+function openKddDistributionListModal(){
+    const deptFilter=document.getElementById('kddDistDeptFilter');deptFilter.innerHTML='<option value="">Tüm Birimler</option>';
+    const uniqueDepts=[...new Set(data.personnel.map(p=>p.department).filter(d=>d))].sort((a,b)=>a.localeCompare(b,'tr'));
+    uniqueDepts.forEach(d=>{deptFilter.innerHTML+='<option value="'+d+'">'+d+'</option>';});
+    const statFilter=document.getElementById('kddDistStatusFilter');statFilter.innerHTML='<option value="">Tüm Statüler</option>';
+    (data.statuses||[]).slice().sort((a,b)=>a.localeCompare(b,'tr')).forEach(s=>{statFilter.innerHTML+='<option value="'+s+'">'+s+'</option>';});
+    document.getElementById('kddDistSortFilter').value='department';
+    document.getElementById('kddDistSearchInput').value='';
+    updateKddDistributionList();showModal('kddDistributionListModal');
+}
+function updateKddDistributionList(){
+    const deptFilter=document.getElementById('kddDistDeptFilter').value;
+    const statFilter=document.getElementById('kddDistStatusFilter').value;
+    const sortFilter=document.getElementById('kddDistSortFilter').value;
+    const searchTerm=document.getElementById('kddDistSearchInput').value.toLowerCase().trim();
+    let personnel=data.personnel.filter(p=>{if(deptFilter&&p.department!==deptFilter)return false;if(statFilter&&p.status!==statFilter)return false;if(searchTerm){const searchIn=(p.name+' '+(p.tcNo||'')).toLowerCase();if(!searchIn.includes(searchTerm))return false;}return true;});
+    if(sortFilter==='name')personnel.sort((a,b)=>a.name.localeCompare(b.name,'tr'));
+    else personnel.sort((a,b)=>{const d=(a.department||'').localeCompare(b.department||'','tr');if(d!==0)return d;return a.name.localeCompare(b.name,'tr');});
+    document.getElementById('kddDistTotalCount').textContent=personnel.length;
+    const allKkdNames=new Set();personnel.forEach(p=>{(p.requiredKkds||[]).forEach(rk=>{allKkdNames.add(rk.name);});});
+    const kkdList=[...allKkdNames].sort((a,b)=>a.localeCompare(b,'tr'));
+    const content=document.getElementById('kddDistributionListContent');
+    if(kkdList.length===0){content.innerHTML='<div class="text-center py-8 text-gray-500">KKD tanımlı değil</div>';return;}
+    let html='<table style="width:100%;border-collapse:collapse;font-size:11px;"><thead><tr><th rowspan="2" style="border:1px solid #333;padding:4px;background:#fed7aa;">#</th><th rowspan="2" style="border:1px solid #333;padding:4px;background:#fed7aa;">Ad Soyad</th><th rowspan="2" style="border:1px solid #333;padding:4px;background:#fed7aa;">Birim</th>';
+    kkdList.forEach(k=>{html+='<th colspan="2" style="border:1px solid #333;padding:4px;background:#ffedd5;">'+escapeHtml(k)+'</th>';});
+    html+='</tr><tr>';
+    kkdList.forEach(()=>{html+='<th style="border:1px solid #333;padding:2px;background:#fff7ed;font-size:9px;">Durum</th><th style="border:1px solid #333;padding:2px;background:#fff7ed;font-size:9px;">Adet</th>';});
+    html+='</tr></thead><tbody>';
+    personnel.forEach((p,idx)=>{
+        html+='<tr><td style="border:1px solid #333;padding:3px;text-align:center;">'+(idx+1)+'</td><td style="border:1px solid #333;padding:3px;font-weight:bold;">'+escapeHtml(p.name)+'</td><td style="border:1px solid #333;padding:3px;font-size:10px;">'+escapeHtml(p.department||'-')+'</td>';
+        kkdList.forEach(kName=>{
+            const req=(p.requiredKkds||[]).find(rk=>rk.name===kName);
+            if(req){
+                const kdd=data.kkds.find(k=>k.name===kName);
+                const pp=kdd?(kdd.perPerson||1):1;
+                const isGiven=(p.kkds||[]).some(k=>k.name===kName);
+                if(isGiven){
+                    html+='<td style="border:1px solid #333;padding:3px;text-align:center;background:#dcfce7;font-weight:bold;color:#065f46;font-size:10px;">✅ Verildi</td><td style="border:1px solid #333;padding:3px;text-align:center;background:#dcfce7;">'+pp+'</td>';
+                }else{
+                    html+='<td style="border:1px solid #333;padding:3px;text-align:center;background:#fef3c7;color:#92400e;font-size:10px;">⏳ Bekliyor</td><td style="border:1px solid #333;padding:3px;text-align:center;">'+pp+'</td>';
+                }
+            }else{
+                html+='<td style="border:1px solid #333;padding:3px;text-align:center;color:#d1d5db;font-size:10px;">-</td><td style="border:1px solid #333;padding:3px;text-align:center;color:#d1d5db;">-</td>';
+            }
+        });
+        html+='</tr>';
+    });
+    html+='</tbody></table>';
+    content.innerHTML=html;
+}
+function printKddDistributionList(){
+    const content=document.getElementById('kddDistributionListContent');
+    if(!content.innerHTML.trim()){alert('Önce listeyi oluşturun!');return}
+    const innerHTML=content.innerHTML;
+    let html='<div style="font-family:Arial,sans-serif;font-size:11px;color:#000;padding:10px;">';
+    html+='<div style="text-align:center;border-bottom:2px solid #333;padding-bottom:8px;margin-bottom:12px;"><h1 style="font-size:18px;margin:0;font-weight:bold;">ATTİ RAYLI SİSTEM</h1><h2 style="font-size:13px;margin:4px 0 0;font-weight:normal;">KKD Dağıtım Listesi</h2><div style="font-size:10px;color:#666;margin-top:4px;">Oluşturulma: '+new Date().toLocaleString('tr-TR')+'</div></div>';
+    html+='<div style="max-width:100%;overflow:hidden;">'+innerHTML+'</div></div>';
+    openPrintPreview('KKD Dağıtım Listesi','ATTİ Raylı Sistem',html);
+}
+
+// ==================== KİYAFET DAĞITIM LİSTESİ ====================
 function openClothingDistributionListModal(){
     const deptFilter=document.getElementById('distListDeptFilter');deptFilter.innerHTML='<option value="">Tüm Birimler</option>';
     const uniqueDepts=[...new Set(data.personnel.map(p=>p.department).filter(d=>d))].sort((a,b)=>a.localeCompare(b,'tr'));
@@ -3392,66 +4175,6 @@ function printClothingDistributionList(){
     html+='<div style="max-width:100%;overflow:hidden;">'+innerHTML+'</div>';
     html+='</div>';
     openPrintPreview('Kıyafet Dağıtım Listesi','ATTİ Raylı Sistem',html);
-}
-
-function openKddDistributionListModal(){
-    const deptFilter=document.getElementById('kddDistDeptFilter');deptFilter.innerHTML='<option value="">Tüm Birimler</option>';
-    const uniqueDepts=[...new Set(data.personnel.map(p=>p.department).filter(d=>d))].sort((a,b)=>a.localeCompare(b,'tr'));
-    uniqueDepts.forEach(d=>{deptFilter.innerHTML+='<option value="'+d+'">'+d+'</option>';});
-    const statFilter=document.getElementById('kddDistStatusFilter');statFilter.innerHTML='<option value="">Tüm Statüler</option>';
-    (data.statuses||[]).slice().sort((a,b)=>a.localeCompare(b,'tr')).forEach(s=>{statFilter.innerHTML+='<option value="'+s+'">'+s+'</option>';});
-    document.getElementById('kddDistSortFilter').value='department';
-    document.getElementById('kddDistSearchInput').value='';
-    updateKddDistributionList();showModal('kddDistributionListModal');
-}
-function updateKddDistributionList(){
-    const deptFilter=document.getElementById('kddDistDeptFilter').value;
-    const statFilter=document.getElementById('kddDistStatusFilter').value;
-    const sortFilter=document.getElementById('kddDistSortFilter').value;
-    const searchTerm=document.getElementById('kddDistSearchInput').value.toLowerCase().trim();
-    let personnel=data.personnel.filter(p=>{if(deptFilter&&p.department!==deptFilter)return false;if(statFilter&&p.status!==statFilter)return false;if(searchTerm){const searchIn=(p.name+' '+(p.tcNo||'')).toLowerCase();if(!searchIn.includes(searchTerm))return false;}return true;});
-    if(sortFilter==='name')personnel.sort((a,b)=>a.name.localeCompare(b.name,'tr'));
-    else personnel.sort((a,b)=>{const d=(a.department||'').localeCompare(b.department||'','tr');if(d!==0)return d;return a.name.localeCompare(b.name,'tr');});
-    document.getElementById('kddDistTotalCount').textContent=personnel.length;
-    const allKkdNames=new Set();personnel.forEach(p=>{(p.requiredKkds||[]).forEach(rk=>{allKkdNames.add(rk.name);});});
-    const kkdList=[...allKkdNames].sort((a,b)=>a.localeCompare(b,'tr'));
-    const content=document.getElementById('kddDistributionListContent');
-    if(kkdList.length===0){content.innerHTML='<div class="text-center py-8 text-gray-500">KKD tanımlı değil</div>';return;}
-    let html='<table style="width:100%;border-collapse:collapse;font-size:11px;"><thead><tr><th rowspan="2" style="border:1px solid #333;padding:4px;background:#fed7aa;">#</th><th rowspan="2" style="border:1px solid #333;padding:4px;background:#fed7aa;">Ad Soyad</th><th rowspan="2" style="border:1px solid #333;padding:4px;background:#fed7aa;">Birim</th>';
-    kkdList.forEach(k=>{html+='<th colspan="2" style="border:1px solid #333;padding:4px;background:#ffedd5;">'+escapeHtml(k)+'</th>';});
-    html+='</tr><tr>';
-    kkdList.forEach(()=>{html+='<th style="border:1px solid #333;padding:2px;background:#fff7ed;font-size:9px;">Durum</th><th style="border:1px solid #333;padding:2px;background:#fff7ed;font-size:9px;">Adet</th>';});
-    html+='</tr></thead><tbody>';
-    personnel.forEach((p,idx)=>{
-        html+='<tr><td style="border:1px solid #333;padding:3px;text-align:center;">'+(idx+1)+'</td><td style="border:1px solid #333;padding:3px;font-weight:bold;">'+escapeHtml(p.name)+'</td><td style="border:1px solid #333;padding:3px;font-size:10px;">'+escapeHtml(p.department||'-')+'</td>';
-        kkdList.forEach(kName=>{
-            const req=(p.requiredKkds||[]).find(rk=>rk.name===kName);
-            if(req){
-                const kdd=data.kkds.find(k=>k.name===kName);
-                const pp=kdd?(kdd.perPerson||1):1;
-                const isGiven=(p.kkds||[]).some(k=>k.name===kName);
-                if(isGiven){
-                    html+='<td style="border:1px solid #333;padding:3px;text-align:center;background:#dcfce7;font-weight:bold;color:#065f46;font-size:10px;">✅ Verildi</td><td style="border:1px solid #333;padding:3px;text-align:center;background:#dcfce7;">'+pp+'</td>';
-                }else{
-                    html+='<td style="border:1px solid #333;padding:3px;text-align:center;background:#fef3c7;color:#92400e;font-size:10px;">⏳ Bekliyor</td><td style="border:1px solid #333;padding:3px;text-align:center;">'+pp+'</td>';
-                }
-            }else{
-                html+='<td style="border:1px solid #333;padding:3px;text-align:center;color:#d1d5db;font-size:10px;">-</td><td style="border:1px solid #333;padding:3px;text-align:center;color:#d1d5db;">-</td>';
-            }
-        });
-        html+='</tr>';
-    });
-    html+='</tbody></table>';
-    content.innerHTML=html;
-}
-function printKddDistributionList(){
-    const content=document.getElementById('kddDistributionListContent');
-    if(!content.innerHTML.trim()){alert('Önce listeyi oluşturun!');return}
-    const innerHTML=content.innerHTML;
-    let html='<div style="font-family:Arial,sans-serif;font-size:11px;color:#000;padding:10px;">';
-    html+='<div style="text-align:center;border-bottom:2px solid #333;padding-bottom:8px;margin-bottom:12px;"><h1 style="font-size:18px;margin:0;font-weight:bold;">ATTİ RAYLI SİSTEM</h1><h2 style="font-size:13px;margin:4px 0 0;font-weight:normal;">KKD Dağıtım Listesi</h2><div style="font-size:10px;color:#666;margin-top:4px;">Oluşturulma: '+new Date().toLocaleString('tr-TR')+'</div></div>';
-    html+='<div style="max-width:100%;overflow:hidden;">'+innerHTML+'</div></div>';
-    openPrintPreview('KKD Dağıtım Listesi','ATTİ Raylı Sistem',html);
 }
 
 function askNeedType(){
