@@ -489,9 +489,15 @@ body.viewer-mode #loginModal *{pointer-events:auto!important;opacity:1!important
 <button onclick="askDistributionType()" class="viewer-allow bg-gradient-to-r from-teal-500 to-cyan-600 text-white px-6 py-3 rounded-lg font-medium">📋 Dağıtım Listesi</button>
 </div>
 </div>
-<div class="bg-white rounded-lg border-2 border-teal-200 p-4 mb-6">
-<div class="flex justify-between items-center mb-4 flex-wrap gap-2">
+<div class="bg-white rounded-lg border-2 border-teal-200 mb-6">
+<div class="flex justify-between items-center p-4 bg-teal-100 cursor-pointer hover:bg-teal-200 transition-colors rounded-t-lg" onclick="toggleStockMainSection('clothingStockMainSection')">
+<div class="flex items-center gap-3">
+<span id="clothingStockMainSectionArrow" class="text-teal-700 text-xl font-bold transition-transform inline-block">▶</span>
 <h4 class="font-bold text-teal-800">👕 Kıyafet Stok Tablosu</h4>
+</div>
+</div>
+<div id="clothingStockMainSection" class="hidden p-4">
+<div class="flex justify-between items-center mb-4 flex-wrap gap-2">
 <div class="flex gap-2 items-center flex-wrap">
 <select id="clothingStockStatusFilter" class="viewer-allow text-xs border-2 border-teal-300 rounded-lg px-2 py-1 bg-white" onchange="updateStockTables()"><option value="">Tüm Statüler</option></select>
 <select id="clothingStockSeasonFilter" class="viewer-allow text-xs border-2 border-orange-300 rounded-lg px-2 py-1 bg-white" onchange="updateStockTables()"><option value="">Tüm Sezonlar</option><option value="yazlik">☀️ Yazlık</option><option value="kislik">❄️ Kışlık</option></select>
@@ -513,8 +519,15 @@ body.viewer-mode #loginModal *{pointer-events:auto!important;opacity:1!important
 </table>
 </div>
 </div>
-<div class="bg-white rounded-lg border-2 border-orange-200 p-4 mb-6">
-<h4 class="font-bold text-orange-800 mb-4">🦺 KKD Stok Tablosu</h4>
+</div>
+<div class="bg-white rounded-lg border-2 border-orange-200 mb-6">
+<div class="flex justify-between items-center p-4 bg-orange-100 cursor-pointer hover:bg-orange-200 transition-colors rounded-t-lg" onclick="toggleStockMainSection('kddStockMainSection')">
+<div class="flex items-center gap-3">
+<span id="kddStockMainSectionArrow" class="text-orange-700 text-xl font-bold transition-transform inline-block">▶</span>
+<h4 class="font-bold text-orange-800">🦺 KKD Stok Tablosu</h4>
+</div>
+</div>
+<div id="kddStockMainSection" class="hidden p-4">
 <div class="overflow-x-auto">
 <table class="w-full table-auto text-sm">
 <thead class="bg-orange-50"><tr>
@@ -529,34 +542,55 @@ body.viewer-mode #loginModal *{pointer-events:auto!important;opacity:1!important
 </div>
 </div>
 </div>
-<div class="bg-white rounded-xl shadow-xl p-6 mb-6">
-<div class="flex items-center justify-between mb-4 flex-wrap gap-3">
-<div class="flex items-center"><div class="p-3 rounded-full bg-orange-100 text-orange-600 text-2xl mr-4">🦺</div><h3 class="text-xl font-bold">KKD Dağıtım Bekleyenler</h3></div>
-<span class="bg-orange-100 text-orange-800 px-3 py-1 rounded-full font-bold" id="kddPendingCount">0</span>
+
+
 </div>
-<div class="overflow-x-auto"><table class="w-full table-auto">
+<div class="bg-white rounded-xl shadow-xl p-6 mb-6">
+<div class="flex items-center justify-between mb-4 flex-wrap gap-3 bg-orange-100 border-2 border-orange-300 rounded-lg p-3 cursor-pointer hover:bg-orange-200 transition-colors" onclick="toggleStockMainSection('kddPendingMainSection')">
+<div class="flex items-center gap-3">
+<span id="kddPendingMainSectionArrow" class="text-orange-700 text-xl font-bold transition-transform inline-block">▶</span>
+<div class="p-2 rounded-full bg-orange-200 text-orange-600 text-xl">🦺</div>
+<h3 class="text-xl font-bold text-orange-900">KKD Dağıtım Bekleyenler</h3>
+</div>
+<div class="flex items-center gap-2 flex-wrap" onclick="event.stopPropagation()">
+<span class="bg-orange-200 text-orange-900 px-3 py-1 rounded-full font-bold" id="kddPendingCount">0</span>
+<select id="kddPendingSortFilter" class="viewer-allow text-xs border-2 border-purple-300 rounded-lg px-2 py-1 bg-white" onchange="updateKddPendingTable()"><option value="default">Varsayılan</option><option value="name">👤 Alfabetik</option><option value="department">🏢 Birime Göre</option></select>
+<button onclick="refreshAllKddPending()" class="admin-only-btn bg-blue-600 text-white px-3 py-2 rounded-lg text-xs font-bold">🔄 Yenile</button>
+<button onclick="openKddPendingPrintModal()" class="viewer-allow bg-emerald-600 text-white px-3 py-2 rounded-lg text-xs font-bold">🖨️ Yazdır</button>
+</div>
+</div>
+<div id="kddPendingMainSection" class="hidden">
+<div class="overflow-x-auto"><table class="w-full table-auto" id="kddPendingTableMain">
 <thead class="bg-orange-50"><tr>
-<th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Personel</th>
-<th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Birim</th>
-<th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Statü</th>
-<th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">KKD</th>
-<th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">Verilecek</th>
+<th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase" style="width:40px;"></th>
+<th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase filter-header" data-col="personnel">Personel <button class="filter-btn viewer-allow" onclick="toggleKddPendingFilter(event,'personnel')" id="kddFilterBtn_personnel">▼</button></th>
+<th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase filter-header" data-col="department">Birim <button class="filter-btn viewer-allow" onclick="toggleKddPendingFilter(event,'department')" id="kddFilterBtn_department">▼</button></th>
+<th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase filter-header" data-col="status">Statü <button class="filter-btn viewer-allow" onclick="toggleKddPendingFilter(event,'status')" id="kddFilterBtn_status">▼</button></th>
+<th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase filter-header" data-col="itemCount">Bekleyen <button class="filter-btn viewer-allow" onclick="toggleKddPendingFilter(event,'itemCount')" id="kddFilterBtn_itemCount">▼</button></th>
 <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">İşlem</th>
 </tr></thead>
 <tbody id="kddPendingTable" class="bg-white divide-y divide-gray-200"></tbody>
-</table></div>
+</table>
+<div id="kddPendingFilterPopups"></div>
+</div>
+</div>
 </div>
 <div class="bg-white rounded-xl shadow-xl p-6 mb-6">
-<div class="flex items-center justify-between mb-4 flex-wrap gap-3">
-<div class="flex items-center"><div class="p-3 rounded-full bg-teal-100 text-teal-600 text-2xl mr-4">👕</div><h3 class="text-xl font-bold">Kıyafet Dağıtım Bekleyenler</h3></div>
-<div class="flex items-center gap-2 flex-wrap">
-<span class="bg-teal-100 text-teal-800 px-3 py-1 rounded-full font-bold" id="clothingPendingCount">0</span>
+<div class="flex items-center justify-between mb-4 flex-wrap gap-3 bg-teal-100 border-2 border-teal-300 rounded-lg p-3 cursor-pointer hover:bg-teal-200 transition-colors" onclick="toggleStockMainSection('clothingPendingMainSection')">
+<div class="flex items-center gap-3">
+<span id="clothingPendingMainSectionArrow" class="text-teal-700 text-xl font-bold transition-transform inline-block">▶</span>
+<div class="p-2 rounded-full bg-teal-200 text-teal-600 text-xl">👕</div>
+<h3 class="text-xl font-bold text-teal-900">Kıyafet Dağıtım Bekleyenler</h3>
+</div>
+<div class="flex items-center gap-2 flex-wrap" onclick="event.stopPropagation()">
+<span class="bg-teal-200 text-teal-900 px-3 py-1 rounded-full font-bold" id="clothingPendingCount">0</span>
 <select id="clothingPendingSeasonFilter" class="viewer-allow text-xs border-2 border-orange-300 rounded-lg px-2 py-1 bg-white" onchange="updatePendingTables()"><option value="">Tüm Sezon</option><option value="yazlik">☀️ Yazlık</option><option value="kislik">❄️ Kışlık</option></select>
 <select id="clothingPendingSortFilter" class="viewer-allow text-xs border-2 border-purple-300 rounded-lg px-2 py-1 bg-white" onchange="updatePendingTables()"><option value="default">Varsayılan</option><option value="name">👤 Alfabetik</option><option value="department">🏢 Birime Göre</option></select>
 <button onclick="refreshAllClothingPending()" class="admin-only-btn bg-blue-600 text-white px-3 py-2 rounded-lg text-xs font-bold">🔄 Yenile</button>
 <button onclick="openClothingPendingPrintModal()" class="viewer-allow bg-emerald-600 text-white px-3 py-2 rounded-lg text-xs font-bold">🖨️ Yazdır</button>
 </div>
 </div>
+<div id="clothingPendingMainSection" class="hidden">
 <div class="overflow-x-auto"><table class="w-full table-auto" id="pendingTable">
 <thead class="bg-teal-50"><tr>
 <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase" style="width:40px;"></th>
@@ -569,6 +603,7 @@ body.viewer-mode #loginModal *{pointer-events:auto!important;opacity:1!important
 <tbody id="clothingPendingTable" class="bg-white divide-y divide-gray-200"></tbody>
 </table>
 <div id="pendingFilterPopups"></div>
+</div>
 </div>
 </div>
 <div class="bg-white rounded-xl shadow-xl p-6">
@@ -600,7 +635,6 @@ body.viewer-mode #loginModal *{pointer-events:auto!important;opacity:1!important
 </div>
 </div>
 </div>
-
 <!-- ==================== GÖREVLER ==================== -->
 <div id="tasks" class="section hidden">
 <div class="bg-white rounded-xl shadow-xl p-6 mb-6">
@@ -608,15 +642,15 @@ body.viewer-mode #loginModal *{pointer-events:auto!important;opacity:1!important
 <div class="flex items-center"><div class="p-3 rounded-full bg-violet-100 text-violet-600 text-2xl mr-4">📌</div><h2 class="text-2xl font-bold">Görev Takip Sistemi</h2></div>
 <div class="flex gap-2 flex-wrap">
 <button onclick="openReportModal()" class="viewer-allow report-btn">📊 Rapor / Yazdır</button>
-<button onclick="openAddTaskAssignmentModal()" class="admin-only-btn bg-gradient-to-r from-violet-500 to-purple-600 text-white px-6 py-3 rounded-lg font-medium">➕ Görev Ekle (Şablondan)</button>
 <button onclick="openAddNewTaskModal()" class="admin-only-btn bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-6 py-3 rounded-lg font-medium">➕ Yeni Görev</button>
 </div>
 </div>
-<div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+<div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
 <div class="bg-blue-50 rounded-lg p-4 border-2 border-blue-200"><div class="flex items-center justify-between"><div><p class="text-xs font-bold text-blue-600 uppercase">Aktif</p><p class="text-2xl font-bold text-blue-800" id="taskActiveCount">0</p></div><div class="text-3xl">🔄</div></div></div>
 <div class="bg-red-50 rounded-lg p-4 border-2 border-red-200"><div class="flex items-center justify-between"><div><p class="text-xs font-bold text-red-600 uppercase">Gecikmiş</p><p class="text-2xl font-bold text-red-800" id="taskOverdueCount">0</p></div><div class="text-3xl">⚠️</div></div></div>
 <div class="bg-yellow-50 rounded-lg p-4 border-2 border-yellow-200"><div class="flex items-center justify-between"><div><p class="text-xs font-bold text-yellow-600 uppercase">Yaklaşan</p><p class="text-2xl font-bold text-yellow-800" id="taskUpcomingCount">0</p></div><div class="text-3xl">⏰</div></div></div>
 <div class="bg-green-50 rounded-lg p-4 border-2 border-green-200"><div class="flex items-center justify-between"><div><p class="text-xs font-bold text-green-600 uppercase">Tamamlanan</p><p class="text-2xl font-bold text-green-800" id="taskCompletedCount">0</p></div><div class="text-3xl">✅</div></div></div>
+<div class="bg-purple-50 rounded-lg p-4 border-2 border-purple-200 cursor-pointer hover:bg-purple-100 transition-colors" onclick="showMissingReports()" title="Rapor istenip de yüklenmemiş tamamlanan görevler"><div class="flex items-center justify-between"><div><p class="text-xs font-bold text-purple-600 uppercase">Raporlanmayan</p><p class="text-2xl font-bold text-purple-800" id="taskMissingReportCount">0</p></div><div class="text-3xl">📎</div></div></div>
 </div>
 <div class="mb-4 bg-violet-50 border-2 border-violet-200 rounded-lg p-3">
 <div class="flex items-center gap-2 flex-wrap">
@@ -632,11 +666,14 @@ body.viewer-mode #loginModal *{pointer-events:auto!important;opacity:1!important
 </div>
 </div>
 <div class="mb-6">
-<div class="flex items-center justify-between mb-3 flex-wrap gap-2">
+<div class="flex items-center justify-between mb-3 flex-wrap gap-2 bg-violet-100 border-2 border-violet-300 rounded-lg p-3 cursor-pointer hover:bg-violet-200 transition-colors" onclick="toggleTaskSection('activeTasksSection')">
+<div class="flex items-center gap-3">
+<span id="activeTasksSectionArrow" class="text-violet-700 text-xl font-bold transition-transform inline-block" style="transform:rotate(90deg)">▶</span>
 <h3 class="text-lg font-bold text-violet-800">📋 Aktif Görevler</h3>
-<button onclick="sortActiveTasks()" class="admin-only-btn bg-violet-500 text-white px-3 py-1 rounded-lg text-xs font-medium">🔽 Sırala</button>
 </div>
-<div class="overflow-x-auto border-2 border-violet-200 rounded-lg">
+<button onclick="event.stopPropagation();sortActiveTasks()" class="admin-only-btn bg-violet-500 text-white px-3 py-1 rounded-lg text-xs font-medium">🔽 Sırala</button>
+</div>
+<div id="activeTasksSection" class="overflow-x-auto border-2 border-violet-200 rounded-lg">
 <table class="task-table" id="activeTaskTable">
 <thead><tr>
 <th style="width:18%;">Görev Adı</th><th style="width:12%;">Birim</th><th style="width:12%;">Sorumlular</th><th style="width:10%;text-align:center;">Verilme</th><th style="width:10%;text-align:center;">Periyot</th><th style="width:10%;text-align:center;">Sonraki</th><th style="width:10%;text-align:center;">Kalan</th><th style="width:8%;text-align:center;">Durum</th><th style="width:10%;text-align:center;">İşlem</th>
@@ -647,11 +684,14 @@ body.viewer-mode #loginModal *{pointer-events:auto!important;opacity:1!important
 <div id="activeTaskFilterEmpty" class="hidden text-center py-6 text-gray-500 text-sm bg-gray-50 rounded-lg mt-2">Bu filtreye uyan görev bulunamadı</div>
 </div>
 <div>
-<div class="flex items-center justify-between mb-3 flex-wrap gap-2">
+<div class="flex items-center justify-between mb-3 flex-wrap gap-2 bg-green-100 border-2 border-green-300 rounded-lg p-3 cursor-pointer hover:bg-green-200 transition-colors" onclick="toggleTaskSection('completedTasksSection')">
+<div class="flex items-center gap-3">
+<span id="completedTasksSectionArrow" class="text-green-700 text-xl font-bold transition-transform inline-block">▶</span>
 <h3 class="text-lg font-bold text-green-800">✅ Tamamlanan Görevler</h3>
-<button onclick="clearCompletedTasks()" class="admin-only-btn bg-red-500 text-white px-3 py-1 rounded-lg text-xs font-medium">🗑️ Temizle</button>
 </div>
-<div class="overflow-x-auto border-2 border-green-200 rounded-lg max-h-96 overflow-y-auto">
+<button onclick="event.stopPropagation();clearCompletedTasks()" class="admin-only-btn bg-red-500 text-white px-3 py-1 rounded-lg text-xs font-medium">🗑️ Temizle</button>
+</div>
+<div id="completedTasksSection" class="hidden overflow-x-auto border-2 border-green-200 rounded-lg max-h-96 overflow-y-auto">
 <table class="task-table" id="completedTaskTable">
 <thead class="sticky top-0"><tr>
 <th style="width:15%;">Görev Adı</th><th style="width:8%;">Birim</th><th style="width:10%;">Sorumlular</th><th style="width:9%;text-align:center;">Verilme</th><th style="width:9%;text-align:center;">Tamamlanma</th><th style="width:7%;text-align:center;">Periyot</th><th style="width:7%;text-align:center;">Durum</th><th style="width:11%;text-align:center;">İşaretleyen</th><th style="width:12%;text-align:center;">Yapanlar</th><th style="width:12%;text-align:center;">Katılmayanlar</th><th style="width:8%;text-align:center;">Rapor</th><th style="width:8%;text-align:center;">İşlem</th>
@@ -739,18 +779,57 @@ body.viewer-mode #loginModal *{pointer-events:auto!important;opacity:1!important
 <div id="panelStock" class="settings-panel">
 <div class="bg-white rounded-xl shadow-xl p-6">
 <div class="text-center mb-6"><div class="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-r from-orange-400 to-red-500 flex items-center justify-center text-white text-2xl">📦</div><h3 class="text-xl font-bold">Stok Ayarları</h3></div>
-<div class="space-y-3">
-<button onclick="showModal('kddModal')" class="admin-only-btn w-full bg-orange-500 text-white px-4 py-3 rounded-lg font-medium">🦺 KKD Ekle</button>
-<button onclick="openClothingModal()" class="admin-only-btn w-full bg-teal-500 text-white px-4 py-3 rounded-lg font-medium">👕 Kıyafet Ekle</button>
+
+<!-- EKLE BUTONLARI -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
+<button onclick="showModal('kddModal')" class="admin-only-btn bg-orange-500 text-white px-4 py-3 rounded-lg font-medium">🦺 KKD Ekle</button>
+<button onclick="openClothingModal()" class="admin-only-btn bg-teal-500 text-white px-4 py-3 rounded-lg font-medium">👕 Kıyafet Ekle</button>
 </div>
-<div class="bg-red-50 rounded-lg p-3 mt-4 border-2 border-red-200">
+
+<!-- TOPLU STOK SIFIRLAMA -->
+<div class="bg-red-50 rounded-lg p-3 mb-4 border-2 border-red-200">
 <label class="block text-sm font-bold text-red-800 mb-2">🗑️ Toplu Stok Sıfırlama</label>
-<select id="resetAllStockStatusSelect" class="viewer-allow w-full border-2 border-red-300 rounded-lg px-3 py-2 bg-white mb-2 text-sm font-semibold"><option value="">-- Statü Seçin --</option></select>
-<button onclick="resetAllStockByStatus()" class="admin-only-btn w-full bg-red-600 text-white px-3 py-2 rounded-lg font-bold text-xs">🗑️ Sıfırla</button>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+<div class="bg-white rounded-lg p-3 border-2 border-teal-300">
+<div class="text-xs font-bold text-teal-700 mb-2">👕 Kıyafet Stoğu</div>
+<select id="resetAllStockStatusSelect" class="viewer-allow w-full border-2 border-teal-300 rounded-lg px-3 py-2 bg-white mb-2 text-sm font-semibold"><option value="">-- Statü Seçin --</option></select>
+<button onclick="resetAllStockByStatus()" class="admin-only-btn w-full bg-teal-600 text-white px-3 py-2 rounded-lg font-bold text-xs">🗑️ Kıyafet Stoğunu Sıfırla</button>
 </div>
-<h4 class="font-semibold mb-3 mt-4">📋 Mevcut Kıyafetler</h4>
+<div class="bg-white rounded-lg p-3 border-2 border-orange-300">
+<div class="text-xs font-bold text-orange-700 mb-2">🦺 KKD Stoğu</div>
+<p class="text-xs text-gray-500 mb-2">Tüm KKD'lerin dağıtım sayıları sıfırlanır (stok korunur).</p>
+<button onclick="resetAllKddStock()" class="admin-only-btn w-full bg-orange-600 text-white px-3 py-2 rounded-lg font-bold text-xs">🗑️ KKD Stoğunu Sıfırla</button>
+</div>
+</div>
+</div>
+
+<!-- MEVCUT KIYAFETLER (AÇILIR-KAPANIR) -->
+<div class="border-2 border-teal-300 rounded-lg mb-4">
+<div class="flex items-center justify-between bg-teal-100 p-3 cursor-pointer hover:bg-teal-200 transition-colors rounded-t-lg" onclick="toggleStockSection('existingClothingSection')">
+<div class="flex items-center gap-3">
+<span id="existingClothingSectionArrow" class="text-teal-700 text-xl font-bold transition-transform inline-block">▶</span>
+<h4 class="font-semibold text-teal-900">👕 Mevcut Kıyafetler <span id="clothingCountBadge" class="text-xs bg-teal-200 text-teal-800 px-2 py-0.5 rounded-full font-bold ml-2">0</span></h4>
+</div>
+</div>
+<div id="existingClothingSection" class="hidden p-4 bg-white rounded-b-lg">
 <select id="clothingListSeasonFilter" class="viewer-allow w-full border-2 border-orange-300 rounded-lg px-3 py-2 text-sm bg-white font-semibold text-orange-800 mb-3" onchange="updateClothingList()"><option value="">Tümü</option><option value="yazlik">☀️ Yazlık</option><option value="kislik">❄️ Kışlık</option></select>
 <div id="clothingList" class="space-y-2 max-h-80 overflow-y-auto"></div>
+</div>
+</div>
+
+<!-- MEVCUT KKD'LER (AÇILIR-KAPANIR) -->
+<div class="border-2 border-orange-300 rounded-lg">
+<div class="flex items-center justify-between bg-orange-100 p-3 cursor-pointer hover:bg-orange-200 transition-colors rounded-t-lg" onclick="toggleStockSection('existingKddSection')">
+<div class="flex items-center gap-3">
+<span id="existingKddSectionArrow" class="text-orange-700 text-xl font-bold transition-transform inline-block">▶</span>
+<h4 class="font-semibold text-orange-900">🦺 Mevcut KKD'ler <span id="kddCountBadge" class="text-xs bg-orange-200 text-orange-800 px-2 py-0.5 rounded-full font-bold ml-2">0</span></h4>
+</div>
+</div>
+<div id="existingKddSection" class="hidden p-4 bg-white rounded-b-lg">
+<div id="kddList" class="space-y-2 max-h-80 overflow-y-auto"></div>
+</div>
+</div>
+
 </div>
 </div>
 
@@ -1041,6 +1120,34 @@ body.viewer-mode #loginModal *{pointer-events:auto!important;opacity:1!important
 <div id="distributionPrintPersonnelList" class="space-y-1"></div>
 </div>
 <div class="mt-2 text-xs text-purple-800 font-bold text-right">Seçili: <span id="distributionPrintSelectedCount">0</span> personel</div>
+</div>
+
+<!-- Malzeme Türü Filtresi (YENİ) -->
+<div class="bg-teal-50 rounded-lg p-4 mb-4 border-2 border-teal-200">
+<h4 class="font-bold text-teal-900 mb-3 text-sm">🎯 Malzeme Türü</h4>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+<label class="flex items-center gap-3 bg-white p-3 rounded-lg border-2 border-teal-300 cursor-pointer hover:bg-teal-100">
+<input type="radio" name="printMaterialType" value="all" checked class="w-4 h-4">
+<div>
+<div class="font-bold text-teal-900 text-sm">📦 Tümü</div>
+<div class="text-xs text-teal-700">Kıyafet + KKD</div>
+</div>
+</label>
+<label class="flex items-center gap-3 bg-white p-3 rounded-lg border-2 border-teal-300 cursor-pointer hover:bg-teal-100">
+<input type="radio" name="printMaterialType" value="clothing" class="w-4 h-4">
+<div>
+<div class="font-bold text-teal-900 text-sm">👕 Kıyafet</div>
+<div class="text-xs text-teal-700">Sadece kıyafet</div>
+</div>
+</label>
+<label class="flex items-center gap-3 bg-white p-3 rounded-lg border-2 border-teal-300 cursor-pointer hover:bg-teal-100">
+<input type="radio" name="printMaterialType" value="kdd" class="w-4 h-4">
+<div>
+<div class="font-bold text-teal-900 text-sm">🦺 KKD</div>
+<div class="text-xs text-teal-700">Sadece KKD</div>
+</div>
+</label>
+</div>
 </div>
 
 <!-- Yazdırma Türü -->
@@ -2058,6 +2165,29 @@ Görev Raporu / Kontrol Formu <span class="text-red-600">*</span>
 <div class="bg-white rounded-xl p-6 w-[750px] max-w-[97vw] shadow-2xl relative max-h-[92vh] overflow-y-auto">
 <button onclick="hideModal('addNewTaskModal')" class="absolute top-4 right-4 text-gray-400 text-2xl font-bold">✕</button>
 <h3 class="text-xl font-bold mb-4 text-center">📌 Yeni Görev Oluştur</h3>
+
+<!-- GÖREV KAYNAĞI SEÇİMİ -->
+<div class="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg p-4 mb-4 border-2 border-indigo-300">
+<h4 class="font-bold text-indigo-900 mb-3 text-sm">🎯 Görev Kaynağı</h4>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+<label class="flex items-center gap-2 bg-white px-3 py-2 rounded-lg border-2 border-indigo-200 cursor-pointer hover:bg-indigo-50 transition-all" id="newTaskSourceEmptyLabel">
+<input type="radio" name="newTaskSource" value="empty" checked onchange="onNewTaskSourceChange('empty')" class="w-4 h-4 accent-indigo-600">
+<span class="text-sm font-bold text-indigo-900">✏️ Sıfırdan Görev Oluştur</span>
+</label>
+<label class="flex items-center gap-2 bg-white px-3 py-2 rounded-lg border-2 border-indigo-200 cursor-pointer hover:bg-indigo-50 transition-all" id="newTaskSourceTemplateLabel">
+<input type="radio" name="newTaskSource" value="template" onchange="onNewTaskSourceChange('template')" class="w-4 h-4 accent-indigo-600">
+<span class="text-sm font-bold text-indigo-900">📋 Şablondan Seç</span>
+</label>
+</div>
+<div id="newTaskTemplateSelectWrapper" class="mt-3 hidden">
+<label class="block text-xs font-bold text-indigo-800 mb-1">📋 Şablon Seçin</label>
+<select id="newTaskTemplateSelect" class="w-full border-2 border-indigo-300 rounded-lg px-3 py-2 bg-white text-sm font-semibold" onchange="onNewTaskTemplatePicked()">
+<option value="">-- Şablon Seçin --</option>
+</select>
+<div id="newTaskTemplateInfo" class="hidden mt-2 text-xs text-indigo-700 bg-white rounded p-2 border border-indigo-200"></div>
+</div>
+</div>
+
 <input type="text" id="newTaskNameInput" placeholder="Görev adı *" class="w-full border-2 border-gray-200 rounded-lg px-4 py-3 mb-3">
 <select id="newTaskDepartmentSelect" class="w-full border-2 border-gray-200 rounded-lg px-4 py-3 mb-3" onchange="onNewTaskDepartmentChange()"><option value="">-- Birim Seçin --</option></select>
 <input type="number" id="newTaskPeriodInput" placeholder="Periyot (gün) *" class="w-full border-2 border-gray-200 rounded-lg px-4 py-3 mb-3">
@@ -2168,13 +2298,16 @@ const legacyClothing=[
     {name:'Ayakkabı',type:'ayakkabi',season:'tum',specifications:'Çelik burunlu',gender:'K',genders:{'K':{sizes:{'36':{stock:2,distributed:0,perPerson:1},'37':{stock:3,distributed:0,perPerson:1},'38':{stock:4,distributed:0,perPerson:1},'39':{stock:3,distributed:0,perPerson:1},'40':{stock:2,distributed:0,perPerson:1}}}}}
 ];
 
-let selectedKkds=[],selectedClothing=[],selectedTrainings=[],selectedCertificates=[],editingPersonnelId=null,clothingStockExpanded=false,clothingPreview=[],editingTrainingId=null,editingCertificateId=null;
+let selectedKkds=[],selectedClothing=[],selectedTrainings=[],selectedCertificates=[],editingPersonnelId=null,clothingStockExpanded=false,kddStockExpanded=false,clothingPreview=[],editingTrainingId=null,editingCertificateId=null;
 let renewalContext=null,currentPersonnelStatusForClothing='',currentClothingSeasonTab='all';
 let expandedPendingPersonnel=new Set(),expandedDistributionPersonnel=new Set();
 let selectedTaskTemplatePersons=[],selectedNewTaskPersons=[];
 let selectedNewTaskCompleters={responsible:[],personnel:[],external:[]};
 let selectedTaskTemplateCompleters={responsible:[],personnel:[],external:[]};
 let pendingFilters={personnel:[],department:[],status:[],itemCount:[]},activePendingFilterPopup=null;
+let kddPendingFilters={personnel:[],department:[],status:[],itemCount:[]},activeKddPendingFilterPopup=null;
+let expandedKddPendingPersonnel=new Set();
+let kddPendingSortMode='default';
 let mykBelgesiVarDurum=false;
 let mykMuafDurum=false;
 let mykYokDurum=false;
@@ -3889,9 +4022,106 @@ function removeKkdSelection(i){selectedKkds=selectedKkds.filter(x=>x!==i);update
 function removeClothingSelection(i){selectedClothing=selectedClothing.filter(x=>x.index!==i);updateSelectionDisplays();}
 
 function toggleClothingStockExpand(){clothingStockExpanded=!clothingStockExpanded;document.getElementById('clothingExpandBtn').textContent=clothingStockExpanded?'📂 Aç':'📁 Kapat';updateStockTables();}
+
+// ==================== STOK ANA BÖLÜMLERİ AÇILIR-KAPANIR ====================
+function toggleStockMainSection(sectionId){
+    const section=document.getElementById(sectionId);
+    if(!section)return;
+    const arrowId=sectionId+'Arrow';
+    const arrow=document.getElementById(arrowId);
+    if(section.classList.contains('hidden')){
+        section.classList.remove('hidden');
+        if(arrow)arrow.style.transform='rotate(90deg)';
+        // Açıldığında içeriği yenile
+        if(sectionId==='clothingStockMainSection'||sectionId==='kddStockMainSection'){
+            updateStockTables();
+        } else if(sectionId==='kddPendingMainSection'){
+            if(typeof updateKddPendingTable==='function')updateKddPendingTable();
+        } else if(sectionId==='clothingPendingMainSection'){
+            if(typeof updatePendingTables==='function')updatePendingTables();
+        }
+    } else {
+        section.classList.add('hidden');
+        if(arrow)arrow.style.transform='rotate(0deg)';
+    }
+}
+
+function toggleKddStockExpand(){kddStockExpanded=!kddStockExpanded;const btn=document.getElementById('kddExpandBtn');if(btn)btn.textContent=kddStockExpanded?'📂 Aç':'📁 Kapat';updateStockTables();}
 function toggleClothingDetail(idx){const rows=document.querySelectorAll('.clothing-child-'+idx);const arrow=document.getElementById('arrow-'+idx);let nowHidden=true;rows.forEach(r=>{if(r.classList.contains('hidden')){r.classList.remove('hidden');nowHidden=false;}else r.classList.add('hidden');});if(arrow)arrow.style.transform=nowHidden?'':'rotate(90deg)';}
+// Aynı fonksiyon KKD detayları için de çalışır (clothing-child-* class'ları kullanılıyor)
 function updateStockTables(){
-    const st=document.getElementById('stockTable');if(st){st.innerHTML='';data.kkds.forEach(k=>{const rem=k.stock-k.distributed;const sc=rem<=0?'text-red-600 font-bold':rem<=5?'text-yellow-600':'text-green-600';st.innerHTML+='<tr><td class="px-3 py-2 text-sm text-blue-700 font-medium">🦺 '+escapeHtml(k.name)+'</td><td class="px-3 py-2 text-sm">'+k.stock+'</td><td class="px-3 py-2 text-sm text-green-600">'+k.distributed+'</td><td class="px-3 py-2 text-sm '+sc+'">'+rem+'</td><td class="px-3 py-2 text-sm font-bold text-purple-700">'+(k.perPerson||1)+'</td></tr>';});}
+    // === KKD STOK TABLOSU (Kıyafet stok tablosu ile aynı özellikler) ===
+    const st=document.getElementById('stockTable');
+    if(st){
+        st.innerHTML='';
+        
+        // Filtre ve sıralama değerlerini al
+        const searchTerm=(document.getElementById('kddStockSearchInput')?.value||'').toLowerCase().trim();
+        const statusFilter=document.getElementById('kddStockStatusFilter')?.value||'';
+        const sortMode=document.getElementById('kddStockSortFilter')?.value||'default';
+        
+        // Kopya oluştur ve işle
+        let kkdList=data.kkds.map((k,i)=>{
+            const rem=k.stock-k.distributed;
+            return {...k,_idx:i,_remaining:rem};
+        });
+        
+        // Arama filtresi
+        if(searchTerm){
+            kkdList=kkdList.filter(k=>k.name.toLowerCase().includes(searchTerm));
+        }
+        
+        // Durum filtresi
+        if(statusFilter){
+            kkdList=kkdList.filter(k=>{
+                const rem=k._remaining;
+                if(statusFilter==='available')return rem>5;
+                if(statusFilter==='low')return rem>0&&rem<=5;
+                if(statusFilter==='out')return rem<=0;
+                if(statusFilter==='given')return k.distributed>0;
+                if(statusFilter==='notgiven')return k.distributed===0;
+                return true;
+            });
+        }
+        
+        // Sıralama
+        if(sortMode==='name')kkdList.sort((a,b)=>a.name.localeCompare(b.name,'tr'));
+        else if(sortMode==='stock_asc')kkdList.sort((a,b)=>a.stock-b.stock);
+        else if(sortMode==='stock_desc')kkdList.sort((a,b)=>b.stock-a.stock);
+        else if(sortMode==='dist_desc')kkdList.sort((a,b)=>b.distributed-a.distributed);
+        else if(sortMode==='remaining_asc')kkdList.sort((a,b)=>a._remaining-b._remaining);
+        
+        if(kkdList.length===0){
+            st.innerHTML='<tr><td colspan="6" class="text-center py-4 text-gray-500">'+(data.kkds.length===0?'Henüz KKD yok':'Bu filtreye uyan KKD bulunamadı')+'</td></tr>';
+        } else {
+            kkdList.forEach(k=>{
+                const rem=k._remaining;
+                const sc=rem<=0?'text-red-600 font-bold':rem<=5?'text-orange-600 font-bold':'text-green-600';
+                
+                // Durum badge
+                let statusBadge='';
+                if(rem<=0){
+                    statusBadge='<span class="px-2 py-1 rounded text-xs font-bold bg-red-100 text-red-800">❌ Stok Bitti</span>';
+                } else if(rem<=5){
+                    statusBadge='<span class="px-2 py-1 rounded text-xs font-bold bg-yellow-100 text-yellow-800">⚠️ Az Kaldı</span>';
+                } else {
+                    statusBadge='<span class="px-2 py-1 rounded text-xs font-bold bg-green-100 text-green-800">✅ Stokta</span>';
+                }
+                
+                // Ana satır (parent - tıklanabilir)
+                const uid='kdd_stock_'+k._idx;
+                const isExp=typeof kddStockExpanded!=='undefined'?kddStockExpanded:false;
+                
+                st.innerHTML+='<tr class="clothing-parent-row bg-orange-100 hover:bg-orange-200 cursor-pointer" data-uid="'+uid+'"><td class="px-3 py-2 text-sm font-bold text-orange-900"><span id="arrow-'+uid+'" class="arrow-icon '+(isExp?'rotate-90':'')+'">▶</span> 🦺 '+escapeHtml(k.name)+'</td><td class="px-3 py-2 text-sm font-semibold">'+k.stock+'</td><td class="px-3 py-2 text-sm text-green-600 font-semibold">'+k.distributed+'</td><td class="px-3 py-2 text-sm '+sc+'">'+rem+'</td><td class="px-3 py-2 text-sm font-bold text-purple-700">'+(k.perPerson||1)+'</td><td class="px-3 py-2 text-sm">'+statusBadge+'</td></tr>';
+                
+                // Alt satır (child) - detay bilgiler
+                const hiddenCls=isExp?'':'hidden';
+                st.innerHTML+='<tr class="clothing-child-'+uid+' clothing-child-row '+hiddenCls+'"><td class="px-3 py-2 text-sm pl-8 text-gray-600">└ Detaylar</td><td class="px-3 py-2 text-sm">📦 Toplam: <strong>'+k.stock+'</strong></td><td class="px-3 py-2 text-sm">📤 Dağıtılan: <strong>'+k.distributed+'</strong></td><td class="px-3 py-2 text-sm '+sc+'">✅ Kalan: <strong>'+rem+'</strong></td><td class="px-3 py-2 text-sm">👤 Kişi Başı: <strong>'+(k.perPerson||1)+'</strong></td><td class="px-3 py-2 text-sm text-xs text-gray-500">'+(k.shelfLife?'📅 Raf Ömrü: '+k.shelfLife+' ay':'')+'</td></tr>';
+            });
+        }
+    }
+    
+    // === KIYAFET STOK TABLOSU (mevcut kod aynen kalıyor) ===
     const cst=document.getElementById('clothingStockTable');if(!cst)return;cst.innerHTML='';
     if(!data.clothing||data.clothing.length===0){cst.innerHTML='<tr><td colspan="6" class="text-center py-4 text-gray-500">Henüz kıyafet yok</td></tr>';return;}
     const filterStat=document.getElementById('clothingStockStatusFilter')?document.getElementById('clothingStockStatusFilter').value:'';
@@ -3924,11 +4154,8 @@ function updateStockTables(){
     if(!anyRow){cst.innerHTML='<tr><td colspan="6" class="text-center py-4 text-gray-500">Bu filtre için kıyafet bulunamadı</td></tr>';}
 }
 function updatePendingTables(){
-    const kt=document.getElementById('kddPendingTable');
-    if(kt){kt.innerHTML='';let count=0;
-        data.personnel.forEach(p=>{(p.requiredKkds||[]).forEach(rk=>{const isD=(p.kkds||[]).some(k=>k.name===rk.name);if(!isD){const kdd=data.kkds.find(k=>k.name===rk.name);if(!kdd)return;count++;const pp=kdd.perPerson||1;const rem=kdd.stock-kdd.distributed;const canDo=rem>=pp;const kddIdx=data.kkds.indexOf(kdd);const btnHtml=isAdmin?'<button class="distribute-kdd-btn bg-orange-500 text-white px-4 py-2 rounded-lg text-sm font-medium" data-pid="'+p.id+'" data-kddidx="'+kddIdx+'" '+(!canDo?'disabled style="opacity:.5"':'')+'>✅ Verildi</button>':'<span class="text-gray-400 text-xs">Yetki yok</span>';kt.innerHTML+='<tr class="hover:bg-orange-50"><td class="px-4 py-3 text-sm font-medium">'+escapeHtml(p.name)+'</td><td class="px-4 py-3 text-sm">'+escapeHtml(p.department)+'</td><td class="px-4 py-3 text-sm">'+escapeHtml(p.status)+'</td><td class="px-4 py-3 text-sm">🦺 '+escapeHtml(rk.name)+'</td><td class="px-4 py-3 text-center text-sm font-bold text-purple-700">'+pp+'</td><td class="px-4 py-3 text-center">'+btnHtml+'</td></tr>';}});});
-        if(count===0)kt.innerHTML='<tr><td colspan="6" class="text-center py-6 text-gray-500">Bekleyen yok</td></tr>';
-        const ec=document.getElementById('kddPendingCount');if(ec)ec.textContent=count;}
+    // KKD pending tablosu artık kendi fonksiyonu ile çağrılıyor
+    updateKddPendingTable();
     const ct=document.getElementById('clothingPendingTable');
     if(ct){ct.innerHTML='';
         const filterSeason=document.getElementById('clothingPendingSeasonFilter')?document.getElementById('clothingPendingSeasonFilter').value:'';
@@ -3960,6 +4187,1178 @@ function updatePendingTables(){
         });}
 }
 function togglePendingGroup(personnelId){if(expandedPendingPersonnel.has(personnelId))expandedPendingPersonnel.delete(personnelId);else expandedPendingPersonnel.add(personnelId);document.querySelectorAll('tr[data-parent="'+personnelId+'"]').forEach(r=>{if(expandedPendingPersonnel.has(personnelId))r.classList.remove('pending-child-hidden');else r.classList.add('pending-child-hidden');});const arrow=document.getElementById('pending-arrow-'+personnelId);if(arrow){if(expandedPendingPersonnel.has(personnelId))arrow.classList.add('rotated');else arrow.classList.remove('rotated');}}
+
+// ==================== KKD DAĞITIM BEKLEYENLER ====================
+function updateKddPendingTable(){
+    const kt=document.getElementById('kddPendingTable');
+    if(!kt)return;
+    kt.innerHTML='';
+    
+    const sortMode=document.getElementById('kddPendingSortFilter')?document.getElementById('kddPendingSortFilter').value:'default';
+    kddPendingSortMode=sortMode;
+    
+    // Gruplama: personnelId -> {personnel, department, status, items:[]}
+    const grouped={};
+    data.personnel.forEach(p=>{
+        (p.requiredKkds||[]).forEach(rk=>{
+            const isD=(p.kkds||[]).some(k=>k.name===rk.name);
+            if(isD)return;
+            const kdd=data.kkds.find(k=>k.name===rk.name);
+            if(!kdd)return;
+            const pp=kdd.perPerson||1;
+            const rem=kdd.stock-kdd.distributed;
+            const canDo=rem>=pp;
+            if(!grouped[p.id])grouped[p.id]={personnelId:p.id,personnel:p.name,department:p.department,status:p.status,items:[]};
+            grouped[p.id].items.push({kddName:rk.name,kddIdx:data.kkds.indexOf(kdd),pp,rem,canDo});
+        });
+    });
+    
+    let personList=Object.values(grouped);
+    
+    // Filtreler
+    if(kddPendingFilters.personnel.length>0)personList=personList.filter(g=>kddPendingFilters.personnel.includes(g.personnel));
+    if(kddPendingFilters.department.length>0)personList=personList.filter(g=>kddPendingFilters.department.includes(g.department||'(Boş)'));
+    if(kddPendingFilters.status.length>0)personList=personList.filter(g=>kddPendingFilters.status.includes(g.status||'(Boş)'));
+    if(kddPendingFilters.itemCount.length>0)personList=personList.filter(g=>kddPendingFilters.itemCount.includes(g.items.length));
+    
+    // Sıralama
+    if(sortMode==='name')personList.sort((a,b)=>a.personnel.localeCompare(b.personnel,'tr'));
+    else if(sortMode==='department')personList.sort((a,b)=>a.department.localeCompare(b.department,'tr')||a.personnel.localeCompare(b.personnel,'tr'));
+    
+    const totalItems=personList.reduce((sum,g)=>sum+g.items.length,0);
+    const ec=document.getElementById('kddPendingCount');
+    if(ec)ec.textContent=totalItems;
+    
+    if(personList.length===0){
+        kt.innerHTML='<tr><td colspan="6" class="text-center py-6 text-gray-500">Bekleyen KKD yok</td></tr>';
+        return;
+    }
+    
+    personList.forEach(grp=>{
+        const isExpanded=expandedKddPendingPersonnel.has(grp.personnelId);
+        const actionsHtml=isAdmin
+            ?'<button onclick="event.stopPropagation();giveAllKkdToPersonnel('+grp.personnelId+')" class="bg-green-600 text-white px-3 py-2 rounded-lg text-xs font-bold">✅ Tümünü Ver</button><button onclick="event.stopPropagation();printKddDistributionForm('+grp.personnelId+')" class="bg-blue-600 text-white px-3 py-2 rounded-lg text-xs font-bold">🖨️ Yazdır</button><button onclick="event.stopPropagation();removeKddPending('+grp.personnelId+')" class="bg-red-600 text-white px-3 py-2 rounded-lg text-xs font-bold">❌ Çıkar</button>'
+            :'<button onclick="event.stopPropagation();printKddDistributionForm('+grp.personnelId+')" class="bg-blue-600 text-white px-3 py-2 rounded-lg text-xs font-bold">🖨️ Yazdır</button>';
+        
+        kt.innerHTML+='<tr class="pending-group-row" onclick="toggleKddPendingGroup('+grp.personnelId+')"><td class="px-4 py-3 text-center"><span class="pending-group-arrow '+(isExpanded?'rotated':'')+'" id="kdd-pending-arrow-'+grp.personnelId+'">▶</span></td><td class="px-4 py-3 text-sm font-bold text-teal-900">👤 '+escapeHtml(grp.personnel)+'</td><td class="px-4 py-3 text-sm">'+escapeHtml(grp.department)+'</td><td class="px-4 py-3 text-sm"><span class="px-2 py-1 rounded text-xs font-bold bg-gray-100">'+escapeHtml(grp.status)+'</span></td><td class="px-4 py-3 text-center"><span class="bg-orange-200 text-orange-900 px-3 py-1 rounded-full font-bold text-xs">'+grp.items.length+' kalem</span></td><td class="px-4 py-3 text-center"><div class="flex gap-1 justify-center flex-wrap">'+actionsHtml+'</div></td></tr>';
+        
+        grp.items.forEach(it=>{
+            const rowCls=it.canDo?'pending-child-row':'pending-child-row bg-red-50';
+            const remCls=it.canDo?'text-green-600':'text-red-600 font-bold';
+            const remLabel=it.canDo?it.rem:'0 (STOK YOK)';
+            const hiddenCls=isExpanded?'':'pending-child-hidden';
+            const btnHtml=isAdmin?'<button class="distribute-kdd-btn bg-orange-500 text-white px-3 py-1 rounded-lg text-xs font-medium" data-pid="'+grp.personnelId+'" data-kddidx="'+it.kddIdx+'" '+(!it.canDo?'disabled style="opacity:.5"':'')+'>'+(it.canDo?'✅ Verildi':'❌ Stok Yok')+'</button>':'<span class="text-gray-400 text-xs">-</span>';
+            kt.innerHTML+='<tr class="'+rowCls+' '+hiddenCls+'" data-kdd-parent="'+grp.personnelId+'"><td class="px-4 py-2 text-center text-gray-400">└</td><td class="px-4 py-2 text-sm pl-6">🦺 '+escapeHtml(it.kddName)+'</td><td class="px-4 py-2 text-sm">'+escapeHtml(grp.department||'-')+'</td><td class="px-4 py-2 text-sm"><span class="px-2 py-1 rounded text-xs font-bold bg-gray-100">'+escapeHtml(grp.status||'-')+'</span></td><td class="px-4 py-2 text-center text-sm"><span class="font-bold text-purple-700">'+it.pp+'</span> adet<br><span class="'+remCls+' text-xs">Stok: '+remLabel+'</span></td><td class="px-4 py-2 text-center">'+btnHtml+'</td></tr>';
+        });
+    });
+}
+
+function toggleKddPendingGroup(personnelId){
+    if(expandedKddPendingPersonnel.has(personnelId))expandedKddPendingPersonnel.delete(personnelId);
+    else expandedKddPendingPersonnel.add(personnelId);
+    document.querySelectorAll('tr[data-kdd-parent="'+personnelId+'"]').forEach(r=>{
+        if(expandedKddPendingPersonnel.has(personnelId))r.classList.remove('pending-child-hidden');
+        else r.classList.add('pending-child-hidden');
+    });
+    const arrow=document.getElementById('kdd-pending-arrow-'+personnelId);
+    if(arrow){
+        if(expandedKddPendingPersonnel.has(personnelId))arrow.classList.add('rotated');
+        else arrow.classList.remove('rotated');
+    }
+}
+
+function refreshAllKddPending(){
+    if(!isAdmin){alert('❌ Yönetici girişi gerekli!');return}
+    if(!confirm('KKD listesi yenilenecek. Onaylıyor musunuz?'))return;
+    data.personnel.forEach(p=>{if(p.kkds&&p.kkds.length>0){p.kkds=[];}});
+    expandedKddPendingPersonnel.clear();
+    saveToLocalStorage();
+    updateAllStats();
+    showSuccessMessage('🔄 KKD listesi yenilendi!');
+}
+
+function giveAllKkdToPersonnel(pid){
+    if(!isAdmin){alert('❌ Yönetici girişi gerekli!');return}
+    const p=data.personnel.find(x=>x.id===pid);
+    if(!p){alert('Personel bulunamadı!');return}
+    const pending=[];
+    (p.requiredKkds||[]).forEach(rk=>{
+        const isD=(p.kkds||[]).some(k=>k.name===rk.name);
+        if(isD)return;
+        const kdd=data.kkds.find(k=>k.name===rk.name);
+        if(!kdd)return;
+        const pp=kdd.perPerson||1;
+        const rem=kdd.stock-kdd.distributed;
+        pending.push({kddName:rk.name,kdd,pp,rem,canDo:rem>=pp});
+    });
+    if(pending.length===0){alert('Bu personel için bekleyen KKD yok!');return}
+    const cannotDo=pending.filter(x=>!x.canDo);
+    let msg=p.name+' için '+pending.length+' KKD verilecek.';
+    if(cannotDo.length>0)msg+='\n\n⚠️ '+cannotDo.length+' KKD için stok yetersiz!';
+    msg+='\n\nSadece stok YETERLİ olanlar verilecek. Onaylıyor musunuz?';
+    if(!confirm(msg))return;
+    let givenCount=0;
+    pending.forEach(it=>{
+        if(!it.canDo)return;
+        const gd=new Date();
+        const ed=new Date();
+        ed.setMonth(ed.getMonth()+(it.kdd.shelfLife||12));
+        p.kkds.push({name:it.kddName,givenDate:gd,expiryDate:ed,quantity:it.pp});
+        it.kdd.distributed+=it.pp;
+        data.distributionHistory.push({date:gd.toISOString(),personnelName:p.name,department:p.department,type:'KKD',itemName:it.kddName,size:'',quantity:it.pp});
+        givenCount++;
+    });
+    saveToLocalStorage();
+    expandedKddPendingPersonnel.delete(pid);
+    updateAllStats();
+    showSuccessMessage('✅ '+p.name+' için '+givenCount+' KKD verildi!');
+}
+
+function removeKddPending(pid){
+    if(!isAdmin){alert('❌ Yönetici girişi gerekli!');return}
+    const p=data.personnel.find(x=>x.id===pid);
+    if(!p)return;
+    if(!confirm(p.name+' KKD bekleyen listeden çıkarılsın mı?'))return;
+    (p.requiredKkds||[]).forEach(rk=>{
+        const isD=(p.kkds||[]).some(k=>k.name===rk.name);
+        if(!isD){
+            p.kkds.push({name:rk.name,givenDate:new Date(),expiryDate:new Date(),quantity:0,markedAsGivenWithoutStock:true});
+        }
+    });
+    expandedKddPendingPersonnel.delete(pid);
+    saveToLocalStorage();
+    updateAllStats();
+    showSuccessMessage('✅ '+p.name+' KKD listesinden çıkarıldı.');
+}
+
+// ==================== KKD FİLTRELEME ====================
+function toggleKddPendingFilter(evt,col){
+    evt.stopPropagation();
+    if(activeKddPendingFilterPopup===col){closeAllKddPendingFilters();return;}
+    closeAllKddPendingFilters();
+    activeKddPendingFilterPopup=col;
+    
+    const allGroups=getKddPendingGroupsForFilter();
+    const values=new Set();
+    allGroups.forEach(g=>{
+        if(col==='personnel')values.add(g.personnel);
+        else if(col==='department')values.add(g.department||'(Boş)');
+        else if(col==='status')values.add(g.status||'(Boş)');
+        else if(col==='itemCount')values.add(g.items.length);
+    });
+    const valsArr=[...values].sort((a,b)=>{
+        if(typeof a==='number'&&typeof b==='number')return a-b;
+        return String(a).localeCompare(String(b),'tr');
+    });
+    const parent=document.getElementById('kddPendingFilterPopups');
+    const btn=document.getElementById('kddFilterBtn_'+col);
+    if(!parent||!btn)return;
+    const selected=kddPendingFilters[col]||[];
+    let html='<div class="filter-popup" id="kddFilterPopup_'+col+'"><div class="filter-popup-title">'+getKddFilterTitle(col)+'</div>';
+    html+='<label class="filter-popup-item"><input type="checkbox" class="kdd-filter-all-checkbox" data-col="'+col+'" '+(selected.length===0?'checked':'')+'> <strong>(Tümü)</strong></label>';
+    valsArr.forEach(v=>{
+        const isChecked=selected.length===0||selected.includes(v);
+        html+='<label class="filter-popup-item"><input type="checkbox" class="kdd-filter-value-checkbox" data-col="'+col+'" data-val="'+String(v).replace(/"/g,'&quot;')+'" '+(isChecked?'checked':'')+'> '+(col==='itemCount'?v+' kalem':escapeHtml(v))+'</label>';
+    });
+    html+='<div class="filter-popup-actions"><button class="btn-clear kdd-filter-clear-btn" data-col="'+col+'">🗑️ Temizle</button><button class="btn-apply kdd-filter-apply-btn" data-col="'+col+'">✓ Uygula</button><button class="btn-close kdd-filter-close-btn">✕ Kapat</button></div></div>';
+    parent.innerHTML=html;
+    
+    const popup=document.getElementById('kddFilterPopup_'+col);
+    const rect=btn.getBoundingClientRect();
+    const parentRect=parent.getBoundingClientRect();
+    popup.style.left=(rect.left-parentRect.left)+'px';
+    popup.style.top=(rect.bottom-parentRect.top+4)+'px';
+    btn.classList.add('active');
+    setTimeout(()=>{document.addEventListener('click',outsideKddFilterClick)},50);
+}
+
+function outsideKddFilterClick(e){
+    if(!e.target.closest('#kddPendingFilterPopups .filter-popup')&&!e.target.closest('#kddPendingTableMain .filter-btn'))closeAllKddPendingFilters();
+}
+function closeAllKddPendingFilters(){
+    const parent=document.getElementById('kddPendingFilterPopups');
+    if(parent)parent.innerHTML='';
+    document.querySelectorAll('#kddPendingTableMain .filter-btn').forEach(b=>b.classList.remove('active'));
+    activeKddPendingFilterPopup=null;
+    document.removeEventListener('click',outsideKddFilterClick);
+}
+function getKddFilterTitle(col){
+    const m={personnel:'Personel',department:'Birim',status:'Statü',itemCount:'Bekleyen KKD'};
+    return m[col]||col;
+}
+function getKddPendingGroupsForFilter(){
+    const grouped={};
+    data.personnel.forEach(p=>{
+        (p.requiredKkds||[]).forEach(rk=>{
+            const isD=(p.kkds||[]).some(k=>k.name===rk.name);
+            if(isD)return;
+            const kdd=data.kkds.find(k=>k.name===rk.name);
+            if(!kdd)return;
+            if(!grouped[p.id])grouped[p.id]={personnelId:p.id,personnel:p.name,department:p.department,status:p.status,items:[]};
+            grouped[p.id].items.push({kddName:rk.name,kddIdx:data.kkds.indexOf(kdd),pp:kdd.perPerson||1});
+        });
+    });
+    return Object.values(grouped);
+}
+
+// KKD filtre click handler'ları
+document.addEventListener('click',function(e){
+    const filterAll=e.target.closest('.kdd-filter-all-checkbox');
+    if(filterAll){
+        const col=filterAll.getAttribute('data-col');
+        if(filterAll.checked){
+            kddPendingFilters[col]=[];
+            document.querySelectorAll('#kddFilterPopup_'+col+' input.kdd-filter-value-checkbox').forEach(cb=>cb.checked=true);
+        }
+        return;
+    }
+    const filterVal=e.target.closest('.kdd-filter-value-checkbox');
+    if(filterVal){
+        const col=filterVal.getAttribute('data-col');
+        const v=filterVal.getAttribute('data-val');
+        let arr=kddPendingFilters[col]||[];
+        const numV=parseInt(v);
+        const actualV=!isNaN(numV)&&String(numV)===v?numV:v;
+        if(filterVal.checked){
+            if(arr.length===0){
+                const allGroups=getKddPendingGroupsForFilter();
+                const allVals=new Set();
+                allGroups.forEach(g=>{allVals.add(String(col==='personnel'?g.personnel:col==='department'?(g.department||'(Boş)'):col==='status'?(g.status||'(Boş)'):g.items.length))});
+                arr=[...allVals].filter(x=>x!==String(actualV));
+            } else {
+                arr=arr.filter(x=>String(x)!==String(actualV));
+            }
+            if(arr.length===0){
+                kddPendingFilters[col]=[];
+                document.querySelectorAll('#kddFilterPopup_'+col+' input.kdd-filter-value-checkbox').forEach(x=>x.checked=true);
+            } else {
+                kddPendingFilters[col]=arr;
+            }
+        } else {
+            if(arr.length===0){
+                const allGroups=getKddPendingGroupsForFilter();
+                const allVals=new Set();
+                allGroups.forEach(g=>{allVals.add(String(col==='personnel'?g.personnel:col==='department'?(g.department||'(Boş)'):col==='status'?(g.status||'(Boş)'):g.items.length))});
+                arr=[...allVals].filter(x=>x!==String(actualV));
+            } else if(!arr.includes(actualV)){
+                arr.push(actualV);
+            }
+            kddPendingFilters[col]=arr;
+        }
+        return;
+    }
+    const filterClear=e.target.closest('.kdd-filter-clear-btn');
+    if(filterClear){
+        const col=filterClear.getAttribute('data-col');
+        kddPendingFilters[col]=[];
+        closeAllKddPendingFilters();
+        updateKddPendingTable();
+        return;
+    }
+    const filterApply=e.target.closest('.kdd-filter-apply-btn');
+    if(filterApply){
+        const col=filterApply.getAttribute('data-col');
+        if(col==='itemCount')kddPendingFilters[col]=(kddPendingFilters[col]||[]).map(x=>{const n=parseInt(x);return isNaN(n)?x:n;});
+        closeAllKddPendingFilters();
+        updateKddPendingTable();
+        return;
+    }
+    const filterClose=e.target.closest('.kdd-filter-close-btn');
+    if(filterClose){
+        closeAllKddPendingFilters();
+        return;
+    }
+});
+
+// ==================== KKD TEK TEK DAĞITIM ====================
+function printKddDistributionForm(pid){
+    const p=data.personnel.find(x=>x.id===pid);
+    if(!p){alert('Personel bulunamadı!');return}
+    const pending=[];
+    (p.requiredKkds||[]).forEach(rk=>{
+        const isD=(p.kkds||[]).some(k=>k.name===rk.name);
+        if(isD)return;
+        const kdd=data.kkds.find(k=>k.name===rk.name);
+        if(!kdd)return;
+        pending.push({kddName:rk.name,pp:kdd.perPerson||1});
+    });
+    if(pending.length===0){alert('Bu personel için bekleyen KKD yok!');return}
+    
+    let html='<div style="font-family:Arial,Helvetica,sans-serif;font-size:12px;padding:14px;color:#000;">';
+    html+='<div style="text-align:center;margin-bottom:16px;"><h1 style="font-size:18px;margin:0;font-weight:bold;letter-spacing:1px;">KKD Malzeme Listesi</h1></div>';
+    html+='<div style="margin-bottom:12px;padding:8px;background:#fff7ed;border:1px solid #c2410c;font-size:11px;"><strong>Personel:</strong> '+escapeHtml(p.name)+' | <strong>Birim:</strong> '+escapeHtml(p.department||'-')+' | <strong>Tarih:</strong> '+new Date().toLocaleDateString('tr-TR')+'</div>';
+    html+='<table style="width:100%;border-collapse:collapse;font-size:12px;"><thead><tr><th style="border:1px solid #000;padding:6px;background:#fed7aa;width:40px;text-align:center;">#</th><th style="border:1px solid #000;padding:6px;background:#fed7aa;text-align:left;">KKD Adı</th><th style="border:1px solid #000;padding:6px;background:#fed7aa;width:80px;text-align:center;">Adet</th><th style="border:1px solid #000;padding:6px;background:#fed7aa;width:120px;text-align:center;">İmza</th></tr></thead><tbody>';
+    pending.forEach((it,i)=>{
+        html+='<tr><td style="border:1px solid #000;padding:6px;text-align:center;">'+(i+1)+'</td><td style="border:1px solid #000;padding:6px;">'+escapeHtml(it.kddName)+'</td><td style="border:1px solid #000;padding:6px;text-align:center;">'+it.pp+'</td><td style="border:1px solid #000;padding:6px;">&nbsp;</td></tr>';
+    });
+    html+='</tbody></table>';
+    html+='<div style="margin-top:18px;padding:10px;border:1px solid #000;background:#f9fafb;font-size:11px;line-height:1.5;text-align:justify;"><strong>YASAL UYARI:</strong> Yukarıda belirtilen KKD malzemelerini 4857 sayılı İş Kanunu ve işyeri çalışma kurallarına uygun olarak, yalnızca işyerinde ve işim gereği kullanmak üzere eksiksiz ve sağlam olarak teslim aldığımı beyan ve taahhüt ederim.</div>';
+    html+='<div style="margin-top:40px;display:flex;justify-content:space-between;gap:40px;"><div style="flex:1;text-align:center;"><div style="border-top:1px solid #000;padding-top:6px;font-weight:bold;font-size:12px;">TESLİM EDEN</div><div style="margin-top:50px;font-size:11px;">Ad Soyad / İmza</div></div><div style="flex:1;text-align:center;"><div style="border-top:1px solid #000;padding-top:6px;font-weight:bold;font-size:12px;">TESLİM ALAN</div><div style="margin-top:50px;font-size:11px;">'+escapeHtml(p.name)+'<br>İmza</div></div></div></div>';
+    
+    openPrintPreview('KKD DAĞITIM FORMU',p.name+' | '+pending.length+' kalem',html);
+}
+
+// ==================== KKD DAĞITIM BEKLEYENLER YAZDIRMA MODALI ====================
+function openKddPendingPrintModal(){
+    if(!isAdmin && !isViewer){alert('❌ Giriş yapmanız gerekiyor!');return}
+    const pendingGroups=getKddPendingGroupsForFilter();
+    if(pendingGroups.length===0){
+        alert('Yazdırılacak bekleyen KKD yok!');
+        return;
+    }
+    renderKddPendingPrintModal(pendingGroups);
+    showModal('kddPendingPrintChoiceModal');
+}
+
+function renderKddPendingPrintModal(pendingGroups){
+    const existing=document.getElementById('kddPendingPrintChoiceModal');
+    if(existing)existing.remove();
+    
+    const modal=document.createElement('div');
+    modal.id='kddPendingPrintChoiceModal';
+    modal.className='modal hidden fixed inset-0 bg-black bg-opacity-60 items-center justify-center z-[95]';
+    modal.innerHTML=`
+        <div class="bg-white rounded-xl p-6 w-[800px] max-w-[97vw] shadow-2xl relative max-h-[94vh] overflow-y-auto">
+            <button onclick="hideModal('kddPendingPrintChoiceModal')" class="absolute top-4 right-4 text-gray-400 text-2xl font-bold">✕</button>
+            <div class="text-center mb-5">
+                <div class="w-16 h-16 mx-auto mb-3 rounded-full bg-gradient-to-r from-orange-500 to-red-600 flex items-center justify-center text-white text-2xl">🖨️</div>
+                <h3 class="text-xl font-bold">KKD Dağıtım Bekleyenler Yazdır</h3>
+                <p class="text-xs text-gray-500 mt-1">Yazdırma türü ve personel seçimi</p>
+            </div>
+
+            <div class="bg-amber-50 rounded-lg p-4 mb-4 border-2 border-amber-200">
+                <h4 class="font-bold text-amber-900 mb-3 text-sm">📋 Yazdırma Türü</h4>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    <label class="flex items-center gap-3 bg-white p-3 rounded-lg border-2 border-amber-300 cursor-pointer hover:bg-amber-100">
+                        <input type="radio" name="kddPendingPrintType" value="name" checked class="w-4 h-4">
+                        <div>
+                            <div class="font-bold text-amber-900 text-sm">👥 İsim Listesi</div>
+                            <div class="text-xs text-amber-700">Personel bazlı özet</div>
+                        </div>
+                    </label>
+                    <label class="flex items-center gap-3 bg-white p-3 rounded-lg border-2 border-amber-300 cursor-pointer hover:bg-amber-100">
+                        <input type="radio" name="kddPendingPrintType" value="material" class="w-4 h-4">
+                        <div>
+                            <div class="font-bold text-amber-900 text-sm">📦 Malzeme Listesi</div>
+                            <div class="text-xs text-amber-700">KKD bazlı özet</div>
+                        </div>
+                    </label>
+                    <label class="flex items-center gap-3 bg-white p-3 rounded-lg border-2 border-amber-300 cursor-pointer hover:bg-amber-100">
+                        <input type="radio" name="kddPendingPrintType" value="form" class="w-4 h-4">
+                        <div>
+                            <div class="font-bold text-amber-900 text-sm">📄 Teslim Formu</div>
+                            <div class="text-xs text-amber-700">İmzalı form (her kişi için)</div>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <div class="bg-blue-50 rounded-lg p-4 mb-4 border-2 border-blue-200">
+                <h4 class="font-bold text-blue-900 mb-3 text-sm">🔍 Filtrele</h4>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-blue-800 mb-1">🏢 Birim Seçimi</label>
+                        <select id="kddPendingPrintDepartmentFilter" class="w-full border-2 border-blue-300 rounded-lg px-3 py-2 bg-white text-sm font-semibold" onchange="applyKddPendingPrintFilters()">
+                            <option value="">-- Tüm Birimler --</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-blue-800 mb-1">📊 Statü Seçimi</label>
+                        <select id="kddPendingPrintStatusFilter" class="w-full border-2 border-blue-300 rounded-lg px-3 py-2 bg-white text-sm font-semibold" onchange="applyKddPendingPrintFilters()">
+                            <option value="">-- Tüm Statüler --</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="mt-2 text-xs text-blue-700">💡 Filtre seçince personel listesi otomatik güncellenir</div>
+            </div>
+
+            <div class="bg-purple-50 rounded-lg p-4 mb-4 border-2 border-purple-200">
+                <div class="flex items-center justify-between mb-3 flex-wrap gap-2">
+                    <h4 class="font-bold text-purple-900 text-sm">👥 Personel Seçimi</h4>
+                    <div class="flex gap-2">
+                        <button onclick="selectAllKddPendingForPrint(true)" class="text-xs bg-purple-600 text-white px-3 py-1 rounded-lg font-bold">✅ Tümünü Seç</button>
+                        <button onclick="selectAllKddPendingForPrint(false)" class="text-xs bg-gray-500 text-white px-3 py-1 rounded-lg font-bold">❌ Temizle</button>
+                    </div>
+                </div>
+                <div id="kddPendingPrintPersonnelList" class="bg-white rounded-lg border-2 border-purple-200 p-3 max-h-64 overflow-y-auto space-y-1"></div>
+                <div class="mt-2 text-xs text-purple-800 font-bold text-right">Seçili: <span id="kddPendingPrintSelectedCount">0</span> personel</div>
+            </div>
+
+            <div class="flex justify-end gap-2 flex-wrap">
+                <button onclick="hideModal('kddPendingPrintChoiceModal')" class="px-6 py-2 bg-gray-500 text-white rounded-lg font-medium hover:bg-gray-600">İptal</button>
+                <button onclick="confirmKddPendingPrint()" class="px-6 py-2 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-lg font-bold">🖨️ Yazdır</button>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(modal);
+    
+    populateKddPendingPrintFilters(pendingGroups);
+    window.kddPendingPrintSelected=new Set();
+    pendingGroups.forEach(g=>window.kddPendingPrintSelected.add(g.personnelId));
+    renderKddPendingPrintPersonnelList(pendingGroups);
+    updateKddPendingPrintSelectedCount();
+}
+
+function populateKddPendingPrintFilters(pendingGroups){
+    const deptSelect=document.getElementById('kddPendingPrintDepartmentFilter');
+    const statusSelect=document.getElementById('kddPendingPrintStatusFilter');
+    if(deptSelect){
+        const cur=deptSelect.value;
+        deptSelect.innerHTML='<option value="">-- Tüm Birimler --</option>';
+        const uniq=[...new Set(pendingGroups.map(g=>g.department).filter(d=>d&&d.trim()))].sort((a,b)=>a.localeCompare(b,'tr'));
+        uniq.forEach(d=>{deptSelect.innerHTML+='<option value="'+escapeHtml(d)+'">'+escapeHtml(d)+'</option>';});
+        deptSelect.value=cur;
+    }
+    if(statusSelect){
+        const cur=statusSelect.value;
+        statusSelect.innerHTML='<option value="">-- Tüm Statüler --</option>';
+        const uniq=[...new Set(pendingGroups.map(g=>g.status).filter(s=>s&&s.trim()))].sort((a,b)=>a.localeCompare(b,'tr'));
+        uniq.forEach(s=>{statusSelect.innerHTML+='<option value="'+escapeHtml(s)+'">'+escapeHtml(s)+'</option>';});
+        statusSelect.value=cur;
+    }
+}
+
+function applyKddPendingPrintFilters(){
+    const allGroups=getKddPendingGroupsForFilter();
+    const deptFilter=document.getElementById('kddPendingPrintDepartmentFilter').value;
+    const statusFilter=document.getElementById('kddPendingPrintStatusFilter').value;
+    let filtered=allGroups;
+    if(deptFilter)filtered=filtered.filter(g=>g.department===deptFilter);
+    if(statusFilter)filtered=filtered.filter(g=>g.status===statusFilter);
+    const prev=new Set(window.kddPendingPrintSelected||[]);
+    renderKddPendingPrintPersonnelList(filtered);
+    window.kddPendingPrintSelected=new Set();
+    filtered.forEach(g=>{if(prev.has(g.personnelId))window.kddPendingPrintSelected.add(g.personnelId);});
+    document.querySelectorAll('#kddPendingPrintPersonnelList input[type=checkbox]').forEach(cb=>{
+        const pid=parseInt(cb.getAttribute('data-pid'));
+        cb.checked=window.kddPendingPrintSelected.has(pid);
+    });
+    updateKddPendingPrintSelectedCount();
+}
+
+function renderKddPendingPrintPersonnelList(pendingGroups){
+    const container=document.getElementById('kddPendingPrintPersonnelList');
+    if(!container)return;
+    container.innerHTML='';
+    pendingGroups.sort((a,b)=>a.personnel.localeCompare(b.personnel,'tr')).forEach(grp=>{
+        const isChecked=window.kddPendingPrintSelected.has(grp.personnelId);
+        container.innerHTML+=`
+            <label class="flex items-center gap-3 p-2 rounded-lg hover:bg-purple-50 cursor-pointer">
+                <input type="checkbox" ${isChecked?'checked':''} data-pid="${grp.personnelId}" onchange="toggleKddPendingPersonnelPrint(this)" class="w-4 h-4 accent-purple-600">
+                <span class="text-sm font-medium">👤 ${escapeHtml(grp.personnel)} <span class="text-xs text-gray-500">(${escapeHtml(grp.department||'-')}) — ${grp.items.length} kalem</span></span>
+            </label>
+        `;
+    });
+}
+
+function toggleKddPendingPersonnelPrint(cb){
+    const pid=parseInt(cb.getAttribute('data-pid'));
+    if(cb.checked)window.kddPendingPrintSelected.add(pid);
+    else window.kddPendingPrintSelected.delete(pid);
+    updateKddPendingPrintSelectedCount();
+}
+
+function selectAllKddPendingForPrint(select){
+    const checkboxes=document.querySelectorAll('#kddPendingPrintPersonnelList input[type=checkbox]');
+    window.kddPendingPrintSelected.clear();
+    checkboxes.forEach(cb=>{
+        cb.checked=select;
+        if(select){
+            const pid=parseInt(cb.getAttribute('data-pid'));
+            window.kddPendingPrintSelected.add(pid);
+        }
+    });
+    updateKddPendingPrintSelectedCount();
+}
+
+function updateKddPendingPrintSelectedCount(){
+    const el=document.getElementById('kddPendingPrintSelectedCount');
+    if(el)el.textContent=window.kddPendingPrintSelected.size;
+}
+
+function confirmKddPendingPrint(){
+    if(window.kddPendingPrintSelected.size===0){alert('❌ En az bir personel seçin!');return}
+    const printType=document.querySelector('input[name="kddPendingPrintType"]:checked').value;
+    const allGroups=getKddPendingGroupsForFilter();
+    const deptFilter=document.getElementById('kddPendingPrintDepartmentFilter').value;
+    const statusFilter=document.getElementById('kddPendingPrintStatusFilter').value;
+    let filteredGroups=allGroups;
+    if(deptFilter)filteredGroups=filteredGroups.filter(g=>g.department===deptFilter);
+    if(statusFilter)filteredGroups=filteredGroups.filter(g=>g.status===statusFilter);
+    const selectedGroups=filteredGroups.filter(g=>window.kddPendingPrintSelected.has(g.personnelId));
+    if(selectedGroups.length===0){alert('Seçilen personel için bekleyen KKD yok!');return}
+    hideModal('kddPendingPrintChoiceModal');
+    if(printType==='name')printKddPendingAsNameList(selectedGroups);
+    else if(printType==='material')printKddPendingAsMaterialList(selectedGroups);
+    else printKddPendingAsForm(selectedGroups);
+}
+
+function printKddPendingAsNameList(groups){
+    let html='<div style="font-family:Arial,sans-serif;font-size:11px;color:#000;padding:10px;">';
+    html+='<div style="text-align:center;border-bottom:2px solid #333;padding-bottom:8px;margin-bottom:12px;">';
+    html+='<h1 style="font-size:18px;margin:0;font-weight:bold;">ATTİ RAYLI SİSTEM</h1>';
+    html+='<h2 style="font-size:13px;margin:4px 0 0;font-weight:normal;">KKD Dağıtım Bekleyenler - İsim Listesi</h2>';
+    html+='<div style="font-size:10px;color:#666;margin-top:4px;">Oluşturulma: '+new Date().toLocaleString('tr-TR')+' | Toplam: '+groups.length+' personel</div>';
+    html+='</div>';
+    html+='<table style="width:100%;border-collapse:collapse;font-size:11px;"><thead><tr style="background:#fed7aa;">';
+    html+='<th style="border:1px solid #333;padding:6px;text-align:left;width:40px;">#</th>';
+    html+='<th style="border:1px solid #333;padding:6px;text-align:left;">Ad Soyad</th>';
+    html+='<th style="border:1px solid #333;padding:6px;text-align:left;">Birim</th>';
+    html+='<th style="border:1px solid #333;padding:6px;text-align:center;width:60px;">Kalem</th>';
+    html+='<th style="border:1px solid #333;padding:6px;text-align:left;">Bekleyen KKD</th>';
+    html+='</tr></thead><tbody>';
+    groups.forEach((g,i)=>{
+        const items=g.items.map(it=>it.kddName+' ('+it.pp+')').join(', ');
+        html+='<tr><td style="border:1px solid #333;padding:6px;text-align:center;">'+(i+1)+'</td><td style="border:1px solid #333;padding:6px;"><strong>'+escapeHtml(g.personnel)+'</strong></td><td style="border:1px solid #333;padding:6px;">'+escapeHtml(g.department||'-')+'</td><td style="border:1px solid #333;padding:6px;text-align:center;font-weight:bold;">'+g.items.length+'</td><td style="border:1px solid #333;padding:6px;font-size:10px;">'+escapeHtml(items)+'</td></tr>';
+    });
+    html+='</tbody></table>';
+    html+='<div style="margin-top:20px;text-align:center;font-size:10px;color:#777;border-top:1px solid #ccc;padding-top:8px;">ATTİ Raylı Sistem - RTS Takip | Hazırlayan: Gökhan GÖKER</div></div>';
+    openPrintPreview('KKD Dağıtım Bekleyenler - İsim Listesi',groups.length+' personel',html);
+}
+
+function printKddPendingAsMaterialList(groups){
+    const materialMap={};
+    groups.forEach(g=>{
+        g.items.forEach(it=>{
+            const key=it.kddName;
+            if(!materialMap[key])materialMap[key]={name:it.kddName,total:0,personnelList:[]};
+            materialMap[key].total+=(it.pp||1);
+            materialMap[key].personnelList.push(g.personnel);
+        });
+    });
+    let html='<div style="font-family:Arial,sans-serif;font-size:11px;color:#000;padding:10px;">';
+    html+='<div style="text-align:center;border-bottom:2px solid #333;padding-bottom:8px;margin-bottom:12px;">';
+    html+='<h1 style="font-size:18px;margin:0;font-weight:bold;">ATTİ RAYLI SİSTEM</h1>';
+    html+='<h2 style="font-size:13px;margin:4px 0 0;font-weight:normal;">KKD Dağıtım Bekleyenler - Malzeme Listesi</h2>';
+    html+='<div style="font-size:10px;color:#666;margin-top:4px;">Oluşturulma: '+new Date().toLocaleString('tr-TR')+'</div></div>';
+    html+='<table style="width:100%;border-collapse:collapse;font-size:11px;"><thead><tr style="background:#fed7aa;">';
+    html+='<th style="border:1px solid #333;padding:6px;text-align:left;width:40px;">#</th>';
+    html+='<th style="border:1px solid #333;padding:6px;text-align:left;">KKD Adı</th>';
+    html+='<th style="border:1px solid #333;padding:6px;text-align:center;width:90px;">Toplam Adet</th>';
+    html+='<th style="border:1px solid #333;padding:6px;text-align:left;">Alan Personeller</th>';
+    html+='</tr></thead><tbody>';
+    let i=0,grand=0;
+    Object.values(materialMap).sort((a,b)=>a.name.localeCompare(b.name,'tr')).forEach(m=>{
+        i++;grand+=m.total;
+        html+='<tr><td style="border:1px solid #333;padding:6px;text-align:center;">'+i+'</td><td style="border:1px solid #333;padding:6px;"><strong>'+escapeHtml(m.name)+'</strong></td><td style="border:1px solid #333;padding:6px;text-align:center;font-weight:bold;">'+m.total+'</td><td style="border:1px solid #333;padding:6px;font-size:10px;">'+escapeHtml(m.personnelList.join(', '))+'</td></tr>';
+    });
+    html+='<tr style="background:#fef3c7;font-weight:bold;"><td colspan="2" style="border:1px solid #333;padding:6px;text-align:right;">TOPLAM:</td><td style="border:1px solid #333;padding:6px;text-align:center;">'+grand+'</td><td style="border:1px solid #333;padding:6px;"></td></tr>';
+    html+='</tbody></table>';
+    html+='<div style="margin-top:20px;text-align:center;font-size:10px;color:#777;border-top:1px solid #ccc;padding-top:8px;">ATTİ Raylı Sistem - RTS Takip | Hazırlayan: Gökhan GÖKER</div></div>';
+    openPrintPreview('KKD Dağıtım Bekleyenler - Malzeme Listesi',groups.length+' personel',html);
+}
+
+function printKddPendingAsForm(groups){
+    let allFormsHtml='';
+    groups.forEach((g,idx)=>{
+        if(idx>0)allFormsHtml+='<div style="page-break-before: always;"></div>';
+        allFormsHtml+='<div style="font-family:Arial,sans-serif;font-size:12px;padding:20px;color:#000;">';
+        allFormsHtml+='<div style="text-align:center;margin-bottom:16px;"><h1 style="font-size:18px;margin:0;font-weight:bold;">ATTİ RAYLI SİSTEM</h1><h2 style="font-size:14px;margin:4px 0 0;">KKD Teslim Formu</h2></div>';
+        allFormsHtml+='<div style="margin-bottom:12px;padding:8px;background:#fff7ed;border:1px solid #c2410c;font-size:11px;"><strong>Personel:</strong> '+escapeHtml(g.personnel)+' | <strong>Birim:</strong> '+escapeHtml(g.department||'-')+' | <strong>Tarih:</strong> '+new Date().toLocaleDateString('tr-TR')+'</div>';
+        allFormsHtml+='<table style="width:100%;border-collapse:collapse;font-size:11px;"><thead><tr>';
+        allFormsHtml+='<th style="border:1px solid #000;padding:6px;background:#fed7aa;width:40px;text-align:center;">#</th>';
+        allFormsHtml+='<th style="border:1px solid #000;padding:6px;background:#fed7aa;text-align:left;">KKD Adı</th>';
+        allFormsHtml+='<th style="border:1px solid #000;padding:6px;background:#fed7aa;width:60px;text-align:center;">Adet</th>';
+        allFormsHtml+='<th style="border:1px solid #000;padding:6px;background:#fed7aa;width:120px;text-align:center;">İmza</th>';
+        allFormsHtml+='</tr></thead><tbody>';
+        g.items.forEach((it,i)=>{
+            allFormsHtml+='<tr><td style="border:1px solid #000;padding:6px;text-align:center;">'+(i+1)+'</td><td style="border:1px solid #000;padding:6px;">'+escapeHtml(it.kddName)+'</td><td style="border:1px solid #000;padding:6px;text-align:center;">'+(it.pp||1)+'</td><td style="border:1px solid #000;padding:6px;">&nbsp;</td></tr>';
+        });
+        allFormsHtml+='</tbody></table>';
+        allFormsHtml+='<div style="margin-top:18px;padding:10px;border:1px solid #000;background:#f9fafb;font-size:11px;line-height:1.5;text-align:justify;"><strong>YASAL UYARI:</strong> Yukarıda belirtilen KKD malzemelerini 4857 sayılı İş Kanunu ve işyeri çalışma kurallarına uygun olarak, yalnızca işyerinde ve işim gereği kullanmak üzere eksiksiz ve sağlam olarak teslim aldığımı beyan ve taahhüt ederim.</div>';
+        allFormsHtml+='<div style="margin-top:40px;display:flex;justify-content:space-between;gap:40px;">';
+        allFormsHtml+='<div style="flex:1;text-align:center;"><div style="border-top:1px solid #000;padding-top:6px;font-weight:bold;font-size:12px;">TESLİM EDEN</div><div style="margin-top:50px;font-size:11px;">Ad Soyad / İmza</div></div>';
+        allFormsHtml+='<div style="flex:1;text-align:center;"><div style="border-top:1px solid #000;padding-top:6px;font-weight:bold;font-size:12px;">TESLİM ALAN</div><div style="margin-top:50px;font-size:11px;">'+escapeHtml(g.personnel)+'<br>İmza</div></div>';
+        allFormsHtml+='</div></div>';
+    });
+    openPrintPreview('KKD Teslim Formu',groups.length+' personel (her kişi ayrı sayfa)',allFormsHtml);
+}
+
+// ==================== KKD DAĞITIM BEKLEYENLER ====================
+function updateKddPendingTable(){
+    const kt=document.getElementById('kddPendingTable');
+    if(!kt)return;
+    kt.innerHTML='';
+    
+    const sortMode=document.getElementById('kddPendingSortFilter')?document.getElementById('kddPendingSortFilter').value:'default';
+    kddPendingSortMode=sortMode;
+    
+    // Gruplama: personnelId -> {personnel, department, status, items:[]}
+    const grouped={};
+    data.personnel.forEach(p=>{
+        (p.requiredKkds||[]).forEach(rk=>{
+            const isD=(p.kkds||[]).some(k=>k.name===rk.name);
+            if(isD)return;
+            const kdd=data.kkds.find(k=>k.name===rk.name);
+            if(!kdd)return;
+            const pp=kdd.perPerson||1;
+            const rem=kdd.stock-kdd.distributed;
+            const canDo=rem>=pp;
+            if(!grouped[p.id])grouped[p.id]={personnelId:p.id,personnel:p.name,department:p.department,status:p.status,items:[]};
+            grouped[p.id].items.push({kddName:rk.name,kddIdx:data.kkds.indexOf(kdd),pp,rem,canDo});
+        });
+    });
+    
+    let personList=Object.values(grouped);
+    
+    // Filtreler
+    if(kddPendingFilters.personnel.length>0)personList=personList.filter(g=>kddPendingFilters.personnel.includes(g.personnel));
+    if(kddPendingFilters.department.length>0)personList=personList.filter(g=>kddPendingFilters.department.includes(g.department||'(Boş)'));
+    if(kddPendingFilters.status.length>0)personList=personList.filter(g=>kddPendingFilters.status.includes(g.status||'(Boş)'));
+    if(kddPendingFilters.itemCount.length>0)personList=personList.filter(g=>kddPendingFilters.itemCount.includes(g.items.length));
+    
+    // Sıralama
+    if(sortMode==='name')personList.sort((a,b)=>a.personnel.localeCompare(b.personnel,'tr'));
+    else if(sortMode==='department')personList.sort((a,b)=>a.department.localeCompare(b.department,'tr')||a.personnel.localeCompare(b.personnel,'tr'));
+    
+    const totalItems=personList.reduce((sum,g)=>sum+g.items.length,0);
+    const ec=document.getElementById('kddPendingCount');
+    if(ec)ec.textContent=totalItems;
+    
+    if(personList.length===0){
+        kt.innerHTML='<tr><td colspan="6" class="text-center py-6 text-gray-500">Bekleyen KKD yok</td></tr>';
+        return;
+    }
+    
+    personList.forEach(grp=>{
+        const isExpanded=expandedKddPendingPersonnel.has(grp.personnelId);
+        const actionsHtml=isAdmin
+            ?'<button onclick="event.stopPropagation();giveAllKkdToPersonnel('+grp.personnelId+')" class="bg-green-600 text-white px-3 py-2 rounded-lg text-xs font-bold">✅ Tümünü Ver</button><button onclick="event.stopPropagation();printKddDistributionForm('+grp.personnelId+')" class="bg-blue-600 text-white px-3 py-2 rounded-lg text-xs font-bold">🖨️ Yazdır</button><button onclick="event.stopPropagation();removeKddPending('+grp.personnelId+')" class="bg-red-600 text-white px-3 py-2 rounded-lg text-xs font-bold">❌ Çıkar</button>'
+            :'<button onclick="event.stopPropagation();printKddDistributionForm('+grp.personnelId+')" class="bg-blue-600 text-white px-3 py-2 rounded-lg text-xs font-bold">🖨️ Yazdır</button>';
+        
+        kt.innerHTML+='<tr class="pending-group-row" onclick="toggleKddPendingGroup('+grp.personnelId+')"><td class="px-4 py-3 text-center"><span class="pending-group-arrow '+(isExpanded?'rotated':'')+'" id="kdd-pending-arrow-'+grp.personnelId+'">▶</span></td><td class="px-4 py-3 text-sm font-bold text-teal-900">👤 '+escapeHtml(grp.personnel)+'</td><td class="px-4 py-3 text-sm">'+escapeHtml(grp.department)+'</td><td class="px-4 py-3 text-sm"><span class="px-2 py-1 rounded text-xs font-bold bg-gray-100">'+escapeHtml(grp.status)+'</span></td><td class="px-4 py-3 text-center"><span class="bg-orange-200 text-orange-900 px-3 py-1 rounded-full font-bold text-xs">'+grp.items.length+' kalem</span></td><td class="px-4 py-3 text-center"><div class="flex gap-1 justify-center flex-wrap">'+actionsHtml+'</div></td></tr>';
+        
+        grp.items.forEach(it=>{
+            const rowCls=it.canDo?'pending-child-row':'pending-child-row bg-red-50';
+            const remCls=it.canDo?'text-green-600':'text-red-600 font-bold';
+            const remLabel=it.canDo?it.rem:'0 (STOK YOK)';
+            const hiddenCls=isExpanded?'':'pending-child-hidden';
+            const btnHtml=isAdmin?'<button class="distribute-kdd-btn bg-orange-500 text-white px-3 py-1 rounded-lg text-xs font-medium" data-pid="'+grp.personnelId+'" data-kddidx="'+it.kddIdx+'" '+(!it.canDo?'disabled style="opacity:.5"':'')+'>'+(it.canDo?'✅ Verildi':'❌ Stok Yok')+'</button>':'<span class="text-gray-400 text-xs">-</span>';
+            kt.innerHTML+='<tr class="'+rowCls+' '+hiddenCls+'" data-kdd-parent="'+grp.personnelId+'"><td class="px-4 py-2 text-center text-gray-400">└</td><td class="px-4 py-2 text-sm pl-6">🦺 '+escapeHtml(it.kddName)+'</td><td class="px-4 py-2 text-sm">'+escapeHtml(grp.department||'-')+'</td><td class="px-4 py-2 text-sm"><span class="px-2 py-1 rounded text-xs font-bold bg-gray-100">'+escapeHtml(grp.status||'-')+'</span></td><td class="px-4 py-2 text-center text-sm"><span class="font-bold text-purple-700">'+it.pp+'</span> adet<br><span class="'+remCls+' text-xs">Stok: '+remLabel+'</span></td><td class="px-4 py-2 text-center">'+btnHtml+'</td></tr>';
+        });
+    });
+}
+
+function toggleKddPendingGroup(personnelId){
+    if(expandedKddPendingPersonnel.has(personnelId))expandedKddPendingPersonnel.delete(personnelId);
+    else expandedKddPendingPersonnel.add(personnelId);
+    document.querySelectorAll('tr[data-kdd-parent="'+personnelId+'"]').forEach(r=>{
+        if(expandedKddPendingPersonnel.has(personnelId))r.classList.remove('pending-child-hidden');
+        else r.classList.add('pending-child-hidden');
+    });
+    const arrow=document.getElementById('kdd-pending-arrow-'+personnelId);
+    if(arrow){
+        if(expandedKddPendingPersonnel.has(personnelId))arrow.classList.add('rotated');
+        else arrow.classList.remove('rotated');
+    }
+}
+
+function refreshAllKddPending(){
+    if(!isAdmin){alert('❌ Yönetici girişi gerekli!');return}
+    if(!confirm('KKD listesi yenilenecek. Onaylıyor musunuz?'))return;
+    data.personnel.forEach(p=>{if(p.kkds&&p.kkds.length>0){p.kkds=[];}});
+    expandedKddPendingPersonnel.clear();
+    saveToLocalStorage();
+    updateAllStats();
+    showSuccessMessage('🔄 KKD listesi yenilendi!');
+}
+
+function giveAllKkdToPersonnel(pid){
+    if(!isAdmin){alert('❌ Yönetici girişi gerekli!');return}
+    const p=data.personnel.find(x=>x.id===pid);
+    if(!p){alert('Personel bulunamadı!');return}
+    const pending=[];
+    (p.requiredKkds||[]).forEach(rk=>{
+        const isD=(p.kkds||[]).some(k=>k.name===rk.name);
+        if(isD)return;
+        const kdd=data.kkds.find(k=>k.name===rk.name);
+        if(!kdd)return;
+        const pp=kdd.perPerson||1;
+        const rem=kdd.stock-kdd.distributed;
+        pending.push({kddName:rk.name,kdd,pp,rem,canDo:rem>=pp});
+    });
+    if(pending.length===0){alert('Bu personel için bekleyen KKD yok!');return}
+    const cannotDo=pending.filter(x=>!x.canDo);
+    let msg=p.name+' için '+pending.length+' KKD verilecek.';
+    if(cannotDo.length>0)msg+='\n\n⚠️ '+cannotDo.length+' KKD için stok yetersiz!';
+    msg+='\n\nSadece stok YETERLİ olanlar verilecek. Onaylıyor musunuz?';
+    if(!confirm(msg))return;
+    let givenCount=0;
+    pending.forEach(it=>{
+        if(!it.canDo)return;
+        const gd=new Date();
+        const ed=new Date();
+        ed.setMonth(ed.getMonth()+(it.kdd.shelfLife||12));
+        p.kkds.push({name:it.kddName,givenDate:gd,expiryDate:ed,quantity:it.pp});
+        it.kdd.distributed+=it.pp;
+        data.distributionHistory.push({date:gd.toISOString(),personnelName:p.name,department:p.department,type:'KKD',itemName:it.kddName,size:'',quantity:it.pp});
+        givenCount++;
+    });
+    saveToLocalStorage();
+    expandedKddPendingPersonnel.delete(pid);
+    updateAllStats();
+    showSuccessMessage('✅ '+p.name+' için '+givenCount+' KKD verildi!');
+}
+
+function removeKddPending(pid){
+    if(!isAdmin){alert('❌ Yönetici girişi gerekli!');return}
+    const p=data.personnel.find(x=>x.id===pid);
+    if(!p)return;
+    if(!confirm(p.name+' KKD bekleyen listeden çıkarılsın mı?'))return;
+    (p.requiredKkds||[]).forEach(rk=>{
+        const isD=(p.kkds||[]).some(k=>k.name===rk.name);
+        if(!isD){
+            p.kkds.push({name:rk.name,givenDate:new Date(),expiryDate:new Date(),quantity:0,markedAsGivenWithoutStock:true});
+        }
+    });
+    expandedKddPendingPersonnel.delete(pid);
+    saveToLocalStorage();
+    updateAllStats();
+    showSuccessMessage('✅ '+p.name+' KKD listesinden çıkarıldı.');
+}
+
+// ==================== KKD FİLTRELEME ====================
+function toggleKddPendingFilter(evt,col){
+    evt.stopPropagation();
+    if(activeKddPendingFilterPopup===col){closeAllKddPendingFilters();return;}
+    closeAllKddPendingFilters();
+    activeKddPendingFilterPopup=col;
+    
+    const allGroups=getKddPendingGroupsForFilter();
+    const values=new Set();
+    allGroups.forEach(g=>{
+        if(col==='personnel')values.add(g.personnel);
+        else if(col==='department')values.add(g.department||'(Boş)');
+        else if(col==='status')values.add(g.status||'(Boş)');
+        else if(col==='itemCount')values.add(g.items.length);
+    });
+    const valsArr=[...values].sort((a,b)=>{
+        if(typeof a==='number'&&typeof b==='number')return a-b;
+        return String(a).localeCompare(String(b),'tr');
+    });
+    const parent=document.getElementById('kddPendingFilterPopups');
+    const btn=document.getElementById('kddFilterBtn_'+col);
+    if(!parent||!btn)return;
+    const selected=kddPendingFilters[col]||[];
+    let html='<div class="filter-popup" id="kddFilterPopup_'+col+'"><div class="filter-popup-title">'+getKddFilterTitle(col)+'</div>';
+    html+='<label class="filter-popup-item"><input type="checkbox" class="kdd-filter-all-checkbox" data-col="'+col+'" '+(selected.length===0?'checked':'')+'> <strong>(Tümü)</strong></label>';
+    valsArr.forEach(v=>{
+        const isChecked=selected.length===0||selected.includes(v);
+        html+='<label class="filter-popup-item"><input type="checkbox" class="kdd-filter-value-checkbox" data-col="'+col+'" data-val="'+String(v).replace(/"/g,'&quot;')+'" '+(isChecked?'checked':'')+'> '+(col==='itemCount'?v+' kalem':escapeHtml(v))+'</label>';
+    });
+    html+='<div class="filter-popup-actions"><button class="btn-clear kdd-filter-clear-btn" data-col="'+col+'">🗑️ Temizle</button><button class="btn-apply kdd-filter-apply-btn" data-col="'+col+'">✓ Uygula</button><button class="btn-close kdd-filter-close-btn">✕ Kapat</button></div></div>';
+    parent.innerHTML=html;
+    
+    const popup=document.getElementById('kddFilterPopup_'+col);
+    const rect=btn.getBoundingClientRect();
+    const parentRect=parent.getBoundingClientRect();
+    popup.style.left=(rect.left-parentRect.left)+'px';
+    popup.style.top=(rect.bottom-parentRect.top+4)+'px';
+    btn.classList.add('active');
+    setTimeout(()=>{document.addEventListener('click',outsideKddFilterClick)},50);
+}
+
+function outsideKddFilterClick(e){
+    if(!e.target.closest('#kddPendingFilterPopups .filter-popup')&&!e.target.closest('#kddPendingTableMain .filter-btn'))closeAllKddPendingFilters();
+}
+function closeAllKddPendingFilters(){
+    const parent=document.getElementById('kddPendingFilterPopups');
+    if(parent)parent.innerHTML='';
+    document.querySelectorAll('#kddPendingTableMain .filter-btn').forEach(b=>b.classList.remove('active'));
+    activeKddPendingFilterPopup=null;
+    document.removeEventListener('click',outsideKddFilterClick);
+}
+function getKddFilterTitle(col){
+    const m={personnel:'Personel',department:'Birim',status:'Statü',itemCount:'Bekleyen KKD'};
+    return m[col]||col;
+}
+function getKddPendingGroupsForFilter(){
+    const grouped={};
+    data.personnel.forEach(p=>{
+        (p.requiredKkds||[]).forEach(rk=>{
+            const isD=(p.kkds||[]).some(k=>k.name===rk.name);
+            if(isD)return;
+            const kdd=data.kkds.find(k=>k.name===rk.name);
+            if(!kdd)return;
+            if(!grouped[p.id])grouped[p.id]={personnelId:p.id,personnel:p.name,department:p.department,status:p.status,items:[]};
+            grouped[p.id].items.push({kddName:rk.name,kddIdx:data.kkds.indexOf(kdd),pp:kdd.perPerson||1});
+        });
+    });
+    return Object.values(grouped);
+}
+
+// KKD filtre click handler'ları
+document.addEventListener('click',function(e){
+    const filterAll=e.target.closest('.kdd-filter-all-checkbox');
+    if(filterAll){
+        const col=filterAll.getAttribute('data-col');
+        if(filterAll.checked){
+            kddPendingFilters[col]=[];
+            document.querySelectorAll('#kddFilterPopup_'+col+' input.kdd-filter-value-checkbox').forEach(cb=>cb.checked=true);
+        }
+        return;
+    }
+    const filterVal=e.target.closest('.kdd-filter-value-checkbox');
+    if(filterVal){
+        const col=filterVal.getAttribute('data-col');
+        const v=filterVal.getAttribute('data-val');
+        let arr=kddPendingFilters[col]||[];
+        const numV=parseInt(v);
+        const actualV=!isNaN(numV)&&String(numV)===v?numV:v;
+        if(filterVal.checked){
+            if(arr.length===0){
+                const allGroups=getKddPendingGroupsForFilter();
+                const allVals=new Set();
+                allGroups.forEach(g=>{allVals.add(String(col==='personnel'?g.personnel:col==='department'?(g.department||'(Boş)'):col==='status'?(g.status||'(Boş)'):g.items.length))});
+                arr=[...allVals].filter(x=>x!==String(actualV));
+            } else {
+                arr=arr.filter(x=>String(x)!==String(actualV));
+            }
+            if(arr.length===0){
+                kddPendingFilters[col]=[];
+                document.querySelectorAll('#kddFilterPopup_'+col+' input.kdd-filter-value-checkbox').forEach(x=>x.checked=true);
+            } else {
+                kddPendingFilters[col]=arr;
+            }
+        } else {
+            if(arr.length===0){
+                const allGroups=getKddPendingGroupsForFilter();
+                const allVals=new Set();
+                allGroups.forEach(g=>{allVals.add(String(col==='personnel'?g.personnel:col==='department'?(g.department||'(Boş)'):col==='status'?(g.status||'(Boş)'):g.items.length))});
+                arr=[...allVals].filter(x=>x!==String(actualV));
+            } else if(!arr.includes(actualV)){
+                arr.push(actualV);
+            }
+            kddPendingFilters[col]=arr;
+        }
+        return;
+    }
+    const filterClear=e.target.closest('.kdd-filter-clear-btn');
+    if(filterClear){
+        const col=filterClear.getAttribute('data-col');
+        kddPendingFilters[col]=[];
+        closeAllKddPendingFilters();
+        updateKddPendingTable();
+        return;
+    }
+    const filterApply=e.target.closest('.kdd-filter-apply-btn');
+    if(filterApply){
+        const col=filterApply.getAttribute('data-col');
+        if(col==='itemCount')kddPendingFilters[col]=(kddPendingFilters[col]||[]).map(x=>{const n=parseInt(x);return isNaN(n)?x:n;});
+        closeAllKddPendingFilters();
+        updateKddPendingTable();
+        return;
+    }
+    const filterClose=e.target.closest('.kdd-filter-close-btn');
+    if(filterClose){
+        closeAllKddPendingFilters();
+        return;
+    }
+});
+
+// ==================== KKD TEK TEK DAĞITIM ====================
+function printKddDistributionForm(pid){
+    const p=data.personnel.find(x=>x.id===pid);
+    if(!p){alert('Personel bulunamadı!');return}
+    const pending=[];
+    (p.requiredKkds||[]).forEach(rk=>{
+        const isD=(p.kkds||[]).some(k=>k.name===rk.name);
+        if(isD)return;
+        const kdd=data.kkds.find(k=>k.name===rk.name);
+        if(!kdd)return;
+        pending.push({kddName:rk.name,pp:kdd.perPerson||1});
+    });
+    if(pending.length===0){alert('Bu personel için bekleyen KKD yok!');return}
+    
+    let html='<div style="font-family:Arial,Helvetica,sans-serif;font-size:12px;padding:14px;color:#000;">';
+    html+='<div style="text-align:center;margin-bottom:16px;"><h1 style="font-size:18px;margin:0;font-weight:bold;letter-spacing:1px;">KKD Malzeme Listesi</h1></div>';
+    html+='<div style="margin-bottom:12px;padding:8px;background:#fff7ed;border:1px solid #c2410c;font-size:11px;"><strong>Personel:</strong> '+escapeHtml(p.name)+' | <strong>Birim:</strong> '+escapeHtml(p.department||'-')+' | <strong>Tarih:</strong> '+new Date().toLocaleDateString('tr-TR')+'</div>';
+    html+='<table style="width:100%;border-collapse:collapse;font-size:12px;"><thead><tr><th style="border:1px solid #000;padding:6px;background:#fed7aa;width:40px;text-align:center;">#</th><th style="border:1px solid #000;padding:6px;background:#fed7aa;text-align:left;">KKD Adı</th><th style="border:1px solid #000;padding:6px;background:#fed7aa;width:80px;text-align:center;">Adet</th><th style="border:1px solid #000;padding:6px;background:#fed7aa;width:120px;text-align:center;">İmza</th></tr></thead><tbody>';
+    pending.forEach((it,i)=>{
+        html+='<tr><td style="border:1px solid #000;padding:6px;text-align:center;">'+(i+1)+'</td><td style="border:1px solid #000;padding:6px;">'+escapeHtml(it.kddName)+'</td><td style="border:1px solid #000;padding:6px;text-align:center;">'+it.pp+'</td><td style="border:1px solid #000;padding:6px;">&nbsp;</td></tr>';
+    });
+    html+='</tbody></table>';
+    html+='<div style="margin-top:18px;padding:10px;border:1px solid #000;background:#f9fafb;font-size:11px;line-height:1.5;text-align:justify;"><strong>YASAL UYARI:</strong> Yukarıda belirtilen KKD malzemelerini 4857 sayılı İş Kanunu ve işyeri çalışma kurallarına uygun olarak, yalnızca işyerinde ve işim gereği kullanmak üzere eksiksiz ve sağlam olarak teslim aldığımı beyan ve taahhüt ederim.</div>';
+    html+='<div style="margin-top:40px;display:flex;justify-content:space-between;gap:40px;"><div style="flex:1;text-align:center;"><div style="border-top:1px solid #000;padding-top:6px;font-weight:bold;font-size:12px;">TESLİM EDEN</div><div style="margin-top:50px;font-size:11px;">Ad Soyad / İmza</div></div><div style="flex:1;text-align:center;"><div style="border-top:1px solid #000;padding-top:6px;font-weight:bold;font-size:12px;">TESLİM ALAN</div><div style="margin-top:50px;font-size:11px;">'+escapeHtml(p.name)+'<br>İmza</div></div></div></div>';
+    
+    openPrintPreview('KKD DAĞITIM FORMU',p.name+' | '+pending.length+' kalem',html);
+}
+
+// ==================== KKD DAĞITIM BEKLEYENLER YAZDIRMA MODALI ====================
+function openKddPendingPrintModal(){
+    if(!isAdmin && !isViewer){alert('❌ Giriş yapmanız gerekiyor!');return}
+    const pendingGroups=getKddPendingGroupsForFilter();
+    if(pendingGroups.length===0){
+        alert('Yazdırılacak bekleyen KKD yok!');
+        return;
+    }
+    renderKddPendingPrintModal(pendingGroups);
+    showModal('kddPendingPrintChoiceModal');
+}
+
+function renderKddPendingPrintModal(pendingGroups){
+    const existing=document.getElementById('kddPendingPrintChoiceModal');
+    if(existing)existing.remove();
+    
+    const modal=document.createElement('div');
+    modal.id='kddPendingPrintChoiceModal';
+    modal.className='modal hidden fixed inset-0 bg-black bg-opacity-60 items-center justify-center z-[95]';
+    modal.innerHTML=`
+        <div class="bg-white rounded-xl p-6 w-[800px] max-w-[97vw] shadow-2xl relative max-h-[94vh] overflow-y-auto">
+            <button onclick="hideModal('kddPendingPrintChoiceModal')" class="absolute top-4 right-4 text-gray-400 text-2xl font-bold">✕</button>
+            <div class="text-center mb-5">
+                <div class="w-16 h-16 mx-auto mb-3 rounded-full bg-gradient-to-r from-orange-500 to-red-600 flex items-center justify-center text-white text-2xl">🖨️</div>
+                <h3 class="text-xl font-bold">KKD Dağıtım Bekleyenler Yazdır</h3>
+                <p class="text-xs text-gray-500 mt-1">Yazdırma türü ve personel seçimi</p>
+            </div>
+
+            <div class="bg-amber-50 rounded-lg p-4 mb-4 border-2 border-amber-200">
+                <h4 class="font-bold text-amber-900 mb-3 text-sm">📋 Yazdırma Türü</h4>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    <label class="flex items-center gap-3 bg-white p-3 rounded-lg border-2 border-amber-300 cursor-pointer hover:bg-amber-100">
+                        <input type="radio" name="kddPendingPrintType" value="name" checked class="w-4 h-4">
+                        <div>
+                            <div class="font-bold text-amber-900 text-sm">👥 İsim Listesi</div>
+                            <div class="text-xs text-amber-700">Personel bazlı özet</div>
+                        </div>
+                    </label>
+                    <label class="flex items-center gap-3 bg-white p-3 rounded-lg border-2 border-amber-300 cursor-pointer hover:bg-amber-100">
+                        <input type="radio" name="kddPendingPrintType" value="material" class="w-4 h-4">
+                        <div>
+                            <div class="font-bold text-amber-900 text-sm">📦 Malzeme Listesi</div>
+                            <div class="text-xs text-amber-700">KKD bazlı özet</div>
+                        </div>
+                    </label>
+                    <label class="flex items-center gap-3 bg-white p-3 rounded-lg border-2 border-amber-300 cursor-pointer hover:bg-amber-100">
+                        <input type="radio" name="kddPendingPrintType" value="form" class="w-4 h-4">
+                        <div>
+                            <div class="font-bold text-amber-900 text-sm">📄 Teslim Formu</div>
+                            <div class="text-xs text-amber-700">İmzalı form (her kişi için)</div>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <div class="bg-blue-50 rounded-lg p-4 mb-4 border-2 border-blue-200">
+                <h4 class="font-bold text-blue-900 mb-3 text-sm">🔍 Filtrele</h4>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-blue-800 mb-1">🏢 Birim Seçimi</label>
+                        <select id="kddPendingPrintDepartmentFilter" class="w-full border-2 border-blue-300 rounded-lg px-3 py-2 bg-white text-sm font-semibold" onchange="applyKddPendingPrintFilters()">
+                            <option value="">-- Tüm Birimler --</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-blue-800 mb-1">📊 Statü Seçimi</label>
+                        <select id="kddPendingPrintStatusFilter" class="w-full border-2 border-blue-300 rounded-lg px-3 py-2 bg-white text-sm font-semibold" onchange="applyKddPendingPrintFilters()">
+                            <option value="">-- Tüm Statüler --</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="mt-2 text-xs text-blue-700">💡 Filtre seçince personel listesi otomatik güncellenir</div>
+            </div>
+
+            <div class="bg-purple-50 rounded-lg p-4 mb-4 border-2 border-purple-200">
+                <div class="flex items-center justify-between mb-3 flex-wrap gap-2">
+                    <h4 class="font-bold text-purple-900 text-sm">👥 Personel Seçimi</h4>
+                    <div class="flex gap-2">
+                        <button onclick="selectAllKddPendingForPrint(true)" class="text-xs bg-purple-600 text-white px-3 py-1 rounded-lg font-bold">✅ Tümünü Seç</button>
+                        <button onclick="selectAllKddPendingForPrint(false)" class="text-xs bg-gray-500 text-white px-3 py-1 rounded-lg font-bold">❌ Temizle</button>
+                    </div>
+                </div>
+                <div id="kddPendingPrintPersonnelList" class="bg-white rounded-lg border-2 border-purple-200 p-3 max-h-64 overflow-y-auto space-y-1"></div>
+                <div class="mt-2 text-xs text-purple-800 font-bold text-right">Seçili: <span id="kddPendingPrintSelectedCount">0</span> personel</div>
+            </div>
+
+            <div class="flex justify-end gap-2 flex-wrap">
+                <button onclick="hideModal('kddPendingPrintChoiceModal')" class="px-6 py-2 bg-gray-500 text-white rounded-lg font-medium hover:bg-gray-600">İptal</button>
+                <button onclick="confirmKddPendingPrint()" class="px-6 py-2 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-lg font-bold">🖨️ Yazdır</button>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(modal);
+    
+    populateKddPendingPrintFilters(pendingGroups);
+    window.kddPendingPrintSelected=new Set();
+    pendingGroups.forEach(g=>window.kddPendingPrintSelected.add(g.personnelId));
+    renderKddPendingPrintPersonnelList(pendingGroups);
+    updateKddPendingPrintSelectedCount();
+}
+
+function populateKddPendingPrintFilters(pendingGroups){
+    const deptSelect=document.getElementById('kddPendingPrintDepartmentFilter');
+    const statusSelect=document.getElementById('kddPendingPrintStatusFilter');
+    if(deptSelect){
+        const cur=deptSelect.value;
+        deptSelect.innerHTML='<option value="">-- Tüm Birimler --</option>';
+        const uniq=[...new Set(pendingGroups.map(g=>g.department).filter(d=>d&&d.trim()))].sort((a,b)=>a.localeCompare(b,'tr'));
+        uniq.forEach(d=>{deptSelect.innerHTML+='<option value="'+escapeHtml(d)+'">'+escapeHtml(d)+'</option>';});
+        deptSelect.value=cur;
+    }
+    if(statusSelect){
+        const cur=statusSelect.value;
+        statusSelect.innerHTML='<option value="">-- Tüm Statüler --</option>';
+        const uniq=[...new Set(pendingGroups.map(g=>g.status).filter(s=>s&&s.trim()))].sort((a,b)=>a.localeCompare(b,'tr'));
+        uniq.forEach(s=>{statusSelect.innerHTML+='<option value="'+escapeHtml(s)+'">'+escapeHtml(s)+'</option>';});
+        statusSelect.value=cur;
+    }
+}
+
+function applyKddPendingPrintFilters(){
+    const allGroups=getKddPendingGroupsForFilter();
+    const deptFilter=document.getElementById('kddPendingPrintDepartmentFilter').value;
+    const statusFilter=document.getElementById('kddPendingPrintStatusFilter').value;
+    let filtered=allGroups;
+    if(deptFilter)filtered=filtered.filter(g=>g.department===deptFilter);
+    if(statusFilter)filtered=filtered.filter(g=>g.status===statusFilter);
+    const prev=new Set(window.kddPendingPrintSelected||[]);
+    renderKddPendingPrintPersonnelList(filtered);
+    window.kddPendingPrintSelected=new Set();
+    filtered.forEach(g=>{if(prev.has(g.personnelId))window.kddPendingPrintSelected.add(g.personnelId);});
+    document.querySelectorAll('#kddPendingPrintPersonnelList input[type=checkbox]').forEach(cb=>{
+        const pid=parseInt(cb.getAttribute('data-pid'));
+        cb.checked=window.kddPendingPrintSelected.has(pid);
+    });
+    updateKddPendingPrintSelectedCount();
+}
+
+function renderKddPendingPrintPersonnelList(pendingGroups){
+    const container=document.getElementById('kddPendingPrintPersonnelList');
+    if(!container)return;
+    container.innerHTML='';
+    pendingGroups.sort((a,b)=>a.personnel.localeCompare(b.personnel,'tr')).forEach(grp=>{
+        const isChecked=window.kddPendingPrintSelected.has(grp.personnelId);
+        container.innerHTML+=`
+            <label class="flex items-center gap-3 p-2 rounded-lg hover:bg-purple-50 cursor-pointer">
+                <input type="checkbox" ${isChecked?'checked':''} data-pid="${grp.personnelId}" onchange="toggleKddPendingPersonnelPrint(this)" class="w-4 h-4 accent-purple-600">
+                <span class="text-sm font-medium">👤 ${escapeHtml(grp.personnel)} <span class="text-xs text-gray-500">(${escapeHtml(grp.department||'-')}) — ${grp.items.length} kalem</span></span>
+            </label>
+        `;
+    });
+}
+
+function toggleKddPendingPersonnelPrint(cb){
+    const pid=parseInt(cb.getAttribute('data-pid'));
+    if(cb.checked)window.kddPendingPrintSelected.add(pid);
+    else window.kddPendingPrintSelected.delete(pid);
+    updateKddPendingPrintSelectedCount();
+}
+
+function selectAllKddPendingForPrint(select){
+    const checkboxes=document.querySelectorAll('#kddPendingPrintPersonnelList input[type=checkbox]');
+    window.kddPendingPrintSelected.clear();
+    checkboxes.forEach(cb=>{
+        cb.checked=select;
+        if(select){
+            const pid=parseInt(cb.getAttribute('data-pid'));
+            window.kddPendingPrintSelected.add(pid);
+        }
+    });
+    updateKddPendingPrintSelectedCount();
+}
+
+function updateKddPendingPrintSelectedCount(){
+    const el=document.getElementById('kddPendingPrintSelectedCount');
+    if(el)el.textContent=window.kddPendingPrintSelected.size;
+}
+
+function confirmKddPendingPrint(){
+    if(window.kddPendingPrintSelected.size===0){alert('❌ En az bir personel seçin!');return}
+    const printType=document.querySelector('input[name="kddPendingPrintType"]:checked').value;
+    const allGroups=getKddPendingGroupsForFilter();
+    const deptFilter=document.getElementById('kddPendingPrintDepartmentFilter').value;
+    const statusFilter=document.getElementById('kddPendingPrintStatusFilter').value;
+    let filteredGroups=allGroups;
+    if(deptFilter)filteredGroups=filteredGroups.filter(g=>g.department===deptFilter);
+    if(statusFilter)filteredGroups=filteredGroups.filter(g=>g.status===statusFilter);
+    const selectedGroups=filteredGroups.filter(g=>window.kddPendingPrintSelected.has(g.personnelId));
+    if(selectedGroups.length===0){alert('Seçilen personel için bekleyen KKD yok!');return}
+    hideModal('kddPendingPrintChoiceModal');
+    if(printType==='name')printKddPendingAsNameList(selectedGroups);
+    else if(printType==='material')printKddPendingAsMaterialList(selectedGroups);
+    else printKddPendingAsForm(selectedGroups);
+}
+
+function printKddPendingAsNameList(groups){
+    let html='<div style="font-family:Arial,sans-serif;font-size:11px;color:#000;padding:10px;">';
+    html+='<div style="text-align:center;border-bottom:2px solid #333;padding-bottom:8px;margin-bottom:12px;">';
+    html+='<h1 style="font-size:18px;margin:0;font-weight:bold;">ATTİ RAYLI SİSTEM</h1>';
+    html+='<h2 style="font-size:13px;margin:4px 0 0;font-weight:normal;">KKD Dağıtım Bekleyenler - İsim Listesi</h2>';
+    html+='<div style="font-size:10px;color:#666;margin-top:4px;">Oluşturulma: '+new Date().toLocaleString('tr-TR')+' | Toplam: '+groups.length+' personel</div>';
+    html+='</div>';
+    html+='<table style="width:100%;border-collapse:collapse;font-size:11px;"><thead><tr style="background:#fed7aa;">';
+    html+='<th style="border:1px solid #333;padding:6px;text-align:left;width:40px;">#</th>';
+    html+='<th style="border:1px solid #333;padding:6px;text-align:left;">Ad Soyad</th>';
+    html+='<th style="border:1px solid #333;padding:6px;text-align:left;">Birim</th>';
+    html+='<th style="border:1px solid #333;padding:6px;text-align:center;width:60px;">Kalem</th>';
+    html+='<th style="border:1px solid #333;padding:6px;text-align:left;">Bekleyen KKD</th>';
+    html+='</tr></thead><tbody>';
+    groups.forEach((g,i)=>{
+        const items=g.items.map(it=>it.kddName+' ('+it.pp+')').join(', ');
+        html+='<tr><td style="border:1px solid #333;padding:6px;text-align:center;">'+(i+1)+'</td><td style="border:1px solid #333;padding:6px;"><strong>'+escapeHtml(g.personnel)+'</strong></td><td style="border:1px solid #333;padding:6px;">'+escapeHtml(g.department||'-')+'</td><td style="border:1px solid #333;padding:6px;text-align:center;font-weight:bold;">'+g.items.length+'</td><td style="border:1px solid #333;padding:6px;font-size:10px;">'+escapeHtml(items)+'</td></tr>';
+    });
+    html+='</tbody></table>';
+    html+='<div style="margin-top:20px;text-align:center;font-size:10px;color:#777;border-top:1px solid #ccc;padding-top:8px;">ATTİ Raylı Sistem - RTS Takip | Hazırlayan: Gökhan GÖKER</div></div>';
+    openPrintPreview('KKD Dağıtım Bekleyenler - İsim Listesi',groups.length+' personel',html);
+}
+
+function printKddPendingAsMaterialList(groups){
+    const materialMap={};
+    groups.forEach(g=>{
+        g.items.forEach(it=>{
+            const key=it.kddName;
+            if(!materialMap[key])materialMap[key]={name:it.kddName,total:0,personnelList:[]};
+            materialMap[key].total+=(it.pp||1);
+            materialMap[key].personnelList.push(g.personnel);
+        });
+    });
+    let html='<div style="font-family:Arial,sans-serif;font-size:11px;color:#000;padding:10px;">';
+    html+='<div style="text-align:center;border-bottom:2px solid #333;padding-bottom:8px;margin-bottom:12px;">';
+    html+='<h1 style="font-size:18px;margin:0;font-weight:bold;">ATTİ RAYLI SİSTEM</h1>';
+    html+='<h2 style="font-size:13px;margin:4px 0 0;font-weight:normal;">KKD Dağıtım Bekleyenler - Malzeme Listesi</h2>';
+    html+='<div style="font-size:10px;color:#666;margin-top:4px;">Oluşturulma: '+new Date().toLocaleString('tr-TR')+'</div></div>';
+    html+='<table style="width:100%;border-collapse:collapse;font-size:11px;"><thead><tr style="background:#fed7aa;">';
+    html+='<th style="border:1px solid #333;padding:6px;text-align:left;width:40px;">#</th>';
+    html+='<th style="border:1px solid #333;padding:6px;text-align:left;">KKD Adı</th>';
+    html+='<th style="border:1px solid #333;padding:6px;text-align:center;width:90px;">Toplam Adet</th>';
+    html+='<th style="border:1px solid #333;padding:6px;text-align:left;">Alan Personeller</th>';
+    html+='</tr></thead><tbody>';
+    let i=0,grand=0;
+    Object.values(materialMap).sort((a,b)=>a.name.localeCompare(b.name,'tr')).forEach(m=>{
+        i++;grand+=m.total;
+        html+='<tr><td style="border:1px solid #333;padding:6px;text-align:center;">'+i+'</td><td style="border:1px solid #333;padding:6px;"><strong>'+escapeHtml(m.name)+'</strong></td><td style="border:1px solid #333;padding:6px;text-align:center;font-weight:bold;">'+m.total+'</td><td style="border:1px solid #333;padding:6px;font-size:10px;">'+escapeHtml(m.personnelList.join(', '))+'</td></tr>';
+    });
+    html+='<tr style="background:#fef3c7;font-weight:bold;"><td colspan="2" style="border:1px solid #333;padding:6px;text-align:right;">TOPLAM:</td><td style="border:1px solid #333;padding:6px;text-align:center;">'+grand+'</td><td style="border:1px solid #333;padding:6px;"></td></tr>';
+    html+='</tbody></table>';
+    html+='<div style="margin-top:20px;text-align:center;font-size:10px;color:#777;border-top:1px solid #ccc;padding-top:8px;">ATTİ Raylı Sistem - RTS Takip | Hazırlayan: Gökhan GÖKER</div></div>';
+    openPrintPreview('KKD Dağıtım Bekleyenler - Malzeme Listesi',groups.length+' personel',html);
+}
+
+function printKddPendingAsForm(groups){
+    let allFormsHtml='';
+    groups.forEach((g,idx)=>{
+        if(idx>0)allFormsHtml+='<div style="page-break-before: always;"></div>';
+        allFormsHtml+='<div style="font-family:Arial,sans-serif;font-size:12px;padding:20px;color:#000;">';
+        allFormsHtml+='<div style="text-align:center;margin-bottom:16px;"><h1 style="font-size:18px;margin:0;font-weight:bold;">ATTİ RAYLI SİSTEM</h1><h2 style="font-size:14px;margin:4px 0 0;">KKD Teslim Formu</h2></div>';
+        allFormsHtml+='<div style="margin-bottom:12px;padding:8px;background:#fff7ed;border:1px solid #c2410c;font-size:11px;"><strong>Personel:</strong> '+escapeHtml(g.personnel)+' | <strong>Birim:</strong> '+escapeHtml(g.department||'-')+' | <strong>Tarih:</strong> '+new Date().toLocaleDateString('tr-TR')+'</div>';
+        allFormsHtml+='<table style="width:100%;border-collapse:collapse;font-size:11px;"><thead><tr>';
+        allFormsHtml+='<th style="border:1px solid #000;padding:6px;background:#fed7aa;width:40px;text-align:center;">#</th>';
+        allFormsHtml+='<th style="border:1px solid #000;padding:6px;background:#fed7aa;text-align:left;">KKD Adı</th>';
+        allFormsHtml+='<th style="border:1px solid #000;padding:6px;background:#fed7aa;width:60px;text-align:center;">Adet</th>';
+        allFormsHtml+='<th style="border:1px solid #000;padding:6px;background:#fed7aa;width:120px;text-align:center;">İmza</th>';
+        allFormsHtml+='</tr></thead><tbody>';
+        g.items.forEach((it,i)=>{
+            allFormsHtml+='<tr><td style="border:1px solid #000;padding:6px;text-align:center;">'+(i+1)+'</td><td style="border:1px solid #000;padding:6px;">'+escapeHtml(it.kddName)+'</td><td style="border:1px solid #000;padding:6px;text-align:center;">'+(it.pp||1)+'</td><td style="border:1px solid #000;padding:6px;">&nbsp;</td></tr>';
+        });
+        allFormsHtml+='</tbody></table>';
+        allFormsHtml+='<div style="margin-top:18px;padding:10px;border:1px solid #000;background:#f9fafb;font-size:11px;line-height:1.5;text-align:justify;"><strong>YASAL UYARI:</strong> Yukarıda belirtilen KKD malzemelerini 4857 sayılı İş Kanunu ve işyeri çalışma kurallarına uygun olarak, yalnızca işyerinde ve işim gereği kullanmak üzere eksiksiz ve sağlam olarak teslim aldığımı beyan ve taahhüt ederim.</div>';
+        allFormsHtml+='<div style="margin-top:40px;display:flex;justify-content:space-between;gap:40px;">';
+        allFormsHtml+='<div style="flex:1;text-align:center;"><div style="border-top:1px solid #000;padding-top:6px;font-weight:bold;font-size:12px;">TESLİM EDEN</div><div style="margin-top:50px;font-size:11px;">Ad Soyad / İmza</div></div>';
+        allFormsHtml+='<div style="flex:1;text-align:center;"><div style="border-top:1px solid #000;padding-top:6px;font-weight:bold;font-size:12px;">TESLİM ALAN</div><div style="margin-top:50px;font-size:11px;">'+escapeHtml(g.personnel)+'<br>İmza</div></div>';
+        allFormsHtml+='</div></div>';
+    });
+    openPrintPreview('KKD Teslim Formu',groups.length+' personel (her kişi ayrı sayfa)',allFormsHtml);
+}
 function giveSingleClothing(pid,cname,gender,size,stat){
     if(!isAdmin){alert('❌ Yönetici girişi gerekli!');return}
     const p=data.personnel.find(x=>x.id===pid);const c=data.clothing.find(x=>x.name===cname && x.gender===gender);
@@ -4393,34 +5792,103 @@ function updateDistributionHistory(){
     const years=[...new Set((data.distributionHistory||[]).map(h=>new Date(h.date).getFullYear()))].sort((a,b)=>b-a);
     const cv=ySel.value;ySel.innerHTML='<option value="">Tüm Yıllar</option>';years.forEach(y=>ySel.innerHTML+='<option value="'+y+'">'+y+'</option>');ySel.value=cv;
     let h=data.distributionHistory||[];if(yf)h=h.filter(x=>new Date(x.date).getFullYear()==yf);
+    
+    // === GRUPLAMA: Kişi + Tür (Kıyafet / KKD) ===
     const grouped={};
-    h.forEach(x=>{const key=x.personnelName;if(!grouped[key])grouped[key]={personnel:x.personnelName,department:x.department,items:[]};grouped[key].items.push(x);});
+    h.forEach(x=>{
+        const key=x.personnelName+'|||'+(x.type||'Diğer');
+        if(!grouped[key]){
+            grouped[key]={
+                personnel:x.personnelName,
+                department:x.department,
+                type:x.type||'Diğer',
+                items:[]
+            };
+        }
+        grouped[key].items.push(x);
+    });
     let personList=Object.values(grouped);
-    personList.forEach(g=>{g.items.sort((a,b)=>new Date(b.date)-new Date(a.date));g.lastDate=g.items[0].date;g.totalCount=g.items.length;});
-    personList.sort((a,b)=>new Date(b.lastDate)-new Date(a.lastDate));
+    personList.forEach(g=>{
+        g.items.sort((a,b)=>new Date(b.date)-new Date(a.date));
+        g.lastDate=g.items[0].date;
+        g.totalCount=g.items.length;
+    });
+    // Sıralama: Önce kişi adı, sonra tür (Kıyafet önce, KKD sonra)
+    personList.sort((a,b)=>{
+        const nameComp=a.personnel.localeCompare(b.personnel,'tr');
+        if(nameComp!==0)return nameComp;
+        return (a.type||'').localeCompare(b.type||'','tr');
+    });
+    
     tb.innerHTML='';
     if(personList.length===0){tb.innerHTML='<tr><td colspan="6" class="text-center py-6 text-gray-500">Kayıt yok</td></tr>';return;}
+    
     personList.forEach(grp=>{
-        const uid='dist_'+grp.personnel.replace(/[^a-zA-Z0-9]/g,'_');
-        const isExpanded=expandedDistributionPersonnel.has(grp.personnel);
+        // Grup anahtarı: "personelAdı|||tür"
+        const groupKey=grp.personnel+'|||'+grp.type;
+        const uid='dist_'+groupKey.replace(/[^a-zA-Z0-9]/g,'_');
+        const isExpanded=expandedDistributionPersonnel.has(groupKey);
         const arrowCls=isExpanded?'rotated':'';
+        
+        // Tür badge
+        let typeBadge='';
+        if(grp.type==='KKD'){
+            typeBadge='<span class="bg-orange-200 text-orange-900 px-2 py-1 rounded text-xs font-bold">🦺 KKD</span>';
+        } else if(grp.type==='Kıyafet'){
+            typeBadge='<span class="bg-teal-200 text-teal-900 px-2 py-1 rounded text-xs font-bold">👕 Kıyafet</span>';
+        } else {
+            typeBadge='<span class="bg-gray-200 text-gray-800 px-2 py-1 rounded text-xs font-bold">📦 '+escapeHtml(grp.type)+'</span>';
+        }
+        
+        // Silme butonu: kişi + tür
         const safePersonnel=grp.personnel.replace(/'/g,"\\'").replace(/"/g,'&quot;');
-        const delAllBtn=isAdmin?'<button onclick="event.stopPropagation();deletePersonnelDistributionHistory(\''+safePersonnel+'\')" class="bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded text-xs font-bold whitespace-nowrap">🗑️ Tümünü Sil</button>':'';
-        tb.innerHTML+='<tr class="dist-group-row" onclick="toggleDistributionGroup(\''+safePersonnel+'\')"><td class="px-4 py-3 text-center"><span class="dist-group-arrow '+arrowCls+'" id="'+uid+'-arrow">▶</span></td><td class="px-4 py-3 text-sm font-bold text-blue-900">👤 '+escapeHtml(grp.personnel)+'</td><td class="px-4 py-3 text-sm">'+escapeHtml(grp.department||'-')+'</td><td class="px-4 py-3 text-center"><span class="bg-blue-200 text-blue-900 px-3 py-1 rounded-full font-bold text-xs">'+grp.totalCount+' dağıtım</span></td><td class="px-4 py-3 text-center text-sm">'+new Date(grp.lastDate).toLocaleDateString('tr-TR')+'</td><td class="px-4 py-3 text-center">'+delAllBtn+'</td></tr>';
+        const safeType=(grp.type||'').replace(/'/g,"\\'").replace(/"/g,'&quot;');
+        const delAllBtn=isAdmin?'<button onclick="event.stopPropagation();deletePersonnelDistributionHistoryByType(\''+safePersonnel+'\',\''+safeType+'\')" class="bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded text-xs font-bold whitespace-nowrap">🗑️ Tümünü Sil</button>':'';
+        
+        tb.innerHTML+='<tr class="dist-group-row" onclick="toggleDistributionGroup(\''+groupKey.replace(/'/g,"\\'")+'\')"><td class="px-4 py-3 text-center"><span class="dist-group-arrow '+arrowCls+'" id="'+uid+'-arrow">▶</span></td><td class="px-4 py-3 text-sm font-bold text-blue-900">👤 '+escapeHtml(grp.personnel)+' '+typeBadge+'</td><td class="px-4 py-3 text-sm">'+escapeHtml(grp.department||'-')+'</td><td class="px-4 py-3 text-center"><span class="bg-blue-200 text-blue-900 px-3 py-1 rounded-full font-bold text-xs">'+grp.totalCount+' dağıtım</span></td><td class="px-4 py-3 text-center text-sm">'+new Date(grp.lastDate).toLocaleDateString('tr-TR')+'</td><td class="px-4 py-3 text-center">'+delAllBtn+'</td></tr>';
+        
         grp.items.forEach(it=>{
             const hiddenCls=isExpanded?'':'dist-child-hidden';
-            const typeLabel=it.type==='KKD'?'🦺 KKD':'👕 Kıyafet';
+            const typeLabel=it.type==='KKD'?'🦺 KKD':(it.type==='Kıyafet'?'👕 Kıyafet':'📦 '+(it.type||''));
             const statBadge=it.status?'<span class="px-2 py-1 rounded text-xs font-bold bg-purple-100 text-purple-800">'+escapeHtml(it.status)+'</span>':'-';
             const safeItem=it.itemName.replace(/'/g,"\\'").replace(/"/g,'&quot;');
             const safeSize=(it.size||'').replace(/'/g,"\\'");
             const delBtn=isAdmin?'<button onclick="event.stopPropagation();deleteDistributionRecord(\''+safePersonnel+'\',\''+it.date+'\',\''+safeItem+'\',\''+safeSize+'\')" class="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded text-xs font-bold">🗑️ Sil</button>':'';
-            tb.innerHTML+='<tr class="dist-child-row '+hiddenCls+'" data-parent-dist="'+grp.personnel.replace(/"/g,'&quot;')+'"><td class="px-4 py-2 text-center text-gray-400">└</td><td class="px-4 py-2 text-sm pl-6">'+typeLabel+' '+escapeHtml(it.itemName)+'</td><td class="px-4 py-2 text-sm">'+escapeHtml(it.size||'-')+'</td><td class="px-4 py-2 text-center text-sm">'+statBadge+'</td><td class="px-4 py-2 text-center text-sm"><strong>'+(it.quantity||1)+' adet</strong><br><span class="text-xs text-gray-500">'+new Date(it.date).toLocaleDateString('tr-TR')+'</span></td><td class="px-4 py-2 text-center">'+delBtn+'</td></tr>';
+            tb.innerHTML+='<tr class="dist-child-row '+hiddenCls+'" data-parent-dist="'+groupKey.replace(/"/g,'&quot;')+'"><td class="px-4 py-2 text-center text-gray-400">└</td><td class="px-4 py-2 text-sm pl-6">'+typeLabel+' '+escapeHtml(it.itemName)+'</td><td class="px-4 py-2 text-sm">'+escapeHtml(it.size||'-')+'</td><td class="px-4 py-2 text-center text-sm">'+statBadge+'</td><td class="px-4 py-2 text-center text-sm"><strong>'+(it.quantity||1)+' adet</strong><br><span class="text-xs text-gray-500">'+new Date(it.date).toLocaleDateString('tr-TR')+'</span></td><td class="px-4 py-2 text-center">'+delBtn+'</td></tr>';
         });
     });
 }
-function toggleDistributionGroup(personnelName){if(expandedDistributionPersonnel.has(personnelName))expandedDistributionPersonnel.delete(personnelName);else expandedDistributionPersonnel.add(personnelName);document.querySelectorAll('tr[data-parent-dist]').forEach(r=>{const pn=r.getAttribute('data-parent-dist');if(pn===personnelName){if(expandedDistributionPersonnel.has(personnelName))r.classList.remove('dist-child-hidden');else r.classList.add('dist-child-hidden');}});const uid='dist_'+personnelName.replace(/[^a-zA-Z0-9]/g,'_');const arrow=document.getElementById(uid+'-arrow');if(arrow){if(expandedDistributionPersonnel.has(personnelName))arrow.classList.add('rotated');else arrow.classList.remove('rotated');}}
+function toggleDistributionGroup(groupKey){
+    if(expandedDistributionPersonnel.has(groupKey))expandedDistributionPersonnel.delete(groupKey);
+    else expandedDistributionPersonnel.add(groupKey);
+    document.querySelectorAll('tr[data-parent-dist]').forEach(r=>{
+        const pn=r.getAttribute('data-parent-dist');
+        if(pn===groupKey){
+            if(expandedDistributionPersonnel.has(groupKey))r.classList.remove('dist-child-hidden');
+            else r.classList.add('dist-child-hidden');
+        }
+    });
+    const uid='dist_'+groupKey.replace(/[^a-zA-Z0-9]/g,'_');
+    const arrow=document.getElementById(uid+'-arrow');
+    if(arrow){
+        if(expandedDistributionPersonnel.has(groupKey))arrow.classList.add('rotated');
+        else arrow.classList.remove('rotated');
+    }
+}
 function deleteDistributionRecord(personnelName,date,itemName,size){if(!isAdmin){alert('❌ Yönetici girişi gerekli!');return}if(!confirm('Bu dağıtım kaydını silmek istediğinize emin misiniz?'))return;const before=(data.distributionHistory||[]).length;data.distributionHistory=(data.distributionHistory||[]).filter(h=>!(h.personnelName===personnelName && h.date===date && h.itemName===itemName && (h.size||'')===(size||'')));if(before===data.distributionHistory.length){alert('⚠️ Kayıt bulunamadı!');return}saveToLocalStorage();updateDistributionHistory();showSuccessMessage('🗑️ Kayıt silindi!');}
 function deletePersonnelDistributionHistory(personnelName){if(!isAdmin){alert('❌ Yönetici girişi gerekli!');return}const count=data.distributionHistory.filter(h=>h.personnelName===personnelName).length;if(!confirm('"'+personnelName+'" adlı personelin TÜM dağıtım geçmişini ('+count+' kayıt) silmek istediğinize emin misiniz?'))return;data.distributionHistory=data.distributionHistory.filter(h=>h.personnelName!==personnelName);saveToLocalStorage();updateDistributionHistory();showSuccessMessage('🗑️ '+count+' kayıt silindi!');}
+
+// Yeni: Kişi + Tür bazlı silme (Kıyafet veya KKD)
+function deletePersonnelDistributionHistoryByType(personnelName, type){
+    if(!isAdmin){alert('❌ Yönetici girişi gerekli!');return}
+    const count=data.distributionHistory.filter(h=>h.personnelName===personnelName && (h.type||'Diğer')===type).length;
+    const typeLabel=type==='KKD'?'🦺 KKD':(type==='Kıyafet'?'👕 Kıyafet':type);
+    if(!confirm('"'+personnelName+'" adlı personelin "'+typeLabel+'" türündeki TÜM dağıtım kayıtlarını ('+count+' kayıt) silmek istediğinize emin misiniz?'))return;
+    data.distributionHistory=data.distributionHistory.filter(h=>!(h.personnelName===personnelName && (h.type||'Diğer')===type));
+    saveToLocalStorage();
+    updateDistributionHistory();
+    showSuccessMessage('🗑️ '+count+' kayıt silindi!');
+}
 function deleteDistributionByYear(){if(!isAdmin){alert('❌ Yönetici girişi gerekli!');return}const year=document.getElementById('distributionYearFilter').value;if(!year){alert('Lütfen önce bir yıl seçin!');return}const count=data.distributionHistory.filter(h=>new Date(h.date).getFullYear()==parseInt(year)).length;if(count===0){alert(year+' yılına ait kayıt yok.');return}if(!confirm(year+' YILINA AİT TÜM KAYITLAR ('+count+') SİLİNECEK! Emin misiniz?'))return;data.distributionHistory=data.distributionHistory.filter(h=>new Date(h.date).getFullYear()!=parseInt(year));saveToLocalStorage();updateDistributionHistory();showSuccessMessage('🗑️ '+count+' kayıt silindi!');}
 function clearAllDistributionHistory(){if(!isAdmin){alert('❌ Yönetici girişi gerekli!');return}const count=(data.distributionHistory||[]).length;if(count===0){alert('Silinecek kayıt yok.');return}if(!confirm('TÜM DAĞITIM GEÇMİŞİ ('+count+' kayıt) SİLİNECEK! Emin misiniz?'))return;if(!confirm('SON ONAY: '+count+' kayıt kalıcı olarak silinecek.'))return;data.distributionHistory=[];saveToLocalStorage();updateDistributionHistory();showSuccessMessage('🗑️ Tüm geçmiş silindi!');}
 
@@ -4569,6 +6037,7 @@ function confirmDistributionPrint(){
     const startDate = document.getElementById('distributionPrintStartDate').value;
     const endDate = document.getElementById('distributionPrintEndDate').value;
     const printType = document.querySelector('input[name="printType"]:checked').value;
+    const materialType = document.querySelector('input[name="printMaterialType"]:checked').value;
     const deptFilter = document.getElementById('distributionPrintDepartmentFilter').value;
     const statusFilter = document.getElementById('distributionPrintStatusFilter').value;
     
@@ -4589,19 +6058,33 @@ function confirmDistributionPrint(){
     hideModal('distributionPrintFilterModal');
     
     if(printType === 'name'){
-        printDistributionAsNameListFiltered(start, end, deptFilter, statusFilter);
+        printDistributionAsNameListFiltered(start, end, deptFilter, statusFilter, materialType);
     } else {
-        printDistributionAsMaterialListFiltered(start, end, deptFilter, statusFilter);
+        printDistributionAsMaterialListFiltered(start, end, deptFilter, statusFilter, materialType);
     }
 }
 
-function printDistributionAsNameListFiltered(startDate, endDate, deptFilter, statusFilter){
+// Malzeme türü etiketi (rapor başlığı için)
+function getMaterialTypeLabel(materialType){
+    if(materialType === 'clothing') return '👕 Kıyafet';
+    if(materialType === 'kdd') return '🦺 KKD';
+    return '📦 Kıyafet + KKD';
+}
+
+function printDistributionAsNameListFiltered(startDate, endDate, deptFilter, statusFilter, materialType){
     let history = data.distributionHistory || [];
     history = history.filter(h => distributionPrintSelectedPersonnel.has(h.personnelName));
     if(deptFilter) history = history.filter(h => h.department === deptFilter);
     if(statusFilter) history = history.filter(h => h.status === statusFilter);
     if(startDate) history = history.filter(h => new Date(h.date) >= startDate);
     if(endDate) history = history.filter(h => new Date(h.date) <= endDate);
+    
+    // Malzeme türü filtresi
+    if(materialType === 'clothing'){
+        history = history.filter(h => h.type === 'Kıyafet');
+    } else if(materialType === 'kdd'){
+        history = history.filter(h => h.type === 'KKD');
+    }
     
     if(history.length === 0){
         alert('Seçilen filtrelere uyan kayıt bulunamadı!');
@@ -4628,12 +6111,14 @@ function printDistributionAsNameListFiltered(startDate, endDate, deptFilter, sta
     else if(endDate) filterInfo = endDate.toLocaleDateString('tr-TR') + ' ve öncesi';
     else filterInfo = 'Tüm Tarihler';
     
+    const materialTypeLabel = getMaterialTypeLabel(materialType);
+    
     let html = '<div style="font-family:Arial,sans-serif;font-size:11px;color:#000;padding:10px;">';
     html += '<div style="text-align:center;border-bottom:2px solid #333;padding-bottom:8px;margin-bottom:12px;">';
     html += '<h1 style="font-size:18px;margin:0;font-weight:bold;">ATTİ RAYLI SİSTEM</h1>';
-    html += '<h2 style="font-size:13px;margin:4px 0 0;font-weight:normal;">Personel Bazlı Dağıtım Özeti</h2>';
+    html += '<h2 style="font-size:13px;margin:4px 0 0;font-weight:normal;">Personel Bazlı Dağıtım Özeti (' + materialTypeLabel + ')</h2>';
     html += '<div style="font-size:11px;margin-top:4px;">Tarih Aralığı: <strong>' + filterInfo + '</strong></div>';
-    html += '<div style="font-size:11px;">Seçili Personel: <strong>' + distributionPrintSelectedPersonnel.size + '</strong> | Kayıt: <strong>' + history.length + '</strong></div>';
+    html += '<div style="font-size:11px;">Malzeme Türü: <strong>' + materialTypeLabel + '</strong> | Seçili Personel: <strong>' + distributionPrintSelectedPersonnel.size + '</strong> | Kayıt: <strong>' + history.length + '</strong></div>';
     html += '<div style="font-size:10px;color:#666;margin-top:4px;">Oluşturulma: ' + new Date().toLocaleString('tr-TR') + '</div>';
     html += '</div>';
     html += '<table style="width:100%;border-collapse:collapse;font-size:11px;"><thead><tr style="background:#dbeafe;">';
@@ -4647,7 +6132,10 @@ function printDistributionAsNameListFiltered(startDate, endDate, deptFilter, sta
     let i = 0;
     Object.values(grouped).sort((a,b) => a.name.localeCompare(b.name,'tr')).forEach(g => {
         i++;
-        const itemSummary = g.items.map(it => it.itemName + ' (' + (it.quantity||1) + ')').join(', ');
+        const itemSummary = g.items.map(it => {
+            const icon = it.type === 'KKD' ? '🦺' : '👕';
+            return icon + ' ' + it.itemName + ' (' + (it.quantity||1) + ')';
+        }).join(', ');
         const sortedDates = g.dates.slice().sort((a,b) => b - a);
         const lastDate = sortedDates[0] ? sortedDates[0].toLocaleDateString('tr-TR') : '-';
         const firstDate = sortedDates[sortedDates.length-1] ? sortedDates[sortedDates.length-1].toLocaleDateString('tr-TR') : '-';
@@ -4665,16 +6153,23 @@ function printDistributionAsNameListFiltered(startDate, endDate, deptFilter, sta
     html += '<div style="margin-top:20px;text-align:center;font-size:10px;color:#777;border-top:1px solid #ccc;padding-top:8px;">ATTİ Raylı Sistem - RTS Takip | Hazırlayan: Gökhan GÖKER</div>';
     html += '</div>';
     
-    openPrintPreview('Personel Bazlı Dağıtım Özeti', Object.keys(grouped).length + ' personel | ' + filterInfo, html);
+    openPrintPreview('Personel Bazlı Dağıtım Özeti - ' + materialTypeLabel, Object.keys(grouped).length + ' personel | ' + filterInfo, html);
 }
 
-function printDistributionAsMaterialListFiltered(startDate, endDate, deptFilter, statusFilter){
+function printDistributionAsMaterialListFiltered(startDate, endDate, deptFilter, statusFilter, materialType){
     let history = data.distributionHistory || [];
     history = history.filter(h => distributionPrintSelectedPersonnel.has(h.personnelName));
     if(deptFilter) history = history.filter(h => h.department === deptFilter);
     if(statusFilter) history = history.filter(h => h.status === statusFilter);
     if(startDate) history = history.filter(h => new Date(h.date) >= startDate);
     if(endDate) history = history.filter(h => new Date(h.date) <= endDate);
+    
+    // Malzeme türü filtresi
+    if(materialType === 'clothing'){
+        history = history.filter(h => h.type === 'Kıyafet');
+    } else if(materialType === 'kdd'){
+        history = history.filter(h => h.type === 'KKD');
+    }
     
     if(history.length === 0){
         alert('Seçilen filtrelere uyan kayıt bulunamadı!');
@@ -4704,12 +6199,14 @@ function printDistributionAsMaterialListFiltered(startDate, endDate, deptFilter,
     else if(endDate) filterInfo = endDate.toLocaleDateString('tr-TR') + ' ve öncesi';
     else filterInfo = 'Tüm Tarihler';
     
+    const materialTypeLabel = getMaterialTypeLabel(materialType);
+    
     let html = '<div style="font-family:Arial,sans-serif;font-size:11px;color:#000;padding:10px;">';
     html += '<div style="text-align:center;border-bottom:2px solid #333;padding-bottom:8px;margin-bottom:12px;">';
     html += '<h1 style="font-size:18px;margin:0;font-weight:bold;">ATTİ RAYLI SİSTEM</h1>';
-    html += '<h2 style="font-size:13px;margin:4px 0 0;font-weight:normal;">Malzeme Bazlı Dağıtım Özeti</h2>';
+    html += '<h2 style="font-size:13px;margin:4px 0 0;font-weight:normal;">Malzeme Bazlı Dağıtım Özeti (' + materialTypeLabel + ')</h2>';
     html += '<div style="font-size:11px;margin-top:4px;">Tarih Aralığı: <strong>' + filterInfo + '</strong></div>';
-    html += '<div style="font-size:11px;">Seçili Personel: <strong>' + distributionPrintSelectedPersonnel.size + '</strong> | Kayıt: <strong>' + history.length + '</strong></div>';
+    html += '<div style="font-size:11px;">Malzeme Türü: <strong>' + materialTypeLabel + '</strong> | Seçili Personel: <strong>' + distributionPrintSelectedPersonnel.size + '</strong> | Kayıt: <strong>' + history.length + '</strong></div>';
     html += '<div style="font-size:10px;color:#666;margin-top:4px;">Oluşturulma: ' + new Date().toLocaleString('tr-TR') + '</div>';
     html += '</div>';
     
@@ -4768,7 +6265,7 @@ function printDistributionAsMaterialListFiltered(startDate, endDate, deptFilter,
     html += '<div style="margin-top:20px;text-align:center;font-size:10px;color:#777;border-top:1px solid #ccc;padding-top:8px;">ATTİ Raylı Sistem - RTS Takip | Hazırlayan: Gökhan GÖKER</div>';
     html += '</div>';
     
-    openPrintPreview('Malzeme Bazlı Dağıtım Özeti', filterInfo, html);
+    openPrintPreview('Malzeme Bazlı Dağıtım Özeti - ' + materialTypeLabel, filterInfo, html);
 }
 
 // ==================== KDD DAĞITIM LİSTESİ ====================
@@ -5301,11 +6798,121 @@ function openAddNewTaskModal(){
     document.getElementById('newTaskCompleterPersonnelSearch').value='';
     document.getElementById('newTaskCompleterPersonnelList').innerHTML='<div class="text-center py-3 text-gray-500 text-sm bg-white rounded border-2 border-dashed border-gray-300">✍️ Yazmaya başlayın, öneriler burada görünecek...</div>';
     document.getElementById('newTaskCompleterExternalList').innerHTML='';
-document.getElementById('newTaskCompleterExternalInput').value='';
-document.getElementById('newTaskRequireReport').checked=false;
-updateNewTaskCompleterSummary();
+    document.getElementById('newTaskCompleterExternalInput').value='';
+    document.getElementById('newTaskRequireReport').checked=false;
+    
+    // Yeni: Kaynak seçimini sıfırla
+    document.querySelector('input[name="newTaskSource"][value="empty"]').checked=true;
+    onNewTaskSourceChange('empty');
+    populateNewTaskTemplateSelect();
+    
+    updateNewTaskCompleterSummary();
     updateDepartmentDropdowns();
     showModal('addNewTaskModal');
+}
+
+// ==================== YENİ GÖREV - ŞABLON SEÇİMİ ====================
+function populateNewTaskTemplateSelect(){
+    const sel=document.getElementById('newTaskTemplateSelect');
+    if(!sel)return;
+    sel.innerHTML='<option value="">-- Şablon Seçin --</option>';
+    if(!data.taskTemplates||data.taskTemplates.length===0){
+        sel.innerHTML='<option value="">⚠️ Kayıtlı şablon yok — Ayarlar → Görev Şablonu Ekleyin</option>';
+        return;
+    }
+    data.taskTemplates.slice().sort((a,b)=>a.name.localeCompare(b.name,'tr')).forEach(t=>{
+        sel.innerHTML+='<option value="'+t.id+'">📌 '+escapeHtml(t.name)+' ('+escapeHtml(t.department)+')</option>';
+    });
+}
+
+function onNewTaskSourceChange(source){
+    const wrapper=document.getElementById('newTaskTemplateSelectWrapper');
+    const emptyLabel=document.getElementById('newTaskSourceEmptyLabel');
+    const templateLabel=document.getElementById('newTaskSourceTemplateLabel');
+    
+    if(source==='template'){
+        if(wrapper) wrapper.classList.remove('hidden');
+        if(templateLabel) templateLabel.classList.add('border-indigo-500','bg-indigo-100');
+        if(emptyLabel) emptyLabel.classList.remove('border-indigo-500','bg-indigo-100');
+    } else {
+        if(wrapper) wrapper.classList.add('hidden');
+        if(emptyLabel) emptyLabel.classList.add('border-indigo-500','bg-indigo-100');
+        if(templateLabel) templateLabel.classList.remove('border-indigo-500','bg-indigo-100');
+        // Sıfırdan seçildiğinde formu temizle
+        document.getElementById('newTaskTemplateInfo').classList.add('hidden');
+        const sel=document.getElementById('newTaskTemplateSelect');
+        if(sel) sel.value='';
+    }
+}
+
+function onNewTaskTemplatePicked(){
+    const sel=document.getElementById('newTaskTemplateSelect');
+    const info=document.getElementById('newTaskTemplateInfo');
+    if(!sel) return;
+    const templateId=parseInt(sel.value);
+    if(!templateId){
+        if(info) info.classList.add('hidden');
+        return;
+    }
+    const template=data.taskTemplates.find(t=>t.id===templateId);
+    if(!template){
+        if(info) info.classList.add('hidden');
+        return;
+    }
+    
+    // Formu şablondan doldur
+    document.getElementById('newTaskNameInput').value=template.name||'';
+    document.getElementById('newTaskPeriodInput').value=template.period||'';
+    
+    // Birim seçimi
+    const deptSelect=document.getElementById('newTaskDepartmentSelect');
+    if(deptSelect){
+        deptSelect.value=template.department||'';
+        // Birim değişince sorumlu listesini yükle
+        onNewTaskDepartmentChange();
+    }
+    
+    // Rapor isteği
+    document.getElementById('newTaskRequireReport').checked=template.requireReport||false;
+    
+    // Sorumluları aktar
+    selectedNewTaskCompleters={responsible:[],personnel:[],external:[]};
+    (template.persons||[]).forEach(p=>{
+        if(p.type==='external'){
+            selectedNewTaskCompleters.external.push({name:p.name,type:'external'});
+        } else if(p.type==='personnel'){
+            selectedNewTaskCompleters.personnel.push({id:p.id,name:p.name,department:p.department,type:'personnel'});
+        } else {
+            // responsible veya tip belirsizse sorumlu olarak ekle
+            selectedNewTaskCompleters.responsible.push({id:p.id,name:p.name,type:'responsible'});
+        }
+    });
+    
+    // Sorumlu listesindeki checkbox'ları işaretle
+    setTimeout(()=>{
+        document.querySelectorAll('#newTaskPersonList input[type="checkbox"]').forEach(cb=>{
+            const id=parseInt(cb.value);
+            if(selectedNewTaskCompleters.responsible.some(x=>x.id===id)){
+                cb.checked=true;
+                selectedNewTaskPersons.push({id,name:cb.getAttribute('data-name')});
+            }
+        });
+        document.getElementById('newTaskSelectedPersonCount').textContent='('+selectedNewTaskPersons.length+')';
+        renderNewTaskExternalCompletersList();
+        updateNewTaskCompleterSummary();
+    },100);
+    
+    // Bilgi kutusu
+    if(info){
+        info.classList.remove('hidden');
+        let pt='';
+        if(template.period===1)pt='Her gün';
+        else if(template.period===7)pt='Haftalık';
+        else if(template.period===30)pt='Aylık';
+        else if(template.period===365)pt='Yıllık';
+        else pt=template.period+' gün';
+        info.innerHTML='✅ <strong>'+escapeHtml(template.name)+'</strong> şablonu yüklendi. Düzenleyip kaydedebilirsiniz.<br><span class="text-gray-600">Periyot: '+pt+' | Kişi: '+(template.persons||[]).length+'</span>';
+    }
 }
 function onNewTaskDepartmentChange(){
     const dept=document.getElementById('newTaskDepartmentSelect').value;
@@ -5518,7 +7125,42 @@ function filterActiveTasks(tasks){
 function calculateTaskStatus(task){const now=new Date();const nextDue=new Date(task.nextDueDate);if(nextDue<now){const d=Math.ceil((now-nextDue)/(1000*60*60*24));return{status:'overdue',days:d,remaining:-d,nextDue:nextDue};}else{const d=Math.ceil((nextDue-now)/(1000*60*60*24));if(d<=3)return{status:'warning',days:d,remaining:d,nextDue:nextDue};return{status:'active',days:d,remaining:d,nextDue:nextDue};}}
 function sortActiveTasks(){if(!isAdmin){alert('❌ Yönetici girişi gerekli!');return}if(!data.tasks||data.tasks.length===0)return;data.tasks.sort((a,b)=>{const as=calculateTaskStatus(a),bs=calculateTaskStatus(b);if(as.status==='overdue'&&bs.status!=='overdue')return -1;if(as.status!=='overdue'&&bs.status==='overdue')return 1;if(as.status==='overdue'&&bs.status==='overdue')return bs.days-as.days;return as.remaining-bs.remaining;});saveToLocalStorage();updateTaskPage();updateHomeActiveTasks();showSuccessMessage('📊 Sıralandı!');}
 function updateTaskPage(){updateTaskStats();updateActiveTaskFilterUI();updateActiveTaskTable();updateCompletedTaskTable();updateHomeActiveTasks();}
-function updateTaskStats(){const tasks=data.tasks||[];let a=0,o=0,u=0;tasks.forEach(t=>{const s=calculateTaskStatus(t);if(s.status==='overdue'){o++;a++;}else if(s.status==='warning'){u++;a++;}else a++;});document.getElementById('taskActiveCount').textContent=a;document.getElementById('taskOverdueCount').textContent=o;document.getElementById('taskUpcomingCount').textContent=u;document.getElementById('taskCompletedCount').textContent=(data.completedTasks||[]).length;}
+
+// ==================== GÖREV BÖLÜMLERİ AÇILIR-KAPANIR ====================
+function toggleTaskSection(sectionId){
+    const section=document.getElementById(sectionId);
+    if(!section)return;
+    
+    const arrowId=sectionId==='activeTasksSection'?'activeTasksSectionArrow':'completedTasksSectionArrow';
+    const arrow=document.getElementById(arrowId);
+    
+    if(section.classList.contains('hidden')){
+        section.classList.remove('hidden');
+        if(arrow) arrow.style.transform='rotate(90deg)';
+    } else {
+        section.classList.add('hidden');
+        if(arrow) arrow.style.transform='rotate(0deg)';
+    }
+}
+function updateTaskStats(){
+    const tasks=data.tasks||[];
+    let a=0,o=0,u=0;
+    tasks.forEach(t=>{
+        const s=calculateTaskStatus(t);
+        if(s.status==='overdue'){o++;a++;}
+        else if(s.status==='warning'){u++;a++;}
+        else a++;
+    });
+    document.getElementById('taskActiveCount').textContent=a;
+    document.getElementById('taskOverdueCount').textContent=o;
+    document.getElementById('taskUpcomingCount').textContent=u;
+    document.getElementById('taskCompletedCount').textContent=(data.completedTasks||[]).length;
+    
+    // === RAPORLANMAYANLAR: Rapor istenip de yüklenmemiş tamamlanan görevler ===
+    const missingReports=(data.completedTasks||[]).filter(t=>t.requireReport===true && !(t.reportForm && t.reportForm.data)).length;
+    const mrEl=document.getElementById('taskMissingReportCount');
+    if(mrEl) mrEl.textContent=missingReports;
+}
 function updateActiveTaskTable(){
     const tbody=document.getElementById('activeTaskTableBody');const emptyEl=document.getElementById('activeTaskFilterEmpty');if(!tbody)return;
     const allTasks=(data.tasks||[]).slice().sort((a,b)=>{const as=calculateTaskStatus(a),bs=calculateTaskStatus(b);if(as.status==='overdue'&&bs.status!=='overdue')return -1;if(as.status!=='overdue'&&bs.status==='overdue')return 1;if(as.status==='overdue'&&bs.status==='overdue')return bs.days-as.days;return as.remaining-bs.remaining;});
@@ -5822,7 +7464,7 @@ function confirmTaskCompletion(){
     if(!data.completedTasks)data.completedTasks=[];
     data.completedTasks.push(ct);
     task.lastCompletedAt=now.toISOString();
-    task.nextDueDate=new Date(now.getTime()+task.period*24*60*60*1000).toISOString();
+    task.nextDueDate=new Date(nextDue.getTime()+task.period*24*60*60*1000).toISOString();
     
     // Görevin kendisinden de rapor verisini temizleyelim (artık completedTask'ta)
     // (gerekirse task.requireReport korunur çünkü periyodik görev)
@@ -5848,6 +7490,57 @@ function confirmTaskCompletion(){
 }
 function deleteTask(id){if(!isAdmin){alert('❌ Yönetici girişi gerekli!');return}const task=data.tasks.find(t=>t.id===id);if(!task)return;if(!confirm(task.name+' görevini silmek istediğinize emin misiniz?'))return;data.tasks=data.tasks.filter(t=>t.id!==id);saveToLocalStorage();updateTaskPage();showSuccessMessage('🗑️ Silindi!');}
 function deleteCompletedTask(id){if(!isAdmin){alert('❌ Yönetici girişi gerekli!');return}if(!confirm('Bu tamamlanan görev kaydını silmek istediğinize emin misiniz?'))return;data.completedTasks=data.completedTasks.filter(t=>t.completedId!==id && t.id!==id);saveToLocalStorage();updateTaskPage();showSuccessMessage('🗑️ Silindi!');}
+
+// ==================== RAPORLANMAYAN GÖREVLER LİSTESİ ====================
+function showMissingReports(){
+    if(!isAdmin && !isViewer){alert('❌ Giriş yapmanız gerekiyor!');return}
+    const missing=(data.completedTasks||[]).filter(t=>t.requireReport===true && !(t.reportForm && t.reportForm.data));
+    
+    let html='<div style="font-family:Arial,sans-serif;font-size:12px;color:#000;padding:10px;">';
+    html+='<div style="text-align:center;border-bottom:2px solid #333;padding-bottom:8px;margin-bottom:12px;">';
+    html+='<h1 style="font-size:18px;margin:0;font-weight:bold;">ATTİ RAYLI SİSTEM</h1>';
+    html+='<h2 style="font-size:13px;margin:4px 0 0;font-weight:normal;">Raporlanmayan Görevler</h2>';
+    html+='<div style="font-size:11px;margin-top:6px;">Rapor istenip de yüklenmemiş tamamlanan görevler</div>';
+    html+='<div style="font-size:10px;color:#666;margin-top:4px;">Oluşturulma: '+new Date().toLocaleString('tr-TR')+' | Toplam: '+missing.length+' görev</div>';
+    html+='</div>';
+    
+    if(missing.length===0){
+        html+='<div style="text-align:center;padding:30px;color:#16a34a;font-size:14px;font-weight:bold;">✅ Raporlanmayan görev yok — Tüm raporlar tamam!</div>';
+    } else {
+        html+='<div style="background:#fef3c7;border:2px solid #f59e0b;border-radius:6px;padding:10px;margin-bottom:14px;font-size:11px;">';
+        html+='<strong>⚠️ UYARI:</strong> Aşağıdaki '+missing.length+' görev için rapor formu istenmiş ancak <strong>yüklenmemiştir</strong>. Lütfen ilgili raporları tamamlayın.';
+        html+='</div>';
+        
+        html+='<table style="width:100%;border-collapse:collapse;font-size:11px;">';
+        html+='<thead><tr style="background:#e9d5ff;">';
+        html+='<th style="border:1px solid #333;padding:6px;text-align:left;width:40px;">#</th>';
+        html+='<th style="border:1px solid #333;padding:6px;text-align:left;">Görev Adı</th>';
+        html+='<th style="border:1px solid #333;padding:6px;text-align:left;">Birim</th>';
+        html+='<th style="border:1px solid #333;padding:6px;text-align:center;">Tamamlanma</th>';
+        html+='<th style="border:1px solid #333;padding:6px;text-align:left;">Yapanlar</th>';
+        html+='<th style="border:1px solid #333;padding:6px;text-align:center;">İşaretleyen</th>';
+        html+='</tr></thead><tbody>';
+        
+        missing.sort((a,b)=>new Date(b.completedAt)-new Date(a.completedAt));
+        missing.forEach((t,i)=>{
+            const yapanlar=(t.completers||[]).map(c=>c.name).join(', ');
+            html+='<tr>';
+            html+='<td style="border:1px solid #333;padding:6px;text-align:center;">'+(i+1)+'</td>';
+            html+='<td style="border:1px solid #333;padding:6px;"><strong>'+escapeHtml(t.name||'-')+'</strong></td>';
+            html+='<td style="border:1px solid #333;padding:6px;">'+escapeHtml(t.department||'-')+'</td>';
+            html+='<td style="border:1px solid #333;padding:6px;text-align:center;">'+new Date(t.completedAt).toLocaleDateString('tr-TR')+'</td>';
+            html+='<td style="border:1px solid #333;padding:6px;font-size:10px;">'+escapeHtml(yapanlar||'-')+'</td>';
+            html+='<td style="border:1px solid #333;padding:6px;text-align:center;">'+escapeHtml(t.completedBy||'-')+'</td>';
+            html+='</tr>';
+        });
+        html+='</tbody></table>';
+    }
+    
+    html+='<div style="margin-top:20px;text-align:center;font-size:10px;color:#777;border-top:1px solid #ccc;padding-top:8px;">ATTİ Raylı Sistem - RTS Takip | Hazırlayan: Gökhan GÖKER</div>';
+    html+='</div>';
+    
+    openPrintPreview('Raporlanmayan Görevler', missing.length+' görev', html);
+}
 
 // ==================== TAMAMLANAN GÖREV RAPORU YÜKLE / İNDİR ====================
 function downloadCompletedTaskReport(completedId){
@@ -6603,12 +8296,13 @@ function deleteTitle(i){if(!isAdmin){alert('❌ Yönetici girişi gerekli!');ret
 function refreshStatusDropdowns(){const f=document.getElementById('clothingStockStatusFilter');if(f){const cv=f.value;f.innerHTML='<option value="">Tüm Statüler</option>';data.statuses.slice().sort((a,b)=>a.localeCompare(b,'tr')).forEach(s=>f.innerHTML+='<option value="'+s+'">'+s+'</option>');f.value=cv;}const ns=document.getElementById('newClothingStatusSelect');if(ns){const cv=ns.value;ns.innerHTML='<option value="">-- Statü Seçin --</option>';data.statuses.slice().sort((a,b)=>a.localeCompare(b,'tr')).forEach(s=>ns.innerHTML+='<option value="'+s+'">'+s+'</option>');ns.value=cv;}const es=document.getElementById('existingClothingStatusSelect');if(es){const cv=es.value;es.innerHTML='<option value="">-- Statü Seçin --</option>';data.statuses.slice().sort((a,b)=>a.localeCompare(b,'tr')).forEach(s=>es.innerHTML+='<option value="'+s+'">'+s+'</option>');es.value=cv;}const ras=document.getElementById('resetAllStockStatusSelect');if(ras){const cv=ras.value;ras.innerHTML='<option value="">-- Statü Seçin --</option>';data.statuses.slice().sort((a,b)=>a.localeCompare(b,'tr')).forEach(s=>ras.innerHTML+='<option value="'+s+'">'+s+'</option>');ras.value=cv;}}
 function updateAllStats(){
     const tp=document.getElementById('totalPersonnel');if(tp)tp.textContent=data.personnel.length;
+    populateNewTaskTemplateSelect();
     const hpc=document.getElementById('homePersonnelCount');if(hpc)hpc.textContent=data.personnel.length+' Personel';
     let tk=data.kkds.reduce((s,k)=>s+k.stock,0);
     const hsc=document.getElementById('homeStockCount');if(hsc)hsc.textContent=tk+' KKD';
     const htc=document.getElementById('homeTrainingCount');if(htc)htc.textContent=data.trainings.length+' Eğitim';
     updateStockTables();updatePendingTables();updateDistributionHistory();
-    updateTrainingList();updateClothingList();updateCertificateList();
+    updateTrainingList();updateClothingList();updateKddList();updateCertificateList();
     updateTrainingStats();updateCertificateStats();
     updatePersonnelTable();updateUpcomingTrainings();
     updateTaskPage();updateTaskTemplateTable();updateDepartmentDropdowns();
@@ -6617,6 +8311,8 @@ function updateAllStats(){
 }
 function updateClothingList(){
     const l=document.getElementById('clothingList');if(!l)return;
+    const badge=document.getElementById('clothingCountBadge');
+    if(badge)badge.textContent=(data.clothing||[]).length;
     l.innerHTML='';
     if(!data.clothing||data.clothing.length===0){l.innerHTML='<div class="text-gray-500 text-sm text-center py-3">Henüz kıyafet yok</div>';return;}
     const filterSeason=document.getElementById('clothingListSeasonFilter')?document.getElementById('clothingListSeasonFilter').value:'';
@@ -6635,6 +8331,69 @@ function updateClothingList(){
 function deleteClothingItem(idx){if(!isAdmin){alert('❌ Yönetici girişi gerekli!');return}const c=data.clothing[idx];if(!c)return;if(!confirm(c.name+' silinsin mi?'))return;data.clothing.splice(idx,1);saveToLocalStorage();updateAllStats();showSuccessMessage('🗑️ Silindi!');}
 function resetAllStockByStatus(){if(!isAdmin){alert('❌ Yönetici girişi gerekli!');return}const stat=document.getElementById('resetAllStockStatusSelect').value;if(!stat){alert('Lütfen statü seçin!');return}if(!confirm(stat+' statüsündeki tüm stoğu sıfırlamak istediğinize emin misiniz?'))return;let totalKiyafet=0,totalBeden=0;data.clothing.forEach(c=>{const stData=c.stockByStatus&&c.stockByStatus[stat]?c.stockByStatus[stat]:null;if(!stData)return;let ks=false;['E','K'].forEach(g=>{if(stData.genders&&stData.genders[g]&&stData.genders[g].sizes){Object.keys(stData.genders[g].sizes).forEach(size=>{stData.genders[g].sizes[size].stock=0;stData.genders[g].sizes[size].distributed=0;totalBeden++;ks=true;});}});if(ks)totalKiyafet++;});saveToLocalStorage();updateAllStats();updateClothingList();updateStockTables();showSuccessMessage('🗑️ '+totalKiyafet+' kıyafetin '+totalBeden+' bedeni sıfırlandı!');}
 function addKdd(){if(!isAdmin){alert('❌ Yönetici girişi gerekli!');return}const n=document.getElementById('kddNameInput').value.trim();const s=document.getElementById('kddShelfLifeInput').value;const st=document.getElementById('kddStockInput').value;const pp=document.getElementById('kddPerPersonInput').value||1;const sp=document.getElementById('kddSpecsInput').value.trim();if(n&&s&&st){data.kkds.push({name:n,shelfLife:parseInt(s),stock:parseInt(st),distributed:0,perPerson:parseInt(pp),specifications:sp});hideModal('kddModal');saveToLocalStorage();updateStockTables();updateAllStats();showSuccessMessage('KKD eklendi!');}else alert('Tüm alanları doldurun!');}
+// ==================== STOK PANELİ AÇILIR-KAPANIR ====================
+function toggleStockSection(sectionId){
+    const section=document.getElementById(sectionId);
+    if(!section)return;
+    const arrowId=sectionId==='existingClothingSection'?'existingClothingSectionArrow':'existingKddSectionArrow';
+    const arrow=document.getElementById(arrowId);
+    if(section.classList.contains('hidden')){
+        section.classList.remove('hidden');
+        if(arrow)arrow.style.transform='rotate(90deg)';
+    } else {
+        section.classList.add('hidden');
+        if(arrow)arrow.style.transform='rotate(0deg)';
+    }
+}
+
+// ==================== KKD LİSTESİ GÖRÜNTÜLEME ====================
+function updateKddList(){
+    const l=document.getElementById('kddList');
+    const badge=document.getElementById('kddCountBadge');
+    if(!l)return;
+    l.innerHTML='';
+    if(badge)badge.textContent=(data.kkds||[]).length;
+    if(!data.kkds||data.kkds.length===0){
+        l.innerHTML='<div class="text-gray-500 text-sm text-center py-3">Henüz KKD yok</div>';
+        return;
+    }
+    data.kkds.slice().sort((a,b)=>a.name.localeCompare(b.name,'tr')).forEach((k,i)=>{
+        const rem=k.stock-k.distributed;
+        const remColor=rem<=0?'text-red-600':rem<=5?'text-orange-600':'text-green-600';
+        const delBtn=isAdmin?'<button class="btn-cloth-del" onclick="deleteKddItem('+data.kkds.indexOf(k)+')">🗑️</button>':'';
+        l.innerHTML+='<div class="clothing-list-row bg-orange-50"><span class="cname">🦺 '+escapeHtml(k.name)+'</span><div class="badges"><span class="st-badge st-default">📦 Stok: '+k.stock+'</span><span class="st-badge st-default">📤 Dağıtılan: '+k.distributed+'</span><span class="st-badge st-default '+remColor+'">✅ Kalan: '+rem+'</span><span class="st-badge st-default">👤 Kişi Başı: '+(k.perPerson||1)+'</span></div><div class="actions">'+delBtn+'</div></div>';
+    });
+}
+
+function deleteKddItem(idx){
+    if(!isAdmin){alert('❌ Yönetici girişi gerekli!');return}
+    const k=data.kkds[idx];
+    if(!k)return;
+    if(!confirm(k.name+' KKD\'sini silmek istediğinize emin misiniz?'))return;
+    data.kkds.splice(idx,1);
+    saveToLocalStorage();
+    updateAllStats();
+    updateKddList();
+    showSuccessMessage('🗑️ Silindi!');
+}
+
+// ==================== KKD STOK SIFIRLAMA ====================
+function resetAllKddStock(){
+    if(!isAdmin){alert('❌ Yönetici girişi gerekli!');return}
+    if(!confirm('TÜM KKD\'lerin DAĞITIM sayıları sıfırlanacak! (Stok korunur)\n\nEmin misiniz?'))return;
+    let count=0;
+    data.kkds.forEach(k=>{
+        k.distributed=0;
+        count++;
+    });
+    saveToLocalStorage();
+    updateAllStats();
+    updateStockTables();
+    updatePendingTables();
+    updateKddPendingTable();
+    updateKddList();
+    showSuccessMessage('🗑️ '+count+' KKD\'nin dağıtım sayısı sıfırlandı!');
+}
 
 function openClothingModal(){
     if(!isAdmin){alert('❌ Yönetici girişi gerekli!');return}
