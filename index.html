@@ -348,14 +348,16 @@ body.viewer-mode #loginModal *{pointer-events:auto!important;opacity:1!important
     @page {
     size: A4 landscape;
 }
-    @page {
-    size: A4 landscape;
-}
     body *{visibility:hidden!important}
     #printPreviewModal,#printPreviewModal *{visibility:visible!important}
     #printPreviewModal{position:absolute!important;left:0;top:0;width:100%;background:#fff!important}
     #printPreviewModal .no-print{display:none!important}
     #printPreviewArea{max-height:none!important;overflow:visible!important;border:none!important;padding:0!important}
+    #ekfOnizlemeModal,
+    #ekfOnizlemeModal *{visibility:visible!important}
+    #ekfOnizlemeModal{position:absolute!important;left:0;top:0;width:100%;background:#fff!important}
+    #ekfOnizlemeModal .no-print{display:none!important}
+    #ekfPrintArea{max-height:none!important;overflow:visible!important;border:none!important;padding:0!important}
 }
 </style>
 <style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.container{width:100%}@media (min-width: 640px){.container{max-width:640px}}@media (min-width: 768px){.container{max-width:768px}}@media (min-width: 1024px){.container{max-width:1024px}}@media (min-width: 1280px){.container{max-width:1280px}}@media (min-width: 1536px){.container{max-width:1536px}}.fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.sticky{position:sticky}.inset-0{inset:0px}.right-0{right:0px}.top-0{top:0px}.top-4{top:1rem}.top-full{top:100%}.right-4{right:1rem}.right-2{right:0.5rem}.right-3{right:0.75rem}.right-9{right:2.25rem}.top-1\/2{top:50%}.z-\[90\]{z-index:90}.z-10{z-index:10}.z-50{z-index:50}.z-\[70\]{z-index:70}.z-\[85\]{z-index:85}.z-\[95\]{z-index:95}.z-\[96\]{z-index:96}.z-\[100\]{z-index:100}.z-\[60\]{z-index:60}.z-\[75\]{z-index:75}.z-\[80\]{z-index:80}.col-span-2{grid-column:span 2 / span 2}.col-span-3{grid-column:span 3 / span 3}.mx-auto{margin-left:auto;margin-right:auto}.mb-1{margin-bottom:0.25rem}.mb-2{margin-bottom:0.5rem}.mb-3{margin-bottom:0.75rem}.mb-4{margin-bottom:1rem}.mb-6{margin-bottom:1.5rem}.mb-8{margin-bottom:2rem}.ml-2{margin-left:0.5rem}.ml-auto{margin-left:auto}.mr-2{margin-right:0.5rem}.mr-3{margin-right:0.75rem}.mr-4{margin-right:1rem}.mt-1{margin-top:0.25rem}.mt-2{margin-top:0.5rem}.mt-4{margin-top:1rem}.mb-0{margin-bottom:0px}.mb-5{margin-bottom:1.25rem}.mr-1{margin-right:0.25rem}.mt-3{margin-top:0.75rem}.mt-6{margin-top:1.5rem}.ml-1{margin-left:0.25rem}.mt-5{margin-top:1.25rem}.block{display:block}.inline-block{display:inline-block}.flex{display:flex}.grid{display:grid}.hidden{display:none}.h-12{height:3rem}.h-16{height:4rem}.h-4{height:1rem}.h-5{height:1.25rem}.h-20{height:5rem}.h-6{height:1.5rem}.max-h-72{max-height:18rem}.max-h-80{max-height:20rem}.max-h-96{max-height:24rem}.max-h-\[60vh\]{max-height:60vh}.max-h-40{max-height:10rem}.max-h-60{max-height:15rem}.max-h-64{max-height:16rem}.max-h-\[45vh\]{max-height:45vh}.max-h-\[50vh\]{max-height:50vh}.max-h-\[65vh\]{max-height:65vh}.max-h-\[90vh\]{max-height:90vh}.max-h-\[92vh\]{max-height:92vh}.max-h-\[94vh\]{max-height:94vh}.max-h-\[95vh\]{max-height:95vh}.max-h-48{max-height:12rem}.max-h-\[80vh\]{max-height:80vh}.max-h-\[85vh\]{max-height:85vh}.min-h-screen{min-height:100vh}.min-h-\[36px\]{min-height:36px}.w-12{width:3rem}.w-16{width:4rem}.w-96{width:24rem}.w-full{width:100%}.w-4{width:1rem}.w-5{width:1.25rem}.w-\[1000px\]{width:1000px}.w-\[1100px\]{width:1100px}.w-\[1200px\]{width:1200px}.w-\[1400px\]{width:1400px}.w-\[500px\]{width:500px}.w-\[520px\]{width:520px}.w-\[600px\]{width:600px}.w-\[900px\]{width:900px}.w-\[950px\]{width:950px}.w-20{width:5rem}.w-6{width:1.5rem}.w-\[1300px\]{width:1300px}.w-\[420px\]{width:420px}.w-\[550px\]{width:550px}.w-\[700px\]{width:700px}.w-\[750px\]{width:750px}.min-w-\[200px\]{min-width:200px}.max-w-\[97vw\]{max-width:97vw}.max-w-\[98vw\]{max-width:98vw}.flex-1{flex:1 1 0%}.table-auto{table-layout:auto}.-translate-y-1\/2{--tw-translate-y:-50%;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.cursor-pointer{cursor:pointer}.list-inside{list-style-position:inside}.list-decimal{list-style-type:decimal}.grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}.grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.flex-wrap{flex-wrap:wrap}.items-end{align-items:flex-end}.items-center{align-items:center}.justify-end{justify-content:flex-end}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-2{gap:0.5rem}.gap-3{gap:0.75rem}.gap-4{gap:1rem}.gap-6{gap:1.5rem}.gap-1{gap:0.25rem}.space-x-4 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(1rem * var(--tw-space-x-reverse));margin-left:calc(1rem * calc(1 - var(--tw-space-x-reverse)))}.space-y-2 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.5rem * var(--tw-space-y-reverse))}.space-y-3 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.75rem * var(--tw-space-y-reverse))}.space-x-3 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(0.75rem * var(--tw-space-x-reverse));margin-left:calc(0.75rem * calc(1 - var(--tw-space-x-reverse)))}.space-y-1 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.25rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.25rem * var(--tw-space-y-reverse))}.divide-y > :not([hidden]) ~ :not([hidden]){--tw-divide-y-reverse:0;border-top-width:calc(1px * calc(1 - var(--tw-divide-y-reverse)));border-bottom-width:calc(1px * var(--tw-divide-y-reverse))}.divide-gray-200 > :not([hidden]) ~ :not([hidden]){--tw-divide-opacity:1;border-color:rgb(229 231 235 / var(--tw-divide-opacity, 1))}.overflow-auto{overflow:auto}.overflow-x-auto{overflow-x:auto}.overflow-y-auto{overflow-y:auto}.whitespace-nowrap{white-space:nowrap}.rounded{border-radius:0.25rem}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:0.5rem}.rounded-xl{border-radius:0.75rem}.rounded-b-lg{border-bottom-right-radius:0.5rem;border-bottom-left-radius:0.5rem}.rounded-t-lg{border-top-left-radius:0.5rem;border-top-right-radius:0.5rem}.rounded-t-xl{border-top-left-radius:0.75rem;border-top-right-radius:0.75rem}.border{border-width:1px}.border-2{border-width:2px}.border-b-2{border-bottom-width:2px}.border-l-4{border-left-width:4px}.border-t-2{border-top-width:2px}.border-dashed{border-style:dashed}.border-blue-200{--tw-border-opacity:1;border-color:rgb(191 219 254 / var(--tw-border-opacity, 1))}.border-blue-300{--tw-border-opacity:1;border-color:rgb(147 197 253 / var(--tw-border-opacity, 1))}.border-cyan-200{--tw-border-opacity:1;border-color:rgb(165 243 252 / var(--tw-border-opacity, 1))}.border-cyan-500{--tw-border-opacity:1;border-color:rgb(6 182 212 / var(--tw-border-opacity, 1))}.border-emerald-200{--tw-border-opacity:1;border-color:rgb(167 243 208 / var(--tw-border-opacity, 1))}.border-emerald-300{--tw-border-opacity:1;border-color:rgb(110 231 183 / var(--tw-border-opacity, 1))}.border-gray-100{--tw-border-opacity:1;border-color:rgb(243 244 246 / var(--tw-border-opacity, 1))}.border-gray-200{--tw-border-opacity:1;border-color:rgb(229 231 235 / var(--tw-border-opacity, 1))}.border-green-200{--tw-border-opacity:1;border-color:rgb(187 247 208 / var(--tw-border-opacity, 1))}.border-green-300{--tw-border-opacity:1;border-color:rgb(134 239 172 / var(--tw-border-opacity, 1))}.border-green-500{--tw-border-opacity:1;border-color:rgb(34 197 94 / var(--tw-border-opacity, 1))}.border-indigo-200{--tw-border-opacity:1;border-color:rgb(199 210 254 / var(--tw-border-opacity, 1))}.border-indigo-600{--tw-border-opacity:1;border-color:rgb(79 70 229 / var(--tw-border-opacity, 1))}.border-orange-200{--tw-border-opacity:1;border-color:rgb(254 215 170 / var(--tw-border-opacity, 1))}.border-orange-300{--tw-border-opacity:1;border-color:rgb(253 186 116 / var(--tw-border-opacity, 1))}.border-purple-200{--tw-border-opacity:1;border-color:rgb(233 213 255 / var(--tw-border-opacity, 1))}.border-purple-300{--tw-border-opacity:1;border-color:rgb(216 180 254 / var(--tw-border-opacity, 1))}.border-red-200{--tw-border-opacity:1;border-color:rgb(254 202 202 / var(--tw-border-opacity, 1))}.border-red-500{--tw-border-opacity:1;border-color:rgb(239 68 68 / var(--tw-border-opacity, 1))}.border-teal-200{--tw-border-opacity:1;border-color:rgb(153 246 228 / var(--tw-border-opacity, 1))}.border-teal-300{--tw-border-opacity:1;border-color:rgb(94 234 212 / var(--tw-border-opacity, 1))}.border-transparent{border-color:transparent}.border-violet-200{--tw-border-opacity:1;border-color:rgb(221 214 254 / var(--tw-border-opacity, 1))}.border-violet-300{--tw-border-opacity:1;border-color:rgb(196 181 253 / var(--tw-border-opacity, 1))}.border-white\/30{border-color:rgb(255 255 255 / 0.3)}.border-white\/40{border-color:rgb(255 255 255 / 0.4)}.border-yellow-200{--tw-border-opacity:1;border-color:rgb(254 240 138 / var(--tw-border-opacity, 1))}.border-yellow-500{--tw-border-opacity:1;border-color:rgb(234 179 8 / var(--tw-border-opacity, 1))}.border-amber-200{--tw-border-opacity:1;border-color:rgb(253 230 138 / var(--tw-border-opacity, 1))}.border-amber-300{--tw-border-opacity:1;border-color:rgb(252 211 77 / var(--tw-border-opacity, 1))}.border-amber-400{--tw-border-opacity:1;border-color:rgb(251 191 36 / var(--tw-border-opacity, 1))}.border-blue-400{--tw-border-opacity:1;border-color:rgb(96 165 250 / var(--tw-border-opacity, 1))}.border-blue-600{--tw-border-opacity:1;border-color:rgb(37 99 235 / var(--tw-border-opacity, 1))}.border-blue-900{--tw-border-opacity:1;border-color:rgb(30 58 138 / var(--tw-border-opacity, 1))}.border-cyan-300{--tw-border-opacity:1;border-color:rgb(103 232 249 / var(--tw-border-opacity, 1))}.border-gray-300{--tw-border-opacity:1;border-color:rgb(209 213 219 / var(--tw-border-opacity, 1))}.border-indigo-300{--tw-border-opacity:1;border-color:rgb(165 180 252 / var(--tw-border-opacity, 1))}.border-orange-400{--tw-border-opacity:1;border-color:rgb(251 146 60 / var(--tw-border-opacity, 1))}.border-pink-200{--tw-border-opacity:1;border-color:rgb(251 207 232 / var(--tw-border-opacity, 1))}.border-pink-300{--tw-border-opacity:1;border-color:rgb(249 168 212 / var(--tw-border-opacity, 1))}.border-pink-600{--tw-border-opacity:1;border-color:rgb(219 39 119 / var(--tw-border-opacity, 1))}.border-pink-900{--tw-border-opacity:1;border-color:rgb(131 24 67 / var(--tw-border-opacity, 1))}.border-purple-600{--tw-border-opacity:1;border-color:rgb(147 51 234 / var(--tw-border-opacity, 1))}.border-red-300{--tw-border-opacity:1;border-color:rgb(252 165 165 / var(--tw-border-opacity, 1))}.bg-blue-100{--tw-bg-opacity:1;background-color:rgb(219 234 254 / var(--tw-bg-opacity, 1))}.bg-blue-50{--tw-bg-opacity:1;background-color:rgb(239 246 255 / var(--tw-bg-opacity, 1))}.bg-blue-500{--tw-bg-opacity:1;background-color:rgb(59 130 246 / var(--tw-bg-opacity, 1))}.bg-blue-600{--tw-bg-opacity:1;background-color:rgb(37 99 235 / var(--tw-bg-opacity, 1))}.bg-cyan-100{--tw-bg-opacity:1;background-color:rgb(207 250 254 / var(--tw-bg-opacity, 1))}.bg-cyan-500{--tw-bg-opacity:1;background-color:rgb(6 182 212 / var(--tw-bg-opacity, 1))}.bg-cyan-600{--tw-bg-opacity:1;background-color:rgb(8 145 178 / var(--tw-bg-opacity, 1))}.bg-emerald-500{--tw-bg-opacity:1;background-color:rgb(16 185 129 / var(--tw-bg-opacity, 1))}.bg-emerald-600{--tw-bg-opacity:1;background-color:rgb(5 150 105 / var(--tw-bg-opacity, 1))}.bg-gray-50{--tw-bg-opacity:1;background-color:rgb(249 250 251 / var(--tw-bg-opacity, 1))}.bg-green-100{--tw-bg-opacity:1;background-color:rgb(220 252 231 / var(--tw-bg-opacity, 1))}.bg-green-50{--tw-bg-opacity:1;background-color:rgb(240 253 244 / var(--tw-bg-opacity, 1))}.bg-green-500{--tw-bg-opacity:1;background-color:rgb(34 197 94 / var(--tw-bg-opacity, 1))}.bg-indigo-100{--tw-bg-opacity:1;background-color:rgb(224 231 255 / var(--tw-bg-opacity, 1))}.bg-indigo-50{--tw-bg-opacity:1;background-color:rgb(238 242 255 / var(--tw-bg-opacity, 1))}.bg-indigo-500{--tw-bg-opacity:1;background-color:rgb(99 102 241 / var(--tw-bg-opacity, 1))}.bg-indigo-600{--tw-bg-opacity:1;background-color:rgb(79 70 229 / var(--tw-bg-opacity, 1))}.bg-orange-100{--tw-bg-opacity:1;background-color:rgb(255 237 213 / var(--tw-bg-opacity, 1))}.bg-orange-200{--tw-bg-opacity:1;background-color:rgb(254 215 170 / var(--tw-bg-opacity, 1))}.bg-orange-50{--tw-bg-opacity:1;background-color:rgb(255 247 237 / var(--tw-bg-opacity, 1))}.bg-orange-500{--tw-bg-opacity:1;background-color:rgb(249 115 22 / var(--tw-bg-opacity, 1))}.bg-orange-600{--tw-bg-opacity:1;background-color:rgb(234 88 12 / var(--tw-bg-opacity, 1))}.bg-purple-100{--tw-bg-opacity:1;background-color:rgb(243 232 255 / var(--tw-bg-opacity, 1))}.bg-purple-50{--tw-bg-opacity:1;background-color:rgb(250 245 255 / var(--tw-bg-opacity, 1))}.bg-purple-500{--tw-bg-opacity:1;background-color:rgb(168 85 247 / var(--tw-bg-opacity, 1))}.bg-purple-600{--tw-bg-opacity:1;background-color:rgb(147 51 234 / var(--tw-bg-opacity, 1))}.bg-red-100{--tw-bg-opacity:1;background-color:rgb(254 226 226 / var(--tw-bg-opacity, 1))}.bg-red-50{--tw-bg-opacity:1;background-color:rgb(254 242 242 / var(--tw-bg-opacity, 1))}.bg-red-500{--tw-bg-opacity:1;background-color:rgb(239 68 68 / var(--tw-bg-opacity, 1))}.bg-red-600{--tw-bg-opacity:1;background-color:rgb(220 38 38 / var(--tw-bg-opacity, 1))}.bg-red-800{--tw-bg-opacity:1;background-color:rgb(153 27 27 / var(--tw-bg-opacity, 1))}.bg-teal-100{--tw-bg-opacity:1;background-color:rgb(204 251 241 / var(--tw-bg-opacity, 1))}.bg-teal-200{--tw-bg-opacity:1;background-color:rgb(153 246 228 / var(--tw-bg-opacity, 1))}.bg-teal-50{--tw-bg-opacity:1;background-color:rgb(240 253 250 / var(--tw-bg-opacity, 1))}.bg-teal-500{--tw-bg-opacity:1;background-color:rgb(20 184 166 / var(--tw-bg-opacity, 1))}.bg-teal-600{--tw-bg-opacity:1;background-color:rgb(13 148 136 / var(--tw-bg-opacity, 1))}.bg-violet-100{--tw-bg-opacity:1;background-color:rgb(237 233 254 / var(--tw-bg-opacity, 1))}.bg-violet-200{--tw-bg-opacity:1;background-color:rgb(221 214 254 / var(--tw-bg-opacity, 1))}.bg-violet-50{--tw-bg-opacity:1;background-color:rgb(245 243 255 / var(--tw-bg-opacity, 1))}.bg-violet-500{--tw-bg-opacity:1;background-color:rgb(139 92 246 / var(--tw-bg-opacity, 1))}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.bg-white\/20{background-color:rgb(255 255 255 / 0.2)}.bg-yellow-100{--tw-bg-opacity:1;background-color:rgb(254 249 195 / var(--tw-bg-opacity, 1))}.bg-yellow-50{--tw-bg-opacity:1;background-color:rgb(254 252 232 / var(--tw-bg-opacity, 1))}.bg-amber-50{--tw-bg-opacity:1;background-color:rgb(255 251 235 / var(--tw-bg-opacity, 1))}.bg-black{--tw-bg-opacity:1;background-color:rgb(0 0 0 / var(--tw-bg-opacity, 1))}.bg-blue-200{--tw-bg-opacity:1;background-color:rgb(191 219 254 / var(--tw-bg-opacity, 1))}.bg-cyan-50{--tw-bg-opacity:1;background-color:rgb(236 254 255 / var(--tw-bg-opacity, 1))}.bg-emerald-50{--tw-bg-opacity:1;background-color:rgb(236 253 245 / var(--tw-bg-opacity, 1))}.bg-gray-200{--tw-bg-opacity:1;background-color:rgb(229 231 235 / var(--tw-bg-opacity, 1))}.bg-gray-500{--tw-bg-opacity:1;background-color:rgb(107 114 128 / var(--tw-bg-opacity, 1))}.bg-green-600{--tw-bg-opacity:1;background-color:rgb(22 163 74 / var(--tw-bg-opacity, 1))}.bg-pink-100{--tw-bg-opacity:1;background-color:rgb(252 231 243 / var(--tw-bg-opacity, 1))}.bg-pink-200{--tw-bg-opacity:1;background-color:rgb(251 207 232 / var(--tw-bg-opacity, 1))}.bg-pink-50{--tw-bg-opacity:1;background-color:rgb(253 242 248 / var(--tw-bg-opacity, 1))}.bg-pink-500{--tw-bg-opacity:1;background-color:rgb(236 72 153 / var(--tw-bg-opacity, 1))}.bg-amber-600{--tw-bg-opacity:1;background-color:rgb(217 119 6 / var(--tw-bg-opacity, 1))}.bg-gray-100{--tw-bg-opacity:1;background-color:rgb(243 244 246 / var(--tw-bg-opacity, 1))}.bg-opacity-50{--tw-bg-opacity:0.5}.bg-opacity-60{--tw-bg-opacity:0.6}.bg-opacity-70{--tw-bg-opacity:0.7}.bg-gradient-to-br{background-image:linear-gradient(to bottom right, var(--tw-gradient-stops))}.bg-gradient-to-r{background-image:linear-gradient(to right, var(--tw-gradient-stops))}.from-blue-50{--tw-gradient-from:#eff6ff var(--tw-gradient-from-position);--tw-gradient-to:rgb(239 246 255 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-blue-400{--tw-gradient-from:#60a5fa var(--tw-gradient-from-position);--tw-gradient-to:rgb(96 165 250 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-blue-500{--tw-gradient-from:#3b82f6 var(--tw-gradient-from-position);--tw-gradient-to:rgb(59 130 246 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-blue-600{--tw-gradient-from:#2563eb var(--tw-gradient-from-position);--tw-gradient-to:rgb(37 99 235 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-cyan-400{--tw-gradient-from:#22d3ee var(--tw-gradient-from-position);--tw-gradient-to:rgb(34 211 238 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-cyan-50{--tw-gradient-from:#ecfeff var(--tw-gradient-from-position);--tw-gradient-to:rgb(236 254 255 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-emerald-50{--tw-gradient-from:#ecfdf5 var(--tw-gradient-from-position);--tw-gradient-to:rgb(236 253 245 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-green-400{--tw-gradient-from:#4ade80 var(--tw-gradient-from-position);--tw-gradient-to:rgb(74 222 128 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-indigo-50{--tw-gradient-from:#eef2ff var(--tw-gradient-from-position);--tw-gradient-to:rgb(238 242 255 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-indigo-500{--tw-gradient-from:#6366f1 var(--tw-gradient-from-position);--tw-gradient-to:rgb(99 102 241 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-orange-400{--tw-gradient-from:#fb923c var(--tw-gradient-from-position);--tw-gradient-to:rgb(251 146 60 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-purple-50{--tw-gradient-from:#faf5ff var(--tw-gradient-from-position);--tw-gradient-to:rgb(250 245 255 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-purple-500{--tw-gradient-from:#a855f7 var(--tw-gradient-from-position);--tw-gradient-to:rgb(168 85 247 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-teal-400{--tw-gradient-from:#2dd4bf var(--tw-gradient-from-position);--tw-gradient-to:rgb(45 212 191 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-teal-500{--tw-gradient-from:#14b8a6 var(--tw-gradient-from-position);--tw-gradient-to:rgb(20 184 166 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-violet-500{--tw-gradient-from:#8b5cf6 var(--tw-gradient-from-position);--tw-gradient-to:rgb(139 92 246 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-cyan-500{--tw-gradient-from:#06b6d4 var(--tw-gradient-from-position);--tw-gradient-to:rgb(6 182 212 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-emerald-500{--tw-gradient-from:#10b981 var(--tw-gradient-from-position);--tw-gradient-to:rgb(16 185 129 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-gray-600{--tw-gradient-from:#4b5563 var(--tw-gradient-from-position);--tw-gradient-to:rgb(75 85 99 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-green-500{--tw-gradient-from:#22c55e var(--tw-gradient-from-position);--tw-gradient-to:rgb(34 197 94 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-indigo-400{--tw-gradient-from:#818cf8 var(--tw-gradient-from-position);--tw-gradient-to:rgb(129 140 248 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-orange-500{--tw-gradient-from:#f97316 var(--tw-gradient-from-position);--tw-gradient-to:rgb(249 115 22 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.via-indigo-50{--tw-gradient-to:rgb(238 242 255 / 0)  var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), #eef2ff var(--tw-gradient-via-position), var(--tw-gradient-to)}.to-purple-50{--tw-gradient-to:#faf5ff var(--tw-gradient-to-position)}.to-blue-50{--tw-gradient-to:#eff6ff var(--tw-gradient-to-position)}.to-blue-500{--tw-gradient-to:#3b82f6 var(--tw-gradient-to-position)}.to-blue-600{--tw-gradient-to:#2563eb var(--tw-gradient-to-position)}.to-cyan-500{--tw-gradient-to:#06b6d4 var(--tw-gradient-to-position)}.to-cyan-600{--tw-gradient-to:#0891b2 var(--tw-gradient-to-position)}.to-emerald-500{--tw-gradient-to:#10b981 var(--tw-gradient-to-position)}.to-indigo-50{--tw-gradient-to:#eef2ff var(--tw-gradient-to-position)}.to-indigo-600{--tw-gradient-to:#4f46e5 var(--tw-gradient-to-position)}.to-indigo-700{--tw-gradient-to:#4338ca var(--tw-gradient-to-position)}.to-purple-600{--tw-gradient-to:#9333ea var(--tw-gradient-to-position)}.to-purple-700{--tw-gradient-to:#7e22ce var(--tw-gradient-to-position)}.to-red-500{--tw-gradient-to:#ef4444 var(--tw-gradient-to-position)}.to-teal-50{--tw-gradient-to:#f0fdfa var(--tw-gradient-to-position)}.to-blue-700{--tw-gradient-to:#1d4ed8 var(--tw-gradient-to-position)}.to-cyan-700{--tw-gradient-to:#0e7490 var(--tw-gradient-to-position)}.to-emerald-600{--tw-gradient-to:#059669 var(--tw-gradient-to-position)}.to-emerald-700{--tw-gradient-to:#047857 var(--tw-gradient-to-position)}.to-gray-800{--tw-gradient-to:#1f2937 var(--tw-gradient-to-position)}.to-orange-600{--tw-gradient-to:#ea580c var(--tw-gradient-to-position)}.to-red-600{--tw-gradient-to:#dc2626 var(--tw-gradient-to-position)}.to-teal-600{--tw-gradient-to:#0d9488 var(--tw-gradient-to-position)}.to-green-600{--tw-gradient-to:#16a34a var(--tw-gradient-to-position)}.p-2{padding:0.5rem}.p-3{padding:0.75rem}.p-4{padding:1rem}.p-5{padding:1.25rem}.p-6{padding:1.5rem}.p-1{padding:0.25rem}.p-8{padding:2rem}.px-2{padding-left:0.5rem;padding-right:0.5rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.px-4{padding-left:1rem;padding-right:1rem}.px-5{padding-left:1.25rem;padding-right:1.25rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.py-0\.5{padding-top:0.125rem;padding-bottom:0.125rem}.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-2\.5{padding-top:0.625rem;padding-bottom:0.625rem}.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.py-4{padding-top:1rem;padding-bottom:1rem}.py-6{padding-top:1.5rem;padding-bottom:1.5rem}.py-8{padding-top:2rem;padding-bottom:2rem}.pt-3{padding-top:0.75rem}.pt-4{padding-top:1rem}.pb-1{padding-bottom:0.25rem}.pr-10{padding-right:2.5rem}.pr-12{padding-right:3rem}.pr-20{padding-right:5rem}.pl-8{padding-left:2rem}.text-left{text-align:left}.text-center{text-align:center}.text-right{text-align:right}.font-sans{font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"}.font-mono{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace}.text-2xl{font-size:1.5rem;line-height:2rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-base{font-size:1rem;line-height:1.5rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-xs{font-size:0.75rem;line-height:1rem}.text-4xl{font-size:2.25rem;line-height:2.5rem}.font-bold{font-weight:700}.font-medium{font-weight:500}.font-semibold{font-weight:600}.font-normal{font-weight:400}.uppercase{text-transform:uppercase}.italic{font-style:italic}.text-blue-100{--tw-text-opacity:1;color:rgb(219 234 254 / var(--tw-text-opacity, 1))}.text-blue-200{--tw-text-opacity:1;color:rgb(191 219 254 / var(--tw-text-opacity, 1))}.text-blue-600{--tw-text-opacity:1;color:rgb(37 99 235 / var(--tw-text-opacity, 1))}.text-blue-700{--tw-text-opacity:1;color:rgb(29 78 216 / var(--tw-text-opacity, 1))}.text-blue-800{--tw-text-opacity:1;color:rgb(30 64 175 / var(--tw-text-opacity, 1))}.text-blue-900{--tw-text-opacity:1;color:rgb(30 58 138 / var(--tw-text-opacity, 1))}.text-cyan-600{--tw-text-opacity:1;color:rgb(8 145 178 / var(--tw-text-opacity, 1))}.text-cyan-700{--tw-text-opacity:1;color:rgb(14 116 144 / var(--tw-text-opacity, 1))}.text-cyan-900{--tw-text-opacity:1;color:rgb(22 78 99 / var(--tw-text-opacity, 1))}.text-emerald-700{--tw-text-opacity:1;color:rgb(4 120 87 / var(--tw-text-opacity, 1))}.text-emerald-900{--tw-text-opacity:1;color:rgb(6 78 59 / var(--tw-text-opacity, 1))}.text-gray-500{--tw-text-opacity:1;color:rgb(107 114 128 / var(--tw-text-opacity, 1))}.text-gray-700{--tw-text-opacity:1;color:rgb(55 65 81 / var(--tw-text-opacity, 1))}.text-gray-800{--tw-text-opacity:1;color:rgb(31 41 55 / var(--tw-text-opacity, 1))}.text-green-600{--tw-text-opacity:1;color:rgb(22 163 74 / var(--tw-text-opacity, 1))}.text-green-700{--tw-text-opacity:1;color:rgb(21 128 61 / var(--tw-text-opacity, 1))}.text-green-800{--tw-text-opacity:1;color:rgb(22 101 52 / var(--tw-text-opacity, 1))}.text-indigo-100{--tw-text-opacity:1;color:rgb(224 231 255 / var(--tw-text-opacity, 1))}.text-indigo-600{--tw-text-opacity:1;color:rgb(79 70 229 / var(--tw-text-opacity, 1))}.text-indigo-700{--tw-text-opacity:1;color:rgb(67 56 202 / var(--tw-text-opacity, 1))}.text-indigo-900{--tw-text-opacity:1;color:rgb(49 46 129 / var(--tw-text-opacity, 1))}.text-orange-600{--tw-text-opacity:1;color:rgb(234 88 12 / var(--tw-text-opacity, 1))}.text-orange-700{--tw-text-opacity:1;color:rgb(194 65 12 / var(--tw-text-opacity, 1))}.text-orange-800{--tw-text-opacity:1;color:rgb(154 52 18 / var(--tw-text-opacity, 1))}.text-orange-900{--tw-text-opacity:1;color:rgb(124 45 18 / var(--tw-text-opacity, 1))}.text-purple-600{--tw-text-opacity:1;color:rgb(147 51 234 / var(--tw-text-opacity, 1))}.text-purple-700{--tw-text-opacity:1;color:rgb(126 34 206 / var(--tw-text-opacity, 1))}.text-purple-800{--tw-text-opacity:1;color:rgb(107 33 168 / var(--tw-text-opacity, 1))}.text-purple-900{--tw-text-opacity:1;color:rgb(88 28 135 / var(--tw-text-opacity, 1))}.text-red-600{--tw-text-opacity:1;color:rgb(220 38 38 / var(--tw-text-opacity, 1))}.text-red-800{--tw-text-opacity:1;color:rgb(153 27 27 / var(--tw-text-opacity, 1))}.text-teal-600{--tw-text-opacity:1;color:rgb(13 148 136 / var(--tw-text-opacity, 1))}.text-teal-700{--tw-text-opacity:1;color:rgb(15 118 110 / var(--tw-text-opacity, 1))}.text-teal-800{--tw-text-opacity:1;color:rgb(17 94 89 / var(--tw-text-opacity, 1))}.text-teal-900{--tw-text-opacity:1;color:rgb(19 78 74 / var(--tw-text-opacity, 1))}.text-violet-600{--tw-text-opacity:1;color:rgb(124 58 237 / var(--tw-text-opacity, 1))}.text-violet-700{--tw-text-opacity:1;color:rgb(109 40 217 / var(--tw-text-opacity, 1))}.text-violet-800{--tw-text-opacity:1;color:rgb(91 33 182 / var(--tw-text-opacity, 1))}.text-violet-900{--tw-text-opacity:1;color:rgb(76 29 149 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.text-white\/80{color:rgb(255 255 255 / 0.8)}.text-yellow-600{--tw-text-opacity:1;color:rgb(202 138 4 / var(--tw-text-opacity, 1))}.text-yellow-800{--tw-text-opacity:1;color:rgb(133 77 14 / var(--tw-text-opacity, 1))}.text-amber-700{--tw-text-opacity:1;color:rgb(180 83 9 / var(--tw-text-opacity, 1))}.text-amber-800{--tw-text-opacity:1;color:rgb(146 64 14 / var(--tw-text-opacity, 1))}.text-amber-900{--tw-text-opacity:1;color:rgb(120 53 15 / var(--tw-text-opacity, 1))}.text-cyan-800{--tw-text-opacity:1;color:rgb(21 94 117 / var(--tw-text-opacity, 1))}.text-emerald-800{--tw-text-opacity:1;color:rgb(6 95 70 / var(--tw-text-opacity, 1))}.text-gray-400{--tw-text-opacity:1;color:rgb(156 163 175 / var(--tw-text-opacity, 1))}.text-gray-600{--tw-text-opacity:1;color:rgb(75 85 99 / var(--tw-text-opacity, 1))}.text-green-900{--tw-text-opacity:1;color:rgb(20 83 45 / var(--tw-text-opacity, 1))}.text-indigo-800{--tw-text-opacity:1;color:rgb(55 48 163 / var(--tw-text-opacity, 1))}.text-pink-800{--tw-text-opacity:1;color:rgb(157 23 77 / var(--tw-text-opacity, 1))}.text-pink-900{--tw-text-opacity:1;color:rgb(131 24 67 / var(--tw-text-opacity, 1))}.text-green-200{--tw-text-opacity:1;color:rgb(187 247 208 / var(--tw-text-opacity, 1))}.text-gray-300{--tw-text-opacity:1;color:rgb(209 213 219 / var(--tw-text-opacity, 1))}.accent-green-600{accent-color:#16a34a}.accent-blue-600{accent-color:#2563eb}.accent-indigo-600{accent-color:#4f46e5}.accent-teal-600{accent-color:#0d9488}.opacity-90{opacity:0.9}.shadow-2xl{--tw-shadow:0 25px 50px -12px rgb(0 0 0 / 0.25);--tw-shadow-colored:0 25px 50px -12px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-lg{--tw-shadow:0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-xl{--tw-shadow:0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.transition-all{transition-property:all;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-colors{transition-property:color, background-color, border-color, fill, stroke, -webkit-text-decoration-color;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, -webkit-text-decoration-color;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-transform{transition-property:transform;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.hover\:bg-blue-700:hover{--tw-bg-opacity:1;background-color:rgb(29 78 216 / var(--tw-bg-opacity, 1))}.hover\:bg-cyan-700:hover{--tw-bg-opacity:1;background-color:rgb(14 116 144 / var(--tw-bg-opacity, 1))}.hover\:bg-emerald-700:hover{--tw-bg-opacity:1;background-color:rgb(4 120 87 / var(--tw-bg-opacity, 1))}.hover\:bg-green-200:hover{--tw-bg-opacity:1;background-color:rgb(187 247 208 / var(--tw-bg-opacity, 1))}.hover\:bg-indigo-700:hover{--tw-bg-opacity:1;background-color:rgb(67 56 202 / var(--tw-bg-opacity, 1))}.hover\:bg-orange-200:hover{--tw-bg-opacity:1;background-color:rgb(254 215 170 / var(--tw-bg-opacity, 1))}.hover\:bg-orange-600:hover{--tw-bg-opacity:1;background-color:rgb(234 88 12 / var(--tw-bg-opacity, 1))}.hover\:bg-purple-100:hover{--tw-bg-opacity:1;background-color:rgb(243 232 255 / var(--tw-bg-opacity, 1))}.hover\:bg-purple-700:hover{--tw-bg-opacity:1;background-color:rgb(126 34 206 / var(--tw-bg-opacity, 1))}.hover\:bg-red-700:hover{--tw-bg-opacity:1;background-color:rgb(185 28 28 / var(--tw-bg-opacity, 1))}.hover\:bg-red-900:hover{--tw-bg-opacity:1;background-color:rgb(127 29 29 / var(--tw-bg-opacity, 1))}.hover\:bg-teal-200:hover{--tw-bg-opacity:1;background-color:rgb(153 246 228 / var(--tw-bg-opacity, 1))}.hover\:bg-violet-100:hover{--tw-bg-opacity:1;background-color:rgb(237 233 254 / var(--tw-bg-opacity, 1))}.hover\:bg-violet-200:hover{--tw-bg-opacity:1;background-color:rgb(221 214 254 / var(--tw-bg-opacity, 1))}.hover\:bg-white\/30:hover{background-color:rgb(255 255 255 / 0.3)}.hover\:bg-amber-100:hover{--tw-bg-opacity:1;background-color:rgb(254 243 199 / var(--tw-bg-opacity, 1))}.hover\:bg-blue-100:hover{--tw-bg-opacity:1;background-color:rgb(219 234 254 / var(--tw-bg-opacity, 1))}.hover\:bg-gray-100:hover{--tw-bg-opacity:1;background-color:rgb(243 244 246 / var(--tw-bg-opacity, 1))}.hover\:bg-gray-600:hover{--tw-bg-opacity:1;background-color:rgb(75 85 99 / var(--tw-bg-opacity, 1))}.hover\:bg-indigo-100:hover{--tw-bg-opacity:1;background-color:rgb(224 231 255 / var(--tw-bg-opacity, 1))}.hover\:bg-red-200:hover{--tw-bg-opacity:1;background-color:rgb(254 202 202 / var(--tw-bg-opacity, 1))}.hover\:bg-teal-100:hover{--tw-bg-opacity:1;background-color:rgb(204 251 241 / var(--tw-bg-opacity, 1))}.hover\:bg-amber-700:hover{--tw-bg-opacity:1;background-color:rgb(180 83 9 / var(--tw-bg-opacity, 1))}.hover\:bg-indigo-200:hover{--tw-bg-opacity:1;background-color:rgb(199 210 254 / var(--tw-bg-opacity, 1))}.hover\:bg-indigo-50:hover{--tw-bg-opacity:1;background-color:rgb(238 242 255 / var(--tw-bg-opacity, 1))}.hover\:bg-gray-50:hover{--tw-bg-opacity:1;background-color:rgb(249 250 251 / var(--tw-bg-opacity, 1))}.hover\:from-indigo-600:hover{--tw-gradient-from:#4f46e5 var(--tw-gradient-from-position);--tw-gradient-to:rgb(79 70 229 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.hover\:from-orange-600:hover{--tw-gradient-from:#ea580c var(--tw-gradient-from-position);--tw-gradient-to:rgb(234 88 12 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.hover\:from-purple-600:hover{--tw-gradient-from:#9333ea var(--tw-gradient-from-position);--tw-gradient-to:rgb(147 51 234 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.hover\:from-teal-600:hover{--tw-gradient-from:#0d9488 var(--tw-gradient-from-position);--tw-gradient-to:rgb(13 148 136 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.hover\:to-indigo-700:hover{--tw-gradient-to:#4338ca var(--tw-gradient-to-position)}.hover\:to-orange-700:hover{--tw-gradient-to:#c2410c var(--tw-gradient-to-position)}.hover\:to-purple-700:hover{--tw-gradient-to:#7e22ce var(--tw-gradient-to-position)}.hover\:to-teal-700:hover{--tw-gradient-to:#0f766e var(--tw-gradient-to-position)}.hover\:text-white:hover{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.hover\:text-emerald-600:hover{--tw-text-opacity:1;color:rgb(5 150 105 / var(--tw-text-opacity, 1))}.hover\:text-indigo-600:hover{--tw-text-opacity:1;color:rgb(79 70 229 / var(--tw-text-opacity, 1))}.hover\:text-purple-600:hover{--tw-text-opacity:1;color:rgb(147 51 234 / var(--tw-text-opacity, 1))}.hover\:shadow-xl:hover{--tw-shadow:0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}@media (min-width: 768px){.md\:col-span-2{grid-column:span 2 / span 2}.md\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.md\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.md\:grid-cols-5{grid-template-columns:repeat(5, minmax(0, 1fr))}.md\:grid-cols-4{grid-template-columns:repeat(4, minmax(0, 1fr))}.md\:grid-cols-6{grid-template-columns:repeat(6, minmax(0, 1fr))}}@media (min-width: 1024px){.lg\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.lg\:grid-cols-4{grid-template-columns:repeat(4, minmax(0, 1fr))}.lg\:flex-nowrap{flex-wrap:nowrap}}</style></head>
@@ -495,8 +497,38 @@ body.viewer-mode #loginModal *{pointer-events:auto!important;opacity:1!important
 </div>
 <div id="trainingListDisplay" class="overflow-x-auto"><table class="egitim-tablo"><thead><tr><th style="width:60px;">#</th><th>Eğitim Adı</th><th>Eğitim Konusu</th><th>Eğitmen</th><th style="width:80px;text-align:center;">Süre (ay)</th><th style="width:80px;text-align:center;">Saat</th><th>Eğitim Yeri</th><th style="width:120px;text-align:center;">İşlem</th></tr></thead><tbody><tr><td>1</td><td><strong>İş Güvenliği Temel Eğitimi</strong></td><td>-</td><td>Ahmet Yılmaz</td><td style="text-align:center;">12</td><td style="text-align:center;">16</td><td>Yüz Yüze - Sınıf</td><td style="text-align:center;">-</td></tr><tr><td>2</td><td><strong>Yangın Güvenliği</strong></td><td>-</td><td>Mehmet Demir</td><td style="text-align:center;">24</td><td style="text-align:center;">8</td><td>Yüz Yüze - Sınıf</td><td style="text-align:center;">-</td></tr></tbody></table></div>
 </div>
-</div>
 
+<!-- ==================== EĞİTİM KATILIM FORMLARI (EKLENDİ) ==================== -->
+<div class="bg-white rounded-xl shadow-xl p-6 mt-6">
+    <div class="flex items-center justify-between mb-4 flex-wrap gap-3">
+        <div class="flex items-center">
+            <div class="p-3 rounded-full bg-emerald-100 text-emerald-600 text-2xl mr-3">📄</div>
+            <div>
+                <h3 class="text-xl font-bold">Eğitim Katılım Formları</h3>
+                <p class="text-xs text-gray-500 mt-1">Oluşturulan katılım formları ve katılımcı listeleri</p>
+            </div>
+        </div>
+        <button onclick="openYeniEgitimKatilimFormuModal()" class="admin-only-btn bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white px-6 py-3 rounded-lg font-medium">➕ Yeni Katılım Formu</button>
+    </div>
+    <div class="overflow-x-auto">
+        <table class="w-full table-auto" id="egitimKatilimFormlariTable">
+            <thead class="bg-emerald-50">
+                <tr>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase" style="width:130px;">Form No</th>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Eğitim Ad(lar)ı</th>
+                    <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase" style="width:110px;">Tarih</th>
+                    <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase" style="width:100px;">Katılımcı</th>
+                    <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase" style="width:110px;">Durum</th>
+                    <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase" style="width:260px;">İşlem</th>
+                </tr>
+            </thead>
+            <tbody id="egitimKatilimFormlariBody" class="bg-white divide-y divide-gray-200">
+                <tr><td colspan="6" class="text-center py-6 text-gray-500 text-sm">Henüz katılım formu oluşturulmadı</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</div>
 <!-- ==================== STOK ==================== -->
 <div id="stock" class="section hidden">
 <div class="bg-white rounded-xl shadow-xl p-6 mb-6">
@@ -2363,6 +2395,160 @@ Sadece seçili görevlerde işlem yapabilsin
 </div>
 </div>
 </div>
+<!-- ==================== YENİ EĞİTİM KATILIM FORMU MODAL ==================== -->
+<div id="yeniEgitimKatilimFormuModal" class="modal hidden fixed inset-0 bg-black bg-opacity-60 items-center justify-center z-[95]">
+<div class="bg-white rounded-xl p-6 w-[1100px] max-w-[97vw] shadow-2xl relative max-h-[95vh] overflow-y-auto">
+<button onclick="hideModal('yeniEgitimKatilimFormuModal')" class="absolute top-4 right-4 text-gray-400 text-2xl font-bold">✕</button>
+<div class="text-center mb-4">
+<div class="w-16 h-16 mx-auto mb-3 rounded-full bg-gradient-to-r from-emerald-500 to-teal-600 flex items-center justify-center text-white text-2xl">📄</div>
+<h3 class="text-xl font-bold">Yeni Eğitim Katılım Formu</h3>
+<p class="text-xs text-gray-500 mt-1">Eğitim bilgilerini, katılımcıları ve eğitim verenleri girin</p>
+</div>
+
+<!-- ADIM 1: Form Genel Bilgileri -->
+<div class="bg-emerald-50 rounded-lg p-4 mb-4 border-2 border-emerald-200">
+<h4 class="font-bold text-emerald-900 mb-3 text-sm flex items-center gap-2"><span class="w-6 h-6 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs">1</span>Form Bilgileri</h4>
+<div class="grid grid-cols-1 md:grid-cols-4 gap-3">
+<div><label class="block text-xs font-bold text-emerald-800 mb-1">📅 Eğitim Tarihi</label><input type="date" id="ekfTarih" class="w-full border-2 border-emerald-300 rounded-lg px-3 py-2 bg-white text-sm font-semibold"></div>
+<div><label class="block text-xs font-bold text-emerald-800 mb-1">🕐 Başlama</label><input type="time" id="ekfBaslama" value="09:00" class="w-full border-2 border-emerald-300 rounded-lg px-3 py-2 bg-white text-sm font-semibold"></div>
+<div><label class="block text-xs font-bold text-emerald-800 mb-1">🕐 Bitiş</label><input type="time" id="ekfBitis" value="17:00" class="w-full border-2 border-emerald-300 rounded-lg px-3 py-2 bg-white text-sm font-semibold"></div>
+<div><label class="block text-xs font-bold text-emerald-800 mb-1">📍 Eğitim Yeri</label><input type="text" id="ekfYer" value="Eğitim Salonu" class="w-full border-2 border-emerald-300 rounded-lg px-3 py-2 bg-white text-sm"></div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-3">
+<div><label class="block text-xs font-bold text-emerald-800 mb-1">👥 Katılımcı Grup Adı</label><select id="ekfGrupAdi" class="w-full border-2 border-emerald-300 rounded-lg px-3 py-2 bg-white text-sm font-semibold"><option value="PERSONEL">PERSONEL</option><option value="STAJYERLER">STAJYERLER</option><option value="İŞÇİLER">İŞÇİLER</option><option value="MEMURLAR">MEMURLAR</option><option value="ÖZEL">ÖZEL (yazacağım)</option></select></div>
+<div><label class="block text-xs font-bold text-emerald-800 mb-1">✍️ Özel Grup Adı (sadece ÖZEL seçilirse)</label><input type="text" id="ekfOzelGrupAdi" placeholder="Örn: MÜHENDİSLER" class="w-full border-2 border-emerald-300 rounded-lg px-3 py-2 bg-white text-sm" disabled></div>
+</div>
+</div>
+
+<!-- ADIM 2: Eğitimler -->
+<div class="bg-blue-50 rounded-lg p-4 mb-4 border-2 border-blue-200">
+<div class="flex justify-between items-center mb-3">
+<h4 class="font-bold text-blue-900 text-sm flex items-center gap-2"><span class="w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center text-xs">2</span>Formdaki Eğitimler</h4>
+<button onclick="ekfEgitimSatiriEkle()" class="admin-only-btn bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-lg text-xs font-bold">➕ Eğitim Ekle</button>
+</div>
+<div id="ekfEgitimListesi" class="space-y-3"></div>
+<div class="text-xs text-blue-700 mt-2">💡 Her satır bir eğitimdir. Aynı forma birden fazla eğitim ekleyebilirsiniz.</div>
+</div>
+
+<!-- ADIM 3: Katılımcılar -->
+<div class="bg-purple-50 rounded-lg p-4 mb-4 border-2 border-purple-200">
+<h4 class="font-bold text-purple-900 mb-3 text-sm flex items-center gap-2"><span class="w-6 h-6 rounded-full bg-purple-600 text-white flex items-center justify-center text-xs">3</span>Katılımcı Seçimi</h4>
+<div class="bg-white rounded-lg p-3 border-2 border-purple-300 mb-3">
+<label class="block text-xs font-bold text-purple-800 mb-2">🔍 Filtrele</label>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-2">
+<select id="ekfFiltreBirim" class="w-full border-2 border-purple-300 rounded-lg px-2 py-2 text-sm bg-white font-semibold" onchange="ekfRenderOtomatikListeler()">
+<option value="">-- Tüm Birimler --</option>
+</select>
+<select id="ekfFiltreStatu" class="w-full border-2 border-purple-300 rounded-lg px-2 py-2 text-sm bg-white font-semibold" onchange="ekfRenderOtomatikListeler()">
+<option value="">-- Tüm Statüler --</option>
+</select>
+<select id="ekfFiltreDurum" class="w-full border-2 border-purple-300 rounded-lg px-2 py-2 text-sm bg-white font-semibold" onchange="ekfRenderOtomatikListeler()">
+<option value="">-- Tüm Durumlar --</option>
+<option value="doldu">🔴 Süresi Dolanlar</option>
+<option value="yaklasiyor">🟡 Süresi Yaklaşanlar</option>
+<option value="hic">⚪ Hiç Almamışlar</option>
+</select>
+</div>
+</div>
+<div class="flex gap-2 mb-3">
+<button onclick="ekfTumunuSec(true)" class="text-xs bg-purple-600 text-white px-3 py-1 rounded-lg font-bold">✅ Tümünü Seç</button>
+<button onclick="ekfTumunuSec(false)" class="text-xs bg-gray-500 text-white px-3 py-1 rounded-lg font-bold">❌ Temizle</button>
+<span class="text-xs text-purple-800 font-bold ml-auto self-center">Seçili: <span id="ekfSeciliSayi">0</span> kişi</span>
+</div>
+
+<!-- Otomatik listeler -->
+<div id="ekfOtomatikListeler" class="space-y-3 mb-3">
+    <div class="text-center py-4 text-gray-500 text-sm bg-white rounded-lg border-2 border-dashed border-purple-300">Önce eğitim ekleyin, süresi dolan/yaklaşan personeller otomatik listelenecek</div>
+</div>
+
+<!-- Manuel ekleme -->
+<div class="bg-white rounded-lg p-3 border-2 border-purple-300">
+<label class="block text-xs font-bold text-purple-800 mb-1">🔍 Manuel Personel Ekle</label>
+<input type="text" id="ekfManuelArama" placeholder="Personel adı yazın..." class="w-full border-2 border-purple-300 rounded-lg px-3 py-2 text-sm" oninput="ekfManuelAra()" autocomplete="off">
+<div id="ekfManuelSonuclar" class="mt-2 max-h-40 overflow-y-auto"></div>
+<div id="ekfManuelEklenenler" class="flex flex-wrap gap-1 mt-2"></div>
+</div>
+</div>
+
+<!-- ADIM 4: Eğitim Verenler -->
+<div class="bg-amber-50 rounded-lg p-4 mb-4 border-2 border-amber-200">
+<div class="flex justify-between items-center mb-3">
+<h4 class="font-bold text-amber-900 text-sm flex items-center gap-2"><span class="w-6 h-6 rounded-full bg-amber-600 text-white flex items-center justify-center text-xs">4</span>Eğitim Verenler</h4>
+<button onclick="ekfEgitmenSatiriEkle()" class="admin-only-btn bg-amber-600 hover:bg-amber-700 text-white px-3 py-2 rounded-lg text-xs font-bold">➕ Eğitim Veren Ekle</button>
+</div>
+<div id="ekfEgitmenListesi" class="space-y-2"></div>
+</div>
+
+<div class="flex justify-between items-center pt-3 border-t-2 border-gray-200 flex-wrap gap-2">
+<div class="text-xs text-gray-500">💡 Kaydedince form listeye eklenir. "Tamamla" dediğinizde katılımcıların eğitim kayıtları yenilenir.</div>
+<div class="flex gap-2">
+<button onclick="hideModal('yeniEgitimKatilimFormuModal')" class="px-6 py-3 text-gray-600 font-medium hover:bg-gray-100 rounded-lg">İptal</button>
+<button onclick="saveEgitimKatilimFormu()" class="px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-lg font-bold">💾 Kaydet</button>
+</div>
+</div>
+</div>
+</div>
+
+<!-- ==================== EĞİTİM KATILIM FORMU ÖNİZLEME / YAZDIRMA MODAL ==================== -->
+<div id="ekfOnizlemeModal" class="modal hidden fixed inset-0 bg-black bg-opacity-70 items-center justify-center z-[96]">
+<div class="bg-white rounded-xl p-6 w-[1200px] max-w-[98vw] shadow-2xl relative max-h-[96vh] overflow-y-auto">
+<button onclick="hideModal('ekfOnizlemeModal')" class="no-print absolute top-4 right-4 text-gray-400 text-2xl font-bold">✕</button>
+<div class="no-print text-center mb-4">
+<div class="w-16 h-16 mx-auto mb-3 rounded-full bg-gradient-to-r from-emerald-500 to-teal-600 flex items-center justify-center text-white text-2xl">🖨️</div>
+<h3 class="text-xl font-bold">Katılım Formu Önizleme</h3>
+<p class="text-xs text-gray-500 mt-1">Yazdırmak istediğiniz katılımcıları seçin</p>
+</div>
+
+<!-- Katılımcı seçim paneli -->
+<div class="no-print bg-purple-50 rounded-lg p-4 mb-4 border-2 border-purple-200">
+<div class="flex justify-between items-center mb-3 flex-wrap gap-2">
+<h4 class="font-bold text-purple-900 text-sm">🖨️ Yazdırılacak Katılımcılar</h4>
+<div class="flex gap-2">
+<button onclick="ekfYazdirTumunuSec(true)" class="text-xs bg-purple-600 text-white px-3 py-1 rounded-lg font-bold">✅ Tümünü Seç</button>
+<button onclick="ekfYazdirTumunuSec(false)" class="text-xs bg-gray-500 text-white px-3 py-1 rounded-lg font-bold">❌ Temizle</button>
+</div>
+</div>
+<div id="ekfYazdirKatilimciListesi" class="bg-white rounded-lg border-2 border-purple-200 p-3 max-h-48 overflow-y-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1"></div>
+<div class="mt-2 text-xs text-purple-800 font-bold text-right">Seçili: <span id="ekfYazdirSeciliSayi">0</span> kişi</div>
+</div>
+
+<!-- Sayfa yönü -->
+<div class="no-print flex items-center justify-between mb-4 flex-wrap gap-3 bg-gray-50 p-3 rounded-lg border-2 border-gray-200">
+<div class="print-orientation-btns">
+<span class="text-xs font-bold text-gray-700 mr-1">📄 Sayfa Yönü:</span>
+<button id="ekfOrientationPortrait" class="print-orientation-btn active" onclick="setEkfOrientation('portrait')">📄 Dikey</button>
+<button id="ekfOrientationLandscape" class="print-orientation-btn" onclick="setEkfOrientation('landscape')">📄 Yatay</button>
+</div>
+</div>
+
+<!-- Form içeriği -->
+<div id="ekfPrintArea"></div>
+
+<div class="no-print flex justify-between items-center mt-5 flex-wrap gap-3">
+<button onclick="hideModal('ekfOnizlemeModal')" class="bg-gray-500 text-white px-6 py-2 rounded-lg font-medium">Kapat</button>
+<div class="flex gap-2">
+<button onclick="ekfFormuTamamla()" id="ekfTamamlaBtn" class="bg-gradient-to-r from-green-500 to-emerald-600 text-white px-6 py-2 rounded-lg font-bold">✅ Formu Tamamla</button>
+<button onclick="printEkfForm()" class="bg-blue-600 text-white px-6 py-2 rounded-lg font-medium">🖨️ Yazdır</button>
+</div>
+</div>
+</div>
+</div>
+
+<!-- ==================== KATILIMCI LİSTESİ GÖRÜNTÜLEME MODAL ==================== -->
+<div id="ekfKatilimciListesiModal" class="modal hidden fixed inset-0 bg-black bg-opacity-60 items-center justify-center z-[94]">
+<div class="bg-white rounded-xl p-6 w-[800px] max-w-[97vw] shadow-2xl relative max-h-[90vh] overflow-y-auto">
+<button onclick="hideModal('ekfKatilimciListesiModal')" class="absolute top-4 right-4 text-gray-400 text-2xl font-bold">✕</button>
+<div class="text-center mb-4">
+<div class="w-16 h-16 mx-auto mb-3 rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 flex items-center justify-center text-white text-2xl">👥</div>
+<h3 id="ekfKatilimciBaslik" class="text-xl font-bold">Katılımcı Listesi</h3>
+<p id="ekfKatilimciAltBaslik" class="text-xs text-gray-500 mt-1"></p>
+</div>
+<div id="ekfKatilimciListesiContent"></div>
+<div class="flex justify-end mt-4">
+<button onclick="hideModal('ekfKatilimciListesiModal')" class="bg-gray-500 text-white px-6 py-2 rounded-lg font-medium">Kapat</button>
+</div>
+</div>
+</div>
 <!-- ==================== GİRİŞ MODAL ==================== -->
 <div id="loginModal" class="modal hidden fixed inset-0 bg-black bg-opacity-60 items-center justify-center z-[100]">
 <div class="bg-white rounded-xl p-8 w-[420px] shadow-2xl relative">
@@ -2403,7 +2589,8 @@ let data={
     ],
     kkds:[{name:'Güvenlik Kaskı',shelfLife:24,stock:50,distributed:0,perPerson:1,specifications:'CE'},{name:'Gözlük',shelfLife:12,stock:30,distributed:0,perPerson:1,specifications:'UV'}],
     clothing:[],personnel:[],distributionHistory:[],taskTemplates:[],tasks:[],completedTasks:[],
-    gorevTanimSablonlari:[]
+    gorevTanimSablonlari:[],
+    egitimKatilimFormlari:[]
 };
 const legacyClothing=[
     {name:'Tshirt',type:'standart',season:'yazlik',specifications:'Pamuk',gender:'E',genders:{'E':{sizes:{'XS':{stock:0,distributed:0,perPerson:1},'S':{stock:10,distributed:0,perPerson:1},'M':{stock:15,distributed:0,perPerson:1},'L':{stock:12,distributed:0,perPerson:1},'XL':{stock:8,distributed:0,perPerson:1},'XXL':{stock:5,distributed:0,perPerson:1},'3XL':{stock:3,distributed:0,perPerson:1}}}}},
@@ -2592,6 +2779,7 @@ function migrateData(){
     if(!data.departments)data.departments=[];
     if(!data.titles)data.titles=[];
     if(!data.gorevTanimSablonlari)data.gorevTanimSablonlari=[];
+    if(!data.egitimKatilimFormlari)data.egitimKatilimFormlari=[];
     if(!data.clothing||data.clothing.length===0){data.clothing=[];legacyClothing.forEach(c=>{const hasE=c.genders&&c.genders['E']&&c.genders['E'].sizes&&Object.keys(c.genders['E'].sizes).length>0;const hasK=c.genders&&c.genders['K']&&c.genders['K'].sizes&&Object.keys(c.genders['K'].sizes).length>0;if(hasE&&hasK){const eCopy=JSON.parse(JSON.stringify(c));eCopy.gender='E';eCopy.genders={'E':JSON.parse(JSON.stringify(c.genders['E']))};data.clothing.push(convertClothingToStatusBased(eCopy));const kCopy=JSON.parse(JSON.stringify(c));kCopy.gender='K';kCopy.genders={'K':JSON.parse(JSON.stringify(c.genders['K']))};data.clothing.push(convertClothingToStatusBased(kCopy));}else if(hasE){c.gender='E';data.clothing.push(convertClothingToStatusBased(JSON.parse(JSON.stringify(c))));}else if(hasK){c.gender='K';data.clothing.push(convertClothingToStatusBased(JSON.parse(JSON.stringify(c))));}});}
     data.clothing.forEach(c=>{if(!c.stockByStatus)c.stockByStatus={};if(!c.season)c.season='tum';if(!c.gender)c.gender='U';data.statuses.forEach(s=>{if(!c.stockByStatus[s])c.stockByStatus[s]={genders:{'E':{sizes:{}},'K':{sizes:{}}}};if(!c.stockByStatus[s].genders)c.stockByStatus[s].genders={'E':{sizes:{}},'K':{sizes:{}}};['E','K'].forEach(g=>{if(!c.stockByStatus[s].genders[g])c.stockByStatus[s].genders[g]={sizes:{}};if(!c.stockByStatus[s].genders[g].sizes)c.stockByStatus[s].genders[g].sizes={};});});});
     data.personnel.forEach(p=>{if(!p.trainings)p.trainings=[];if(!p.certificates)p.certificates=[];if(!p.status)p.status='Memur';if(!p.liseOkul)p.liseOkul='';if(!p.myoOkul)p.myoOkul='';if(!p.universiteOkul)p.universiteOkul='';if(!p.yuksekLisansOkul)p.yuksekLisansOkul='';if(p.gorevTanimRevNo===undefined)p.gorevTanimRevNo=0;if(!p.gorevTanimFields)p.gorevTanimFields=[];if(!p.gorevTanimSignatures)p.gorevTanimSignatures=[];if(p.gorevTanimTebligYapildi===undefined)p.gorevTanimTebligYapildi=false;if(!p.gorevTanimSablonAdi)p.gorevTanimSablonAdi='';});
@@ -3196,7 +3384,7 @@ function openPrintPreview(title,meta,innerHtml){
     showModal('printPreviewModal');
 }
 function closePrintPreview(){hideModal('printPreviewModal');}
-function showSection(name,ev){document.querySelectorAll('.section').forEach(s=>s.classList.add('hidden'));const t=document.getElementById(name);if(t)t.classList.remove('hidden');document.querySelectorAll('.nav-btn').forEach(b=>{b.classList.remove('border-indigo-600','text-indigo-600','bg-indigo-50');b.classList.add('text-gray-700','border-transparent')});if(ev&&ev.target){const btn=ev.target.closest('button');if(btn){btn.classList.remove('text-gray-700','border-transparent');btn.classList.add('border-indigo-600','text-indigo-600','bg-indigo-50');}}if(name==='personnel'){updatePersonnelTable();}if(name==='stock'){updateStockTables();updatePendingTables();updateDistributionHistory();}if(name==='settings'){updateTrainingList();updateClothingList();updateCertificateList();updateTaskTemplateTable();updateDepartmentDropdowns();updateMykStatus();updateLiseMuafiyetStatus();updateUstalikMuafiyetStatus();updateOnlisansMuafiyetStatus();updateLisansMuafiyetStatus();renderGorevTanimListesi();populateGorevTanimPersonelDropdown();populateGorevTanimSablonDropdown();}if(name==='training'){updateTrainingStats();updateCertificateStats();updateUpcomingTrainings();updateTrainingList();updateTrainingListDisplay();}if(name==='tasks'){updateTaskPage();}if(name==='home'){updateUpcomingTrainings();updateHomeActiveTasks();}}
+function showSection(name,ev){document.querySelectorAll('.section').forEach(s=>s.classList.add('hidden'));const t=document.getElementById(name);if(t)t.classList.remove('hidden');document.querySelectorAll('.nav-btn').forEach(b=>{b.classList.remove('border-indigo-600','text-indigo-600','bg-indigo-50');b.classList.add('text-gray-700','border-transparent')});if(ev&&ev.target){const btn=ev.target.closest('button');if(btn){btn.classList.remove('text-gray-700','border-transparent');btn.classList.add('border-indigo-600','text-indigo-600','bg-indigo-50');}}if(name==='personnel'){updatePersonnelTable();}if(name==='stock'){updateStockTables();updatePendingTables();updateDistributionHistory();}if(name==='settings'){updateTrainingList();updateClothingList();updateCertificateList();updateTaskTemplateTable();updateDepartmentDropdowns();updateMykStatus();updateLiseMuafiyetStatus();updateUstalikMuafiyetStatus();updateOnlisansMuafiyetStatus();updateLisansMuafiyetStatus();renderGorevTanimListesi();populateGorevTanimPersonelDropdown();populateGorevTanimSablonDropdown();}if(name==='training'){updateTrainingStats();updateCertificateStats();updateUpcomingTrainings();updateTrainingList();updateTrainingListDisplay();updateEgitimKatilimFormlariTable();}if(name==='tasks'){updateTaskPage();}if(name==='home'){updateUpcomingTrainings();updateHomeActiveTasks();}}
 
 function normalize(s){
     if(!s)return '';
@@ -8493,7 +8681,9 @@ function updateAllStats(){
     updateTaskPage();updateTaskTemplateTable();updateDepartmentDropdowns();
     updateHomeActiveTasks();
     updateTrainingListDisplay();
+    updateEgitimKatilimFormlariTable();
 }
+
 function updateClothingList(){
     const l=document.getElementById('clothingList');if(!l)return;
     const badge=document.getElementById('clothingCountBadge');
@@ -10022,6 +10212,815 @@ window.confirmRestoreFromSlot = async function(slot) {
         alert('❌ Geri yükleme başarısız: ' + (e.message || 'Bilinmeyen hata'));
     }
 };
+// ============================================================
+// ============== EĞİTİM KATILIM FORMU MODÜLÜ =================
+// ============================================================
+
+let ekfSeciliKatilimcilar = {}; // {personnelId: {name, department, okul, bolum, kaynak}}
+let ekfSeciliEgitmenler = [];
+let ekfEgitimSatirlari = []; // [{egitimId, ad, egitmen, sure, yenilemeAy}]
+let ekfDuzenlenenId = null;
+let ekfAktifFormId = null;
+let ekfYazdirSecili = new Set();
+
+function generateEgitimFormNo(){
+    const yil = new Date().getFullYear();
+    const mevcutFormlar = data.egitimKatilimFormlari || [];
+    const buYilFormlar = mevcutFormlar.filter(f => f.formNo && f.formNo.startsWith('EĞT-' + yil + '-'));
+    let maxNo = 0;
+    buYilFormlar.forEach(f => {
+        const m = f.formNo.match(/EĞT-\d{4}-(\d+)/);
+        if(m) maxNo = Math.max(maxNo, parseInt(m[1]));
+    });
+    return 'EĞT-' + yil + '-' + String(maxNo + 1).padStart(3, '0');
+}
+
+function openYeniEgitimKatilimFormuModal(){
+    if(!isAdmin){alert('❌ Yönetici girişi gerekli!');return}
+    ekfDuzenlenenId = null;
+    ekfSeciliKatilimcilar = {};
+    ekfSeciliEgitmenler = [{ad:'', unvan:''}];
+    ekfEgitimSatirlari = [];
+    
+    const bugun = new Date().toISOString().split('T')[0];
+    document.getElementById('ekfTarih').value = bugun;
+    document.getElementById('ekfBaslama').value = '09:00';
+    document.getElementById('ekfBitis').value = '17:00';
+    document.getElementById('ekfYer').value = 'Eğitim Salonu';
+    document.getElementById('ekfGrupAdi').value = 'PERSONEL';
+    document.getElementById('ekfOzelGrupAdi').value = '';
+    document.getElementById('ekfOzelGrupAdi').disabled = true;
+    document.getElementById('ekfManuelArama').value = '';
+    document.getElementById('ekfManuelSonuclar').innerHTML = '';
+    document.getElementById('ekfSeciliSayi').textContent = '0';
+    
+    // Grup adı değişince özel input
+    document.getElementById('ekfGrupAdi').onchange = function(){
+        document.getElementById('ekfOzelGrupAdi').disabled = this.value !== 'ÖZEL';
+        if(this.value !== 'ÖZEL') document.getElementById('ekfOzelGrupAdi').value = '';
+    };
+    
+    ekfEgitimSatiriEkle();
+    ekfEgitmenSatiriEkle();
+    ekfRenderEgitimListesi();
+    ekfRenderEgitmenListesi();
+    ekfRenderManuelEklenenler();
+    ekfFiltreDropdownlariniDoldur();
+    ekfRenderOtomatikListeler();
+    
+    showModal('yeniEgitimKatilimFormuModal');
+}
+function ekfFiltreDropdownlariniDoldur(){
+    const birimSel = document.getElementById('ekfFiltreBirim');
+    const statuSel = document.getElementById('ekfFiltreStatu');
+    
+    if(birimSel){
+        const cv = birimSel.value;
+        birimSel.innerHTML = '<option value="">-- Tüm Birimler --</option>';
+        (data.departments || []).slice().sort((a,b)=>a.localeCompare(b,'tr')).forEach(d => {
+            birimSel.innerHTML += '<option value="' + escapeHtml(d) + '">🏢 ' + escapeHtml(d) + '</option>';
+        });
+        birimSel.value = cv;
+    }
+    
+    if(statuSel){
+        const cv = statuSel.value;
+        statuSel.innerHTML = '<option value="">-- Tüm Statüler --</option>';
+        (data.statuses || []).slice().sort((a,b)=>a.localeCompare(b,'tr')).forEach(s => {
+            statuSel.innerHTML += '<option value="' + escapeHtml(s) + '">📊 ' + escapeHtml(s) + '</option>';
+        });
+        statuSel.value = cv;
+    }
+}
+
+function ekfEgitimSatiriEkle(){
+    ekfEgitimSatirlari.push({
+        egitimId: '',
+        ad: '',
+        egitmen: '',
+        sure: '',
+        yenilemeAy: ''
+    });
+    ekfRenderEgitimListesi();
+}
+
+function ekfRenderEgitimListesi(){
+    const c = document.getElementById('ekfEgitimListesi');
+    if(!c) return;
+    c.innerHTML = '';
+    if(ekfEgitimSatirlari.length === 0){
+        c.innerHTML = '<div class="text-center py-4 text-gray-500 text-sm bg-white rounded-lg border-2 border-dashed border-blue-300">Henüz eğitim eklenmedi. "Eğitim Ekle" butonunu kullanın.</div>';
+        return;
+    }
+    ekfEgitimSatirlari.forEach((e, i) => {
+        const div = document.createElement('div');
+        div.className = 'bg-white rounded-lg p-3 border-2 border-blue-300';
+        
+        let optionsHtml = '<option value="">-- Eğitim Seçin --</option>';
+        (data.trainings || []).forEach(t => {
+            const sel = (e.egitimId === t.id) ? ' selected' : '';
+            optionsHtml += '<option value="' + t.id + '"' + sel + '>📚 ' + escapeHtml(t.name) + ' (' + (t.duration||12) + ' ay)</option>';
+        });
+        
+        div.innerHTML = 
+            '<div class="flex justify-between items-center mb-2">' +
+                '<span class="text-xs font-bold text-blue-800 bg-blue-100 px-2 py-1 rounded">📚 Eğitim ' + (i+1) + '</span>' +
+                '<button onclick="ekfEgitimSatiriSil(' + i + ')" class="text-red-500 font-bold text-sm">🗑️ Sil</button>' +
+            '</div>' +
+            '<div class="grid grid-cols-1 md:grid-cols-4 gap-2">' +
+                '<div class="md:col-span-2"><label class="block text-xs font-bold text-blue-700 mb-1">Eğitim Adı</label><select class="w-full border-2 border-blue-300 rounded-lg px-2 py-2 text-sm font-semibold" onchange="ekfEgitimSecildi(' + i + ', this.value)">' + optionsHtml + '</select></div>' +
+                '<div><label class="block text-xs font-bold text-blue-700 mb-1">Eğitmen</label><input type="text" value="' + escapeHtml(e.egitmen||'') + '" class="w-full border-2 border-blue-300 rounded-lg px-2 py-2 text-sm" onchange="ekfEgitimAlanGuncelle(' + i + ', \'egitmen\', this.value)"></div>' +
+                '<div><label class="block text-xs font-bold text-blue-700 mb-1">Süre (saat)</label><input type="number" value="' + (e.sure||'') + '" class="w-full border-2 border-blue-300 rounded-lg px-2 py-2 text-sm" onchange="ekfEgitimAlanGuncelle(' + i + ', \'sure\', this.value)"></div>' +
+            '</div>' +
+            '<div class="grid grid-cols-1 md:grid-cols-4 gap-2 mt-2">' +
+                '<div><label class="block text-xs font-bold text-purple-700 mb-1">Yenileme Süresi (ay)</label><input type="number" value="' + (e.yenilemeAy||'') + '" class="w-full border-2 border-purple-300 rounded-lg px-2 py-2 text-sm" onchange="ekfEgitimAlanGuncelle(' + i + ', \'yenilemeAy\', this.value)" placeholder="örn: 12"></div>' +
+            '</div>';
+        c.appendChild(div);
+    });
+}
+
+function ekfEgitimSatiriSil(i){
+    ekfEgitimSatirlari.splice(i, 1);
+    ekfRenderEgitimListesi();
+    ekfRenderOtomatikListeler();
+}
+
+function ekfEgitimSecildi(i, val){
+    const egitim = data.trainings.find(t => String(t.id) === String(val));
+    if(!egitim){ 
+        ekfEgitimSatirlari[i].egitimId = '';
+        ekfEgitimSatirlari[i].ad = '';
+        return; 
+    }
+    ekfEgitimSatirlari[i].egitimId = egitim.id;
+    ekfEgitimSatirlari[i].ad = egitim.name;
+    ekfEgitimSatirlari[i].egitmen = egitim.instructor || '';
+    ekfEgitimSatirlari[i].sure = egitim.hours || '';
+    ekfEgitimSatirlari[i].yenilemeAy = egitim.duration || 12;
+    ekfRenderEgitimListesi();
+    ekfRenderOtomatikListeler();
+}
+
+function ekfEgitimAlanGuncelle(i, alan, val){
+    if(ekfEgitimSatirlari[i]) ekfEgitimSatirlari[i][alan] = val;
+}
+
+function ekfEgitmenSatiriEkle(){
+    ekfSeciliEgitmenler.push({ad:'', unvan:''});
+    ekfRenderEgitmenListesi();
+}
+
+function ekfRenderEgitmenListesi(){
+    const c = document.getElementById('ekfEgitmenListesi');
+    if(!c) return;
+    c.innerHTML = '';
+    if(ekfSeciliEgitmenler.length === 0){
+        c.innerHTML = '<div class="text-center py-3 text-gray-500 text-sm">Henüz eğitim veren eklenmedi</div>';
+        return;
+    }
+    ekfSeciliEgitmenler.forEach((e, i) => {
+        c.innerHTML += 
+            '<div class="flex gap-2 items-center bg-white rounded-lg p-2 border-2 border-amber-300">' +
+                '<input type="text" value="' + escapeHtml(e.ad||'') + '" placeholder="Ad Soyad" class="flex-1 border-2 border-amber-300 rounded-lg px-2 py-2 text-sm" onchange="ekfEgitmenGuncelle(' + i + ', \'ad\', this.value)">' +
+                '<input type="text" value="' + escapeHtml(e.unvan||'') + '" placeholder="Unvan/Görev" class="flex-1 border-2 border-amber-300 rounded-lg px-2 py-2 text-sm" onchange="ekfEgitmenGuncelle(' + i + ', \'unvan\', this.value)">' +
+                '<button onclick="ekfEgitmenSil(' + i + ')" class="text-red-500 font-bold px-2">🗑️</button>' +
+            '</div>';
+    });
+}
+
+function ekfEgitmenGuncelle(i, alan, val){
+    if(ekfSeciliEgitmenler[i]) ekfSeciliEgitmenler[i][alan] = val;
+}
+
+function ekfEgitmenSil(i){
+    ekfSeciliEgitmenler.splice(i, 1);
+    ekfRenderEgitmenListesi();
+}
+
+// ==================== KATILIMCI LİSTELERİ ====================
+
+function ekfRenderOtomatikListeler(){
+    const c = document.getElementById('ekfOtomatikListeler');
+    if(!c) return;
+    
+    const seciliEgitimIdler = ekfEgitimSatirlari.filter(e => e.egitimId).map(e => e.egitimId);
+    if(seciliEgitimIdler.length === 0){
+        c.innerHTML = '<div class="text-center py-4 text-gray-500 text-sm bg-white rounded-lg border-2 border-dashed border-purple-300">Önce eğitim ekleyin, süresi dolan/yaklaşan personeller otomatik listelenecek</div>';
+        return;
+    }
+    
+    // === FİLTRELERİ OKU ===
+    const filtreBirim = (document.getElementById('ekfFiltreBirim') || {}).value || '';
+    const filtreStatu = (document.getElementById('ekfFiltreStatu') || {}).value || '';
+    const filtreDurum = (document.getElementById('ekfFiltreDurum') || {}).value || '';
+    
+    const now = new Date();
+    const otuzGunSonra = new Date(now.getTime() + 30*24*60*60*1000);
+    
+    const dolanlar = [];
+    const yaklasanlar = [];
+    const hicAlmamislar = [];
+    
+    const egitimAdlari = ekfEgitimSatirlari.filter(e => e.ad).map(e => e.ad);
+    
+    (data.personnel || []).forEach(p => {
+        // === FİLTRE KONTROLÜ ===
+        if(filtreBirim && (p.department || '') !== filtreBirim) return;
+        if(filtreStatu && (p.status || '') !== filtreStatu) return;
+        
+        let enKotuDurum = null;
+        let enKotuGun = 999999;
+        let egitimAdiDetay = '';
+        
+        egitimAdlari.forEach(egitimAdi => {
+            const kayit = (p.trainings || []).find(t => t.name === egitimAdi);
+            if(!kayit){
+                if(enKotuDurum === null){ enKotuDurum = 'hic'; egitimAdiDetay = egitimAdi; }
+            } else {
+                const ed = new Date(kayit.expiryDate);
+                const gunFark = Math.ceil((ed - now) / (1000*60*60*24));
+                if(ed < now){
+                    if(enKotuDurum !== 'doldu' || gunFark < enKotuGun){
+                        enKotuDurum = 'doldu';
+                        enKotuGun = gunFark;
+                        egitimAdiDetay = egitimAdi;
+                    }
+                } else if(ed <= otuzGunSonra){
+                    if(enKotuDurum !== 'doldu' && enKotuDurum !== 'yaklasiyor'){
+                        enKotuDurum = 'yaklasiyor';
+                        enKotuGun = gunFark;
+                        egitimAdiDetay = egitimAdi;
+                    } else if(enKotuDurum === 'yaklasiyor' && gunFark < enKotuGun){
+                        enKotuGun = gunFark;
+                        egitimAdiDetay = egitimAdi;
+                    }
+                }
+            }
+        });
+        
+        const kayitObj = {id: p.id, name: p.name, department: p.department, tcNo: p.tcNo, status: p.status};
+        if(enKotuDurum === 'doldu') dolanlar.push({...kayitObj, gun: enKotuGun, egitimAdi: egitimAdiDetay});
+        else if(enKotuDurum === 'yaklasiyor') yaklasanlar.push({...kayitObj, gun: enKotuGun, egitimAdi: egitimAdiDetay});
+        else if(enKotuDurum === 'hic') hicAlmamislar.push({...kayitObj, egitimAdi: egitimAdiDetay});
+    });
+    
+    dolanlar.sort((a,b) => a.gun - b.gun);
+    yaklasanlar.sort((a,b) => a.gun - b.gun);
+    hicAlmamislar.sort((a,b) => a.name.localeCompare(b.name, 'tr'));
+    
+    // Aktif filtre var mı?
+    const filtreVar = !!(filtreBirim || filtreStatu || filtreDurum);
+    let filtreInfoHtml = '';
+    if(filtreVar){
+        const parts = [];
+        if(filtreBirim) parts.push('🏢 ' + escapeHtml(filtreBirim));
+        if(filtreStatu) parts.push('📊 ' + escapeHtml(filtreStatu));
+        if(filtreDurum) {
+            const dtxt = filtreDurum === 'doldu' ? '🔴 Süresi Dolanlar' : filtreDurum === 'yaklasiyor' ? '🟡 Yaklaşanlar' : '⚪ Hiç Almamışlar';
+            parts.push(dtxt);
+        }
+        filtreInfoHtml = '<div class="bg-purple-100 border-2 border-purple-400 rounded-lg p-2 mb-3 text-xs text-purple-900 font-bold">🔍 Aktif Filtre: ' + parts.join(' • ') + ' <button onclick="ekfFiltreTemizle()" class="ml-2 bg-red-500 text-white px-2 py-0.5 rounded text-xs">✕ Temizle</button></div>';
+    }
+    
+    // Gösterilecek gruplar (durum filtresi varsa sadece o grubu göster)
+    const gosterDoldu = !filtreDurum || filtreDurum === 'doldu';
+    const gosterYaklasan = !filtreDurum || filtreDurum === 'yaklasiyor';
+    const gosterHic = !filtreDurum || filtreDurum === 'hic';
+    
+    let html = filtreInfoHtml;
+    
+    // DOLANLAR
+    if(gosterDoldu){
+        html += '<div class="bg-red-50 rounded-lg p-3 border-2 border-red-300">';
+        html += '<div class="flex justify-between items-center mb-2"><h5 class="font-bold text-red-900 text-sm">🔴 Süresi DOLANLAR (' + dolanlar.length + ')</h5><button onclick="ekfGrupSec(\'doldu\', true)" class="text-xs bg-red-600 text-white px-2 py-1 rounded font-bold">Tümünü Seç</button></div>';
+        if(dolanlar.length === 0){ html += '<div class="text-xs text-gray-500 italic">' + (filtreVar ? 'Bu filtreye uyan personel yok' : 'Bu eğitim(ler) için süresi dolan personel yok') + '</div>'; }
+        else {
+            dolanlar.forEach(p => {
+                const chk = ekfSeciliKatilimcilar[p.id] ? 'checked' : '';
+                html += '<label class="flex items-center gap-2 p-2 rounded hover:bg-red-100 cursor-pointer text-sm"><input type="checkbox" class="ekf-katilimci-cb" data-kaynak="doldu" data-pid="' + p.id + '" data-name="' + escapeHtml(p.name) + '" data-dept="' + escapeHtml(p.department||'') + '" data-status="' + escapeHtml(p.status||'') + '" data-egitim="' + escapeHtml(p.egitimAdi||'') + '" ' + chk + ' onchange="ekfKatilimciToggle(this)"><span class="flex-1">👤 <strong>' + escapeHtml(p.name) + '</strong> <span class="text-xs text-gray-500">(' + escapeHtml(p.department||'-') + ' • ' + escapeHtml(p.status||'-') + ')</span></span><span class="text-xs text-red-700 font-bold">' + Math.abs(p.gun) + ' gün gecikme</span></label>';
+            });
+        }
+        html += '</div>';
+    }
+    
+    // YAKLAŞANLAR
+    if(gosterYaklasan){
+        html += '<div class="bg-yellow-50 rounded-lg p-3 border-2 border-yellow-300 mt-3">';
+        html += '<div class="flex justify-between items-center mb-2"><h5 class="font-bold text-yellow-900 text-sm">🟡 Süresi YAKLAŞANLAR - 30 gün (' + yaklasanlar.length + ')</h5><button onclick="ekfGrupSec(\'yaklasiyor\', true)" class="text-xs bg-yellow-600 text-white px-2 py-1 rounded font-bold">Tümünü Seç</button></div>';
+        if(yaklasanlar.length === 0){ html += '<div class="text-xs text-gray-500 italic">' + (filtreVar ? 'Bu filtreye uyan personel yok' : 'Süresi yaklaşan personel yok') + '</div>'; }
+        else {
+            yaklasanlar.forEach(p => {
+                const chk = ekfSeciliKatilimcilar[p.id] ? 'checked' : '';
+                html += '<label class="flex items-center gap-2 p-2 rounded hover:bg-yellow-100 cursor-pointer text-sm"><input type="checkbox" class="ekf-katilimci-cb" data-kaynak="yaklasiyor" data-pid="' + p.id + '" data-name="' + escapeHtml(p.name) + '" data-dept="' + escapeHtml(p.department||'') + '" data-status="' + escapeHtml(p.status||'') + '" data-egitim="' + escapeHtml(p.egitimAdi||'') + '" ' + chk + ' onchange="ekfKatilimciToggle(this)"><span class="flex-1">👤 <strong>' + escapeHtml(p.name) + '</strong> <span class="text-xs text-gray-500">(' + escapeHtml(p.department||'-') + ' • ' + escapeHtml(p.status||'-') + ')</span></span><span class="text-xs text-yellow-700 font-bold">' + p.gun + ' gün kaldı</span></label>';
+            });
+        }
+        html += '</div>';
+    }
+    
+    // HİÇ ALMAMIŞLAR
+    if(gosterHic){
+        html += '<div class="bg-gray-50 rounded-lg p-3 border-2 border-gray-300 mt-3">';
+        html += '<div class="flex justify-between items-center mb-2"><h5 class="font-bold text-gray-800 text-sm">⚪ HİÇ ALMAMIŞLAR (' + hicAlmamislar.length + ')</h5><button onclick="ekfGrupSec(\'hic\', true)" class="text-xs bg-gray-600 text-white px-2 py-1 rounded font-bold">Tümünü Seç</button></div>';
+        if(hicAlmamislar.length === 0){ html += '<div class="text-xs text-gray-500 italic">' + (filtreVar ? 'Bu filtreye uyan personel yok' : 'Tüm personel bu eğitim(ler)den en az birini almış') + '</div>'; }
+        else {
+            hicAlmamislar.slice(0, 100).forEach(p => {
+                const chk = ekfSeciliKatilimcilar[p.id] ? 'checked' : '';
+                html += '<label class="flex items-center gap-2 p-2 rounded hover:bg-gray-100 cursor-pointer text-sm"><input type="checkbox" class="ekf-katilimci-cb" data-kaynak="hic" data-pid="' + p.id + '" data-name="' + escapeHtml(p.name) + '" data-dept="' + escapeHtml(p.department||'') + '" data-status="' + escapeHtml(p.status||'') + '" data-egitim="' + escapeHtml(p.egitimAdi||'') + '" ' + chk + ' onchange="ekfKatilimciToggle(this)"><span class="flex-1">👤 <strong>' + escapeHtml(p.name) + '</strong> <span class="text-xs text-gray-500">(' + escapeHtml(p.department||'-') + ' • ' + escapeHtml(p.status||'-') + ')</span></span></label>';
+            });
+            if(hicAlmamislar.length > 100) html += '<div class="text-xs text-gray-500 mt-1">... ve ' + (hicAlmamislar.length-100) + ' kişi daha</div>';
+        }
+        html += '</div>';
+    }
+    
+    c.innerHTML = html;
+    ekfSeciliSayiGuncelle();
+}
+
+// YENİ: Filtre temizleme
+function ekfFiltreTemizle(){
+    const b = document.getElementById('ekfFiltreBirim');
+    const s = document.getElementById('ekfFiltreStatu');
+    const d = document.getElementById('ekfFiltreDurum');
+    if(b) b.value = '';
+    if(s) s.value = '';
+    if(d) d.value = '';
+    ekfRenderOtomatikListeler();
+}
+
+function ekfGrupSec(grup, sec){
+    document.querySelectorAll('.ekf-katilimci-cb[data-kaynak="' + grup + '"]').forEach(cb => {
+        cb.checked = sec;
+        const pid = parseInt(cb.getAttribute('data-pid'));
+        if(sec){
+            ekfSeciliKatilimcilar[pid] = {
+                name: cb.getAttribute('data-name'),
+                department: cb.getAttribute('data-dept'),
+                kaynak: grup
+            };
+        } else {
+            delete ekfSeciliKatilimcilar[pid];
+        }
+    });
+    ekfSeciliSayiGuncelle();
+}
+
+function ekfKatilimciToggle(cb){
+    const pid = parseInt(cb.getAttribute('data-pid'));
+    if(cb.checked){
+        ekfSeciliKatilimcilar[pid] = {
+            name: cb.getAttribute('data-name'),
+            department: cb.getAttribute('data-dept'),
+            kaynak: cb.getAttribute('data-kaynak') || 'manuel'
+        };
+    } else {
+        delete ekfSeciliKatilimcilar[pid];
+    }
+    ekfSeciliSayiGuncelle();
+}
+
+function ekfTumunuSec(sec){
+    document.querySelectorAll('.ekf-katilimci-cb').forEach(cb => {
+        cb.checked = sec;
+        const pid = parseInt(cb.getAttribute('data-pid'));
+        if(sec){
+            ekfSeciliKatilimcilar[pid] = {
+                name: cb.getAttribute('data-name'),
+                department: cb.getAttribute('data-dept'),
+                kaynak: cb.getAttribute('data-kaynak') || 'manuel'
+            };
+        } else {
+            delete ekfSeciliKatilimcilar[pid];
+        }
+    });
+    ekfSeciliSayiGuncelle();
+}
+
+function ekfSeciliSayiGuncelle(){
+    const el = document.getElementById('ekfSeciliSayi');
+    if(el) el.textContent = Object.keys(ekfSeciliKatilimcilar).length;
+}
+
+// ==================== MANUEL PERSONEL EKLEME ====================
+function ekfManuelAra(){
+    const inp = document.getElementById('ekfManuelArama');
+    const c = document.getElementById('ekfManuelSonuclar');
+    if(!inp || !c) return;
+    const term = normalize(inp.value.trim());
+    if(term.length < 2){ c.innerHTML = ''; return; }
+    
+    const mevcutIdler = new Set(Object.keys(ekfSeciliKatilimcilar).map(x => parseInt(x)));
+    const sonuclar = (data.personnel || [])
+        .filter(p => !mevcutIdler.has(p.id))
+        .filter(p => normalize(p.name).includes(term) || normalize(p.department||'').includes(term))
+        .slice(0, 30)
+        .sort((a,b) => a.name.localeCompare(b.name,'tr'));
+    
+    if(sonuclar.length === 0){
+        c.innerHTML = '<div class="text-xs text-gray-500 italic text-center py-2">Sonuç bulunamadı</div>';
+        return;
+    }
+    c.innerHTML = '';
+    sonuclar.forEach(p => {
+        const div = document.createElement('div');
+        div.className = 'flex items-center gap-2 p-2 rounded cursor-pointer hover:bg-purple-100 border border-purple-200 mb-1 text-sm';
+        div.innerHTML = '<span>👤</span><span class="flex-1"><strong>' + escapeHtml(p.name) + '</strong> <span class="text-xs text-gray-500">(' + escapeHtml(p.department||'-') + ')</span></span><button class="text-xs bg-purple-600 text-white px-2 py-1 rounded font-bold">+ Ekle</button>';
+        div.onclick = function(){ ekfManuelEkle(p.id, p.name, p.department); };
+        c.appendChild(div);
+    });
+}
+
+function ekfManuelEkle(pid, name, dept){
+    if(ekfSeciliKatilimcilar[pid]){ alert('Bu kişi zaten seçili!'); return; }
+    ekfSeciliKatilimcilar[pid] = {name: name, department: dept, kaynak: 'manuel'};
+    document.getElementById('ekfManuelArama').value = '';
+    document.getElementById('ekfManuelSonuclar').innerHTML = '';
+    ekfRenderManuelEklenenler();
+    ekfSeciliSayiGuncelle();
+    ekfRenderOtomatikListeler();
+}
+
+function ekfRenderManuelEklenenler(){
+    const c = document.getElementById('ekfManuelEklenenler');
+    if(!c) return;
+    c.innerHTML = '';
+    Object.keys(ekfSeciliKatilimcilar).forEach(pidStr => {
+        const pid = parseInt(pidStr);
+        const info = ekfSeciliKatilimcilar[pid];
+        if(info.kaynak === 'manuel'){
+            c.innerHTML += '<span class="inline-flex items-center gap-1 bg-purple-100 text-purple-800 px-2 py-1 rounded-full text-xs font-bold border border-purple-300">👤 ' + escapeHtml(info.name) + ' <button onclick="ekfManuelSil(' + pid + ')" class="text-red-600 font-bold">✕</button></span>';
+        }
+    });
+}
+
+function ekfManuelSil(pid){
+    delete ekfSeciliKatilimcilar[pid];
+    ekfRenderManuelEklenenler();
+    ekfSeciliSayiGuncelle();
+    ekfRenderOtomatikListeler();
+}
+
+// ==================== KAYDET ====================
+function saveEgitimKatilimFormu(){
+    if(!isAdmin){alert('❌ Yönetici girişi gerekli!');return}
+    
+    const tarih = document.getElementById('ekfTarih').value;
+    const baslama = document.getElementById('ekfBaslama').value;
+    const bitis = document.getElementById('ekfBitis').value;
+    const yer = document.getElementById('ekfYer').value.trim();
+    const grupSecim = document.getElementById('ekfGrupAdi').value;
+    const ozelGrup = document.getElementById('ekfOzelGrupAdi').value.trim();
+    const grupAdi = grupSecim === 'ÖZEL' ? (ozelGrup || 'ÖZEL') : grupSecim;
+    
+    if(!tarih){ alert('Eğitim tarihi girin!'); return; }
+    if(!yer){ alert('Eğitim yeri girin!'); return; }
+    
+    const egitimler = ekfEgitimSatirlari.filter(e => e.egitimId && e.ad);
+    if(egitimler.length === 0){ alert('En az bir eğitim ekleyin!'); return; }
+    
+    if(Object.keys(ekfSeciliKatilimcilar).length === 0){ alert('En az bir katılımcı seçin!'); return; }
+    
+    const egitmenler = ekfSeciliEgitmenler.filter(e => e.ad.trim());
+    if(egitmenler.length === 0){ alert('En az bir eğitim veren girin!'); return; }
+    
+    const katilimcilar = Object.keys(ekfSeciliKatilimcilar).map(pidStr => {
+        const pid = parseInt(pidStr);
+        const info = ekfSeciliKatilimcilar[pid];
+        const p = data.personnel.find(x => x.id === pid);
+        const k = { personnelId: pid, name: info.name, department: info.department };
+        if(p){
+            k.tcNo = p.tcNo || '';
+            k.okul = p.liseOkul || '';
+            k.bolum = p.lise || '';
+        }
+        return k;
+    });
+    
+    const formObj = {
+        id: Date.now(),
+        formNo: generateEgitimFormNo(),
+        egitimTarihi: tarih,
+        baslama: baslama,
+        bitis: bitis,
+        egitimYeri: yer,
+        katilimciGrupAdi: grupAdi,
+        egitimler: JSON.parse(JSON.stringify(egitimler)),
+        katilimcilar: katilimcilar,
+        egitimVerenler: JSON.parse(JSON.stringify(egitmenler)),
+        durum: 'devam',
+        olusturmaTarihi: new Date().toISOString(),
+        olusturan: currentUsername || 'admin',
+        tamamlanmaTarihi: null,
+        tamamlayan: null
+    };
+    
+    if(!data.egitimKatilimFormlari) data.egitimKatilimFormlari = [];
+    data.egitimKatilimFormlari.push(formObj);
+    
+    saveToLocalStorage();
+    hideModal('yeniEgitimKatilimFormuModal');
+    updateEgitimKatilimFormlariTable();
+    showSuccessMessage('✅ Form oluşturuldu! No: ' + formObj.formNo);
+}
+
+// ==================== TABLO ====================
+function updateEgitimKatilimFormlariTable(){
+    const tb = document.getElementById('egitimKatilimFormlariBody');
+    if(!tb) return;
+    tb.innerHTML = '';
+    const formlar = data.egitimKatilimFormlari || [];
+    if(formlar.length === 0){
+        tb.innerHTML = '<tr><td colspan="6" class="text-center py-6 text-gray-500 text-sm">Henüz katılım formu oluşturulmadı</td></tr>';
+        return;
+    }
+    formlar.slice().sort((a,b) => new Date(b.olusturmaTarihi) - new Date(a.olusturmaTarihi)).forEach(f => {
+        const egitimAdlari = (f.egitimler||[]).map(e => e.ad).join(' + ');
+        const durumBadge = f.durum === 'tamamlandi'
+            ? '<span class="px-2 py-1 rounded text-xs font-bold bg-green-100 text-green-800">✅ Tamamlandı</span>'
+            : '<span class="px-2 py-1 rounded text-xs font-bold bg-yellow-100 text-yellow-800">⏳ Devam</span>';
+        const safeFormNo = escapeHtml(f.formNo);
+        const safeEgitimAdi = escapeHtml(egitimAdlari);
+        
+        let islemler = '<button onclick="ekfFormuGoruntule(' + f.id + ')" class="bg-blue-600 text-white px-2 py-1 rounded text-xs font-bold mr-1">👁️ Görüntüle</button>' +
+                       '<button onclick="ekfKatilimciListesiGoster(' + f.id + ')" class="bg-purple-600 text-white px-2 py-1 rounded text-xs font-bold mr-1">👥 Katılımcı</button>';
+        if(isAdmin){
+            if(f.durum === 'devam'){
+                islemler += '<button onclick="ekfFormuTamamlaOnayli(' + f.id + ')" class="bg-green-600 text-white px-2 py-1 rounded text-xs font-bold mr-1">✅ Tamamla</button>';
+            }
+            islemler += '<button onclick="ekfFormuSil(' + f.id + ')" class="bg-red-600 text-white px-2 py-1 rounded text-xs font-bold">🗑️</button>';
+        }
+        
+        tb.innerHTML += '<tr class="hover:bg-emerald-50 cursor-pointer" onclick="ekfKatilimciListesiGoster(' + f.id + ')">' +
+            '<td class="px-4 py-3 text-sm font-bold font-mono text-emerald-800">' + safeFormNo + '</td>' +
+            '<td class="px-4 py-3 text-sm"><strong>' + safeEgitimAdi + '</strong></td>' +
+            '<td class="px-4 py-3 text-center text-sm">' + (f.egitimTarihi ? new Date(f.egitimTarihi).toLocaleDateString('tr-TR') : '-') + '</td>' +
+            '<td class="px-4 py-3 text-center text-sm font-bold">' + (f.katilimcilar||[]).length + ' kişi</td>' +
+            '<td class="px-4 py-3 text-center">' + durumBadge + '</td>' +
+            '<td class="px-4 py-3 text-center" onclick="event.stopPropagation()">' + islemler + '</td>' +
+        '</tr>';
+    });
+}
+
+// ==================== KATILIMCI LİSTESİ GÖRÜNTÜLEME ====================
+function ekfKatilimciListesiGoster(formId){
+    const f = (data.egitimKatilimFormlari || []).find(x => x.id === formId);
+    if(!f){ alert('Form bulunamadı!'); return; }
+    
+    document.getElementById('ekfKatilimciBaslik').textContent = 'Katılımcı Listesi — ' + f.formNo;
+    document.getElementById('ekfKatilimciAltBaslik').textContent = (f.egitimler||[]).map(e => e.ad).join(' + ') + ' | ' + (f.egitimTarihi ? new Date(f.egitimTarihi).toLocaleDateString('tr-TR') : '') + ' | ' + f.katilimciGrupAdi;
+    
+    const katilimcilar = f.katilimcilar || [];
+    if(katilimcilar.length === 0){
+        document.getElementById('ekfKatilimciListesiContent').innerHTML = '<div class="text-center py-6 text-gray-500 text-sm">Katılımcı yok</div>';
+    } else {
+        let html = '<div class="overflow-x-auto"><table class="w-full table-auto text-sm">';
+        html += '<thead class="bg-emerald-50"><tr>';
+        html += '<th class="px-3 py-2 text-left text-xs font-bold text-gray-600">#</th>';
+        html += '<th class="px-3 py-2 text-left text-xs font-bold text-gray-600">Ad Soyad</th>';
+        html += '<th class="px-3 py-2 text-left text-xs font-bold text-gray-600">' + (f.katilimciGrupAdi === 'STAJYERLER' ? 'Okul' : 'Birim') + '</th>';
+        if(f.katilimciGrupAdi === 'STAJYERLER') html += '<th class="px-3 py-2 text-left text-xs font-bold text-gray-600">Bölüm</th>';
+        html += '</tr></thead><tbody>';
+        katilimcilar.forEach((k, i) => {
+            html += '<tr class="border-b hover:bg-emerald-50">';
+            html += '<td class="px-3 py-2 text-center font-bold">' + (i+1) + '</td>';
+            html += '<td class="px-3 py-2"><strong>' + escapeHtml(k.name) + '</strong></td>';
+            html += '<td class="px-3 py-2">' + escapeHtml(k.department || '-') + '</td>';
+            if(f.katilimciGrupAdi === 'STAJYERLER') html += '<td class="px-3 py-2">' + escapeHtml(k.bolum || '-') + '</td>';
+            html += '</tr>';
+        });
+        html += '</tbody></table></div>';
+        document.getElementById('ekfKatilimciListesiContent').innerHTML = html;
+    }
+    showModal('ekfKatilimciListesiModal');
+}
+
+// ==================== FORM GÖRÜNTÜLE / YAZDIRMA ====================
+function ekfFormuGoruntule(formId){
+    const f = (data.egitimKatilimFormlari || []).find(x => x.id === formId);
+    if(!f){ alert('Form bulunamadı!'); return; }
+    ekfAktifFormId = formId;
+    ekfYazdirSecili = new Set((f.katilimcilar||[]).map(k => k.personnelId));
+    ekfRenderYazdirKatilimciListesi(f);
+    ekfRenderFormu(f, true);
+    showModal('ekfOnizlemeModal');
+}
+
+function ekfRenderYazdirKatilimciListesi(f){
+    const c = document.getElementById('ekfYazdirKatilimciListesi');
+    if(!c) return;
+    c.innerHTML = '';
+    (f.katilimcilar||[]).forEach(k => {
+        const checked = ekfYazdirSecili.has(k.personnelId) ? 'checked' : '';
+        c.innerHTML += '<label class="flex items-center gap-2 p-1 rounded hover:bg-purple-100 cursor-pointer text-xs"><input type="checkbox" class="ekf-yazdir-cb" data-pid="' + k.personnelId + '" ' + checked + ' onchange="ekfYazdirToggle(this)"><span>' + escapeHtml(k.name) + '</span></label>';
+    });
+    ekfYazdirSeciliSayiGuncelle();
+}
+
+function ekfYazdirToggle(cb){
+    const pid = parseInt(cb.getAttribute('data-pid'));
+    if(cb.checked) ekfYazdirSecili.add(pid);
+    else ekfYazdirSecili.delete(pid);
+    ekfYazdirSeciliSayiGuncelle();
+    const f = (data.egitimKatilimFormlari || []).find(x => x.id === ekfAktifFormId);
+    if(f) ekfRenderFormu(f, false);
+}
+
+function ekfYazdirTumunuSec(sec){
+    document.querySelectorAll('.ekf-yazdir-cb').forEach(cb => {
+        cb.checked = sec;
+        const pid = parseInt(cb.getAttribute('data-pid'));
+        if(sec) ekfYazdirSecili.add(pid);
+        else ekfYazdirSecili.delete(pid);
+    });
+    ekfYazdirSeciliSayiGuncelle();
+    const f = (data.egitimKatilimFormlari || []).find(x => x.id === ekfAktifFormId);
+    if(f) ekfRenderFormu(f, false);
+}
+
+function ekfYazdirSeciliSayiGuncelle(){
+    const el = document.getElementById('ekfYazdirSeciliSayi');
+    if(el) el.textContent = ekfYazdirSecili.size;
+}
+
+function ekfRenderFormu(f, sifirla){
+    const c = document.getElementById('ekfPrintArea');
+    if(!c) return;
+    
+    const filtrelenmisKatilimcilar = (f.katilimcilar||[]).filter(k => ekfYazdirSecili.has(k.personnelId));
+    const stajyerMi = f.katilimciGrupAdi === 'STAJYERLER';
+    
+    let html = '<div style="font-family:Arial,sans-serif;font-size:12px;color:#000;padding:20px;background:#fff;">';
+    
+    // Başlık
+    html += '<div style="text-align:center;margin-bottom:20px;border-bottom:2px solid #000;padding-bottom:10px;">';
+    html += '<h1 style="font-size:14px;margin:0;font-weight:bold;text-transform:uppercase;">ADANA BÜYÜKŞEHİR BELEDİYESİ ULAŞIM DAİRESİ BAŞKANLIĞI</h1>';
+    html += '<h2 style="font-size:13px;margin:2px 0 0;font-weight:bold;">RAYLI SİSTEM ŞUBE MÜDÜRLÜĞÜ</h2>';
+    html += '<h3 style="font-size:16px;margin:12px 0 0;font-weight:bold;text-transform:uppercase;letter-spacing:2px;">EĞİTİM KATILIM FORMU</h3>';
+    html += '<div style="font-size:11px;margin-top:6px;">Form No: <strong>' + escapeHtml(f.formNo) + '</strong></div>';
+    html += '</div>';
+    
+    // Bilgiler
+    html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:4px 20px;font-size:12px;margin-bottom:14px;">';
+    html += '<div><strong>Eğitim Tarihi:</strong> ' + (f.egitimTarihi ? new Date(f.egitimTarihi).toLocaleDateString('tr-TR') : '-') + '</div>';
+    html += '<div><strong>Eğitim Yeri:</strong> ' + escapeHtml(f.egitimYeri || '-') + '</div>';
+    html += '<div><strong>Başlama:</strong> ' + escapeHtml(f.baslama || '-') + '</div>';
+    html += '<div><strong>Bitiş:</strong> ' + escapeHtml(f.bitis || '-') + '</div>';
+    html += '</div>';
+    
+    // Eğitimler tablosu
+    html += '<table style="width:100%;border-collapse:collapse;font-size:11px;margin-bottom:14px;">';
+    html += '<thead><tr style="background:#e5e7eb;"><th style="border:1px solid #000;padding:5px;text-align:left;">Eğitim Adı</th><th style="border:1px solid #000;padding:5px;text-align:left;width:150px;">Eğitim Veren</th><th style="border:1px solid #000;padding:5px;text-align:center;width:80px;">Süre (saat)</th></tr></thead><tbody>';
+    (f.egitimler||[]).forEach(e => {
+        html += '<tr><td style="border:1px solid #000;padding:5px;"><strong>' + escapeHtml(e.ad) + '</strong></td><td style="border:1px solid #000;padding:5px;">' + escapeHtml(e.egitmen||'-') + '</td><td style="border:1px solid #000;padding:5px;text-align:center;">' + (e.sure||'-') + '</td></tr>';
+    });
+    html += '</tbody></table>';
+    
+    // Katılımcılar
+    html += '<h4 style="font-size:13px;font-weight:bold;margin:14px 0 6px;background:#f3f4f6;padding:5px 8px;border-left:4px solid #000;">EĞİTİME KATILAN ' + escapeHtml(f.katilimciGrupAdi) + '</h4>';
+    
+    if(filtrelenmisKatilimcilar.length === 0){
+        html += '<div style="text-align:center;padding:20px;color:#999;font-style:italic;">Yazdırılacak katılımcı seçilmedi</div>';
+    } else {
+        html += '<table style="width:100%;border-collapse:collapse;font-size:11px;">';
+        html += '<thead><tr style="background:#e5e7eb;"><th style="border:1px solid #000;padding:5px;text-align:center;width:40px;">No</th><th style="border:1px solid #000;padding:5px;text-align:left;">Ad Soyad</th>';
+        if(stajyerMi){
+            html += '<th style="border:1px solid #000;padding:5px;text-align:left;width:150px;">Okul</th><th style="border:1px solid #000;padding:5px;text-align:left;width:150px;">Bölüm</th>';
+        } else {
+            html += '<th style="border:1px solid #000;padding:5px;text-align:left;width:200px;">Birim</th>';
+        }
+        html += '<th style="border:1px solid #000;padding:5px;text-align:center;width:120px;">İmza</th></tr></thead><tbody>';
+        filtrelenmisKatilimcilar.forEach((k, i) => {
+            html += '<tr><td style="border:1px solid #000;padding:5px;text-align:center;">' + (i+1) + '</td><td style="border:1px solid #000;padding:5px;">' + escapeHtml(k.name) + '</td>';
+            if(stajyerMi){
+                html += '<td style="border:1px solid #000;padding:5px;">' + escapeHtml(k.okul||'-') + '</td><td style="border:1px solid #000;padding:5px;">' + escapeHtml(k.bolum||'-') + '</td>';
+            } else {
+                html += '<td style="border:1px solid #000;padding:5px;">' + escapeHtml(k.department||'-') + '</td>';
+            }
+            html += '<td style="border:1px solid #000;padding:5px;">&nbsp;</td></tr>';
+        });
+        html += '</tbody></table>';
+    }
+    
+    // Eğitim verenler
+    html += '<h4 style="font-size:13px;font-weight:bold;margin:20px 0 6px;background:#f3f4f6;padding:5px 8px;border-left:4px solid #000;">EĞİTİM VEREN(LER)</h4>';
+    html += '<table style="width:100%;border-collapse:collapse;font-size:11px;">';
+    html += '<thead><tr style="background:#e5e7eb;"><th style="border:1px solid #000;padding:5px;text-align:center;width:40px;">No</th><th style="border:1px solid #000;padding:5px;text-align:left;">Ad Soyad</th><th style="border:1px solid #000;padding:5px;text-align:left;width:220px;">Unvan/Görev</th><th style="border:1px solid #000;padding:5px;text-align:center;width:120px;">İmza</th></tr></thead><tbody>';
+    (f.egitimVerenler||[]).forEach((e, i) => {
+        html += '<tr><td style="border:1px solid #000;padding:5px;text-align:center;">' + (i+1) + '</td><td style="border:1px solid #000;padding:5px;">' + escapeHtml(e.ad) + '</td><td style="border:1px solid #000;padding:5px;">' + escapeHtml(e.unvan||'-') + '</td><td style="border:1px solid #000;padding:5px;">&nbsp;</td></tr>';
+    });
+    html += '</tbody></table>';
+    
+    html += '</div>';
+    c.innerHTML = html;
+}
+
+function setEkfOrientation(orientation){
+    document.getElementById('ekfOrientationPortrait').classList.toggle('active', orientation === 'portrait');
+    document.getElementById('ekfOrientationLandscape').classList.toggle('active', orientation === 'landscape');
+    window.ekfOrientation = orientation;
+}
+
+function printEkfForm(){
+    const f = (data.egitimKatilimFormlari || []).find(x => x.id === ekfAktifFormId);
+    if(!f){ alert('Form bulunamadı!'); return; }
+    const katilimciSayisi = ekfYazdirSecili.size;
+    if(katilimciSayisi === 0){ alert('Yazdırılacak katılımcı seçin!'); return; }
+    
+    const orientation = (window.ekfOrientation || 'portrait') === 'landscape' ? 'landscape' : 'portrait';
+    const icerik = document.getElementById('ekfPrintArea').innerHTML;
+    
+    const pw = window.open('', '_blank', 'width=900,height=700');
+    pw.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>' + escapeHtml(f.formNo) + ' - Eğitim Katılım Formu</title><style>@page { size: A4 ' + orientation + '; margin: 1.2cm; } body { font-family: Arial, sans-serif; font-size: 12px; margin: 0; padding: 0; } table { width: 100%; border-collapse: collapse; }</style></head><body>' + icerik + '</body></html>');
+    pw.document.close();
+    pw.focus();
+    setTimeout(() => { pw.print(); }, 300);
+}
+
+// ==================== TAMAMLA ====================
+function ekfFormuTamamlaOnayli(formId){
+    if(!isAdmin){ alert('❌ Yönetici girişi gerekli!'); return; }
+    const f = (data.egitimKatilimFormlari || []).find(x => x.id === formId);
+    if(!f){ alert('Form bulunamadı!'); return; }
+    if(f.durum === 'tamamlandi'){ alert('Bu form zaten tamamlandı!'); return; }
+    
+    const mesaj = f.formNo + ' numaralı form tamamlanacak.\n\n' +
+        '👥 Katılımcı: ' + (f.katilimcilar||[]).length + ' kişi\n' +
+        '📚 Eğitim: ' + (f.egitimler||[]).map(e => e.ad).join(', ') + '\n\n' +
+        'Her katılımcının eğitim kaydı yenilenecek.\n\nOnaylıyor musunuz?';
+    
+    if(!confirm(mesaj)) return;
+    ekfFormuTamamlaExecute(formId);
+}
+
+function ekfFormuTamamla(){
+    if(!isAdmin){ alert('❌ Yönetici girişi gerekli!'); return; }
+    if(!ekfAktifFormId){ alert('Aktif form yok!'); return; }
+    ekfFormuTamamlaOnayli(ekfAktifFormId);
+}
+
+function ekfFormuTamamlaExecute(formId){
+    const f = (data.egitimKatilimFormlari || []).find(x => x.id === formId);
+    if(!f) return;
+    
+    const bugun = new Date();
+    let guncellenenPersonel = 0;
+    let eklenenKayit = 0;
+    
+    (f.katilimcilar || []).forEach(k => {
+        const p = data.personnel.find(x => x.id === k.personnelId);
+        if(!p){ return; }
+        if(!p.trainings) p.trainings = [];
+        
+        (f.egitimler || []).forEach(eg => {
+            const mevcut = p.trainings.find(t => t.name === eg.ad);
+            const expiry = new Date(bugun);
+            expiry.setMonth(expiry.getMonth() + (parseInt(eg.yenilemeAy) || 12));
+            
+            if(mevcut){
+                mevcut.completedDate = bugun.toISOString();
+                mevcut.expiryDate = expiry.toISOString();
+                if(eg.yenilemeAy) mevcut.duration = parseInt(eg.yenilemeAy);
+                if(eg.egitmen) mevcut.instructor = eg.egitmen;
+                if(eg.sure) mevcut.hours = parseInt(eg.sure);
+            } else {
+                p.trainings.push({
+                    name: eg.ad,
+                    completedDate: bugun.toISOString(),
+                    expiryDate: expiry.toISOString(),
+                    duration: parseInt(eg.yenilemeAy) || 12,
+                    instructor: eg.egitmen || '',
+                    hours: parseInt(eg.sure) || 0,
+                    location: f.egitimYeri || ''
+                });
+                eklenenKayit++;
+            }
+        });
+        guncellenenPersonel++;
+    });
+    
+    f.durum = 'tamamlandi';
+    f.tamamlanmaTarihi = new Date().toISOString();
+    f.tamamlayan = currentUsername || 'admin';
+    
+    saveToLocalStorage();
+    updateEgitimKatilimFormlariTable();
+    updateAllStats();
+    hideModal('ekfOnizlemeModal');
+    
+    showSuccessMessage('✅ Form tamamlandı! ' + guncellenenPersonel + ' personel güncellendi, ' + eklenenKayit + ' yeni kayıt eklendi.');
+}
+
+// ==================== SİL ====================
+function ekfFormuSil(formId){
+    if(!isAdmin){ alert('❌ Yönetici girişi gerekli!'); return; }
+    const f = (data.egitimKatilimFormlari || []).find(x => x.id === formId);
+    if(!f) return;
+    if(!confirm(f.formNo + ' numaralı formu silmek istediğinize emin misiniz?')) return;
+    data.egitimKatilimFormlari = data.egitimKatilimFormlari.filter(x => x.id !== formId);
+    saveToLocalStorage();
+    updateEgitimKatilimFormlariTable();
+    showSuccessMessage('🗑️ Form silindi.');
+}
+
 </script>
 
 
