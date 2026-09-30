@@ -406,6 +406,7 @@ body.viewer-mode #loginModal *{pointer-events:auto!important;opacity:1!important
 <div class="flex justify-center space-x-4 flex-wrap">
 <button onclick="showSection('home',event)" class="nav-btn text-indigo-600 bg-indigo-50 border-indigo-600 px-6 py-4 border-b-2 font-medium">🏠 Ana Sayfa</button>
 <button onclick="showSection('personnel',event)" class="nav-btn text-gray-700 px-6 py-4 border-b-2 border-transparent font-medium">👥 Personel</button>
+<button onclick="showSection('stajyer',event)" class="nav-btn text-gray-700 px-6 py-4 border-b-2 border-transparent font-medium">🎓 Stajyer</button>
 <button onclick="showSection('training',event)" class="nav-btn text-gray-700 px-6 py-4 border-b-2 border-transparent font-medium">📚 Eğitim</button>
 <button onclick="showSection('stock',event)" class="nav-btn text-gray-700 px-6 py-4 border-b-2 border-transparent font-medium">📦 Stok</button>
 <button onclick="showSection('tasks',event)" class="nav-btn text-gray-700 px-6 py-4 border-b-2 border-transparent font-medium">📌 Görevler</button>
@@ -478,17 +479,188 @@ body.viewer-mode #loginModal *{pointer-events:auto!important;opacity:1!important
 </div>
 </div>
 
+<!-- ==================== STAJYER SAYFASI (YENİ) ==================== -->
+<div id="stajyer" class="section hidden">
+<div class="bg-white rounded-xl shadow-xl p-6">
+    <!-- Başlık + Yeni Stajyer Butonu -->
+    <div class="flex items-center justify-between mb-6 flex-wrap gap-3">
+        <div class="flex items-center">
+            <div class="p-3 rounded-full bg-indigo-100 text-indigo-600 text-2xl mr-4">🎓</div>
+            <div>
+                <h2 class="text-2xl font-bold">Stajyer Yönetimi</h2>
+                <p class="text-xs text-gray-500 mt-1">Aktif ve arşivlenmiş stajyer kayıtları</p>
+            </div>
+        </div>
+        <button onclick="openYeniStajyerModal()" class="admin-only-btn bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white px-6 py-3 rounded-lg font-medium">➕ Yeni Stajyer Kaydı</button>
+    </div>
+
+    <!-- AKTİF STAJYERLER (AKORDİYON) -->
+    <div class="border-2 border-indigo-300 rounded-lg mb-6">
+        <div class="flex items-center justify-between bg-indigo-100 p-4 cursor-pointer hover:bg-indigo-200 transition-colors rounded-t-lg" onclick="toggleStajyerSection('aktifStajyerSection')">
+            <div class="flex items-center gap-3">
+                <span id="aktifStajyerSectionArrow" class="text-indigo-700 text-xl font-bold transition-transform inline-block" style="transform:rotate(90deg)">▶</span>
+                <div class="p-2 rounded-full bg-indigo-200 text-indigo-600 text-xl">🟢</div>
+                <h3 class="text-xl font-bold text-indigo-900">Aktif Stajyerler</h3>
+                <span id="aktifStajyerCount" class="bg-indigo-200 text-indigo-900 px-3 py-1 rounded-full font-bold text-sm">0</span>
+            </div>
+            <button onclick="event.stopPropagation();printAktifStajyerler()" class="viewer-allow bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-lg text-xs font-bold">🖨️ Yazdır</button>
+        </div>
+        <div id="aktifStajyerSection" class="p-4 bg-white rounded-b-lg">
+            <!-- Filtreler -->
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-2 mb-3 bg-indigo-50 p-3 rounded-lg border border-indigo-200">
+                <input type="text" id="aktifStajyerArama" placeholder="🔍 Ad/Soyad..." class="viewer-allow border-2 border-indigo-300 rounded-lg px-3 py-2 text-xs" oninput="filterAktifStajyerler()">
+                <select id="aktifStajyerOkulFilter" class="viewer-allow border-2 border-indigo-300 rounded-lg px-3 py-2 text-xs bg-white" onchange="filterAktifStajyerler()"><option value="">Tüm Okullar</option></select>
+                <select id="aktifStajyerBirimFilter" class="viewer-allow border-2 border-indigo-300 rounded-lg px-3 py-2 text-xs bg-white" onchange="filterAktifStajyerler()"><option value="">Tüm Birimler</option></select>
+                <input type="date" id="aktifStajyerBaslangicFilter" class="viewer-allow border-2 border-indigo-300 rounded-lg px-3 py-2 text-xs" onchange="filterAktifStajyerler()" title="Başlangıç">
+                <input type="date" id="aktifStajyerBitisFilter" class="viewer-allow border-2 border-indigo-300 rounded-lg px-3 py-2 text-xs" onchange="filterAktifStajyerler()" title="Bitiş">
+            </div>
+            <div class="overflow-x-auto max-h-[60vh] overflow-y-auto">
+                <table class="w-full table-auto text-sm" id="aktifStajyerTable">
+                    <thead class="bg-indigo-50 sticky top-0">
+                        <tr>
+                            <th class="px-3 py-2 text-left text-xs font-bold text-gray-600">STAJYER</th>
+                            <th class="px-3 py-2 text-left text-xs font-bold text-gray-600">İLETİŞİM</th>
+                            <th class="px-3 py-2 text-left text-xs font-bold text-gray-600">EĞİTİM</th>
+                            <th class="px-3 py-2 text-left text-xs font-bold text-gray-600">BİRİM</th>
+                            <th class="px-3 py-2 text-left text-xs font-bold text-gray-600">DÖNEM</th>
+                            <th class="px-3 py-2 text-center text-xs font-bold text-gray-600">GÜNLER</th>
+                            <th class="px-3 py-2 text-center text-xs font-bold text-gray-600">EĞİTİM DURUMU</th>
+                            <th class="px-3 py-2 text-center text-xs font-bold text-gray-600">KALAN SÜRE</th>
+                            <th class="px-3 py-2 text-center text-xs font-bold text-gray-600">DURUM</th>
+                            <th class="px-3 py-2 text-center text-xs font-bold text-gray-600">İŞLEMLER</th>
+                        </tr>
+                    </thead>
+                    <tbody id="aktifStajyerBody" class="bg-white divide-y divide-gray-200">
+                        <tr><td colspan="10" class="text-center py-6 text-gray-500 text-sm">Kayıt yok</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- STAJI BİTENLER (AKORDİYON) -->
+    <div class="border-2 border-emerald-300 rounded-lg">
+        <div class="flex items-center justify-between bg-emerald-100 p-4 cursor-pointer hover:bg-emerald-200 transition-colors rounded-t-lg" onclick="toggleStajyerSection('arsivStajyerSection')">
+            <div class="flex items-center gap-3">
+                <span id="arsivStajyerSectionArrow" class="text-emerald-700 text-xl font-bold transition-transform inline-block">▶</span>
+                <div class="p-2 rounded-full bg-emerald-200 text-emerald-600 text-xl">📦</div>
+                <h3 class="text-xl font-bold text-emerald-900">Stajı Bitenler</h3>
+                <span id="arsivStajyerCount" class="bg-emerald-200 text-emerald-900 px-3 py-1 rounded-full font-bold text-sm">0</span>
+            </div>
+            <button onclick="event.stopPropagation();printArsivStajyerler()" class="viewer-allow bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-lg text-xs font-bold">🖨️ Yazdır</button>
+        </div>
+        <div id="arsivStajyerSection" class="hidden p-4 bg-white rounded-b-lg">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-2 mb-3 bg-emerald-50 p-3 rounded-lg border border-emerald-200">
+                <input type="text" id="arsivStajyerArama" placeholder="🔍 Ad/Soyad..." class="viewer-allow border-2 border-emerald-300 rounded-lg px-3 py-2 text-xs" oninput="filterArsivStajyerler()">
+                <select id="arsivStajyerOkulFilter" class="viewer-allow border-2 border-emerald-300 rounded-lg px-3 py-2 text-xs bg-white" onchange="filterArsivStajyerler()"><option value="">Tüm Okullar</option></select>
+                <select id="arsivStajyerBirimFilter" class="viewer-allow border-2 border-emerald-300 rounded-lg px-3 py-2 text-xs bg-white" onchange="filterArsivStajyerler()"><option value="">Tüm Birimler</option></select>
+                <button onclick="clearArsivStajyerFilters()" class="bg-gray-500 hover:bg-gray-600 text-white px-3 py-2 rounded-lg text-xs font-bold">🔄 Temizle</button>
+            </div>
+            <div class="overflow-x-auto max-h-[60vh] overflow-y-auto">
+                <table class="w-full table-auto text-sm" id="arsivStajyerTable">
+                    <thead class="bg-emerald-50 sticky top-0">
+                        <tr>
+                            <th class="px-3 py-2 text-left text-xs font-bold text-gray-600">STAJYER</th>
+                            <th class="px-3 py-2 text-left text-xs font-bold text-gray-600">İLETİŞİM</th>
+                            <th class="px-3 py-2 text-left text-xs font-bold text-gray-600">EĞİTİM</th>
+                            <th class="px-3 py-2 text-left text-xs font-bold text-gray-600">BİRİM</th>
+                            <th class="px-3 py-2 text-left text-xs font-bold text-gray-600">DÖNEM</th>
+                            <th class="px-3 py-2 text-center text-xs font-bold text-gray-600">ARŞİV TARİHİ</th>
+                            <th class="px-3 py-2 text-center text-xs font-bold text-gray-600">İŞLEMLER</th>
+                        </tr>
+                    </thead>
+                    <tbody id="arsivStajyerBody" class="bg-white divide-y divide-gray-200">
+                        <tr><td colspan="7" class="text-center py-6 text-gray-500 text-sm">Kayıt yok</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="mt-3 bg-emerald-100 rounded-lg p-3 text-center">
+                <span class="font-bold text-emerald-900 text-sm">✅ Toplam Tamamlanan: <span id="arsivStajyerToplam">0</span></span>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
 <!-- ==================== EĞİTİM ==================== -->
 <div id="training" class="section hidden">
-<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-<div class="viewer-allow bg-white rounded-xl shadow-xl p-6 border-l-4 border-green-500 card-hover cursor-pointer" onclick="showTrainingStats('completed')"><div class="flex items-center justify-between"><div><h3 class="text-lg font-semibold">📈 Eğitim Alanlar</h3><p class="text-3xl font-bold text-green-600" id="completedTrainings">0</p><p class="text-xs text-gray-500 mt-1">Detay için tıkla</p></div><div class="p-3 rounded-full bg-green-100 text-green-600 text-2xl">✅</div></div></div>
-<div class="viewer-allow bg-white rounded-xl shadow-xl p-6 border-l-4 border-yellow-500 card-hover cursor-pointer" onclick="showTrainingStats('expiring')"><div class="flex items-center justify-between"><div><h3 class="text-lg font-semibold">⏰ Süresi Yaklaşanlar</h3><p class="text-3xl font-bold text-yellow-600" id="expiringTrainings">0</p><p class="text-xs text-gray-500 mt-1">Detay için tıkla</p></div><div class="p-3 rounded-full bg-yellow-100 text-yellow-600 text-2xl">⚠️</div></div></div>
-<div class="viewer-allow bg-white rounded-xl shadow-xl p-6 border-l-4 border-red-500 card-hover cursor-pointer" onclick="showTrainingStats('expired')"><div class="flex items-center justify-between"><div><h3 class="text-lg font-semibold">❌ Süresi Dolanlar</h3><p class="text-3xl font-bold text-red-600" id="expiredTrainings">0</p><p class="text-xs text-gray-500 mt-1">Detay için tıkla</p></div><div class="p-3 rounded-full bg-red-100 text-red-600 text-2xl">🚫</div></div></div>
+<!-- ÜST SIRA: Eğitim istatistikleri (4 küçük kart) -->
+<div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
+<div class="viewer-allow bg-white rounded-lg shadow-lg p-3 border-l-4 border-green-500 card-hover cursor-pointer" onclick="showTrainingStats('completed')">
+<div class="flex items-center justify-between gap-2">
+<div class="flex-1 min-w-0">
+<h3 class="text-xs font-semibold text-gray-600 uppercase">📈 Eğitim Alan</h3>
+<p class="text-2xl font-bold text-green-600" id="completedTrainings">0</p>
 </div>
-<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-<div class="viewer-allow bg-white rounded-xl shadow-xl p-6 border-l-4 border-cyan-500 card-hover cursor-pointer" onclick="showCertificateStats('all')"><div class="flex items-center justify-between"><div><h3 class="text-lg font-semibold">📜 Sertifikalar</h3><p class="text-3xl font-bold text-cyan-600" id="certificateRenewalCount">0</p><p class="text-xs text-gray-500 mt-1">Detay için tıkla</p></div><div class="p-3 rounded-full bg-cyan-100 text-cyan-600 text-2xl">🔄</div></div></div>
-<div class="viewer-allow bg-white rounded-xl shadow-xl p-6 border-l-4 border-yellow-500 card-hover cursor-pointer" onclick="showCertificateStats('expiring')"><div class="flex items-center justify-between"><div><h3 class="text-lg font-semibold">⏰ Yaklaşan Sertifikalar</h3><p class="text-3xl font-bold text-yellow-600" id="expiringCertificates">0</p></div><div class="p-3 rounded-full bg-yellow-100 text-yellow-600 text-2xl">⚠️</div></div></div>
-<div class="viewer-allow bg-white rounded-xl shadow-xl p-6 border-l-4 border-red-500 card-hover cursor-pointer" onclick="showCertificateStats('expired')"><div class="flex items-center justify-between"><div><h3 class="text-lg font-semibold">❌ Dolan Sertifikalar</h3><p class="text-3xl font-bold text-red-600" id="expiredCertificates">0</p></div><div class="p-3 rounded-full bg-red-100 text-red-600 text-2xl">🚫</div></div></div>
+<div class="p-2 rounded-full bg-green-100 text-green-600 text-lg flex-shrink-0">✅</div>
+</div>
+</div>
+<div class="viewer-allow bg-white rounded-lg shadow-lg p-3 border-l-4 border-yellow-500 card-hover cursor-pointer" onclick="showTrainingStats('expiring')">
+<div class="flex items-center justify-between gap-2">
+<div class="flex-1 min-w-0">
+<h3 class="text-xs font-semibold text-gray-600 uppercase">⏰ Yaklaşan</h3>
+<p class="text-2xl font-bold text-yellow-600" id="expiringTrainings">0</p>
+</div>
+<div class="p-2 rounded-full bg-yellow-100 text-yellow-600 text-lg flex-shrink-0">⚠️</div>
+</div>
+</div>
+<div class="viewer-allow bg-white rounded-lg shadow-lg p-3 border-l-4 border-red-500 card-hover cursor-pointer" onclick="showTrainingStats('expired')">
+<div class="flex items-center justify-between gap-2">
+<div class="flex-1 min-w-0">
+<h3 class="text-xs font-semibold text-gray-600 uppercase">❌ Süresi Dolan</h3>
+<p class="text-2xl font-bold text-red-600" id="expiredTrainings">0</p>
+</div>
+<div class="p-2 rounded-full bg-red-100 text-red-600 text-lg flex-shrink-0">🚫</div>
+</div>
+</div>
+<div class="viewer-allow bg-white rounded-lg shadow-lg p-3 border-l-4 border-purple-500 card-hover cursor-pointer" onclick="showEgitimAlmayanlar()">
+<div class="flex items-center justify-between gap-2">
+<div class="flex-1 min-w-0">
+<h3 class="text-xs font-semibold text-gray-600 uppercase">📊 Eğitim Almayan</h3>
+<p class="text-2xl font-bold text-purple-600" id="noTrainingCount">0</p>
+</div>
+<div class="p-2 rounded-full bg-purple-100 text-purple-600 text-lg flex-shrink-0">👤</div>
+</div>
+</div>
+</div>
+
+<!-- ALT SIRA: Sertifika istatistikleri (4 küçük kart) -->
+<div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+<div class="viewer-allow bg-white rounded-lg shadow-lg p-3 border-l-4 border-cyan-500 card-hover cursor-pointer" onclick="showCertificateStats('all')">
+<div class="flex items-center justify-between gap-2">
+<div class="flex-1 min-w-0">
+<h3 class="text-xs font-semibold text-gray-600 uppercase">📜 Sertifika</h3>
+<p class="text-2xl font-bold text-cyan-600" id="certificateRenewalCount">0</p>
+</div>
+<div class="p-2 rounded-full bg-cyan-100 text-cyan-600 text-lg flex-shrink-0">🔄</div>
+</div>
+</div>
+<div class="viewer-allow bg-white rounded-lg shadow-lg p-3 border-l-4 border-yellow-500 card-hover cursor-pointer" onclick="showCertificateStats('expiring')">
+<div class="flex items-center justify-between gap-2">
+<div class="flex-1 min-w-0">
+<h3 class="text-xs font-semibold text-gray-600 uppercase">⏰ Yaklaşan</h3>
+<p class="text-2xl font-bold text-yellow-600" id="expiringCertificates">0</p>
+</div>
+<div class="p-2 rounded-full bg-yellow-100 text-yellow-600 text-lg flex-shrink-0">⚠️</div>
+</div>
+</div>
+<div class="viewer-allow bg-white rounded-lg shadow-lg p-3 border-l-4 border-red-500 card-hover cursor-pointer" onclick="showCertificateStats('expired')">
+<div class="flex items-center justify-between gap-2">
+<div class="flex-1 min-w-0">
+<h3 class="text-xs font-semibold text-gray-600 uppercase">❌ Dolan</h3>
+<p class="text-2xl font-bold text-red-600" id="expiredCertificates">0</p>
+</div>
+<div class="p-2 rounded-full bg-red-100 text-red-600 text-lg flex-shrink-0">🚫</div>
+</div>
+</div>
+<div class="viewer-allow bg-white rounded-lg shadow-lg p-3 border-l-4 border-indigo-500 card-hover cursor-pointer" onclick="openGenelIstatistikModal()">
+<div class="flex items-center justify-between gap-2">
+<div class="flex-1 min-w-0">
+<h3 class="text-xs font-semibold text-gray-600 uppercase">📈 İstatistik</h3>
+<p class="text-2xl font-bold text-indigo-600" id="istatistikCount">—</p>
+</div>
+<div class="p-2 rounded-full bg-indigo-100 text-indigo-600 text-lg flex-shrink-0">📊</div>
+</div>
+</div>
 </div>
 <div class="bg-white rounded-xl shadow-xl p-6">
 <div class="flex items-center justify-between mb-4 flex-wrap gap-3">
@@ -2549,6 +2721,88 @@ Sadece seçili görevlerde işlem yapabilsin
 </div>
 </div>
 </div>
+
+<!-- ==================== YENİ STAJYER MODAL ==================== -->
+<div id="yeniStajyerModal" class="modal hidden fixed inset-0 bg-black bg-opacity-60 items-center justify-center z-[95]">
+<div class="bg-white rounded-xl p-6 w-[900px] max-w-[97vw] shadow-2xl relative max-h-[95vh] overflow-y-auto">
+<button onclick="hideModal('yeniStajyerModal')" class="absolute top-4 right-4 text-gray-400 text-2xl font-bold">✕</button>
+<div class="text-center mb-4">
+    <div class="w-16 h-16 mx-auto mb-3 rounded-full bg-gradient-to-r from-indigo-500 to-purple-600 flex items-center justify-center text-white text-2xl">🎓</div>
+    <h3 id="stajyerModalTitle" class="text-xl font-bold">Yeni Stajyer Kaydı</h3>
+</div>
+
+<!-- Kişisel Bilgiler -->
+<div class="bg-indigo-50 rounded-lg p-4 mb-4 border-2 border-indigo-200">
+    <h4 class="font-bold text-indigo-900 mb-3 text-sm">👤 Kişisel Bilgiler</h4>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
+        <div><label class="block text-xs font-bold text-indigo-800 mb-1">Ad *</label><input type="text" id="stajyerAd" class="w-full border-2 border-indigo-300 rounded-lg px-3 py-2 text-sm"></div>
+        <div><label class="block text-xs font-bold text-indigo-800 mb-1">Soyad *</label><input type="text" id="stajyerSoyad" class="w-full border-2 border-indigo-300 rounded-lg px-3 py-2 text-sm"></div>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <div><label class="block text-xs font-bold text-indigo-800 mb-1">Telefon</label><input type="text" id="stajyerTelefon" placeholder="0532 123 4567" class="w-full border-2 border-indigo-300 rounded-lg px-3 py-2 text-sm"></div>
+        <div><label class="block text-xs font-bold text-indigo-800 mb-1">TC Kimlik No (boşsa otomatik verilir)</label><input type="text" id="stajyerTcNo" maxlength="11" placeholder="11 haneli" class="w-full border-2 border-indigo-300 rounded-lg px-3 py-2 text-sm" oninput="stajyerTcInput(this)"></div>
+    </div>
+</div>
+
+<!-- Eğitim Bilgileri -->
+<div class="bg-emerald-50 rounded-lg p-4 mb-4 border-2 border-emerald-200">
+    <h4 class="font-bold text-emerald-900 mb-3 text-sm">🎓 Eğitim Bilgileri</h4>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <div><label class="block text-xs font-bold text-emerald-800 mb-1">Okul *</label><select id="stajyerOkul" class="w-full border-2 border-emerald-300 rounded-lg px-3 py-2 text-sm bg-white"><option value="">Seçiniz</option></select></div>
+        <div><label class="block text-xs font-bold text-emerald-800 mb-1">Bölüm *</label><select id="stajyerBolum" class="w-full border-2 border-emerald-300 rounded-lg px-3 py-2 text-sm bg-white"><option value="">Seçiniz</option></select></div>
+    </div>
+</div>
+
+<!-- Staj Dönemi -->
+<div class="bg-purple-50 rounded-lg p-4 mb-4 border-2 border-purple-200">
+    <h4 class="font-bold text-purple-900 mb-3 text-sm">📅 Staj Dönemi ve Birim</h4>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-3">
+        <div><label class="block text-xs font-bold text-purple-800 mb-1">Başlangıç *</label><input type="date" id="stajyerBaslangic" class="w-full border-2 border-purple-300 rounded-lg px-3 py-2 text-sm"></div>
+        <div><label class="block text-xs font-bold text-purple-800 mb-1">Bitiş *</label><input type="date" id="stajyerBitis" class="w-full border-2 border-purple-300 rounded-lg px-3 py-2 text-sm"></div>
+        <div><label class="block text-xs font-bold text-purple-800 mb-1">Birim (Opsiyonel)</label><select id="stajyerBirim" class="w-full border-2 border-purple-300 rounded-lg px-3 py-2 text-sm bg-white"><option value="">Seçiniz</option></select></div>
+    </div>
+    <div>
+        <label class="block text-xs font-bold text-purple-800 mb-2">Çalışma Günleri *</label>
+        <div class="flex flex-wrap gap-2">
+            <label class="flex items-center gap-1 bg-white px-3 py-2 rounded-lg border-2 border-purple-200 cursor-pointer text-xs font-bold"><input type="checkbox" class="stajyer-gun-cb" value="Pzt" checked> Paz</label>
+            <label class="flex items-center gap-1 bg-white px-3 py-2 rounded-lg border-2 border-purple-200 cursor-pointer text-xs font-bold"><input type="checkbox" class="stajyer-gun-cb" value="Sal" checked> Sal</label>
+            <label class="flex items-center gap-1 bg-white px-3 py-2 rounded-lg border-2 border-purple-200 cursor-pointer text-xs font-bold"><input type="checkbox" class="stajyer-gun-cb" value="Çar" checked> Çar</label>
+            <label class="flex items-center gap-1 bg-white px-3 py-2 rounded-lg border-2 border-purple-200 cursor-pointer text-xs font-bold"><input type="checkbox" class="stajyer-gun-cb" value="Per" checked> Per</label>
+            <label class="flex items-center gap-1 bg-white px-3 py-2 rounded-lg border-2 border-purple-200 cursor-pointer text-xs font-bold"><input type="checkbox" class="stajyer-gun-cb" value="Cum" checked> Cum</label>
+            <label class="flex items-center gap-1 bg-white px-3 py-2 rounded-lg border-2 border-purple-200 cursor-pointer text-xs font-bold"><input type="checkbox" class="stajyer-gun-cb" value="Cmt"> Cmt</label>
+            <label class="flex items-center gap-1 bg-white px-3 py-2 rounded-lg border-2 border-purple-200 cursor-pointer text-xs font-bold"><input type="checkbox" class="stajyer-gun-cb" value="Paz"> Paz</label>
+        </div>
+    </div>
+</div>
+
+<!-- Alması Gereken Eğitimler -->
+<div class="bg-amber-50 rounded-lg p-4 mb-4 border-2 border-amber-200">
+    <h4 class="font-bold text-amber-900 mb-3 text-sm">📚 Alması Gereken Eğitimler</h4>
+    <div id="stajyerEgitimListesi" class="space-y-2 max-h-48 overflow-y-auto"></div>
+</div>
+
+<!-- Butonlar -->
+<div class="flex justify-end gap-3 pt-3 border-t-2 border-gray-200">
+    <button onclick="hideModal('yeniStajyerModal')" class="px-6 py-3 text-gray-600 font-medium hover:bg-gray-100 rounded-lg">İptal</button>
+    <button onclick="saveStajyer()" class="px-6 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-lg font-bold">💾 Kaydet</button>
+</div>
+</div>
+</div>
+
+<!-- ==================== STAJYER GÖRÜNTÜLE MODAL ==================== -->
+<div id="stajyerGoruntuleModal" class="modal hidden fixed inset-0 bg-black bg-opacity-60 items-center justify-center z-[94]">
+<div class="bg-white rounded-xl p-6 w-[800px] max-w-[97vw] shadow-2xl relative max-h-[90vh] overflow-y-auto">
+<button onclick="hideModal('stajyerGoruntuleModal')" class="absolute top-4 right-4 text-gray-400 text-2xl font-bold">✕</button>
+<div class="text-center mb-4">
+    <div class="w-16 h-16 mx-auto mb-3 rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 flex items-center justify-center text-white text-2xl">👁️</div>
+    <h3 class="text-xl font-bold">Stajyer Detayları</h3>
+</div>
+<div id="stajyerGoruntuleContent"></div>
+<div class="flex justify-end mt-4">
+    <button onclick="hideModal('stajyerGoruntuleModal')" class="bg-gray-500 text-white px-6 py-2 rounded-lg font-medium">Kapat</button>
+</div>
+</div>
+</div>
 <!-- ==================== GİRİŞ MODAL ==================== -->
 <div id="loginModal" class="modal hidden fixed inset-0 bg-black bg-opacity-60 items-center justify-center z-[100]">
 <div class="bg-white rounded-xl p-8 w-[420px] shadow-2xl relative">
@@ -2590,7 +2844,8 @@ let data={
     kkds:[{name:'Güvenlik Kaskı',shelfLife:24,stock:50,distributed:0,perPerson:1,specifications:'CE'},{name:'Gözlük',shelfLife:12,stock:30,distributed:0,perPerson:1,specifications:'UV'}],
     clothing:[],personnel:[],distributionHistory:[],taskTemplates:[],tasks:[],completedTasks:[],
     gorevTanimSablonlari:[],
-    egitimKatilimFormlari:[]
+    egitimKatilimFormlari:[],
+    stajyerler:[]
 };
 const legacyClothing=[
     {name:'Tshirt',type:'standart',season:'yazlik',specifications:'Pamuk',gender:'E',genders:{'E':{sizes:{'XS':{stock:0,distributed:0,perPerson:1},'S':{stock:10,distributed:0,perPerson:1},'M':{stock:15,distributed:0,perPerson:1},'L':{stock:12,distributed:0,perPerson:1},'XL':{stock:8,distributed:0,perPerson:1},'XXL':{stock:5,distributed:0,perPerson:1},'3XL':{stock:3,distributed:0,perPerson:1}}}}},
@@ -2780,6 +3035,7 @@ function migrateData(){
     if(!data.titles)data.titles=[];
     if(!data.gorevTanimSablonlari)data.gorevTanimSablonlari=[];
     if(!data.egitimKatilimFormlari)data.egitimKatilimFormlari=[];
+    if(!data.stajyerler)data.stajyerler=[];
     if(!data.clothing||data.clothing.length===0){data.clothing=[];legacyClothing.forEach(c=>{const hasE=c.genders&&c.genders['E']&&c.genders['E'].sizes&&Object.keys(c.genders['E'].sizes).length>0;const hasK=c.genders&&c.genders['K']&&c.genders['K'].sizes&&Object.keys(c.genders['K'].sizes).length>0;if(hasE&&hasK){const eCopy=JSON.parse(JSON.stringify(c));eCopy.gender='E';eCopy.genders={'E':JSON.parse(JSON.stringify(c.genders['E']))};data.clothing.push(convertClothingToStatusBased(eCopy));const kCopy=JSON.parse(JSON.stringify(c));kCopy.gender='K';kCopy.genders={'K':JSON.parse(JSON.stringify(c.genders['K']))};data.clothing.push(convertClothingToStatusBased(kCopy));}else if(hasE){c.gender='E';data.clothing.push(convertClothingToStatusBased(JSON.parse(JSON.stringify(c))));}else if(hasK){c.gender='K';data.clothing.push(convertClothingToStatusBased(JSON.parse(JSON.stringify(c))));}});}
     data.clothing.forEach(c=>{if(!c.stockByStatus)c.stockByStatus={};if(!c.season)c.season='tum';if(!c.gender)c.gender='U';data.statuses.forEach(s=>{if(!c.stockByStatus[s])c.stockByStatus[s]={genders:{'E':{sizes:{}},'K':{sizes:{}}}};if(!c.stockByStatus[s].genders)c.stockByStatus[s].genders={'E':{sizes:{}},'K':{sizes:{}}};['E','K'].forEach(g=>{if(!c.stockByStatus[s].genders[g])c.stockByStatus[s].genders[g]={sizes:{}};if(!c.stockByStatus[s].genders[g].sizes)c.stockByStatus[s].genders[g].sizes={};});});});
     data.personnel.forEach(p=>{if(!p.trainings)p.trainings=[];if(!p.certificates)p.certificates=[];if(!p.status)p.status='Memur';if(!p.liseOkul)p.liseOkul='';if(!p.myoOkul)p.myoOkul='';if(!p.universiteOkul)p.universiteOkul='';if(!p.yuksekLisansOkul)p.yuksekLisansOkul='';if(p.gorevTanimRevNo===undefined)p.gorevTanimRevNo=0;if(!p.gorevTanimFields)p.gorevTanimFields=[];if(!p.gorevTanimSignatures)p.gorevTanimSignatures=[];if(p.gorevTanimTebligYapildi===undefined)p.gorevTanimTebligYapildi=false;if(!p.gorevTanimSablonAdi)p.gorevTanimSablonAdi='';});
@@ -3384,8 +3640,8 @@ function openPrintPreview(title,meta,innerHtml){
     showModal('printPreviewModal');
 }
 function closePrintPreview(){hideModal('printPreviewModal');}
-function showSection(name,ev){document.querySelectorAll('.section').forEach(s=>s.classList.add('hidden'));const t=document.getElementById(name);if(t)t.classList.remove('hidden');document.querySelectorAll('.nav-btn').forEach(b=>{b.classList.remove('border-indigo-600','text-indigo-600','bg-indigo-50');b.classList.add('text-gray-700','border-transparent')});if(ev&&ev.target){const btn=ev.target.closest('button');if(btn){btn.classList.remove('text-gray-700','border-transparent');btn.classList.add('border-indigo-600','text-indigo-600','bg-indigo-50');}}if(name==='personnel'){updatePersonnelTable();}if(name==='stock'){updateStockTables();updatePendingTables();updateDistributionHistory();}if(name==='settings'){updateTrainingList();updateClothingList();updateCertificateList();updateTaskTemplateTable();updateDepartmentDropdowns();updateMykStatus();updateLiseMuafiyetStatus();updateUstalikMuafiyetStatus();updateOnlisansMuafiyetStatus();updateLisansMuafiyetStatus();renderGorevTanimListesi();populateGorevTanimPersonelDropdown();populateGorevTanimSablonDropdown();}if(name==='training'){updateTrainingStats();updateCertificateStats();updateUpcomingTrainings();updateTrainingList();updateTrainingListDisplay();updateEgitimKatilimFormlariTable();}if(name==='tasks'){updateTaskPage();}if(name==='home'){updateUpcomingTrainings();updateHomeActiveTasks();}}
-
+function showSection(name,ev){document.querySelectorAll('.section').forEach(s=>s.classList.add('hidden'));const t=document.getElementById(name);if(t)t.classList.remove('hidden');document.querySelectorAll('.nav-btn').forEach(b=>{b.classList.remove('border-indigo-600','text-indigo-600','bg-indigo-50');b.classList.add('text-gray-700','border-transparent')});if(ev&&ev.target){const btn=ev.target.closest('button');if(btn){btn.classList.remove('text-gray-700','border-transparent');btn.classList.add('border-indigo-600','text-indigo-600','bg-indigo-50');}}if(name==='personnel'){updatePersonnelTable();}if(name==='stock'){updateStockTables();updatePendingTables();updateDistributionHistory();}if(name==='settings'){updateTrainingList();updateClothingList();updateCertificateList();updateTaskTemplateTable();updateDepartmentDropdowns();updateMykStatus();updateLiseMuafiyetStatus();updateUstalikMuafiyetStatus();updateOnlisansMuafiyetStatus();updateLisansMuafiyetStatus();renderGorevTanimListesi();populateGorevTanimPersonelDropdown();populateGorevTanimSablonDropdown();}if(name==='training'){updateTrainingStats();updateCertificateStats();updateUpcomingTrainings();updateTrainingList();updateTrainingListDisplay();updateEgitimKatilimFormlariTable();updateNoTrainingCount();updateIstatistikCount();}if(name==='tasks'){updateTaskPage();}if(name==='home'){updateUpcomingTrainings();updateHomeActiveTasks();}}
+if(name==='stajyer'){updateStajyerTablolari();populateStajyerDropdowns();}
 function normalize(s){
     if(!s)return '';
     return s.toString()
@@ -8682,6 +8938,7 @@ function updateAllStats(){
     updateHomeActiveTasks();
     updateTrainingListDisplay();
     updateEgitimKatilimFormlariTable();
+    updateStajyerTablolari();
 }
 
 function updateClothingList(){
@@ -8938,7 +9195,10 @@ function addClothing(){
     fp.forEach(item=>{if(!target.stockByStatus[stat].genders[item.gender])target.stockByStatus[stat].genders[item.gender]={sizes:{}};if(!target.stockByStatus[stat].genders[item.gender].sizes)target.stockByStatus[stat].genders[item.gender].sizes={};const ex=target.stockByStatus[stat].genders[item.gender].sizes[item.size];if(ex){ex.stock+=item.stock;ex.perPerson=item.perPerson;}else{target.stockByStatus[stat].genders[item.gender].sizes[item.size]={stock:item.stock,distributed:0,perPerson:item.perPerson};}});
     hideModal('clothingModal');saveToLocalStorage();updateStockTables();updateClothingList();updateAllStats();showSuccessMessage('✅ '+n+' kaydedildi!');
 }
-function updateTrainingStats(){const now=new Date();const soon=new Date(now.getTime()+30*24*60*60*1000);let completed=0,expiring=0,expired=0;data.personnel.forEach(p=>{(p.trainings||[]).forEach(t=>{if(!t.expiryDate)return;completed++;const ed=new Date(t.expiryDate);if(ed<now)expired++;else if(ed<=soon)expiring++;});});const e1=document.getElementById('completedTrainings');const e2=document.getElementById('expiringTrainings');const e3=document.getElementById('expiredTrainings');if(e1)e1.textContent=completed;if(e2)e2.textContent=expiring;if(e3)e3.textContent=expired;}
+function updateTrainingStats(){const now=new Date();const soon=new Date(now.getTime()+30*24*60*60*1000);let completed=0,expiring=0,expired=0;data.personnel.forEach(p=>{(p.trainings||[]).forEach(t=>{if(!t.expiryDate)return;completed++;const ed=new Date(t.expiryDate);if(ed<now)expired++;else if(ed<=soon)expiring++;});});const e1=document.getElementById('completedTrainings');const e2=document.getElementById('expiringTrainings');const e3=document.getElementById('expiredTrainings');if(e1)e1.textContent=completed;if(e2)e2.textContent=expiring;if(e3)e3.textContent=expired;
+    updateNoTrainingCount();
+    updateIstatistikCount();
+}
 function updateCertificateStats(){const now=new Date();const soon=new Date(now.getTime()+30*24*60*60*1000);let renewal=0,expiring=0,expired=0;data.personnel.forEach(p=>{(p.certificates||[]).forEach(c=>{if(!c.expiryDate)return;renewal++;const ed=new Date(c.expiryDate);if(ed<now)expired++;else if(ed<=soon)expiring++;});});const e1=document.getElementById('certificateRenewalCount');const e2=document.getElementById('expiringCertificates');const e3=document.getElementById('expiredCertificates');if(e1)e1.textContent=renewal;if(e2)e2.textContent=expiring;if(e3)e3.textContent=expired;}
 
 function togglePendingFilter(evt,col){evt.stopPropagation();if(activePendingFilterPopup===col){closeAllPendingFilters();return;}closeAllPendingFilters();activePendingFilterPopup=col;
@@ -10423,8 +10683,8 @@ function ekfRenderOtomatikListeler(){
     
     const egitimAdlari = ekfEgitimSatirlari.filter(e => e.ad).map(e => e.ad);
     
+    // ==================== PERSONEL TARAMA ====================
     (data.personnel || []).forEach(p => {
-        // === FİLTRE KONTROLÜ ===
         if(filtreBirim && (p.department || '') !== filtreBirim) return;
         if(filtreStatu && (p.status || '') !== filtreStatu) return;
         
@@ -10441,27 +10701,64 @@ function ekfRenderOtomatikListeler(){
                 const gunFark = Math.ceil((ed - now) / (1000*60*60*24));
                 if(ed < now){
                     if(enKotuDurum !== 'doldu' || gunFark < enKotuGun){
-                        enKotuDurum = 'doldu';
-                        enKotuGun = gunFark;
-                        egitimAdiDetay = egitimAdi;
+                        enKotuDurum = 'doldu'; enKotuGun = gunFark; egitimAdiDetay = egitimAdi;
                     }
                 } else if(ed <= otuzGunSonra){
                     if(enKotuDurum !== 'doldu' && enKotuDurum !== 'yaklasiyor'){
-                        enKotuDurum = 'yaklasiyor';
-                        enKotuGun = gunFark;
-                        egitimAdiDetay = egitimAdi;
+                        enKotuDurum = 'yaklasiyor'; enKotuGun = gunFark; egitimAdiDetay = egitimAdi;
                     } else if(enKotuDurum === 'yaklasiyor' && gunFark < enKotuGun){
-                        enKotuGun = gunFark;
-                        egitimAdiDetay = egitimAdi;
+                        enKotuGun = gunFark; egitimAdiDetay = egitimAdi;
                     }
                 }
             }
         });
         
-        const kayitObj = {id: p.id, name: p.name, department: p.department, tcNo: p.tcNo, status: p.status};
+        const kayitObj = {id: p.id, name: p.name, department: p.department, tcNo: p.tcNo, status: p.status, kaynak: 'personel'};
         if(enKotuDurum === 'doldu') dolanlar.push({...kayitObj, gun: enKotuGun, egitimAdi: egitimAdiDetay});
         else if(enKotuDurum === 'yaklasiyor') yaklasanlar.push({...kayitObj, gun: enKotuGun, egitimAdi: egitimAdiDetay});
         else if(enKotuDurum === 'hic') hicAlmamislar.push({...kayitObj, egitimAdi: egitimAdiDetay});
+    });
+    
+    // ==================== STAJYER TARAMA ====================
+    (data.stajyerler || []).forEach(s => {
+        if(s.durum === 'arsiv') return;
+        if(filtreBirim && (s.birim || '') !== filtreBirim) return;
+        if(filtreStatu && filtreStatu !== 'Stajyer') return; // statü filtresi varsa ve Stajyer değilse atla
+        
+        const isim = s.ad + ' ' + s.soyad;
+        const egitimler = s.egitimler || [];
+        const durumlar = s.egitimDurumlari || {};
+        
+        // Bu stajyerin alması gereken eğitimler arasında form eğitimlerinden olan var mı?
+        let enKotuDurum = null;
+        let enKotuGun = 999999;
+        let egitimAdiDetay = '';
+        
+        egitimAdlari.forEach(egitimAdi => {
+            // Stajyerin alması gereken eğitimler arasında bu eğitim var mı?
+            const egitimObj = (data.trainings || []).find(t => t.name === egitimAdi);
+            if(!egitimObj) return;
+            
+            const stajyerEgitimVar = egitimler.includes(egitimObj.id);
+            if(!stajyerEgitimVar){
+                // Bu eğitim stajyerin listesinde değil, atla
+                return;
+            }
+            
+            const tamamlandi = !!durumlar[egitimObj.id];
+            if(!tamamlandi){
+                // Hiç tamamlanmamış → "hiç almamış" olarak say
+                if(enKotuDurum === null){
+                    enKotuDurum = 'hic';
+                    egitimAdiDetay = egitimAdi;
+                }
+            }
+            // Not: Stajyer eğitimleri tamamlandığında expiryDate tutmuyoruz
+            // Sadece tamamlandı/tamamlanmadı var
+        });
+        
+        const kayitObj = {id: s.id, name: isim, department: s.birim || '', tcNo: s.tcNo, status: 'Stajyer', kaynak: 'stajyer'};
+        if(enKotuDurum === 'hic') hicAlmamislar.push({...kayitObj, egitimAdi: egitimAdiDetay});
     });
     
     dolanlar.sort((a,b) => a.gun - b.gun);
@@ -10482,52 +10779,54 @@ function ekfRenderOtomatikListeler(){
         filtreInfoHtml = '<div class="bg-purple-100 border-2 border-purple-400 rounded-lg p-2 mb-3 text-xs text-purple-900 font-bold">🔍 Aktif Filtre: ' + parts.join(' • ') + ' <button onclick="ekfFiltreTemizle()" class="ml-2 bg-red-500 text-white px-2 py-0.5 rounded text-xs">✕ Temizle</button></div>';
     }
     
-    // Gösterilecek gruplar (durum filtresi varsa sadece o grubu göster)
     const gosterDoldu = !filtreDurum || filtreDurum === 'doldu';
     const gosterYaklasan = !filtreDurum || filtreDurum === 'yaklasiyor';
     const gosterHic = !filtreDurum || filtreDurum === 'hic';
     
     let html = filtreInfoHtml;
     
-    // DOLANLAR
+    // === DOLANLAR ===
     if(gosterDoldu){
         html += '<div class="bg-red-50 rounded-lg p-3 border-2 border-red-300">';
         html += '<div class="flex justify-between items-center mb-2"><h5 class="font-bold text-red-900 text-sm">🔴 Süresi DOLANLAR (' + dolanlar.length + ')</h5><button onclick="ekfGrupSec(\'doldu\', true)" class="text-xs bg-red-600 text-white px-2 py-1 rounded font-bold">Tümünü Seç</button></div>';
-        if(dolanlar.length === 0){ html += '<div class="text-xs text-gray-500 italic">' + (filtreVar ? 'Bu filtreye uyan personel yok' : 'Bu eğitim(ler) için süresi dolan personel yok') + '</div>'; }
+        if(dolanlar.length === 0){ html += '<div class="text-xs text-gray-500 italic">' + (filtreVar ? 'Bu filtreye uyan kişi yok' : 'Süresi dolan personel yok') + '</div>'; }
         else {
             dolanlar.forEach(p => {
                 const chk = ekfSeciliKatilimcilar[p.id] ? 'checked' : '';
-                html += '<label class="flex items-center gap-2 p-2 rounded hover:bg-red-100 cursor-pointer text-sm"><input type="checkbox" class="ekf-katilimci-cb" data-kaynak="doldu" data-pid="' + p.id + '" data-name="' + escapeHtml(p.name) + '" data-dept="' + escapeHtml(p.department||'') + '" data-status="' + escapeHtml(p.status||'') + '" data-egitim="' + escapeHtml(p.egitimAdi||'') + '" ' + chk + ' onchange="ekfKatilimciToggle(this)"><span class="flex-1">👤 <strong>' + escapeHtml(p.name) + '</strong> <span class="text-xs text-gray-500">(' + escapeHtml(p.department||'-') + ' • ' + escapeHtml(p.status||'-') + ')</span></span><span class="text-xs text-red-700 font-bold">' + Math.abs(p.gun) + ' gün gecikme</span></label>';
+                const kaynakBadge = p.kaynak === 'stajyer' ? '<span class="text-xs bg-emerald-200 text-emerald-900 px-1.5 py-0.5 rounded ml-1">🎓 Stajyer</span>' : '';
+                html += '<label class="flex items-center gap-2 p-2 rounded hover:bg-red-100 cursor-pointer text-sm"><input type="checkbox" class="ekf-katilimci-cb" data-kaynak="doldu" data-pid="' + p.id + '" data-name="' + escapeHtml(p.name) + '" data-dept="' + escapeHtml(p.department||'') + '" data-status="' + escapeHtml(p.status||'') + '" data-egitim="' + escapeHtml(p.egitimAdi||'') + '" data-tip="' + p.kaynak + '" ' + chk + ' onchange="ekfKatilimciToggle(this)"><span class="flex-1">👤 <strong>' + escapeHtml(p.name) + '</strong> ' + kaynakBadge + ' <span class="text-xs text-gray-500">(' + escapeHtml(p.department||'-') + ' • ' + escapeHtml(p.status||'-') + ')</span></span><span class="text-xs text-red-700 font-bold">' + Math.abs(p.gun) + ' gün gecikme</span></label>';
             });
         }
         html += '</div>';
     }
     
-    // YAKLAŞANLAR
+    // === YAKLAŞANLAR ===
     if(gosterYaklasan){
         html += '<div class="bg-yellow-50 rounded-lg p-3 border-2 border-yellow-300 mt-3">';
         html += '<div class="flex justify-between items-center mb-2"><h5 class="font-bold text-yellow-900 text-sm">🟡 Süresi YAKLAŞANLAR - 30 gün (' + yaklasanlar.length + ')</h5><button onclick="ekfGrupSec(\'yaklasiyor\', true)" class="text-xs bg-yellow-600 text-white px-2 py-1 rounded font-bold">Tümünü Seç</button></div>';
-        if(yaklasanlar.length === 0){ html += '<div class="text-xs text-gray-500 italic">' + (filtreVar ? 'Bu filtreye uyan personel yok' : 'Süresi yaklaşan personel yok') + '</div>'; }
+        if(yaklasanlar.length === 0){ html += '<div class="text-xs text-gray-500 italic">' + (filtreVar ? 'Bu filtreye uyan kişi yok' : 'Süresi yaklaşan personel yok') + '</div>'; }
         else {
             yaklasanlar.forEach(p => {
                 const chk = ekfSeciliKatilimcilar[p.id] ? 'checked' : '';
-                html += '<label class="flex items-center gap-2 p-2 rounded hover:bg-yellow-100 cursor-pointer text-sm"><input type="checkbox" class="ekf-katilimci-cb" data-kaynak="yaklasiyor" data-pid="' + p.id + '" data-name="' + escapeHtml(p.name) + '" data-dept="' + escapeHtml(p.department||'') + '" data-status="' + escapeHtml(p.status||'') + '" data-egitim="' + escapeHtml(p.egitimAdi||'') + '" ' + chk + ' onchange="ekfKatilimciToggle(this)"><span class="flex-1">👤 <strong>' + escapeHtml(p.name) + '</strong> <span class="text-xs text-gray-500">(' + escapeHtml(p.department||'-') + ' • ' + escapeHtml(p.status||'-') + ')</span></span><span class="text-xs text-yellow-700 font-bold">' + p.gun + ' gün kaldı</span></label>';
+                const kaynakBadge = p.kaynak === 'stajyer' ? '<span class="text-xs bg-emerald-200 text-emerald-900 px-1.5 py-0.5 rounded ml-1">🎓 Stajyer</span>' : '';
+                html += '<label class="flex items-center gap-2 p-2 rounded hover:bg-yellow-100 cursor-pointer text-sm"><input type="checkbox" class="ekf-katilimci-cb" data-kaynak="yaklasiyor" data-pid="' + p.id + '" data-name="' + escapeHtml(p.name) + '" data-dept="' + escapeHtml(p.department||'') + '" data-status="' + escapeHtml(p.status||'') + '" data-egitim="' + escapeHtml(p.egitimAdi||'') + '" data-tip="' + p.kaynak + '" ' + chk + ' onchange="ekfKatilimciToggle(this)"><span class="flex-1">👤 <strong>' + escapeHtml(p.name) + '</strong> ' + kaynakBadge + ' <span class="text-xs text-gray-500">(' + escapeHtml(p.department||'-') + ' • ' + escapeHtml(p.status||'-') + ')</span></span><span class="text-xs text-yellow-700 font-bold">' + p.gun + ' gün kaldı</span></label>';
             });
         }
         html += '</div>';
     }
     
-    // HİÇ ALMAMIŞLAR
+    // === HİÇ ALMAMIŞLAR ===
     if(gosterHic){
         html += '<div class="bg-gray-50 rounded-lg p-3 border-2 border-gray-300 mt-3">';
         html += '<div class="flex justify-between items-center mb-2"><h5 class="font-bold text-gray-800 text-sm">⚪ HİÇ ALMAMIŞLAR (' + hicAlmamislar.length + ')</h5><button onclick="ekfGrupSec(\'hic\', true)" class="text-xs bg-gray-600 text-white px-2 py-1 rounded font-bold">Tümünü Seç</button></div>';
-        if(hicAlmamislar.length === 0){ html += '<div class="text-xs text-gray-500 italic">' + (filtreVar ? 'Bu filtreye uyan personel yok' : 'Tüm personel bu eğitim(ler)den en az birini almış') + '</div>'; }
+        if(hicAlmamislar.length === 0){ html += '<div class="text-xs text-gray-500 italic">' + (filtreVar ? 'Bu filtreye uyan kişi yok' : 'Tüm kişiler bu eğitim(ler)den en az birini almış') + '</div>'; }
         else {
-            hicAlmamislar.slice(0, 100).forEach(p => {
+            hicAlmamislar.slice(0, 150).forEach(p => {
                 const chk = ekfSeciliKatilimcilar[p.id] ? 'checked' : '';
-                html += '<label class="flex items-center gap-2 p-2 rounded hover:bg-gray-100 cursor-pointer text-sm"><input type="checkbox" class="ekf-katilimci-cb" data-kaynak="hic" data-pid="' + p.id + '" data-name="' + escapeHtml(p.name) + '" data-dept="' + escapeHtml(p.department||'') + '" data-status="' + escapeHtml(p.status||'') + '" data-egitim="' + escapeHtml(p.egitimAdi||'') + '" ' + chk + ' onchange="ekfKatilimciToggle(this)"><span class="flex-1">👤 <strong>' + escapeHtml(p.name) + '</strong> <span class="text-xs text-gray-500">(' + escapeHtml(p.department||'-') + ' • ' + escapeHtml(p.status||'-') + ')</span></span></label>';
+                const kaynakBadge = p.kaynak === 'stajyer' ? '<span class="text-xs bg-emerald-200 text-emerald-900 px-1.5 py-0.5 rounded ml-1">🎓 Stajyer</span>' : '';
+                html += '<label class="flex items-center gap-2 p-2 rounded hover:bg-gray-100 cursor-pointer text-sm"><input type="checkbox" class="ekf-katilimci-cb" data-kaynak="hic" data-pid="' + p.id + '" data-name="' + escapeHtml(p.name) + '" data-dept="' + escapeHtml(p.department||'') + '" data-status="' + escapeHtml(p.status||'') + '" data-egitim="' + escapeHtml(p.egitimAdi||'') + '" data-tip="' + p.kaynak + '" ' + chk + ' onchange="ekfKatilimciToggle(this)"><span class="flex-1">👤 <strong>' + escapeHtml(p.name) + '</strong> ' + kaynakBadge + ' <span class="text-xs text-gray-500">(' + escapeHtml(p.department||'-') + ' • ' + escapeHtml(p.status||'-') + ')</span></span></label>';
             });
-            if(hicAlmamislar.length > 100) html += '<div class="text-xs text-gray-500 mt-1">... ve ' + (hicAlmamislar.length-100) + ' kişi daha</div>';
+            if(hicAlmamislar.length > 150) html += '<div class="text-xs text-gray-500 mt-1">... ve ' + (hicAlmamislar.length-150) + ' kişi daha</div>';
         }
         html += '</div>';
     }
@@ -10555,7 +10854,9 @@ function ekfGrupSec(grup, sec){
             ekfSeciliKatilimcilar[pid] = {
                 name: cb.getAttribute('data-name'),
                 department: cb.getAttribute('data-dept'),
-                kaynak: grup
+                status: cb.getAttribute('data-status') || '',
+                kaynak: grup,
+                tip: cb.getAttribute('data-tip') || 'personel'
             };
         } else {
             delete ekfSeciliKatilimcilar[pid];
@@ -10570,7 +10871,9 @@ function ekfKatilimciToggle(cb){
         ekfSeciliKatilimcilar[pid] = {
             name: cb.getAttribute('data-name'),
             department: cb.getAttribute('data-dept'),
-            kaynak: cb.getAttribute('data-kaynak') || 'manuel'
+            status: cb.getAttribute('data-status') || '',
+            kaynak: cb.getAttribute('data-kaynak') || 'manuel',
+            tip: cb.getAttribute('data-tip') || 'personel'
         };
     } else {
         delete ekfSeciliKatilimcilar[pid];
@@ -10586,7 +10889,9 @@ function ekfTumunuSec(sec){
             ekfSeciliKatilimcilar[pid] = {
                 name: cb.getAttribute('data-name'),
                 department: cb.getAttribute('data-dept'),
-                kaynak: cb.getAttribute('data-kaynak') || 'manuel'
+                status: cb.getAttribute('data-status') || '',
+                kaynak: cb.getAttribute('data-kaynak') || 'manuel',
+                tip: cb.getAttribute('data-tip') || 'personel'
             };
         } else {
             delete ekfSeciliKatilimcilar[pid];
@@ -10631,7 +10936,7 @@ function ekfManuelAra(){
 
 function ekfManuelEkle(pid, name, dept){
     if(ekfSeciliKatilimcilar[pid]){ alert('Bu kişi zaten seçili!'); return; }
-    ekfSeciliKatilimcilar[pid] = {name: name, department: dept, kaynak: 'manuel'};
+    ekfSeciliKatilimcilar[pid] = {name: name, department: dept, kaynak: 'manuel', tip: 'personel'};
     document.getElementById('ekfManuelArama').value = '';
     document.getElementById('ekfManuelSonuclar').innerHTML = '';
     ekfRenderManuelEklenenler();
@@ -10685,12 +10990,23 @@ function saveEgitimKatilimFormu(){
     const katilimcilar = Object.keys(ekfSeciliKatilimcilar).map(pidStr => {
         const pid = parseInt(pidStr);
         const info = ekfSeciliKatilimcilar[pid];
-        const p = data.personnel.find(x => x.id === pid);
-        const k = { personnelId: pid, name: info.name, department: info.department };
-        if(p){
-            k.tcNo = p.tcNo || '';
-            k.okul = p.liseOkul || '';
-            k.bolum = p.lise || '';
+        const tip = info.tip || 'personel';
+        let k = { personnelId: pid, name: info.name, department: info.department, tip: tip };
+        
+        if(tip === 'stajyer'){
+            const s = (data.stajyerler || []).find(x => x.id === pid);
+            if(s){
+                k.tcNo = s.tcNo || '';
+                k.okul = s.okul || '';
+                k.bolum = s.bolum || '';
+            }
+        } else {
+            const p = data.personnel.find(x => x.id === pid);
+            if(p){
+                k.tcNo = p.tcNo || '';
+                k.okul = p.liseOkul || '';
+                k.bolum = p.lise || '';
+            }
         }
         return k;
     });
@@ -10759,7 +11075,70 @@ function updateEgitimKatilimFormlariTable(){
         '</tr>';
     });
 }
+function birimAtaStajyer(id){
+    if(!isAdmin && !isViewer){ alert('❌ Giriş yapmanız gerekiyor!'); return; }
+    const s = (data.stajyerler||[]).find(x => x.id === id);
+    if(!s){ alert('Stajyer bulunamadı!'); return; }
+    
+    const birimler = (data.departments || []).slice().sort((a,b)=>a.localeCompare(b,'tr'));
+    if(birimler.length === 0){
+        alert('⚠️ Sistemde tanımlı birim yok!\n\nAyarlar → Birim Yönetimi\'nden birim ekleyin.');
+        return;
+    }
+    
+    // Modal oluştur
+    let modal = document.getElementById('birimAtaModal');
+    if(!modal){
+        modal = document.createElement('div');
+        modal.id = 'birimAtaModal';
+        modal.className = 'modal hidden fixed inset-0 bg-black bg-opacity-60 items-center justify-center z-[97]';
+        document.body.appendChild(modal);
+    }
+    
+    let optionsHtml = '<option value="">-- Birim Seçin --</option>';
+    birimler.forEach(b => {
+        optionsHtml += '<option value="' + escapeHtml(b) + '">🏢 ' + escapeHtml(b) + '</option>';
+    });
+    
+    modal.innerHTML = '<div class="bg-white rounded-xl p-6 w-[450px] max-w-[97vw] shadow-2xl relative">' +
+        '<button onclick="hideModal(\'birimAtaModal\')" class="absolute top-4 right-4 text-gray-400 text-2xl font-bold">✕</button>' +
+        '<div class="text-center mb-4">' +
+        '<div class="w-16 h-16 mx-auto mb-3 rounded-full bg-gradient-to-r from-orange-500 to-red-500 flex items-center justify-center text-white text-2xl">🏢</div>' +
+        '<h3 class="text-xl font-bold">Birim Ata</h3>' +
+        '<p class="text-xs text-gray-500 mt-1">' + escapeHtml(s.ad + ' ' + s.soyad) + ' için birim seçin</p>' +
+        '</div>' +
+        '<div class="bg-orange-50 rounded-lg p-4 mb-4 border-2 border-orange-200">' +
+        '<label class="block text-sm font-bold text-orange-900 mb-2">🏢 Birim</label>' +
+        '<select id="birimAtaSelect" class="w-full border-2 border-orange-400 rounded-lg px-4 py-3 bg-white font-bold text-orange-900">' + optionsHtml + '</select>' +
+        '</div>' +
+        '<div class="flex justify-end gap-2">' +
+        '<button onclick="hideModal(\'birimAtaModal\')" class="px-6 py-2 text-gray-600 font-medium hover:bg-gray-100 rounded-lg">İptal</button>' +
+        '<button onclick="birimAtaKaydet(' + id + ')" class="px-6 py-2 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-lg font-bold">💾 Kaydet</button>' +
+        '</div>' +
+        '</div>';
+    
+    showModal('birimAtaModal');
+    setTimeout(() => {
+        const sel = document.getElementById('birimAtaSelect');
+        if(sel) sel.focus();
+    }, 100);
+}
 
+function birimAtaKaydet(id){
+    if(!isAdmin && !isViewer){ alert('❌ Giriş yapmanız gerekiyor!'); return; }
+    const sel = document.getElementById('birimAtaSelect');
+    const birim = sel ? sel.value : '';
+    if(!birim){ alert('Lütfen birim seçin!'); return; }
+    
+    const s = (data.stajyerler||[]).find(x => x.id === id);
+    if(!s){ alert('Stajyer bulunamadı!'); return; }
+    
+    s.birim = birim;
+    saveToLocalStorage();
+    updateStajyerTablolari();
+    hideModal('birimAtaModal');
+    showSuccessMessage('✅ Birim atandı: ' + birim);
+}
 // ==================== KATILIMCI LİSTESİ GÖRÜNTÜLEME ====================
 function ekfKatilimciListesiGoster(formId){
     const f = (data.egitimKatilimFormlari || []).find(x => x.id === formId);
@@ -10846,7 +11225,8 @@ function ekfRenderFormu(f, sifirla){
     if(!c) return;
     
     const filtrelenmisKatilimcilar = (f.katilimcilar||[]).filter(k => ekfYazdirSecili.has(k.personnelId));
-    const stajyerMi = f.katilimciGrupAdi === 'STAJYERLER';
+    // Grup adı stajyer grubu ise VEYA katılımcılardan herhangi biri stajyer ise okul/bölüm göster
+    const stajyerMi = f.katilimciGrupAdi === 'STAJYERLER' || (f.katilimcilar||[]).some(k => k.tip === 'stajyer');
     
     let html = '<div style="font-family:Arial,sans-serif;font-size:12px;color:#000;padding:20px;background:#fff;">';
     
@@ -10882,15 +11262,17 @@ function ekfRenderFormu(f, sifirla){
     } else {
         html += '<table style="width:100%;border-collapse:collapse;font-size:11px;">';
         html += '<thead><tr style="background:#e5e7eb;"><th style="border:1px solid #000;padding:5px;text-align:center;width:40px;">No</th><th style="border:1px solid #000;padding:5px;text-align:left;">Ad Soyad</th>';
+        // Hem Birim hem Okul/Bölüm sütunlarını göster (karışık grup olabilir)
         if(stajyerMi){
-            html += '<th style="border:1px solid #000;padding:5px;text-align:left;width:150px;">Okul</th><th style="border:1px solid #000;padding:5px;text-align:left;width:150px;">Bölüm</th>';
+            html += '<th style="border:1px solid #000;padding:5px;text-align:left;width:130px;">Birim / Okul</th><th style="border:1px solid #000;padding:5px;text-align:left;width:130px;">Bölüm</th>';
         } else {
             html += '<th style="border:1px solid #000;padding:5px;text-align:left;width:200px;">Birim</th>';
         }
         html += '<th style="border:1px solid #000;padding:5px;text-align:center;width:120px;">İmza</th></tr></thead><tbody>';
         filtrelenmisKatilimcilar.forEach((k, i) => {
-            html += '<tr><td style="border:1px solid #000;padding:5px;text-align:center;">' + (i+1) + '</td><td style="border:1px solid #000;padding:5px;">' + escapeHtml(k.name) + '</td>';
-            if(stajyerMi){
+            const satirStajyer = k.tip === 'stajyer';
+            html += '<tr><td style="border:1px solid #000;padding:5px;text-align:center;">' + (i+1) + '</td><td style="border:1px solid #000;padding:5px;">' + escapeHtml(k.name) + (satirStajyer ? ' 🎓' : '') + '</td>';
+            if(satirStajyer){
                 html += '<td style="border:1px solid #000;padding:5px;">' + escapeHtml(k.okul||'-') + '</td><td style="border:1px solid #000;padding:5px;">' + escapeHtml(k.bolum||'-') + '</td>';
             } else {
                 html += '<td style="border:1px solid #000;padding:5px;">' + escapeHtml(k.department||'-') + '</td>';
@@ -10964,37 +11346,76 @@ function ekfFormuTamamlaExecute(formId){
     const bugun = new Date();
     let guncellenenPersonel = 0;
     let eklenenKayit = 0;
+    let guncellenenStajyer = 0;
+    let tamamlananStajyer = 0;
     
     (f.katilimcilar || []).forEach(k => {
-        const p = data.personnel.find(x => x.id === k.personnelId);
-        if(!p){ return; }
-        if(!p.trainings) p.trainings = [];
+        const tip = k.tip || 'personel';
         
-        (f.egitimler || []).forEach(eg => {
-            const mevcut = p.trainings.find(t => t.name === eg.ad);
-            const expiry = new Date(bugun);
-            expiry.setMonth(expiry.getMonth() + (parseInt(eg.yenilemeAy) || 12));
+        // ==================== PERSONEL ====================
+        if(tip === 'personel'){
+            const p = data.personnel.find(x => x.id === k.personnelId);
+            if(!p){ return; }
+            if(!p.trainings) p.trainings = [];
             
-            if(mevcut){
-                mevcut.completedDate = bugun.toISOString();
-                mevcut.expiryDate = expiry.toISOString();
-                if(eg.yenilemeAy) mevcut.duration = parseInt(eg.yenilemeAy);
-                if(eg.egitmen) mevcut.instructor = eg.egitmen;
-                if(eg.sure) mevcut.hours = parseInt(eg.sure);
-            } else {
-                p.trainings.push({
-                    name: eg.ad,
-                    completedDate: bugun.toISOString(),
-                    expiryDate: expiry.toISOString(),
-                    duration: parseInt(eg.yenilemeAy) || 12,
-                    instructor: eg.egitmen || '',
-                    hours: parseInt(eg.sure) || 0,
-                    location: f.egitimYeri || ''
-                });
-                eklenenKayit++;
+            (f.egitimler || []).forEach(eg => {
+                const mevcut = p.trainings.find(t => t.name === eg.ad);
+                const expiry = new Date(bugun);
+                expiry.setMonth(expiry.getMonth() + (parseInt(eg.yenilemeAy) || 12));
+                
+                if(mevcut){
+                    mevcut.completedDate = bugun.toISOString();
+                    mevcut.expiryDate = expiry.toISOString();
+                    if(eg.yenilemeAy) mevcut.duration = parseInt(eg.yenilemeAy);
+                    if(eg.egitmen) mevcut.instructor = eg.egitmen;
+                    if(eg.sure) mevcut.hours = parseInt(eg.sure);
+                } else {
+                    p.trainings.push({
+                        name: eg.ad,
+                        completedDate: bugun.toISOString(),
+                        expiryDate: expiry.toISOString(),
+                        duration: parseInt(eg.yenilemeAy) || 12,
+                        instructor: eg.egitmen || '',
+                        hours: parseInt(eg.sure) || 0,
+                        location: f.egitimYeri || ''
+                    });
+                    eklenenKayit++;
+                }
+            });
+            guncellenenPersonel++;
+        }
+        
+        // ==================== STAJYER ====================
+        else if(tip === 'stajyer'){
+            const s = (data.stajyerler || []).find(x => x.id === k.personnelId);
+            if(!s){ return; }
+            if(!s.egitimDurumlari) s.egitimDurumlari = {};
+            if(!s.egitimler) s.egitimler = [];
+            
+            (f.egitimler || []).forEach(eg => {
+                // Form'daki eğitimin stajyerin eğitim listesindeki id'sini bul
+                const egitimObj = (data.trainings || []).find(t => t.name === eg.ad);
+                if(!egitimObj) return;
+                
+                const eid = egitimObj.id;
+                
+                // Stajyerin eğitim listesinde yoksa ekle (yeni bir eğitim verdiysek)
+                if(!s.egitimler.includes(eid)){
+                    s.egitimler.push(eid);
+                }
+                
+                // Eğitimi tamamlandı olarak işaretle
+                s.egitimDurumlari[eid] = true;
+            });
+            
+            guncellenenStajyer++;
+            
+            // Stajyerin TÜM eğitimleri tamamlandı mı?
+            const tumEgitimlerTamam = (s.egitimler || []).every(eid => s.egitimDurumlari[eid] === true);
+            if(tumEgitimlerTamam && s.egitimler.length > 0){
+                tamamlananStajyer++;
             }
-        });
-        guncellenenPersonel++;
+        }
     });
     
     f.durum = 'tamamlandi';
@@ -11004,9 +11425,17 @@ function ekfFormuTamamlaExecute(formId){
     saveToLocalStorage();
     updateEgitimKatilimFormlariTable();
     updateAllStats();
+    if(typeof updateStajyerTablolari === 'function') updateStajyerTablolari();
     hideModal('ekfOnizlemeModal');
     
-    showSuccessMessage('✅ Form tamamlandı! ' + guncellenenPersonel + ' personel güncellendi, ' + eklenenKayit + ' yeni kayıt eklendi.');
+    let msg = '✅ Form tamamlandı! ';
+    const parcalar = [];
+    if(guncellenenPersonel > 0) parcalar.push(guncellenenPersonel + ' personel');
+    if(guncellenenStajyer > 0) parcalar.push(guncellenenStajyer + ' stajyer');
+    msg += parcalar.join(' + ') + ' güncellendi';
+    if(eklenenKayit > 0) msg += ', ' + eklenenKayit + ' yeni kayıt eklendi';
+    if(tamamlananStajyer > 0) msg += '. 🎉 ' + tamamlananStajyer + ' stajyerin tüm eğitimleri tamamlandı!';
+    showSuccessMessage(msg);
 }
 
 // ==================== SİL ====================
@@ -11020,7 +11449,813 @@ function ekfFormuSil(formId){
     updateEgitimKatilimFormlariTable();
     showSuccessMessage('🗑️ Form silindi.');
 }
+// ============================================================
+// ==================== STAJYER MODÜLÜ =========================
+// ============================================================
 
+let editingStajyerId = null;
+let selectedStajyerEgitimler = [];
+
+function toggleStajyerSection(sectionId){
+    const section = document.getElementById(sectionId);
+    if(!section) return;
+    const arrowId = sectionId === 'aktifStajyerSection' ? 'aktifStajyerSectionArrow' : 'arsivStajyerSectionArrow';
+    const arrow = document.getElementById(arrowId);
+    if(section.classList.contains('hidden')){
+        section.classList.remove('hidden');
+        if(arrow) arrow.style.transform = 'rotate(90deg)';
+    } else {
+        section.classList.add('hidden');
+        if(arrow) arrow.style.transform = 'rotate(0deg)';
+    }
+}
+
+function stajyerTcInput(input){
+    let val = input.value.replace(/\D/g, '');
+    if(val.length > 11) val = val.substring(0, 11);
+    input.value = val;
+}
+
+function generateStajyerTcNo(){
+    const existing = new Set();
+    (data.stajyerler || []).forEach(s => { if(s.tcNo) existing.add(String(s.tcNo).trim()); });
+    let counter = 1;
+    while(counter <= 99999999999){
+        const candidate = String(counter).padStart(11, '0');
+        if(!existing.has(candidate)) return candidate;
+        counter++;
+    }
+    return String(Date.now()).slice(-11).padStart(11, '0');
+}
+
+function populateStajyerDropdowns(){
+    const okulSel = document.getElementById('stajyerOkul');
+    if(okulSel){
+        const cv = okulSel.value;
+        okulSel.innerHTML = '<option value="">Seçiniz</option>';
+        (data.okullar.lise || []).slice().sort((a,b)=>a.localeCompare(b,'tr')).forEach(o => {
+            okulSel.innerHTML += '<option value="' + escapeHtml(o) + '">' + escapeHtml(o) + '</option>';
+        });
+        okulSel.value = cv;
+    }
+    const bolumSel = document.getElementById('stajyerBolum');
+    if(bolumSel){
+        const cv = bolumSel.value;
+        bolumSel.innerHTML = '<option value="">Seçiniz</option>';
+        (data.mezuniyetDallari.lise || []).slice().sort((a,b)=>a.localeCompare(b,'tr')).forEach(d => {
+            bolumSel.innerHTML += '<option value="' + escapeHtml(d) + '">' + escapeHtml(d) + '</option>';
+        });
+        bolumSel.value = cv;
+    }
+    const birimSel = document.getElementById('stajyerBirim');
+    if(birimSel){
+        const cv = birimSel.value;
+        birimSel.innerHTML = '<option value="">Seçiniz</option>';
+        (data.departments || []).slice().sort((a,b)=>a.localeCompare(b,'tr')).forEach(d => {
+            birimSel.innerHTML += '<option value="' + escapeHtml(d) + '">' + escapeHtml(d) + '</option>';
+        });
+        birimSel.value = cv;
+    }
+    // Filtre dropdownları
+    const okulFilter = document.getElementById('aktifStajyerOkulFilter');
+    if(okulFilter){
+        const cv = okulFilter.value;
+        okulFilter.innerHTML = '<option value="">Tüm Okullar</option>';
+        (data.okullar.lise || []).slice().sort((a,b)=>a.localeCompare(b,'tr')).forEach(o => {
+            okulFilter.innerHTML += '<option value="' + escapeHtml(o) + '">' + escapeHtml(o) + '</option>';
+        });
+        okulFilter.value = cv;
+    }
+    const birimFilter = document.getElementById('aktifStajyerBirimFilter');
+    if(birimFilter){
+        const cv = birimFilter.value;
+        birimFilter.innerHTML = '<option value="">Tüm Birimler</option>';
+        (data.departments || []).slice().sort((a,b)=>a.localeCompare(b,'tr')).forEach(d => {
+            birimFilter.innerHTML += '<option value="' + escapeHtml(d) + '">' + escapeHtml(d) + '</option>';
+        });
+        birimFilter.value = cv;
+    }
+    const okulFilterA = document.getElementById('arsivStajyerOkulFilter');
+    if(okulFilterA){
+        const cv = okulFilterA.value;
+        okulFilterA.innerHTML = '<option value="">Tüm Okullar</option>';
+        (data.okullar.lise || []).slice().sort((a,b)=>a.localeCompare(b,'tr')).forEach(o => {
+            okulFilterA.innerHTML += '<option value="' + escapeHtml(o) + '">' + escapeHtml(o) + '</option>';
+        });
+        okulFilterA.value = cv;
+    }
+    const birimFilterA = document.getElementById('arsivStajyerBirimFilter');
+    if(birimFilterA){
+        const cv = birimFilterA.value;
+        birimFilterA.innerHTML = '<option value="">Tüm Birimler</option>';
+        (data.departments || []).slice().sort((a,b)=>a.localeCompare(b,'tr')).forEach(d => {
+            birimFilterA.innerHTML += '<option value="' + escapeHtml(d) + '">' + escapeHtml(d) + '</option>';
+        });
+        birimFilterA.value = cv;
+    }
+}
+
+function openYeniStajyerModal(){
+    if(!isAdmin){ alert('❌ Yönetici girişi gerekli!'); return; }
+    editingStajyerId = null;
+    document.getElementById('stajyerModalTitle').textContent = 'Yeni Stajyer Kaydı';
+    document.getElementById('stajyerAd').value = '';
+    document.getElementById('stajyerSoyad').value = '';
+    document.getElementById('stajyerTelefon').value = '';
+    document.getElementById('stajyerTcNo').value = '';
+    document.getElementById('stajyerOkul').value = '';
+    document.getElementById('stajyerBolum').value = '';
+    document.getElementById('stajyerBirim').value = '';
+    document.getElementById('stajyerBaslangic').value = new Date().toISOString().split('T')[0];
+    document.getElementById('stajyerBitis').value = '';
+    document.querySelectorAll('.stajyer-gun-cb').forEach(cb => { cb.checked = ['Pzt','Sal','Çar','Per','Cum'].includes(cb.value); });
+    selectedStajyerEgitimler = [];
+    populateStajyerDropdowns();
+    renderStajyerEgitimListesi();
+    showModal('yeniStajyerModal');
+}
+
+function renderStajyerEgitimListesi(){
+    const c = document.getElementById('stajyerEgitimListesi');
+    if(!c) return;
+    c.innerHTML = '';
+    if(!data.trainings || data.trainings.length === 0){
+        c.innerHTML = '<div class="text-center py-3 text-gray-500 text-sm bg-white rounded-lg">Henüz tanımlı eğitim yok</div>';
+        return;
+    }
+    data.trainings.forEach((t, i) => {
+        const chk = selectedStajyerEgitimler.includes(t.id) ? 'checked' : '';
+        c.innerHTML += '<label class="flex items-center gap-2 bg-white p-2 rounded-lg border-2 border-amber-200 cursor-pointer hover:bg-amber-50 text-sm"><input type="checkbox" class="stajyer-egitim-cb" value="' + t.id + '" ' + chk + ' onchange="toggleStajyerEgitim(' + t.id + ', this.checked)"><span><strong>' + escapeHtml(t.name) + '</strong> — ' + escapeHtml(t.subject||'-') + ' • ' + (t.hours||0) + ' saat</span></label>';
+    });
+}
+
+function toggleStajyerEgitim(egitimId, checked){
+    if(checked){
+        if(!selectedStajyerEgitimler.includes(egitimId)) selectedStajyerEgitimler.push(egitimId);
+    } else {
+        selectedStajyerEgitimler = selectedStajyerEgitimler.filter(x => x !== egitimId);
+    }
+}
+
+function saveStajyer(){
+    if(!isAdmin){ alert('❌ Yönetici girişi gerekli!'); return; }
+    const ad = document.getElementById('stajyerAd').value.trim();
+    const soyad = document.getElementById('stajyerSoyad').value.trim();
+    const telefon = document.getElementById('stajyerTelefon').value.trim();
+    let tcNo = document.getElementById('stajyerTcNo').value.trim();
+    const okul = document.getElementById('stajyerOkul').value;
+    const bolum = document.getElementById('stajyerBolum').value;
+    const birim = document.getElementById('stajyerBirim').value;
+    const baslangic = document.getElementById('stajyerBaslangic').value;
+    const bitis = document.getElementById('stajyerBitis').value;
+    
+    if(!ad){ alert('Ad girin!'); return; }
+    if(!soyad){ alert('Soyad girin!'); return; }
+    if(!okul){ alert('Okul seçin!'); return; }
+    if(!bolum){ alert('Bölüm seçin!'); return; }
+    if(!baslangic){ alert('Başlangıç tarihi girin!'); return; }
+    if(!bitis){ alert('Bitiş tarihi girin!'); return; }
+    
+    if(!tcNo){
+        tcNo = generateStajyerTcNo();
+    } else {
+        if(tcNo.length !== 11 || !/^\d+$/.test(tcNo)){ alert('TC 11 haneli ve sadece rakam olmalıdır!'); return; }
+    }
+    
+    if((data.stajyerler || []).some(s => s.tcNo === tcNo && s.id !== editingStajyerId)){
+        alert('Bu TC zaten kayıtlı!'); return;
+    }
+    
+    const gunler = [];
+    document.querySelectorAll('.stajyer-gun-cb:checked').forEach(cb => gunler.push(cb.value));
+    if(gunler.length === 0){ alert('En az bir çalışma günü seçin!'); return; }
+    
+    const stajyer = {
+        id: editingStajyerId || Date.now(),
+        ad: ad, soyad: soyad, tcNo: tcNo, telefon: telefon,
+        okul: okul, bolum: bolum, birim: birim,
+        baslangic: baslangic, bitis: bitis,
+        gunler: gunler,
+        egitimler: selectedStajyerEgitimler.slice(),
+        durum: 'aktif',
+        olusturmaTarihi: new Date().toISOString(),
+        arsivTarihi: null
+    };
+    
+    if(editingStajyerId){
+        const idx = data.stajyerler.findIndex(s => s.id === editingStajyerId);
+        if(idx !== -1){
+            const eski = data.stajyerler[idx];
+            stajyer.durum = eski.durum;
+            stajyer.olusturmaTarihi = eski.olusturmaTarihi;
+            stajyer.arsivTarihi = eski.arsivTarihi;
+            // Eğitim durumlarını koru (yeni eklenenler "bekliyor" olarak başlar)
+            stajyer.egitimDurumlari = eski.egitimDurumlari || {};
+            selectedStajyerEgitimler.forEach(eid => {
+                if(!stajyer.egitimDurumlari[eid]) stajyer.egitimDurumlari[eid] = false;
+            });
+            data.stajyerler[idx] = stajyer;
+        }
+        showSuccessMessage('✅ Stajyer güncellendi!');
+    } else {
+        if(!data.stajyerler) data.stajyerler = [];
+        // Her seçili eğitim için "bekliyor" (false) olarak başlat
+        stajyer.egitimDurumlari = {};
+        selectedStajyerEgitimler.forEach(eid => {
+            stajyer.egitimDurumlari[eid] = false;
+        });
+        data.stajyerler.push(stajyer);
+        showSuccessMessage('✅ Stajyer eklendi! TC: ' + tcNo);
+    }
+    
+    saveToLocalStorage();
+    updateStajyerTablolari();
+    hideModal('yeniStajyerModal');
+}
+
+function updateStajyerTablolari(){
+    const aktifler = (data.stajyerler || []).filter(s => s.durum !== 'arsiv');
+    const arsivler = (data.stajyerler || []).filter(s => s.durum === 'arsiv');
+    
+    const ak = document.getElementById('aktifStajyerCount');
+    if(ak) ak.textContent = aktifler.length;
+    const ark = document.getElementById('arsivStajyerCount');
+    if(ark) ark.textContent = arsivler.length;
+    const art = document.getElementById('arsivStajyerToplam');
+    if(art) art.textContent = arsivler.length;
+    
+    renderAktifStajyerler(aktifler);
+    renderArsivStajyerler(arsivler);
+}
+
+function renderAktifStajyerler(list){
+    const tb = document.getElementById('aktifStajyerBody');
+    if(!tb) return;
+    tb.innerHTML = '';
+    if(list.length === 0){
+        tb.innerHTML = '<tr><td colspan="10" class="text-center py-6 text-gray-500 text-sm">Aktif stajyer yok</td></tr>';
+        return;
+    }
+    list.sort((a,b) => new Date(b.olusturmaTarihi||0) - new Date(a.olusturmaTarihi||0));
+    const now = new Date();
+    list.forEach(s => {
+        const initials = ((s.ad||'')[0]||'') + ((s.soyad||'')[0]||'');
+        const bitis = s.bitis ? new Date(s.bitis) : null;
+        const kalanGun = bitis ? Math.ceil((bitis - now) / (1000*60*60*24)) : 0;
+        let kalanHtml = '';
+        if(kalanGun > 0){
+            const renk = kalanGun <= 7 ? 'bg-red-100 text-red-800' : (kalanGun <= 30 ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800');
+            kalanHtml = '<span class="px-2 py-1 rounded text-xs font-bold ' + renk + '">' + kalanGun + ' gün</span>';
+        } else {
+            kalanHtml = '<span class="px-2 py-1 rounded text-xs font-bold bg-red-100 text-red-800">Süre doldu</span>';
+        }
+        
+        // === EĞİTİM DURUMU HESAPLAMA ===
+        const egitimDurumlari = s.egitimDurumlari || {};
+        let tamamlanan = 0;
+        let bekleyen = 0;
+        (s.egitimler||[]).forEach(eid => { 
+            if(egitimDurumlari[eid]) tamamlanan++; 
+            else bekleyen++;
+        });
+        const toplamEgitim = (s.egitimler||[]).length;
+        
+        let egitimDurumHtml = '';
+        if(toplamEgitim === 0){
+            egitimDurumHtml = '<span class="text-xs text-gray-400 italic">Eğitim yok</span>';
+        } else if(tamamlanan === toplamEgitim){
+            egitimDurumHtml = '<div class="text-xs font-bold text-green-700">' + tamamlanan + '/' + toplamEgitim + '</div><div class="text-xs text-green-600">✅ Tamamlandı</div>';
+        } else {
+            egitimDurumHtml = '<div class="text-xs font-bold text-orange-700">' + tamamlanan + '/' + toplamEgitim + '</div><div class="text-xs text-orange-600">⏳ Bekliyor</div>';
+        }
+        
+        // === BİRİM GÖSTERİMİ ===
+        let birimHtml = '';
+        if(s.birim){
+            birimHtml = '<span class="text-sm font-semibold">' + escapeHtml(s.birim) + '</span>';
+        } else {
+            birimHtml = '<button onclick="birimAtaStajyer(' + s.id + ')" class="bg-orange-100 hover:bg-orange-200 text-orange-800 border-2 border-orange-400 border-dashed rounded-lg px-3 py-1.5 text-xs font-bold cursor-pointer transition-all" title="Birim atamak için tıkla">⏳ Bekliyor — Birim Ata</button>';
+        }
+        
+        const gunlerHtml = (s.gunler||[]).map(g => '<span class="inline-block bg-indigo-100 text-indigo-800 text-xs px-1.5 py-0.5 rounded mr-0.5 mb-0.5">' + g + '</span>').join('');
+        
+        tb.innerHTML += '<tr class="hover:bg-indigo-50">' +
+            '<td class="px-3 py-3"><div class="flex items-center gap-2"><div class="w-10 h-10 rounded-full bg-indigo-200 text-indigo-800 flex items-center justify-center font-bold text-sm">' + escapeHtml(initials.toUpperCase()) + '</div><div><div class="font-bold text-sm">' + escapeHtml(s.ad + ' ' + s.soyad) + '</div><div class="text-xs text-gray-500">' + escapeHtml(s.tcNo||'-') + '</div></div></div></td>' +
+            '<td class="px-3 py-3 text-sm">' + escapeHtml(s.telefon||'-') + '</td>' +
+            '<td class="px-3 py-3 text-sm"><div class="font-semibold">' + escapeHtml(s.okul||'-') + '</div><div class="text-xs text-gray-500">' + escapeHtml(s.bolum||'-') + '</div></td>' +
+            '<td class="px-3 py-3">' + birimHtml + '</td>' +
+            '<td class="px-3 py-3 text-xs">' + (s.baslangic ? new Date(s.baslangic).toLocaleDateString('tr-TR') : '-') + '<br>' + (s.bitis ? new Date(s.bitis).toLocaleDateString('tr-TR') : '-') + '</td>' +
+            '<td class="px-3 py-3 text-center">' + gunlerHtml + '</td>' +
+            '<td class="px-3 py-3 text-center">' + egitimDurumHtml + '</td>' +
+            '<td class="px-3 py-3 text-center">' + kalanHtml + '</td>' +
+            '<td class="px-3 py-3 text-center"><span class="px-2 py-1 rounded text-xs font-bold bg-green-100 text-green-800">Aktif</span></td>' +
+            '<td class="px-3 py-3 text-center"><div class="flex gap-1 justify-center">' +
+                '<button onclick="goruntuleStajyer(' + s.id + ')" class="bg-blue-500 text-white px-2 py-1 rounded text-xs font-bold" title="Görüntüle">👁️</button>' +
+                (isAdmin ? '<button onclick="editStajyer(' + s.id + ')" class="bg-amber-500 text-white px-2 py-1 rounded text-xs font-bold" title="Düzenle">✏️</button>' : '') +
+                (isAdmin ? '<button onclick="arsivleStajyer(' + s.id + ')" class="bg-purple-500 text-white px-2 py-1 rounded text-xs font-bold" title="Stajı Bitir">📦</button>' : '') +
+                (isAdmin ? '<button onclick="deleteStajyer(' + s.id + ')" class="bg-red-500 text-white px-2 py-1 rounded text-xs font-bold" title="Sil">🗑️</button>' : '') +
+            '</div></td>' +
+        '</tr>';
+    });
+}
+
+function renderArsivStajyerler(list){
+    const tb = document.getElementById('arsivStajyerBody');
+    if(!tb) return;
+    tb.innerHTML = '';
+    if(list.length === 0){
+        tb.innerHTML = '<tr><td colspan="7" class="text-center py-6 text-gray-500 text-sm">Arşivde stajyer yok</td></tr>';
+        return;
+    }
+    list.sort((a,b) => new Date(b.arsivTarihi||0) - new Date(a.arsivTarihi||0));
+    list.forEach(s => {
+        const initials = ((s.ad||'')[0]||'') + ((s.soyad||'')[0]||'');
+        tb.innerHTML += '<tr class="hover:bg-emerald-50">' +
+            '<td class="px-3 py-3"><div class="flex items-center gap-2"><div class="w-10 h-10 rounded-full bg-emerald-200 text-emerald-800 flex items-center justify-center font-bold text-sm">' + escapeHtml(initials.toUpperCase()) + '</div><div><div class="font-bold text-sm">' + escapeHtml(s.ad + ' ' + s.soyad) + '</div><div class="text-xs text-green-600 font-semibold">✅ Tamamlandı</div></div></div></td>' +
+            '<td class="px-3 py-3 text-sm">' + escapeHtml(s.telefon||'-') + '<br><span class="text-xs text-gray-500">' + escapeHtml(s.tcNo||'-') + '</span></td>' +
+            '<td class="px-3 py-3 text-sm"><div class="font-semibold">' + escapeHtml(s.okul||'-') + '</div><div class="text-xs text-gray-500">' + escapeHtml(s.bolum||'-') + '</div></td>' +
+            '<td class="px-3 py-3 text-sm"><div class="font-semibold">' + escapeHtml(s.birim||'-') + '</div></td>' +
+            '<td class="px-3 py-3 text-xs">' + (s.baslangic ? new Date(s.baslangic).toLocaleDateString('tr-TR') : '-') + '<br>' + (s.bitis ? new Date(s.bitis).toLocaleDateString('tr-TR') : '-') + '</td>' +
+            '<td class="px-3 py-3 text-center text-xs">' + (s.arsivTarihi ? new Date(s.arsivTarihi).toLocaleDateString('tr-TR') : '-') + '</td>' +
+            '<td class="px-3 py-3 text-center"><div class="flex gap-1 justify-center">' +
+                '<button onclick="goruntuleStajyer(' + s.id + ')" class="bg-blue-500 text-white px-2 py-1 rounded text-xs font-bold">👁️</button>' +
+                (isAdmin ? '<button onclick="aktifeAlStajyer(' + s.id + ')" class="bg-green-500 text-white px-2 py-1 rounded text-xs font-bold" title="Aktife Al">♻️</button>' : '') +
+                (isAdmin ? '<button onclick="deleteStajyer(' + s.id + ')" class="bg-red-500 text-white px-2 py-1 rounded text-xs font-bold">🗑️</button>' : '') +
+            '</div></td>' +
+        '</tr>';
+    });
+}
+
+function filterAktifStajyerler(){
+    const arama = (document.getElementById('aktifStajyerArama').value||'').toLowerCase();
+    const okul = document.getElementById('aktifStajyerOkulFilter').value;
+    const birim = document.getElementById('aktifStajyerBirimFilter').value;
+    const bas = document.getElementById('aktifStajyerBaslangicFilter').value;
+    const bit = document.getElementById('aktifStajyerBitisFilter').value;
+    
+    let list = (data.stajyerler||[]).filter(s => s.durum !== 'arsiv');
+    if(arama) list = list.filter(s => (s.ad+' '+s.soyad).toLowerCase().includes(arama) || (s.tcNo||'').includes(arama));
+    if(okul) list = list.filter(s => s.okul === okul);
+    if(birim) list = list.filter(s => s.birim === birim);
+    if(bas) list = list.filter(s => s.baslangic && s.baslangic >= bas);
+    if(bit) list = list.filter(s => s.bitis && s.bitis <= bit);
+    renderAktifStajyerler(list);
+}
+
+function filterArsivStajyerler(){
+    const arama = (document.getElementById('arsivStajyerArama').value||'').toLowerCase();
+    const okul = document.getElementById('arsivStajyerOkulFilter').value;
+    const birim = document.getElementById('arsivStajyerBirimFilter').value;
+    let list = (data.stajyerler||[]).filter(s => s.durum === 'arsiv');
+    if(arama) list = list.filter(s => (s.ad+' '+s.soyad).toLowerCase().includes(arama) || (s.tcNo||'').includes(arama));
+    if(okul) list = list.filter(s => s.okul === okul);
+    if(birim) list = list.filter(s => s.birim === birim);
+    renderArsivStajyerler(list);
+}
+
+function clearArsivStajyerFilters(){
+    document.getElementById('arsivStajyerArama').value = '';
+    document.getElementById('arsivStajyerOkulFilter').value = '';
+    document.getElementById('arsivStajyerBirimFilter').value = '';
+    filterArsivStajyerler();
+}
+
+function editStajyer(id){
+    if(!isAdmin){ alert('❌ Yönetici girişi gerekli!'); return; }
+    const s = data.stajyerler.find(x => x.id === id);
+    if(!s) return;
+    editingStajyerId = id;
+    document.getElementById('stajyerModalTitle').textContent = '✏️ Stajyer Düzenle';
+    document.getElementById('stajyerAd').value = s.ad||'';
+    document.getElementById('stajyerSoyad').value = s.soyad||'';
+    document.getElementById('stajyerTelefon').value = s.telefon||'';
+    document.getElementById('stajyerTcNo').value = s.tcNo||'';
+    document.getElementById('stajyerBaslangic').value = s.baslangic||'';
+    document.getElementById('stajyerBitis').value = s.bitis||'';
+    populateStajyerDropdowns();
+    setTimeout(() => {
+        document.getElementById('stajyerOkul').value = s.okul||'';
+        document.getElementById('stajyerBolum').value = s.bolum||'';
+        document.getElementById('stajyerBirim').value = s.birim||'';
+    }, 50);
+    document.querySelectorAll('.stajyer-gun-cb').forEach(cb => { cb.checked = (s.gunler||[]).includes(cb.value); });
+    selectedStajyerEgitimler = (s.egitimler||[]).slice();
+    renderStajyerEgitimListesi();
+    showModal('yeniStajyerModal');
+}
+
+function arsivleStajyer(id){
+    if(!isAdmin){ alert('❌ Yönetici girişi gerekli!'); return; }
+    const s = data.stajyerler.find(x => x.id === id);
+    if(!s) return;
+    if(!confirm(s.ad + ' ' + s.soyad + ' adlı stajyerin stajı bitirilecek ve arşive taşınacak. Onaylıyor musunuz?')) return;
+    s.durum = 'arsiv';
+    s.arsivTarihi = new Date().toISOString();
+    saveToLocalStorage();
+    updateStajyerTablolari();
+    showSuccessMessage('📦 Stajyer arşive taşındı!');
+}
+
+function aktifeAlStajyer(id){
+    if(!isAdmin){ alert('❌ Yönetici girişi gerekli!'); return; }
+    const s = data.stajyerler.find(x => x.id === id);
+    if(!s) return;
+    if(!confirm(s.ad + ' ' + s.soyad + ' adlı stajyer tekrar aktif edilecek. Onaylıyor musunuz?')) return;
+    s.durum = 'aktif';
+    s.arsivTarihi = null;
+    saveToLocalStorage();
+    updateStajyerTablolari();
+    showSuccessMessage('✅ Stajyer tekrar aktif!');
+}
+
+function deleteStajyer(id){
+    if(!isAdmin){ alert('❌ Yönetici girişi gerekli!'); return; }
+    const s = data.stajyerler.find(x => x.id === id);
+    if(!s) return;
+    if(!confirm(s.ad + ' ' + s.soyad + ' adlı stajyeri silmek istediğinize emin misiniz?')) return;
+    data.stajyerler = data.stajyerler.filter(x => x.id !== id);
+    saveToLocalStorage();
+    updateStajyerTablolari();
+    showSuccessMessage('🗑️ Silindi!');
+}
+
+function goruntuleStajyer(id){
+    const s = data.stajyerler.find(x => x.id === id);
+    if(!s) return;
+    const egitimler = (s.egitimler||[]).map(eid => {
+        const t = data.trainings.find(x => x.id === eid);
+        const tamam = (s.egitimDurumlari||{})[eid];
+        return '<li class="flex justify-between p-2 border-b text-sm"><span>📚 ' + escapeHtml(t ? t.name : '-') + '</span><span class="font-bold ' + (tamam?'text-green-600':'text-gray-400') + '">' + (tamam?'✅ Tamamlandı':'⏳ Bekliyor') + '</span></li>';
+    }).join('');
+    
+    let html = '<div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">';
+    html += '<div class="bg-indigo-50 rounded-lg p-3 border-2 border-indigo-200"><div class="text-xs font-bold text-indigo-700 mb-1">👤 AD SOYAD</div><div class="font-bold">' + escapeHtml(s.ad + ' ' + s.soyad) + '</div></div>';
+    html += '<div class="bg-indigo-50 rounded-lg p-3 border-2 border-indigo-200"><div class="text-xs font-bold text-indigo-700 mb-1">🆔 TC NO</div><div class="font-mono">' + escapeHtml(s.tcNo||'-') + '</div></div>';
+    html += '<div class="bg-indigo-50 rounded-lg p-3 border-2 border-indigo-200"><div class="text-xs font-bold text-indigo-700 mb-1">📞 TELEFON</div><div>' + escapeHtml(s.telefon||'-') + '</div></div>';
+    html += '<div class="bg-emerald-50 rounded-lg p-3 border-2 border-emerald-200"><div class="text-xs font-bold text-emerald-700 mb-1">🏫 OKUL / BÖLÜM</div><div>' + escapeHtml(s.okul||'-') + ' / ' + escapeHtml(s.bolum||'-') + '</div></div>';
+    html += '<div class="bg-purple-50 rounded-lg p-3 border-2 border-purple-200"><div class="text-xs font-bold text-purple-700 mb-1">🏢 BİRİM</div><div>' + escapeHtml(s.birim||'-') + '</div></div>';
+    html += '<div class="bg-purple-50 rounded-lg p-3 border-2 border-purple-200"><div class="text-xs font-bold text-purple-700 mb-1">📅 DÖNEM</div><div>' + (s.baslangic?new Date(s.baslangic).toLocaleDateString('tr-TR'):'-') + ' → ' + (s.bitis?new Date(s.bitis).toLocaleDateString('tr-TR'):'-') + '</div></div>';
+    html += '<div class="bg-amber-50 rounded-lg p-3 border-2 border-amber-200 md:col-span-2"><div class="text-xs font-bold text-amber-700 mb-1">📆 ÇALIŞMA GÜNLERİ</div><div>' + (s.gunler||[]).join(', ') + '</div></div>';
+    html += '</div>';
+    html += '<h4 class="font-bold text-gray-800 mb-2 text-sm">📚 EĞİTİM DURUMU</h4>';
+    html += '<ul class="bg-gray-50 rounded-lg p-2">' + (egitimler || '<li class="text-gray-500 text-sm text-center p-3">Eğitim tanımlı değil</li>') + '</ul>';
+    
+    document.getElementById('stajyerGoruntuleContent').innerHTML = html;
+    showModal('stajyerGoruntuleModal');
+}
+
+function printAktifStajyerler(){
+    const list = (data.stajyerler||[]).filter(s => s.durum !== 'arsiv');
+    if(list.length === 0){ alert('Yazdırılacak aktif stajyer yok!'); return; }
+    let html = '<div style="font-family:Arial,sans-serif;font-size:11px;color:#000;padding:10px;">';
+    html += '<div style="text-align:center;border-bottom:2px solid #333;padding-bottom:8px;margin-bottom:12px;"><h1 style="font-size:18px;margin:0;font-weight:bold;">ATTİ RAYLI SİSTEM</h1><h2 style="font-size:13px;margin:4px 0 0;font-weight:normal;">Aktif Stajyer Listesi</h2><div style="font-size:10px;color:#666;margin-top:4px;">Oluşturulma: ' + new Date().toLocaleString('tr-TR') + ' | Toplam: ' + list.length + '</div></div>';
+    html += '<table style="width:100%;border-collapse:collapse;font-size:10px;"><thead><tr style="background:#c7d2fe;"><th style="border:1px solid #333;padding:5px;">#</th><th style="border:1px solid #333;padding:5px;text-align:left;">Ad Soyad</th><th style="border:1px solid #333;padding:5px;text-align:left;">TC</th><th style="border:1px solid #333;padding:5px;text-align:left;">Telefon</th><th style="border:1px solid #333;padding:5px;text-align:left;">Okul</th><th style="border:1px solid #333;padding:5px;text-align:left;">Bölüm</th><th style="border:1px solid #333;padding:5px;text-align:left;">Birim</th><th style="border:1px solid #333;padding:5px;text-align:center;">Başlangıç</th><th style="border:1px solid #333;padding:5px;text-align:center;">Bitiş</th></tr></thead><tbody>';
+    list.sort((a,b) => (a.ad||'').localeCompare(b.ad||'','tr')).forEach((s,i) => {
+        html += '<tr><td style="border:1px solid #333;padding:5px;text-align:center;">'+(i+1)+'</td><td style="border:1px solid #333;padding:5px;"><strong>' + escapeHtml(s.ad+' '+s.soyad) + '</strong></td><td style="border:1px solid #333;padding:5px;font-family:monospace;">' + escapeHtml(s.tcNo||'-') + '</td><td style="border:1px solid #333;padding:5px;">' + escapeHtml(s.telefon||'-') + '</td><td style="border:1px solid #333;padding:5px;">' + escapeHtml(s.okul||'-') + '</td><td style="border:1px solid #333;padding:5px;">' + escapeHtml(s.bolum||'-') + '</td><td style="border:1px solid #333;padding:5px;">' + escapeHtml(s.birim||'-') + '</td><td style="border:1px solid #333;padding:5px;text-align:center;">' + (s.baslangic?new Date(s.baslangic).toLocaleDateString('tr-TR'):'-') + '</td><td style="border:1px solid #333;padding:5px;text-align:center;">' + (s.bitis?new Date(s.bitis).toLocaleDateString('tr-TR'):'-') + '</td></tr>';
+    });
+    html += '</tbody></table></div>';
+    openPrintPreview('Aktif Stajyer Listesi', list.length + ' kişi', html);
+}
+
+function printArsivStajyerler(){
+    const list = (data.stajyerler||[]).filter(s => s.durum === 'arsiv');
+    if(list.length === 0){ alert('Yazdırılacak arşiv kaydı yok!'); return; }
+    let html = '<div style="font-family:Arial,sans-serif;font-size:11px;color:#000;padding:10px;">';
+    html += '<div style="text-align:center;border-bottom:2px solid #333;padding-bottom:8px;margin-bottom:12px;"><h1 style="font-size:18px;margin:0;font-weight:bold;">ATTİ RAYLI SİSTEM</h1><h2 style="font-size:13px;margin:4px 0 0;font-weight:normal;">Stajı Bitenler Listesi</h2><div style="font-size:10px;color:#666;margin-top:4px;">Oluşturulma: ' + new Date().toLocaleString('tr-TR') + ' | Toplam: ' + list.length + '</div></div>';
+    html += '<table style="width:100%;border-collapse:collapse;font-size:10px;"><thead><tr style="background:#d1fae5;"><th style="border:1px solid #333;padding:5px;">#</th><th style="border:1px solid #333;padding:5px;text-align:left;">Ad Soyad</th><th style="border:1px solid #333;padding:5px;text-align:left;">TC</th><th style="border:1px solid #333;padding:5px;text-align:left;">Telefon</th><th style="border:1px solid #333;padding:5px;text-align:left;">Okul</th><th style="border:1px solid #333;padding:5px;text-align:left;">Bölüm</th><th style="border:1px solid #333;padding:5px;text-align:left;">Birim</th><th style="border:1px solid #333;padding:5px;text-align:center;">Dönem</th><th style="border:1px solid #333;padding:5px;text-align:center;">Arşiv Tarihi</th></tr></thead><tbody>';
+    list.sort((a,b) => new Date(b.arsivTarihi||0) - new Date(a.arsivTarihi||0)).forEach((s,i) => {
+        html += '<tr><td style="border:1px solid #333;padding:5px;text-align:center;">'+(i+1)+'</td><td style="border:1px solid #333;padding:5px;"><strong>' + escapeHtml(s.ad+' '+s.soyad) + '</strong></td><td style="border:1px solid #333;padding:5px;font-family:monospace;">' + escapeHtml(s.tcNo||'-') + '</td><td style="border:1px solid #333;padding:5px;">' + escapeHtml(s.telefon||'-') + '</td><td style="border:1px solid #333;padding:5px;">' + escapeHtml(s.okul||'-') + '</td><td style="border:1px solid #333;padding:5px;">' + escapeHtml(s.bolum||'-') + '</td><td style="border:1px solid #333;padding:5px;">' + escapeHtml(s.birim||'-') + '</td><td style="border:1px solid #333;padding:5px;text-align:center;">' + (s.baslangic?new Date(s.baslangic).toLocaleDateString('tr-TR'):'-') + ' → ' + (s.bitis?new Date(s.bitis).toLocaleDateString('tr-TR'):'-') + '</td><td style="border:1px solid #333;padding:5px;text-align:center;">' + (s.arsivTarihi?new Date(s.arsivTarihi).toLocaleDateString('tr-TR'):'-') + '</td></tr>';
+    });
+    html += '</tbody></table></div>';
+    openPrintPreview('Stajı Bitenler Listesi', list.length + ' kişi', html);
+}
+
+// Sayfa açıldığında stajyer tablolarını da güncelle
+setTimeout(() => {
+    if(typeof updateStajyerTablolari === 'function') updateStajyerTablolari();
+}, 500);
+// ============================================================
+// ============ EĞİTİM İSTATİSTİK KARTLARI ====================
+// ============================================================
+
+// Eğitim almayanlar sayısı (hiç eğitimi olmayan personel)
+function updateNoTrainingCount(){
+    const el = document.getElementById('noTrainingCount');
+    if(!el) return;
+    const personelSayi = (data.personnel || []).filter(p => !p.trainings || p.trainings.length === 0).length;
+const stajyerSayi = (data.stajyerler || []).filter(s => {
+    if(s.durum === 'arsiv') return false;
+    const durumlar = s.egitimDurumlari || {};
+    return (s.egitimler || []).some(eid => !durumlar[eid]);
+}).length;
+el.textContent = personelSayi + stajyerSayi;
+}
+
+// İstatistik kartı - özet sayı göster
+function updateIstatistikCount(){
+    const el = document.getElementById('istatistikCount');
+    if(!el) return;
+    // Tüm eğitim + sertifika kayıt sayısı
+    let toplam = 0;
+    (data.personnel || []).forEach(p => {
+        toplam += (p.trainings || []).length;
+        toplam += (p.certificates || []).length;
+    });
+    el.textContent = toplam;
+}
+
+// Eğitim Almayanlar modalı - Personel + Stajyer iki ayrı tablo
+function showEgitimAlmayanlar(){
+    if(!isAdmin && !isViewer){ alert('❌ Giriş yapmanız gerekiyor!'); return; }
+    
+    const now = new Date();
+    const soon = new Date(now.getTime() + 30*24*60*60*1000);
+    
+    // ==================== PERSONEL LİSTESİ ====================
+    // Hiç eğitimi olmayan VEYA eğitim süresi dolan/yaklaşan personel
+    const personelList = (data.personnel || []).filter(p => {
+        const t = p.trainings || [];
+        if(t.length === 0) return true;
+        // Süresi dolan veya yaklaşan varsa da göster
+        return t.some(k => {
+            if(!k.expiryDate) return false;
+            const ed = new Date(k.expiryDate);
+            return ed < now || ed <= soon;
+        });
+    }).map(p => {
+        const t = p.trainings || [];
+        // Alınan eğitimler (isimleri)
+        const alinanEgitimler = t.map(k => {
+            let durum = 'gecerli';
+            if(k.expiryDate){
+                const ed = new Date(k.expiryDate);
+                if(ed < now) durum = 'dolan';
+                else if(ed <= soon) durum = 'yaklasan';
+            }
+            return {name: k.name, durum: durum};
+        });
+        // Sistem'deki tüm eğitimlerden eksik olanlar
+        const alinanIsimler = new Set(t.map(k => k.name));
+        const eksikEgitimler = (data.trainings || []).filter(tr => !alinanIsimler.has(tr.name));
+        return { ...p, alinanEgitimler, eksikEgitimler, kaynak: 'personel' };
+    });
+    
+    // ==================== STAJYER LİSTESİ ====================
+    // Aktif stajyerlerden, eğitimleri tamamlanmamış olanlar
+    const stajyerList = (data.stajyerler || []).filter(s => s.durum !== 'arsiv').map(s => {
+        const egitimler = s.egitimler || [];
+        const durumlar = s.egitimDurumlari || {};
+        // Alması gereken eğitimler ve durumları
+        const egitimDetay = egitimler.map(eid => {
+            const t = (data.trainings || []).find(x => x.id === eid);
+            return { id: eid, name: t ? t.name : '-', tamamlandi: !!durumlar[eid] };
+        });
+        const bekleyenSayi = egitimDetay.filter(e => !e.tamamlandi).length;
+        return { ...s, egitimDetay, bekleyenSayi, kaynak: 'stajyer' };
+    }).filter(s => s.bekleyenSayi > 0); // Sadece bekleyen eğitimi olanlar
+    
+    // ==================== HTML OLUŞTUR ====================
+    let html = '';
+    
+    // Üst özet
+    html += '<div class="bg-purple-50 rounded-lg p-3 mb-4 border-2 border-purple-200 text-sm">';
+    html += '<div class="flex justify-between flex-wrap gap-2">';
+    html += '<span><strong>👤 Personel:</strong> ' + personelList.length + ' kişi</span>';
+    html += '<span><strong>🎓 Stajyer:</strong> ' + stajyerList.length + ' kişi</span>';
+    html += '<span><strong>📊 Toplam:</strong> ' + (personelList.length + stajyerList.length) + ' kişi</span>';
+    html += '</div></div>';
+    
+    // ==================== PERSONEL TABLOSU ====================
+    html += '<h3 class="font-bold text-base text-blue-800 mb-2 bg-blue-100 px-3 py-2 rounded-lg border-l-4 border-blue-600">👤 PERSONEL TABLOSU (' + personelList.length + ')</h3>';
+    
+    if(personelList.length === 0){
+        html += '<div class="text-center py-6 bg-green-50 rounded-lg border-2 border-green-200 mb-6"><div class="text-4xl mb-2">✅</div><div class="font-bold text-green-800">Tüm personel eğitimlerini tamamlamış!</div></div>';
+    } else {
+        html += '<div class="overflow-x-auto max-h-[45vh] overflow-y-auto border-2 border-blue-200 rounded-lg mb-6">';
+        html += '<table class="w-full table-auto text-sm">';
+        html += '<thead class="bg-blue-100 sticky top-0 z-10"><tr>';
+        html += '<th class="px-3 py-2 text-left text-xs font-bold" style="width:40px;">#</th>';
+        html += '<th class="px-3 py-2 text-left text-xs font-bold">Ad Soyad</th>';
+        html += '<th class="px-3 py-2 text-left text-xs font-bold" style="width:110px;">TC</th>';
+        html += '<th class="px-3 py-2 text-left text-xs font-bold">Birim</th>';
+        html += '<th class="px-3 py-2 text-left text-xs font-bold" style="width:90px;">Statü</th>';
+        html += '<th class="px-3 py-2 text-left text-xs font-bold">Alması Gereken / Alınan Eğitimler</th>';
+        html += '</tr></thead><tbody>';
+        
+        personelList.slice().sort((a,b) => a.name.localeCompare(b.name, 'tr')).forEach((p, i) => {
+            // Eğitim durumu özeti
+            let egitimHtml = '';
+            
+            // Alınan eğitimler
+            if(p.alinanEgitimler.length > 0){
+                egitimHtml += '<div class="mb-1">';
+                p.alinanEgitimler.forEach(e => {
+                    let icon = '✅', cls = 'bg-green-100 text-green-800 border-green-300';
+                    if(e.durum === 'dolan'){ icon = '❌'; cls = 'bg-red-100 text-red-800 border-red-300'; }
+                    else if(e.durum === 'yaklasan'){ icon = '⏰'; cls = 'bg-yellow-100 text-yellow-800 border-yellow-300'; }
+                    egitimHtml += '<span class="inline-block ' + cls + ' border px-2 py-0.5 rounded text-xs font-bold mr-1 mb-0.5">📚 ' + escapeHtml(e.name) + ' ' + icon + '</span>';
+                });
+                egitimHtml += '</div>';
+            }
+            
+            // Eksik eğitimler
+            if(p.eksikEgitimler.length > 0){
+                egitimHtml += '<div>';
+                p.eksikEgitimler.forEach(tr => {
+                    egitimHtml += '<span class="inline-block bg-purple-100 text-purple-800 border border-purple-300 px-2 py-0.5 rounded text-xs font-bold mr-1 mb-0.5">📌 ' + escapeHtml(tr.name) + ' ⏳</span>';
+                });
+                egitimHtml += '</div>';
+            }
+            
+            if(!egitimHtml) egitimHtml = '<span class="text-gray-400 italic text-xs">-</span>';
+            
+            html += '<tr class="border-b hover:bg-blue-50">';
+            html += '<td class="px-3 py-2 font-bold text-center">' + (i+1) + '</td>';
+            html += '<td class="px-3 py-2"><strong>' + escapeHtml(p.name) + '</strong></td>';
+            html += '<td class="px-3 py-2 font-mono text-xs">' + escapeHtml(p.tcNo||'-') + '</td>';
+            html += '<td class="px-3 py-2 text-xs">' + escapeHtml(p.department||'-') + '</td>';
+            html += '<td class="px-3 py-2 text-xs">' + escapeHtml(p.status||'-') + '</td>';
+            html += '<td class="px-3 py-2">' + egitimHtml + '</td>';
+            html += '</tr>';
+        });
+        
+        html += '</tbody></table></div>';
+    }
+    
+    // ==================== STAJYER TABLOSU ====================
+    html += '<h3 class="font-bold text-base text-emerald-800 mb-2 bg-emerald-100 px-3 py-2 rounded-lg border-l-4 border-emerald-600">🎓 STAJYER TABLOSU (' + stajyerList.length + ')</h3>';
+    
+    if(stajyerList.length === 0){
+        html += '<div class="text-center py-6 bg-green-50 rounded-lg border-2 border-green-200"><div class="text-4xl mb-2">✅</div><div class="font-bold text-green-800">Bekleyen eğitimi olan stajyer yok!</div></div>';
+    } else {
+        html += '<div class="overflow-x-auto max-h-[45vh] overflow-y-auto border-2 border-emerald-200 rounded-lg">';
+        html += '<table class="w-full table-auto text-sm">';
+        html += '<thead class="bg-emerald-100 sticky top-0 z-10"><tr>';
+        html += '<th class="px-3 py-2 text-left text-xs font-bold" style="width:40px;">#</th>';
+        html += '<th class="px-3 py-2 text-left text-xs font-bold">Ad Soyad</th>';
+        html += '<th class="px-3 py-2 text-left text-xs font-bold" style="width:110px;">TC</th>';
+        html += '<th class="px-3 py-2 text-left text-xs font-bold">Okul / Bölüm</th>';
+        html += '<th class="px-3 py-2 text-left text-xs font-bold" style="width:130px;">Birim</th>';
+        html += '<th class="px-3 py-2 text-left text-xs font-bold">Alması Gereken Eğitimler</th>';
+        html += '</tr></thead><tbody>';
+        
+        stajyerList.slice().sort((a,b) => (a.ad||'').localeCompare(b.ad||'', 'tr')).forEach((s, i) => {
+            const initials = ((s.ad||'')[0]||'') + ((s.soyad||'')[0]||'');
+            
+            // Birim gösterimi
+            let birimHtml = '';
+            if(s.birim){
+                birimHtml = '<span class="text-xs font-semibold">' + escapeHtml(s.birim) + '</span>';
+            } else {
+                birimHtml = '<span class="text-xs text-orange-700 font-bold">⏳ Bekliyor</span>';
+            }
+            
+            // Eğitim rozetleri
+            let egitimHtml = '<div>';
+            s.egitimDetay.forEach(e => {
+                let icon = e.tamamlandi ? '✅' : '⏳';
+                let cls = e.tamamlandi ? 'bg-green-100 text-green-800 border-green-300' : 'bg-purple-100 text-purple-800 border-purple-300';
+                egitimHtml += '<span class="inline-block ' + cls + ' border px-2 py-0.5 rounded text-xs font-bold mr-1 mb-0.5">📚 ' + escapeHtml(e.name) + ' ' + icon + '</span>';
+            });
+            egitimHtml += '</div>';
+            
+            html += '<tr class="border-b hover:bg-emerald-50">';
+            html += '<td class="px-3 py-2 font-bold text-center">' + (i+1) + '</td>';
+            html += '<td class="px-3 py-2"><div class="flex items-center gap-2"><div class="w-8 h-8 rounded-full bg-emerald-200 text-emerald-800 flex items-center justify-center font-bold text-xs">' + escapeHtml(initials.toUpperCase()) + '</div><strong>' + escapeHtml(s.ad + ' ' + s.soyad) + '</strong></div></td>';
+            html += '<td class="px-3 py-2 font-mono text-xs">' + escapeHtml(s.tcNo||'-') + '</td>';
+            html += '<td class="px-3 py-2 text-xs"><div class="font-semibold">' + escapeHtml(s.okul||'-') + '</div><div class="text-gray-500">' + escapeHtml(s.bolum||'-') + '</div></td>';
+            html += '<td class="px-3 py-2">' + birimHtml + '</td>';
+            html += '<td class="px-3 py-2">' + egitimHtml + '</td>';
+            html += '</tr>';
+        });
+        
+        html += '</tbody></table></div>';
+    }
+    
+    // ==================== MODAL BAŞLIĞI VE GÖSTER ====================
+    document.getElementById('trainingDetailIcon').innerHTML = '📊';
+    document.getElementById('trainingDetailTitle').textContent = 'Eğitim Almayanlar';
+    const sub = document.getElementById('trainingDetailSubTitle');
+    if(sub) sub.textContent = 'Personel ve stajyer eğitim durumu özeti';
+    
+    trainingDetailFilterState.activeFilters = {};
+    trainingDetailFilterState.sortColumn = null;
+    trainingDetailFilterState.detailType = 'noTraining';
+    
+    document.getElementById('trainingDetailContent').innerHTML = html;
+    showModal('trainingDetailModal');
+}
+
+// Genel İstatistik modalı
+function openGenelIstatistikModal(){
+    if(!isAdmin && !isViewer){ alert('❌ Giriş yapmanız gerekiyor!'); return; }
+    
+    const now = new Date();
+    const soon = new Date(now.getTime() + 30*24*60*60*1000);
+    
+    let toplamEgitimKayit = 0;
+    let toplamSertifikaKayit = 0;
+    let gecerliEgitim = 0;
+    let yaklasanEgitim = 0;
+    let dolanEgitim = 0;
+    let gecerliSertifika = 0;
+    let yaklasanSertifika = 0;
+    let dolanSertifika = 0;
+    let egitimAlmayanPersonel = 0;
+    let hicSertifikasiz = 0;
+    
+    (data.personnel || []).forEach(p => {
+        const tList = p.trainings || [];
+        const cList = p.certificates || [];
+        
+        if(tList.length === 0) egitimAlmayanPersonel++;
+        if(cList.length === 0) hicSertifikasiz++;
+        
+        tList.forEach(t => {
+            toplamEgitimKayit++;
+            if(t.expiryDate){
+                const ed = new Date(t.expiryDate);
+                if(ed < now) dolanEgitim++;
+                else if(ed <= soon) yaklasanEgitim++;
+                else gecerliEgitim++;
+            } else {
+                gecerliEgitim++;
+            }
+        });
+        
+        cList.forEach(c => {
+            toplamSertifikaKayit++;
+            if(c.expiryDate){
+                const ed = new Date(c.expiryDate);
+                if(ed < now) dolanSertifika++;
+                else if(ed <= soon) yaklasanSertifika++;
+                else gecerliSertifika++;
+            } else {
+                gecerliSertifika++;
+            }
+        });
+    });
+    
+    let html = '<div style="font-family:Arial,sans-serif;padding:10px;">';
+    
+    // Özet kutular
+    html += '<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:16px;">';
+    html += '<div style="background:#e0e7ff;border:2px solid #6366f1;border-radius:8px;padding:12px;text-align:center;"><div style="font-size:11px;font-weight:bold;color:#4338ca;text-transform:uppercase;">👥 Toplam Personel</div><div style="font-size:24px;font-weight:bold;color:#3730a3;">' + data.personnel.length + '</div></div>';
+    html += '<div style="background:#fef3c7;border:2px solid #f59e0b;border-radius:8px;padding:12px;text-align:center;"><div style="font-size:11px;font-weight:bold;color:#92400e;text-transform:uppercase;">📚 Toplam Eğitim Kaydı</div><div style="font-size:24px;font-weight:bold;color:#78350f;">' + toplamEgitimKayit + '</div></div>';
+    html += '<div style="background:#dbeafe;border:2px solid #3b82f6;border-radius:8px;padding:12px;text-align:center;"><div style="font-size:11px;font-weight:bold;color:#1e40af;text-transform:uppercase;">📜 Toplam Sertifika</div><div style="font-size:24px;font-weight:bold;color:#1e3a8a;">' + toplamSertifikaKayit + '</div></div>';
+    html += '<div style="background:#fce7f3;border:2px solid #ec4899;border-radius:8px;padding:12px;text-align:center;"><div style="font-size:11px;font-weight:bold;color:#9d174d;text-transform:uppercase;">👤 Eğitim Almayan</div><div style="font-size:24px;font-weight:bold;color:#831843;">' + egitimAlmayanPersonel + '</div></div>';
+    html += '</div>';
+    
+    // Eğitim detay
+    html += '<h3 style="background:#7c3aed;color:#fff;padding:8px 12px;margin:14px 0 8px;font-size:13px;border-radius:6px;">📚 EĞİTİM DURUMU</h3>';
+    html += '<table style="width:100%;border-collapse:collapse;font-size:12px;">';
+    html += '<tr><td style="border:1px solid #999;padding:8px;background:#dcfce7;font-weight:bold;">✅ Geçerli Eğitim</td><td style="border:1px solid #999;padding:8px;text-align:center;font-weight:bold;color:#16a34a;">' + gecerliEgitim + '</td></tr>';
+    html += '<tr><td style="border:1px solid #999;padding:8px;background:#fef3c7;font-weight:bold;">⏰ Yaklaşan (30 gün)</td><td style="border:1px solid #999;padding:8px;text-align:center;font-weight:bold;color:#d97706;">' + yaklasanEgitim + '</td></tr>';
+    html += '<tr><td style="border:1px solid #999;padding:8px;background:#fee2e2;font-weight:bold;">❌ Süresi Dolan</td><td style="border:1px solid #999;padding:8px;text-align:center;font-weight:bold;color:#dc2626;">' + dolanEgitim + '</td></tr>';
+    html += '</table>';
+    
+    // Sertifika detay
+    html += '<h3 style="background:#0891b2;color:#fff;padding:8px 12px;margin:14px 0 8px;font-size:13px;border-radius:6px;">📜 SERTİFİKA DURUMU</h3>';
+    html += '<table style="width:100%;border-collapse:collapse;font-size:12px;">';
+    html += '<tr><td style="border:1px solid #999;padding:8px;background:#dcfce7;font-weight:bold;">✅ Geçerli Sertifika</td><td style="border:1px solid #999;padding:8px;text-align:center;font-weight:bold;color:#16a34a;">' + gecerliSertifika + '</td></tr>';
+    html += '<tr><td style="border:1px solid #999;padding:8px;background:#fef3c7;font-weight:bold;">⏰ Yaklaşan (30 gün)</td><td style="border:1px solid #999;padding:8px;text-align:center;font-weight:bold;color:#d97706;">' + yaklasanSertifika + '</td></tr>';
+    html += '<tr><td style="border:1px solid #999;padding:8px;background:#fee2e2;font-weight:bold;">❌ Süresi Dolan</td><td style="border:1px solid #999;padding:8px;text-align:center;font-weight:bold;color:#dc2626;">' + dolanSertifika + '</td></tr>';
+    html += '<tr><td style="border:1px solid #999;padding:8px;background:#f3f4f6;font-weight:bold;">👤 Hiç Sertifikası Olmayan</td><td style="border:1px solid #999;padding:8px;text-align:center;font-weight:bold;color:#4b5563;">' + hicSertifikasiz + '</td></tr>';
+    html += '</table>';
+    
+    // Birim bazlı dağılım
+    html += '<h3 style="background:#4f46e5;color:#fff;padding:8px 12px;margin:14px 0 8px;font-size:13px;border-radius:6px;">🏢 BİRİM BAZLI DAĞILIM</h3>';
+    const birimMap = {};
+    (data.personnel || []).forEach(p => {
+        const dept = p.department || '(Boş)';
+        if(!birimMap[dept]) birimMap[dept] = {personel: 0, egitim: 0, sertifika: 0};
+        birimMap[dept].personel++;
+        birimMap[dept].egitim += (p.trainings || []).length;
+        birimMap[dept].sertifika += (p.certificates || []).length;
+    });
+    html += '<table style="width:100%;border-collapse:collapse;font-size:11px;">';
+    html += '<thead><tr style="background:#e0e7ff;"><th style="border:1px solid #999;padding:6px;text-align:left;">Birim</th><th style="border:1px solid #999;padding:6px;text-align:center;">Personel</th><th style="border:1px solid #999;padding:6px;text-align:center;">Eğitim</th><th style="border:1px solid #999;padding:6px;text-align:center;">Sertifika</th></tr></thead><tbody>';
+    Object.keys(birimMap).sort((a,b) => a.localeCompare(b,'tr')).forEach(dept => {
+        const d = birimMap[dept];
+        html += '<tr><td style="border:1px solid #999;padding:6px;"><strong>' + escapeHtml(dept) + '</strong></td><td style="border:1px solid #999;padding:6px;text-align:center;">' + d.personel + '</td><td style="border:1px solid #999;padding:6px;text-align:center;">' + d.egitim + '</td><td style="border:1px solid #999;padding:6px;text-align:center;">' + d.sertifika + '</td></tr>';
+    });
+    html += '</tbody></table>';
+    
+    html += '<div style="margin-top:16px;text-align:center;font-size:10px;color:#666;border-top:1px solid #ccc;padding-top:8px;">Oluşturulma: ' + new Date().toLocaleString('tr-TR') + ' | ATTİ Raylı Sistem</div>';
+    html += '</div>';
+    
+    document.getElementById('trainingDetailIcon').innerHTML = '📈';
+    document.getElementById('trainingDetailTitle').textContent = 'Genel Eğitim İstatistikleri';
+    const sub = document.getElementById('trainingDetailSubTitle');
+    if(sub) sub.textContent = 'Eğitim ve sertifika durumları özeti';
+    
+    trainingDetailFilterState.activeFilters = {};
+    trainingDetailFilterState.sortColumn = null;
+    trainingDetailFilterState.detailType = 'istatistik';
+    
+    document.getElementById('trainingDetailContent').innerHTML = html;
+    showModal('trainingDetailModal');
+}
 </script>
 
 
