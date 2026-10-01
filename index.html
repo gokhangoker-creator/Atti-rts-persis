@@ -662,13 +662,7 @@ body.viewer-mode #loginModal *{pointer-events:auto!important;opacity:1!important
 </div>
 </div>
 </div>
-<div class="bg-white rounded-xl shadow-xl p-6">
-<div class="flex items-center justify-between mb-4 flex-wrap gap-3">
-<div class="flex items-center"><div class="p-3 rounded-full bg-cyan-100 text-cyan-600 text-2xl mr-3">📚</div><h3 class="text-xl font-bold">Tanımlı Eğitimler</h3></div>
-<button onclick="openNewTrainingModal()" class="admin-only-btn bg-indigo-500 text-white px-4 py-2 rounded-lg font-medium">➕ Yeni Eğitim Ekle</button>
-</div>
-<div id="trainingListDisplay" class="overflow-x-auto"><table class="egitim-tablo"><thead><tr><th style="width:60px;">#</th><th>Eğitim Adı</th><th>Eğitim Konusu</th><th>Eğitmen</th><th style="width:80px;text-align:center;">Süre (ay)</th><th style="width:80px;text-align:center;">Saat</th><th>Eğitim Yeri</th><th style="width:120px;text-align:center;">İşlem</th></tr></thead><tbody><tr><td>1</td><td><strong>İş Güvenliği Temel Eğitimi</strong></td><td>-</td><td>Ahmet Yılmaz</td><td style="text-align:center;">12</td><td style="text-align:center;">16</td><td>Yüz Yüze - Sınıf</td><td style="text-align:center;">-</td></tr><tr><td>2</td><td><strong>Yangın Güvenliği</strong></td><td>-</td><td>Mehmet Demir</td><td style="text-align:center;">24</td><td style="text-align:center;">8</td><td>Yüz Yüze - Sınıf</td><td style="text-align:center;">-</td></tr></tbody></table></div>
-</div>
+
 
 <!-- ==================== EĞİTİM KATILIM FORMLARI (EKLENDİ) ==================== -->
 <div class="bg-white rounded-xl shadow-xl p-6 mt-6">
@@ -686,12 +680,12 @@ body.viewer-mode #loginModal *{pointer-events:auto!important;opacity:1!important
         <table class="w-full table-auto" id="egitimKatilimFormlariTable">
             <thead class="bg-emerald-50">
                 <tr>
-                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase" style="width:130px;">Form No</th>
-                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Eğitim Ad(lar)ı</th>
-                    <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase" style="width:110px;">Tarih</th>
-                    <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase" style="width:100px;">Katılımcı</th>
-                    <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase" style="width:110px;">Durum</th>
-                    <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase" style="width:260px;">İşlem</th>
+                    <th class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase col-filter-header" data-col="formNo" onclick="openEkfColFilter(event,'formNo')" style="width:130px;cursor:pointer;user-select:none;">Form No <span style="font-size:9px;">▼</span></th>
+                    <th class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase col-filter-header" data-col="egitimAdi" onclick="openEkfColFilter(event,'egitimAdi')" style="cursor:pointer;user-select:none;">Eğitim Ad(lar)ı ▼<span style="font-size:9px;">▼</span></th>
+                    <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase col-filter-header" data-col="egitimTarihi" onclick="openEkfColFilter(event,'egitimTarihi')" style="width:110px;cursor:pointer;user-select:none;">Tarih ▼<span style="font-size:9px;">▼</span></th>
+                    <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase col-filter-header" data-col="katilimciSayisi" onclick="openEkfColFilter(event,'katilimciSayisi')" style="width:100px;cursor:pointer;user-select:none;">Katılımcı ▼<span style="font-size:9px;">▼</span></th>
+                    <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase col-filter-header" data-col="durum" onclick="openEkfColFilter(event,'durum')" style="width:110px;cursor:pointer;user-select:none;">Durum ▼<span style="font-size:9px;">▼</span></th>
+                    <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase" style="width:260px;">İşlem<span style="font-size:9px;">▼</span></th>
                 </tr>
             </thead>
             <tbody id="egitimKatilimFormlariBody" class="bg-white divide-y divide-gray-200">
@@ -2086,13 +2080,8 @@ Görev Raporu / Kontrol Formu <span class="text-red-600">*</span>
 <p id="trainingDetailSubTitle" class="text-xs text-gray-500 mt-1">Sütun başlıklarına tıklayarak filtreleyin ve sıralayın</p>
 </div>
 <div id="trainingDetailContent"></div>
-<div class="flex justify-between items-center mt-5 flex-wrap gap-3">
-<div class="flex gap-2 flex-wrap items-center">
-<label class="flex items-center gap-2 bg-indigo-50 px-3 py-2 rounded-lg border border-indigo-200 cursor-pointer text-sm font-medium text-indigo-800"><input type="checkbox" id="selectAllDetail" onchange="toggleSelectAllDetail(this.checked)" class="w-4 h-4">☑️ Tümünü Seç</label>
-<button onclick="exportTrainingDetail()" class="bg-green-600 text-white px-4 py-2 rounded-lg font-medium">📊 Excel</button>
-<button onclick="printTrainingDetail()" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium">🖨️ Seçili Yazdır</button>
-</div>
-<button onclick="hideModal('trainingDetailModal')" class="bg-gray-500 text-white px-6 py-2 rounded-lg font-medium">Kapat</button>
+<div class="flex justify-end items-center mt-5 pt-4 border-t-2 border-gray-200">
+<button onclick="hideModal('trainingDetailModal')" class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded-lg font-medium">Kapat</button>
 </div>
 </div>
 </div>
@@ -2662,8 +2651,8 @@ Sadece seçili görevlerde işlem yapabilsin
 </div>
 
 <!-- ==================== EĞİTİM KATILIM FORMU ÖNİZLEME / YAZDIRMA MODAL ==================== -->
-<div id="ekfOnizlemeModal" class="modal hidden fixed inset-0 bg-black bg-opacity-70 items-center justify-center z-[96]">
-<div class="bg-white rounded-xl p-6 w-[1200px] max-w-[98vw] shadow-2xl relative max-h-[96vh] overflow-y-auto">
+<div id="ekfOnizlemeModal" class="modal hidden fixed inset-0 bg-black bg-opacity-70 overflow-y-auto z-[96] p-4">
+<div class="bg-white rounded-xl p-6 w-[1200px] max-w-[98vw] shadow-2xl relative mx-auto my-4">
 <button onclick="hideModal('ekfOnizlemeModal')" class="no-print absolute top-4 right-4 text-gray-400 text-2xl font-bold">✕</button>
 <div class="no-print text-center mb-4">
 <div class="w-16 h-16 mx-auto mb-3 rounded-full bg-gradient-to-r from-emerald-500 to-teal-600 flex items-center justify-center text-white text-2xl">🖨️</div>
@@ -3038,7 +3027,7 @@ function migrateData(){
     if(!data.stajyerler)data.stajyerler=[];
     if(!data.clothing||data.clothing.length===0){data.clothing=[];legacyClothing.forEach(c=>{const hasE=c.genders&&c.genders['E']&&c.genders['E'].sizes&&Object.keys(c.genders['E'].sizes).length>0;const hasK=c.genders&&c.genders['K']&&c.genders['K'].sizes&&Object.keys(c.genders['K'].sizes).length>0;if(hasE&&hasK){const eCopy=JSON.parse(JSON.stringify(c));eCopy.gender='E';eCopy.genders={'E':JSON.parse(JSON.stringify(c.genders['E']))};data.clothing.push(convertClothingToStatusBased(eCopy));const kCopy=JSON.parse(JSON.stringify(c));kCopy.gender='K';kCopy.genders={'K':JSON.parse(JSON.stringify(c.genders['K']))};data.clothing.push(convertClothingToStatusBased(kCopy));}else if(hasE){c.gender='E';data.clothing.push(convertClothingToStatusBased(JSON.parse(JSON.stringify(c))));}else if(hasK){c.gender='K';data.clothing.push(convertClothingToStatusBased(JSON.parse(JSON.stringify(c))));}});}
     data.clothing.forEach(c=>{if(!c.stockByStatus)c.stockByStatus={};if(!c.season)c.season='tum';if(!c.gender)c.gender='U';data.statuses.forEach(s=>{if(!c.stockByStatus[s])c.stockByStatus[s]={genders:{'E':{sizes:{}},'K':{sizes:{}}}};if(!c.stockByStatus[s].genders)c.stockByStatus[s].genders={'E':{sizes:{}},'K':{sizes:{}}};['E','K'].forEach(g=>{if(!c.stockByStatus[s].genders[g])c.stockByStatus[s].genders[g]={sizes:{}};if(!c.stockByStatus[s].genders[g].sizes)c.stockByStatus[s].genders[g].sizes={};});});});
-    data.personnel.forEach(p=>{if(!p.trainings)p.trainings=[];if(!p.certificates)p.certificates=[];if(!p.status)p.status='Memur';if(!p.liseOkul)p.liseOkul='';if(!p.myoOkul)p.myoOkul='';if(!p.universiteOkul)p.universiteOkul='';if(!p.yuksekLisansOkul)p.yuksekLisansOkul='';if(p.gorevTanimRevNo===undefined)p.gorevTanimRevNo=0;if(!p.gorevTanimFields)p.gorevTanimFields=[];if(!p.gorevTanimSignatures)p.gorevTanimSignatures=[];if(p.gorevTanimTebligYapildi===undefined)p.gorevTanimTebligYapildi=false;if(!p.gorevTanimSablonAdi)p.gorevTanimSablonAdi='';});
+   data.personnel.forEach(p=>{if(!p.trainings)p.trainings=[];if(!p.requiredTrainings)p.requiredTrainings=[];if(!p.certificates)p.certificates=[];if(!p.status)p.status='Memur';if(!p.liseOkul)p.liseOkul='';if(!p.myoOkul)p.myoOkul='';if(!p.universiteOkul)p.universiteOkul='';if(!p.yuksekLisansOkul)p.yuksekLisansOkul='';if(p.gorevTanimRevNo===undefined)p.gorevTanimRevNo=0;if(!p.gorevTanimFields)p.gorevTanimFields=[];if(!p.gorevTanimSignatures)p.gorevTanimSignatures=[];if(p.gorevTanimTebligYapildi===undefined)p.gorevTanimTebligYapildi=false;if(!p.gorevTanimSablonAdi)p.gorevTanimSablonAdi='';});
     data.kkds.forEach(k=>{if(k.perPerson===undefined)k.perPerson=1});
     data.trainings.forEach((t,i)=>{if(!t.id)t.id=Date.now()+i;if(!t.subject)t.subject='';});
     data.certificates.forEach((c,i)=>{if(!c.id)c.id=Date.now()+i+1000});
@@ -4441,7 +4430,7 @@ function addPersonnel(){
     
     if(muafiyetTable.length>0&&fiiliGorev){let enIyi=null,enIyiOran=0;muafiyetTable.forEach(r=>{const o=meslekEslesmeOrani(fiiliGorev,r);if(o>enIyiOran){enIyiOran=o;enIyi=r;}});if(enIyi){mykEslesenYK=(enIyi.ykKodu||'')+' - '+(enIyi.ykAdi||'');mykMuafOran=enIyiOran;}}
     
-    const np={id:editingPersonnelId||Date.now(),tcNo,name,status,title,department,job,phone,gender,trainings:[],certificates:[],kkds:[],clothing:[],requiredKkds:[],requiredClothing:[],fiiliGorev,lise,liseOkul,onlisans,myoOkul,universite,universiteOkul,yuksekLisans,yuksekLisansOkul,ustalikDal,ustalikYil,mykDurum,mykEslesenYK,mykMuafOran,mykZorunlulukVar,mykAranmaz,mykBelgesiVar:mykBelgesiVar,mykMuaf:mykMuaf,mykYok:mykYok,
+    const np={id:editingPersonnelId||Date.now(),tcNo,name,status,title,department,job,phone,gender,trainings:[],requiredTrainings:[],certificates:[],certificates:[],kkds:[],clothing:[],requiredKkds:[],requiredClothing:[],fiiliGorev,lise,liseOkul,onlisans,myoOkul,universite,universiteOkul,yuksekLisans,yuksekLisansOkul,ustalikDal,ustalikYil,mykDurum,mykEslesenYK,mykMuafOran,mykZorunlulukVar,mykAranmaz,mykBelgesiVar:mykBelgesiVar,mykMuaf:mykMuaf,mykYok:mykYok,
         gorevTanimSablonId:personelGorevTanimSablonId,
         gorevTanimSablonAdi:(personelGorevTanimSablonId && document.getElementById('personnelGorevTanimSablon').selectedOptions[0])?document.getElementById('personnelGorevTanimSablon').selectedOptions[0].textContent:'',
         gorevTanimFields:JSON.parse(JSON.stringify(personelGorevTanimFields)),
@@ -4449,7 +4438,20 @@ function addPersonnel(){
         gorevTanimTebligYapildi:personelGorevTanimTebligYapildi,
         gorevTanimRevNo:personelGorevTanimRevNo
     };
-    selectedTrainings.forEach(item=>{const t=data.trainings[item.index];if(!t)return;const cd=item.completedDate?new Date(item.completedDate):new Date();const ed=new Date(cd);ed.setMonth(ed.getMonth()+(t.duration||12));np.trainings.push({name:t.name,duration:t.duration,completedDate:cd,expiryDate:ed,instructor:t.instructor,hours:t.hours,location:t.location});});
+        // Seçilen eğitimler → "alması gereken" olarak kaydedilir (henüz alınmadı)
+    selectedTrainings.forEach(item=>{
+        const t=data.trainings[item.index];
+        if(!t)return;
+        np.requiredTrainings.push({
+            id: t.id,
+            name: t.name,
+            duration: t.duration||12,
+            instructor: t.instructor||'',
+            hours: t.hours||0,
+            location: t.location||'',
+            subject: t.subject||''
+        });
+    });
     selectedCertificates.forEach(item=>{const cert=data.certificates[item.index];if(!cert)return;const gd=new Date(item.givenDate);const ed=new Date(item.givenDate);ed.setMonth(ed.getMonth()+(cert.duration||12));np.certificates.push({name:cert.name,duration:cert.duration,issuer:cert.issuer,givenDate:gd,expiryDate:ed});});
     selectedKkds.forEach(i=>{const k=data.kkds[i];if(k)np.requiredKkds.push({name:k.name,perPerson:k.perPerson||1});});
     selectedClothing.forEach(item=>{const c=data.clothing[item.index];if(c)np.requiredClothing.push({name:c.name,gender:item.gender,size:item.size,status:item.status||status,season:c.season||'tum'});});
@@ -4461,7 +4463,9 @@ function updatePersonnelTable(list){
     const tb=document.getElementById('personnelTable');if(!tb)return;tb.innerHTML='';
     let arr = list || data.personnel.slice();
     (arr).forEach(p=>{
-        const trainCount=(p.trainings||[]).length;const certCount=(p.certificates||[]).length;
+                const trainCount=(p.trainings||[]).length;
+        const reqCount=(p.requiredTrainings||[]).length;
+        const certCount=(p.certificates||[]).length;
         let mykBadge='-';
         if(p.mykDurum==='Muaf')mykBadge='<span class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs font-bold">✅ MUAF</span>';
         else if(p.mykDurum==='Sertifika')mykBadge='<span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs font-bold">📜 SERTİFİKA</span>';
@@ -4475,7 +4479,7 @@ function updatePersonnelTable(list){
         let actionsHtml='';
         if(isAdmin){actionsHtml='<button onclick="editPersonnel('+p.id+')" class="text-green-600 mr-2">✏️</button><button onclick="deletePersonnel('+p.id+')" class="text-red-600">🗑️</button>';}
         else{actionsHtml='<span class="text-gray-300">-</span>';}
-        tb.innerHTML+='<tr class="hover:bg-gray-50"><td class="px-6 py-4 text-sm font-mono">'+escapeHtml(p.tcNo)+'</td><td class="px-6 py-4 text-sm font-medium">'+escapeHtml(p.name)+'</td><td class="px-6 py-4"><span class="px-3 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-800">'+escapeHtml(p.status)+'</span></td><td class="px-6 py-4 text-sm">'+escapeHtml(p.title)+'</td><td class="px-6 py-4 text-sm">'+escapeHtml(p.department)+'</td><td class="px-6 py-4 text-sm"><span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs font-semibold">📚 '+trainCount+'</span></td><td class="px-6 py-4 text-sm"><span class="bg-cyan-100 text-cyan-800 px-2 py-1 rounded text-xs font-semibold">📜 '+certCount+'</span></td><td class="px-6 py-4 text-sm">'+mykBadge+'</td><td class="px-6 py-4 text-sm">'+gtHtml+'</td><td class="px-6 py-4 text-sm">'+actionsHtml+'</td></tr>';
+        tb.innerHTML+='<tr class="hover:bg-gray-50"><td class="px-6 py-4 text-sm font-mono">'+escapeHtml(p.tcNo)+'</td><td class="px-6 py-4 text-sm font-medium">'+escapeHtml(p.name)+'</td><td class="px-6 py-4"><span class="px-3 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-800">'+escapeHtml(p.status)+'</span></td><td class="px-6 py-4 text-sm">'+escapeHtml(p.title)+'</td><td class="px-6 py-4 text-sm">'+escapeHtml(p.department)+'</td><td class="px-6 py-4 text-sm"><span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs font-semibold" title="Alınan: '+trainCount+' / Alınacak: '+reqCount+'">📚 '+trainCount+(reqCount>0?' <span class="bg-purple-100 text-purple-800 px-1 rounded text-xs">⏳'+reqCount+'</span>':'')+'</span></td><td class="px-6 py-4 text-sm"><span class="bg-cyan-100 text-cyan-800 px-2 py-1 rounded text-xs font-semibold">📜 '+certCount+'</span></td><td class="px-6 py-4 text-sm">'+mykBadge+'</td><td class="px-6 py-4 text-sm">'+gtHtml+'</td><td class="px-6 py-4 text-sm">'+actionsHtml+'</td></tr>';
     });
 }
 function editPersonnel(id){
@@ -4518,8 +4522,19 @@ function editPersonnel(id){
         document.getElementById('personnelMyoOkul').value=p.myoOkul||'';
         document.getElementById('personnelUniversiteOkul').value=p.universiteOkul||'';
         document.getElementById('personnelYuksekLisansOkul').value=p.yuksekLisansOkul||'';
-        selectedTrainings=[];
-        (p.trainings||[]).forEach(t=>{const i=data.trainings.findIndex(x=>x.name===t.name);if(i!==-1)selectedTrainings.push({index:i,completedDate:new Date(t.completedDate).toISOString().split('T')[0]});});
+                selectedTrainings=[];
+        // Alması gereken eğitimleri yükle (yeni sistem)
+        (p.requiredTrainings||[]).forEach(rt=>{
+            const i = data.trainings.findIndex(x => x.id === rt.id || x.name === rt.name);
+            if(i !== -1) selectedTrainings.push({index: i});
+        });
+        // Eski kayıtlarda requiredTrainings yoksa trainings'ten de yükle (geriye dönük uyumluluk)
+        if((p.requiredTrainings||[]).length === 0 && (p.trainings||[]).length > 0){
+            (p.trainings||[]).forEach(t=>{
+                const i = data.trainings.findIndex(x => x.name === t.name);
+                if(i !== -1) selectedTrainings.push({index: i});
+            });
+        }
         selectedCertificates=[];
         (p.certificates||[]).forEach(cert=>{const i=data.certificates.findIndex(x=>x.name===cert.name);if(i!==-1)selectedCertificates.push({index:i,givenDate:new Date(cert.givenDate).toISOString().split('T')[0]});});
         selectedKkds=[];
@@ -10683,8 +10698,8 @@ function ekfRenderOtomatikListeler(){
     
     const egitimAdlari = ekfEgitimSatirlari.filter(e => e.ad).map(e => e.ad);
     
-    // ==================== PERSONEL TARAMA ====================
     (data.personnel || []).forEach(p => {
+        // === FİLTRE KONTROLÜ ===
         if(filtreBirim && (p.department || '') !== filtreBirim) return;
         if(filtreStatu && (p.status || '') !== filtreStatu) return;
         
@@ -10701,64 +10716,27 @@ function ekfRenderOtomatikListeler(){
                 const gunFark = Math.ceil((ed - now) / (1000*60*60*24));
                 if(ed < now){
                     if(enKotuDurum !== 'doldu' || gunFark < enKotuGun){
-                        enKotuDurum = 'doldu'; enKotuGun = gunFark; egitimAdiDetay = egitimAdi;
+                        enKotuDurum = 'doldu';
+                        enKotuGun = gunFark;
+                        egitimAdiDetay = egitimAdi;
                     }
                 } else if(ed <= otuzGunSonra){
                     if(enKotuDurum !== 'doldu' && enKotuDurum !== 'yaklasiyor'){
-                        enKotuDurum = 'yaklasiyor'; enKotuGun = gunFark; egitimAdiDetay = egitimAdi;
+                        enKotuDurum = 'yaklasiyor';
+                        enKotuGun = gunFark;
+                        egitimAdiDetay = egitimAdi;
                     } else if(enKotuDurum === 'yaklasiyor' && gunFark < enKotuGun){
-                        enKotuGun = gunFark; egitimAdiDetay = egitimAdi;
+                        enKotuGun = gunFark;
+                        egitimAdiDetay = egitimAdi;
                     }
                 }
             }
         });
         
-        const kayitObj = {id: p.id, name: p.name, department: p.department, tcNo: p.tcNo, status: p.status, kaynak: 'personel'};
+        const kayitObj = {id: p.id, name: p.name, department: p.department, tcNo: p.tcNo, status: p.status};
         if(enKotuDurum === 'doldu') dolanlar.push({...kayitObj, gun: enKotuGun, egitimAdi: egitimAdiDetay});
         else if(enKotuDurum === 'yaklasiyor') yaklasanlar.push({...kayitObj, gun: enKotuGun, egitimAdi: egitimAdiDetay});
         else if(enKotuDurum === 'hic') hicAlmamislar.push({...kayitObj, egitimAdi: egitimAdiDetay});
-    });
-    
-    // ==================== STAJYER TARAMA ====================
-    (data.stajyerler || []).forEach(s => {
-        if(s.durum === 'arsiv') return;
-        if(filtreBirim && (s.birim || '') !== filtreBirim) return;
-        if(filtreStatu && filtreStatu !== 'Stajyer') return; // statü filtresi varsa ve Stajyer değilse atla
-        
-        const isim = s.ad + ' ' + s.soyad;
-        const egitimler = s.egitimler || [];
-        const durumlar = s.egitimDurumlari || {};
-        
-        // Bu stajyerin alması gereken eğitimler arasında form eğitimlerinden olan var mı?
-        let enKotuDurum = null;
-        let enKotuGun = 999999;
-        let egitimAdiDetay = '';
-        
-        egitimAdlari.forEach(egitimAdi => {
-            // Stajyerin alması gereken eğitimler arasında bu eğitim var mı?
-            const egitimObj = (data.trainings || []).find(t => t.name === egitimAdi);
-            if(!egitimObj) return;
-            
-            const stajyerEgitimVar = egitimler.includes(egitimObj.id);
-            if(!stajyerEgitimVar){
-                // Bu eğitim stajyerin listesinde değil, atla
-                return;
-            }
-            
-            const tamamlandi = !!durumlar[egitimObj.id];
-            if(!tamamlandi){
-                // Hiç tamamlanmamış → "hiç almamış" olarak say
-                if(enKotuDurum === null){
-                    enKotuDurum = 'hic';
-                    egitimAdiDetay = egitimAdi;
-                }
-            }
-            // Not: Stajyer eğitimleri tamamlandığında expiryDate tutmuyoruz
-            // Sadece tamamlandı/tamamlanmadı var
-        });
-        
-        const kayitObj = {id: s.id, name: isim, department: s.birim || '', tcNo: s.tcNo, status: 'Stajyer', kaynak: 'stajyer'};
-        if(enKotuDurum === 'hic') hicAlmamislar.push({...kayitObj, egitimAdi: egitimAdiDetay});
     });
     
     dolanlar.sort((a,b) => a.gun - b.gun);
@@ -10779,54 +10757,52 @@ function ekfRenderOtomatikListeler(){
         filtreInfoHtml = '<div class="bg-purple-100 border-2 border-purple-400 rounded-lg p-2 mb-3 text-xs text-purple-900 font-bold">🔍 Aktif Filtre: ' + parts.join(' • ') + ' <button onclick="ekfFiltreTemizle()" class="ml-2 bg-red-500 text-white px-2 py-0.5 rounded text-xs">✕ Temizle</button></div>';
     }
     
+    // Gösterilecek gruplar (durum filtresi varsa sadece o grubu göster)
     const gosterDoldu = !filtreDurum || filtreDurum === 'doldu';
     const gosterYaklasan = !filtreDurum || filtreDurum === 'yaklasiyor';
     const gosterHic = !filtreDurum || filtreDurum === 'hic';
     
     let html = filtreInfoHtml;
     
-    // === DOLANLAR ===
+    // DOLANLAR
     if(gosterDoldu){
         html += '<div class="bg-red-50 rounded-lg p-3 border-2 border-red-300">';
         html += '<div class="flex justify-between items-center mb-2"><h5 class="font-bold text-red-900 text-sm">🔴 Süresi DOLANLAR (' + dolanlar.length + ')</h5><button onclick="ekfGrupSec(\'doldu\', true)" class="text-xs bg-red-600 text-white px-2 py-1 rounded font-bold">Tümünü Seç</button></div>';
-        if(dolanlar.length === 0){ html += '<div class="text-xs text-gray-500 italic">' + (filtreVar ? 'Bu filtreye uyan kişi yok' : 'Süresi dolan personel yok') + '</div>'; }
+        if(dolanlar.length === 0){ html += '<div class="text-xs text-gray-500 italic">' + (filtreVar ? 'Bu filtreye uyan personel yok' : 'Bu eğitim(ler) için süresi dolan personel yok') + '</div>'; }
         else {
             dolanlar.forEach(p => {
                 const chk = ekfSeciliKatilimcilar[p.id] ? 'checked' : '';
-                const kaynakBadge = p.kaynak === 'stajyer' ? '<span class="text-xs bg-emerald-200 text-emerald-900 px-1.5 py-0.5 rounded ml-1">🎓 Stajyer</span>' : '';
-                html += '<label class="flex items-center gap-2 p-2 rounded hover:bg-red-100 cursor-pointer text-sm"><input type="checkbox" class="ekf-katilimci-cb" data-kaynak="doldu" data-pid="' + p.id + '" data-name="' + escapeHtml(p.name) + '" data-dept="' + escapeHtml(p.department||'') + '" data-status="' + escapeHtml(p.status||'') + '" data-egitim="' + escapeHtml(p.egitimAdi||'') + '" data-tip="' + p.kaynak + '" ' + chk + ' onchange="ekfKatilimciToggle(this)"><span class="flex-1">👤 <strong>' + escapeHtml(p.name) + '</strong> ' + kaynakBadge + ' <span class="text-xs text-gray-500">(' + escapeHtml(p.department||'-') + ' • ' + escapeHtml(p.status||'-') + ')</span></span><span class="text-xs text-red-700 font-bold">' + Math.abs(p.gun) + ' gün gecikme</span></label>';
+                html += '<label class="flex items-center gap-2 p-2 rounded hover:bg-red-100 cursor-pointer text-sm"><input type="checkbox" class="ekf-katilimci-cb" data-kaynak="doldu" data-pid="' + p.id + '" data-name="' + escapeHtml(p.name) + '" data-dept="' + escapeHtml(p.department||'') + '" data-status="' + escapeHtml(p.status||'') + '" data-egitim="' + escapeHtml(p.egitimAdi||'') + '" ' + chk + ' onchange="ekfKatilimciToggle(this)"><span class="flex-1">👤 <strong>' + escapeHtml(p.name) + '</strong> <span class="text-xs text-gray-500">(' + escapeHtml(p.department||'-') + ' • ' + escapeHtml(p.status||'-') + ')</span></span><span class="text-xs text-red-700 font-bold">' + Math.abs(p.gun) + ' gün gecikme</span></label>';
             });
         }
         html += '</div>';
     }
     
-    // === YAKLAŞANLAR ===
+    // YAKLAŞANLAR
     if(gosterYaklasan){
         html += '<div class="bg-yellow-50 rounded-lg p-3 border-2 border-yellow-300 mt-3">';
         html += '<div class="flex justify-between items-center mb-2"><h5 class="font-bold text-yellow-900 text-sm">🟡 Süresi YAKLAŞANLAR - 30 gün (' + yaklasanlar.length + ')</h5><button onclick="ekfGrupSec(\'yaklasiyor\', true)" class="text-xs bg-yellow-600 text-white px-2 py-1 rounded font-bold">Tümünü Seç</button></div>';
-        if(yaklasanlar.length === 0){ html += '<div class="text-xs text-gray-500 italic">' + (filtreVar ? 'Bu filtreye uyan kişi yok' : 'Süresi yaklaşan personel yok') + '</div>'; }
+        if(yaklasanlar.length === 0){ html += '<div class="text-xs text-gray-500 italic">' + (filtreVar ? 'Bu filtreye uyan personel yok' : 'Süresi yaklaşan personel yok') + '</div>'; }
         else {
             yaklasanlar.forEach(p => {
                 const chk = ekfSeciliKatilimcilar[p.id] ? 'checked' : '';
-                const kaynakBadge = p.kaynak === 'stajyer' ? '<span class="text-xs bg-emerald-200 text-emerald-900 px-1.5 py-0.5 rounded ml-1">🎓 Stajyer</span>' : '';
-                html += '<label class="flex items-center gap-2 p-2 rounded hover:bg-yellow-100 cursor-pointer text-sm"><input type="checkbox" class="ekf-katilimci-cb" data-kaynak="yaklasiyor" data-pid="' + p.id + '" data-name="' + escapeHtml(p.name) + '" data-dept="' + escapeHtml(p.department||'') + '" data-status="' + escapeHtml(p.status||'') + '" data-egitim="' + escapeHtml(p.egitimAdi||'') + '" data-tip="' + p.kaynak + '" ' + chk + ' onchange="ekfKatilimciToggle(this)"><span class="flex-1">👤 <strong>' + escapeHtml(p.name) + '</strong> ' + kaynakBadge + ' <span class="text-xs text-gray-500">(' + escapeHtml(p.department||'-') + ' • ' + escapeHtml(p.status||'-') + ')</span></span><span class="text-xs text-yellow-700 font-bold">' + p.gun + ' gün kaldı</span></label>';
+                html += '<label class="flex items-center gap-2 p-2 rounded hover:bg-yellow-100 cursor-pointer text-sm"><input type="checkbox" class="ekf-katilimci-cb" data-kaynak="yaklasiyor" data-pid="' + p.id + '" data-name="' + escapeHtml(p.name) + '" data-dept="' + escapeHtml(p.department||'') + '" data-status="' + escapeHtml(p.status||'') + '" data-egitim="' + escapeHtml(p.egitimAdi||'') + '" ' + chk + ' onchange="ekfKatilimciToggle(this)"><span class="flex-1">👤 <strong>' + escapeHtml(p.name) + '</strong> <span class="text-xs text-gray-500">(' + escapeHtml(p.department||'-') + ' • ' + escapeHtml(p.status||'-') + ')</span></span><span class="text-xs text-yellow-700 font-bold">' + p.gun + ' gün kaldı</span></label>';
             });
         }
         html += '</div>';
     }
     
-    // === HİÇ ALMAMIŞLAR ===
+    // HİÇ ALMAMIŞLAR
     if(gosterHic){
         html += '<div class="bg-gray-50 rounded-lg p-3 border-2 border-gray-300 mt-3">';
         html += '<div class="flex justify-between items-center mb-2"><h5 class="font-bold text-gray-800 text-sm">⚪ HİÇ ALMAMIŞLAR (' + hicAlmamislar.length + ')</h5><button onclick="ekfGrupSec(\'hic\', true)" class="text-xs bg-gray-600 text-white px-2 py-1 rounded font-bold">Tümünü Seç</button></div>';
-        if(hicAlmamislar.length === 0){ html += '<div class="text-xs text-gray-500 italic">' + (filtreVar ? 'Bu filtreye uyan kişi yok' : 'Tüm kişiler bu eğitim(ler)den en az birini almış') + '</div>'; }
+        if(hicAlmamislar.length === 0){ html += '<div class="text-xs text-gray-500 italic">' + (filtreVar ? 'Bu filtreye uyan personel yok' : 'Tüm personel bu eğitim(ler)den en az birini almış') + '</div>'; }
         else {
-            hicAlmamislar.slice(0, 150).forEach(p => {
+            hicAlmamislar.slice(0, 100).forEach(p => {
                 const chk = ekfSeciliKatilimcilar[p.id] ? 'checked' : '';
-                const kaynakBadge = p.kaynak === 'stajyer' ? '<span class="text-xs bg-emerald-200 text-emerald-900 px-1.5 py-0.5 rounded ml-1">🎓 Stajyer</span>' : '';
-                html += '<label class="flex items-center gap-2 p-2 rounded hover:bg-gray-100 cursor-pointer text-sm"><input type="checkbox" class="ekf-katilimci-cb" data-kaynak="hic" data-pid="' + p.id + '" data-name="' + escapeHtml(p.name) + '" data-dept="' + escapeHtml(p.department||'') + '" data-status="' + escapeHtml(p.status||'') + '" data-egitim="' + escapeHtml(p.egitimAdi||'') + '" data-tip="' + p.kaynak + '" ' + chk + ' onchange="ekfKatilimciToggle(this)"><span class="flex-1">👤 <strong>' + escapeHtml(p.name) + '</strong> ' + kaynakBadge + ' <span class="text-xs text-gray-500">(' + escapeHtml(p.department||'-') + ' • ' + escapeHtml(p.status||'-') + ')</span></span></label>';
+                html += '<label class="flex items-center gap-2 p-2 rounded hover:bg-gray-100 cursor-pointer text-sm"><input type="checkbox" class="ekf-katilimci-cb" data-kaynak="hic" data-pid="' + p.id + '" data-name="' + escapeHtml(p.name) + '" data-dept="' + escapeHtml(p.department||'') + '" data-status="' + escapeHtml(p.status||'') + '" data-egitim="' + escapeHtml(p.egitimAdi||'') + '" ' + chk + ' onchange="ekfKatilimciToggle(this)"><span class="flex-1">👤 <strong>' + escapeHtml(p.name) + '</strong> <span class="text-xs text-gray-500">(' + escapeHtml(p.department||'-') + ' • ' + escapeHtml(p.status||'-') + ')</span></span></label>';
             });
-            if(hicAlmamislar.length > 150) html += '<div class="text-xs text-gray-500 mt-1">... ve ' + (hicAlmamislar.length-150) + ' kişi daha</div>';
+            if(hicAlmamislar.length > 100) html += '<div class="text-xs text-gray-500 mt-1">... ve ' + (hicAlmamislar.length-100) + ' kişi daha</div>';
         }
         html += '</div>';
     }
@@ -10854,9 +10830,7 @@ function ekfGrupSec(grup, sec){
             ekfSeciliKatilimcilar[pid] = {
                 name: cb.getAttribute('data-name'),
                 department: cb.getAttribute('data-dept'),
-                status: cb.getAttribute('data-status') || '',
-                kaynak: grup,
-                tip: cb.getAttribute('data-tip') || 'personel'
+                kaynak: grup
             };
         } else {
             delete ekfSeciliKatilimcilar[pid];
@@ -10871,9 +10845,7 @@ function ekfKatilimciToggle(cb){
         ekfSeciliKatilimcilar[pid] = {
             name: cb.getAttribute('data-name'),
             department: cb.getAttribute('data-dept'),
-            status: cb.getAttribute('data-status') || '',
-            kaynak: cb.getAttribute('data-kaynak') || 'manuel',
-            tip: cb.getAttribute('data-tip') || 'personel'
+            kaynak: cb.getAttribute('data-kaynak') || 'manuel'
         };
     } else {
         delete ekfSeciliKatilimcilar[pid];
@@ -10889,9 +10861,7 @@ function ekfTumunuSec(sec){
             ekfSeciliKatilimcilar[pid] = {
                 name: cb.getAttribute('data-name'),
                 department: cb.getAttribute('data-dept'),
-                status: cb.getAttribute('data-status') || '',
-                kaynak: cb.getAttribute('data-kaynak') || 'manuel',
-                tip: cb.getAttribute('data-tip') || 'personel'
+                kaynak: cb.getAttribute('data-kaynak') || 'manuel'
             };
         } else {
             delete ekfSeciliKatilimcilar[pid];
@@ -10936,7 +10906,7 @@ function ekfManuelAra(){
 
 function ekfManuelEkle(pid, name, dept){
     if(ekfSeciliKatilimcilar[pid]){ alert('Bu kişi zaten seçili!'); return; }
-    ekfSeciliKatilimcilar[pid] = {name: name, department: dept, kaynak: 'manuel', tip: 'personel'};
+    ekfSeciliKatilimcilar[pid] = {name: name, department: dept, kaynak: 'manuel'};
     document.getElementById('ekfManuelArama').value = '';
     document.getElementById('ekfManuelSonuclar').innerHTML = '';
     ekfRenderManuelEklenenler();
@@ -10990,23 +10960,12 @@ function saveEgitimKatilimFormu(){
     const katilimcilar = Object.keys(ekfSeciliKatilimcilar).map(pidStr => {
         const pid = parseInt(pidStr);
         const info = ekfSeciliKatilimcilar[pid];
-        const tip = info.tip || 'personel';
-        let k = { personnelId: pid, name: info.name, department: info.department, tip: tip };
-        
-        if(tip === 'stajyer'){
-            const s = (data.stajyerler || []).find(x => x.id === pid);
-            if(s){
-                k.tcNo = s.tcNo || '';
-                k.okul = s.okul || '';
-                k.bolum = s.bolum || '';
-            }
-        } else {
-            const p = data.personnel.find(x => x.id === pid);
-            if(p){
-                k.tcNo = p.tcNo || '';
-                k.okul = p.liseOkul || '';
-                k.bolum = p.lise || '';
-            }
+        const p = data.personnel.find(x => x.id === pid);
+        const k = { personnelId: pid, name: info.name, department: info.department };
+        if(p){
+            k.tcNo = p.tcNo || '';
+            k.okul = p.liseOkul || '';
+            k.bolum = p.lise || '';
         }
         return k;
     });
@@ -11039,41 +10998,265 @@ function saveEgitimKatilimFormu(){
 }
 
 // ==================== TABLO ====================
+// ============================================================
+// ========== EĞİTİM KATILIM FORMLARI - FİLTRE + SIRALAMA ======
+// ============================================================
+
+let ekfTableFilterState = {
+    activeFilters: {},
+    sortColumn: null,
+    sortDirection: 'asc',
+    openPanelColumn: null
+};
+
 function updateEgitimKatilimFormlariTable(){
     const tb = document.getElementById('egitimKatilimFormlariBody');
     if(!tb) return;
     tb.innerHTML = '';
+    
     const formlar = data.egitimKatilimFormlari || [];
     if(formlar.length === 0){
         tb.innerHTML = '<tr><td colspan="6" class="text-center py-6 text-gray-500 text-sm">Henüz katılım formu oluşturulmadı</td></tr>';
         return;
     }
-    formlar.slice().sort((a,b) => new Date(b.olusturmaTarihi) - new Date(a.olusturmaTarihi)).forEach(f => {
-        const egitimAdlari = (f.egitimler||[]).map(e => e.ad).join(' + ');
+    
+    // Filtre + sıralama uygula
+    let filtered = formlar.map(f => ({
+        ...f,
+        egitimAdi: (f.egitimler||[]).map(e => e.ad).join(' + '),
+        katilimciSayisi: (f.katilimcilar||[]).length
+    }));
+    
+    const s = ekfTableFilterState;
+    
+    // Filtre
+    Object.keys(s.activeFilters).forEach(col => {
+        const set = s.activeFilters[col];
+        if(!set || set.size === 0) return;
+        filtered = filtered.filter(f => {
+            let v = f[col];
+            if(v === null || v === undefined) v = '';
+            if(col === 'egitimTarihi'){
+                // Tarih formatı
+                v = v ? new Date(v).toLocaleDateString('tr-TR') : '';
+            }
+            return set.has(String(v));
+        });
+    });
+    
+    // Sıralama
+    if(s.sortColumn){
+        const col = s.sortColumn;
+        const dir = s.sortDirection === 'asc' ? 1 : -1;
+        filtered.sort((a, b) => {
+            let va = a[col], vb = b[col];
+            if(col === 'egitimTarihi'){
+                va = new Date(va).getTime() || 0;
+                vb = new Date(vb).getTime() || 0;
+                return (va - vb) * dir;
+            }
+            if(col === 'katilimciSayisi'){
+                return ((va||0) - (vb||0)) * dir;
+            }
+            return String(va||'').toLowerCase().localeCompare(String(vb||'').toLowerCase(), 'tr', {numeric:true}) * dir;
+        });
+    } else {
+        // Varsayılan: En yeni tarih önce
+        filtered.sort((a,b) => new Date(b.olusturmaTarihi) - new Date(a.olusturmaTarihi));
+    }
+    
+    // Satırları yaz
+    filtered.forEach(f => {
         const durumBadge = f.durum === 'tamamlandi'
-            ? '<span class="px-2 py-1 rounded text-xs font-bold bg-green-100 text-green-800">✅ Tamamlandı</span>'
-            : '<span class="px-2 py-1 rounded text-xs font-bold bg-yellow-100 text-yellow-800">⏳ Devam</span>';
-        const safeFormNo = escapeHtml(f.formNo);
-        const safeEgitimAdi = escapeHtml(egitimAdlari);
+            ? '<span class="inline-block px-2 py-1 rounded text-xs font-bold bg-green-100 text-green-800 whitespace-nowrap">✅ Tamamlandı</span>'
+            : '<span class="inline-block px-2 py-1 rounded text-xs font-bold bg-yellow-100 text-yellow-800 whitespace-nowrap">⏳ Devam</span>';
         
-        let islemler = '<button onclick="ekfFormuGoruntule(' + f.id + ')" class="bg-blue-600 text-white px-2 py-1 rounded text-xs font-bold mr-1">👁️ Görüntüle</button>' +
-                       '<button onclick="ekfKatilimciListesiGoster(' + f.id + ')" class="bg-purple-600 text-white px-2 py-1 rounded text-xs font-bold mr-1">👥 Katılımcı</button>';
+        let islemler = '<button onclick="ekfFormuGoruntule(' + f.id + ')" class="bg-blue-600 hover:bg-blue-700 text-white w-10 h-10 rounded-lg text-xl font-bold mr-2 inline-flex items-center justify-center" title="👁️ Görüntüle / 🖨️ Yazdır">👁️🖨️</button>' +
+                       '<button onclick="ekfKatilimciListesiGoster(' + f.id + ')" class="bg-purple-600 hover:bg-purple-700 text-white w-10 h-10 rounded-lg text-xl font-bold mr-2 inline-flex items-center justify-center" title="👥 Katılımcı Listesi">👥</button>';
         if(isAdmin){
             if(f.durum === 'devam'){
-                islemler += '<button onclick="ekfFormuTamamlaOnayli(' + f.id + ')" class="bg-green-600 text-white px-2 py-1 rounded text-xs font-bold mr-1">✅ Tamamla</button>';
+                islemler += '<button onclick="ekfFormuTamamlaOnayli(' + f.id + ')" class="bg-green-600 hover:bg-green-700 text-white w-10 h-10 rounded-lg text-xl font-bold mr-2 inline-flex items-center justify-center" title="✅ Formu Tamamla">✅</button>';
             }
-            islemler += '<button onclick="ekfFormuSil(' + f.id + ')" class="bg-red-600 text-white px-2 py-1 rounded text-xs font-bold">🗑️</button>';
+            islemler += '<button onclick="ekfFormuSil(' + f.id + ')" class="bg-red-600 hover:bg-red-700 text-white w-10 h-10 rounded-lg text-xl font-bold inline-flex items-center justify-center" title="🗑️ Sil">🗑️</button>';
         }
         
         tb.innerHTML += '<tr class="hover:bg-emerald-50 cursor-pointer" onclick="ekfKatilimciListesiGoster(' + f.id + ')">' +
-            '<td class="px-4 py-3 text-sm font-bold font-mono text-emerald-800">' + safeFormNo + '</td>' +
-            '<td class="px-4 py-3 text-sm"><strong>' + safeEgitimAdi + '</strong></td>' +
+            '<td class="px-4 py-3 text-sm font-bold font-mono text-emerald-800">' + escapeHtml(f.formNo) + '</td>' +
+            '<td class="px-4 py-3 text-sm"><strong>' + escapeHtml(f.egitimAdi) + '</strong></td>' +
             '<td class="px-4 py-3 text-center text-sm">' + (f.egitimTarihi ? new Date(f.egitimTarihi).toLocaleDateString('tr-TR') : '-') + '</td>' +
-            '<td class="px-4 py-3 text-center text-sm font-bold">' + (f.katilimcilar||[]).length + ' kişi</td>' +
+            '<td class="px-4 py-3 text-center text-sm font-bold">' + f.katilimciSayisi + ' kişi</td>' +
             '<td class="px-4 py-3 text-center">' + durumBadge + '</td>' +
-            '<td class="px-4 py-3 text-center" onclick="event.stopPropagation()">' + islemler + '</td>' +
+            '<td class="px-4 py-3 text-center align-middle" onclick="event.stopPropagation()">' + islemler + '</td>' +
         '</tr>';
     });
+    
+    // Aktif filtre göstergesi (tablonun üstünde)
+    updateEkfTableFilterIndicator();
+}
+
+function updateEkfTableFilterIndicator(){
+    const s = ekfTableFilterState;
+    const container = document.getElementById('egitimKatilimFormlariTable');
+    if(!container) return;
+    const parent = container.parentElement;
+    if(!parent) return;
+    
+    let indicator = document.getElementById('ekfTableFilterIndicator');
+    if(!indicator){
+        indicator = document.createElement('div');
+        indicator.id = 'ekfTableFilterIndicator';
+        parent.insertBefore(indicator, parent.firstChild);
+    }
+    
+    const filterCount = Object.keys(s.activeFilters).length;
+    const sortActive = s.sortColumn;
+    
+    if(filterCount === 0 && !sortActive){
+        indicator.innerHTML = '';
+        return;
+    }
+    
+    let html = '<div class="bg-amber-50 border-2 border-amber-300 rounded-lg p-2 mb-3 text-xs flex justify-between items-center flex-wrap gap-2">';
+    html += '<div class="flex gap-2 flex-wrap items-center">';
+    if(filterCount > 0){
+        html += '<span class="font-bold text-amber-800">🔍 ' + filterCount + ' aktif filtre:</span>';
+        Object.keys(s.activeFilters).forEach(col => {
+            const colLabels = {formNo:'Form No', egitimAdi:'Eğitim', egitimTarihi:'Tarih', katilimciSayisi:'Katılımcı', durum:'Durum'};
+            html += '<span class="bg-amber-200 text-amber-900 px-2 py-0.5 rounded-full font-bold">' + (colLabels[col]||col) + '</span>';
+        });
+    }
+    if(sortActive){
+        const colLabels = {formNo:'Form No', egitimAdi:'Eğitim', egitimTarihi:'Tarih', katilimciSayisi:'Katılımcı', durum:'Durum'};
+        html += '<span class="font-bold text-blue-800 ml-2">⬆️ Sıralama: ' + (colLabels[s.sortColumn]||s.sortColumn) + ' (' + (s.sortDirection === 'asc' ? 'A-Z' : 'Z-A') + ')</span>';
+    }
+    html += '</div>';
+    html += '<button onclick="clearEkfTableFilters()" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-lg font-bold">🗑️ Temizle</button>';
+    html += '</div>';
+    indicator.innerHTML = html;
+}
+
+function openEkfColFilter(event, col){
+    event.stopPropagation();
+    const existingPanel = document.querySelector('.ekf-col-filter-panel');
+    if(existingPanel) existingPanel.remove();
+    
+    const s = ekfTableFilterState;
+    if(s.openPanelColumn === col){ s.openPanelColumn = null; return; }
+    s.openPanelColumn = col;
+    
+    const btn = event.currentTarget;
+    const rect = btn.getBoundingClientRect();
+    const panel = document.createElement('div');
+    panel.className = 'col-filter-panel ekf-col-filter-panel';
+    
+    const colLabels = {formNo:'Form No', egitimAdi:'Eğitim Ad(lar)ı', egitimTarihi:'Tarih', katilimciSayisi:'Katılımcı Sayısı', durum:'Durum'};
+    const title = document.createElement('div');
+    title.className = 'panel-title';
+    title.innerHTML = '<span>🔍 ' + (colLabels[col] || col) + '</span><button title="Kapat">✕</button>';
+    title.querySelector('button').onclick = (e) => { e.stopPropagation(); panel.remove(); s.openPanelColumn = null; };
+    panel.appendChild(title);
+    
+    // Sıralama
+    const sortAsc = document.createElement('label');
+    sortAsc.className = 'col-filter-item sort-option' + (s.sortColumn === col && s.sortDirection === 'asc' ? ' active' : '');
+    sortAsc.innerHTML = '<span>⬆️ A-Z (Artan)</span>';
+    sortAsc.onclick = () => { s.sortColumn = col; s.sortDirection = 'asc'; updateEgitimKatilimFormlariTable(); panel.remove(); s.openPanelColumn = null; };
+    panel.appendChild(sortAsc);
+    
+    const sortDesc = document.createElement('label');
+    sortDesc.className = 'col-filter-item sort-option' + (s.sortColumn === col && s.sortDirection === 'desc' ? ' active' : '');
+    sortDesc.innerHTML = '<span>⬇️ Z-A (Azalan)</span>';
+    sortDesc.onclick = () => { s.sortColumn = col; s.sortDirection = 'desc'; updateEgitimKatilimFormlariTable(); panel.remove(); s.openPanelColumn = null; };
+    panel.appendChild(sortDesc);
+    
+    const divider = document.createElement('div');
+    divider.style.borderTop = '1px solid #e5e7eb';
+    divider.style.margin = '6px 0';
+    panel.appendChild(divider);
+    
+    // Değerler
+    const values = new Set();
+    (data.egitimKatilimFormlari || []).forEach(f => {
+        let v = f[col];
+        if(col === 'egitimAdi') v = (f.egitimler||[]).map(e => e.ad).join(' + ');
+        else if(col === 'katilimciSayisi') v = (f.katilimcilar||[]).length;
+        else if(col === 'egitimTarihi') v = f.egitimTarihi ? new Date(f.egitimTarihi).toLocaleDateString('tr-TR') : '';
+        if(v === null || v === undefined || v === '') return;
+        values.add(String(v));
+    });
+    
+    let valsArr;
+    if(col === 'katilimciSayisi'){
+        valsArr = [...values].map(x => parseInt(x)).filter(x => !isNaN(x)).sort((a,b) => a - b).map(x => String(x));
+    } else {
+        valsArr = [...values].sort((a,b) => a.localeCompare(b, 'tr'));
+    }
+    
+    const activeFilters = s.activeFilters[col];
+    const isAllChecked = !activeFilters || activeFilters.size === 0;
+    
+    const allItem = document.createElement('label');
+    allItem.className = 'col-filter-item';
+    allItem.innerHTML = '<input type="checkbox" ' + (isAllChecked ? 'checked' : '') + '> <strong>(Tümü)</strong>';
+    allItem.querySelector('input').onchange = (e) => {
+        if(e.target.checked){ delete s.activeFilters[col]; }
+        else { s.activeFilters[col] = new Set(valsArr); }
+        updateEgitimKatilimFormlariTable(); panel.remove(); s.openPanelColumn = null;
+    };
+    panel.appendChild(allItem);
+    
+    valsArr.forEach(v => {
+        const item = document.createElement('label');
+        item.className = 'col-filter-item';
+        const isChecked = isAllChecked || activeFilters.has(v);
+        item.innerHTML = '<input type="checkbox" ' + (isChecked ? 'checked' : '') + '> <span>' + escapeHtml(v) + (col === 'katilimciSayisi' ? ' kişi' : '') + '</span>';
+        item.querySelector('input').onchange = (e) => {
+            let currentSet = s.activeFilters[col];
+            if(!currentSet){ currentSet = new Set(valsArr); s.activeFilters[col] = currentSet; }
+            if(e.target.checked){ currentSet.add(v); } else { currentSet.delete(v); }
+            if(currentSet.size === valsArr.length || currentSet.size === 0){ delete s.activeFilters[col]; }
+            updateEgitimKatilimFormlariTable(); panel.remove(); s.openPanelColumn = null;
+        };
+        panel.appendChild(item);
+    });
+    
+    const actions = document.createElement('div');
+    actions.className = 'col-filter-actions';
+    const clearBtn = document.createElement('button');
+    clearBtn.className = 'btn-clear';
+    clearBtn.textContent = '🗑️ Sütunu temizle';
+    clearBtn.onclick = () => { delete s.activeFilters[col]; updateEgitimKatilimFormlariTable(); panel.remove(); s.openPanelColumn = null; };
+    actions.appendChild(clearBtn);
+    panel.appendChild(actions);
+    
+    document.body.appendChild(panel);
+    
+    const panelWidth = 260;
+    let left = rect.left;
+    let top = rect.bottom + 4;
+    if(left + panelWidth > window.innerWidth - 10) left = window.innerWidth - panelWidth - 10;
+    if(top + 400 > window.innerHeight){ top = rect.top - 410; if(top < 10) top = 10; }
+    panel.style.left = left + 'px';
+    panel.style.top = top + 'px';
+    
+    setTimeout(() => { document.addEventListener('click', closeEkfFilterOutside); }, 10);
+}
+
+function closeEkfFilterOutside(e){
+    if(!e.target.closest('.ekf-col-filter-panel') && !e.target.closest('.col-filter-header')){
+        const panel = document.querySelector('.ekf-col-filter-panel');
+        if(panel) panel.remove();
+        ekfTableFilterState.openPanelColumn = null;
+        document.removeEventListener('click', closeEkfFilterOutside);
+    }
+}
+
+function clearEkfTableFilters(){
+    ekfTableFilterState.activeFilters = {};
+    ekfTableFilterState.sortColumn = null;
+    ekfTableFilterState.sortDirection = 'asc';
+    updateEgitimKatilimFormlariTable();
+    showSuccessMessage('✅ Filtreler temizlendi!');
 }
 function birimAtaStajyer(id){
     if(!isAdmin && !isViewer){ alert('❌ Giriş yapmanız gerekiyor!'); return; }
@@ -11225,8 +11408,7 @@ function ekfRenderFormu(f, sifirla){
     if(!c) return;
     
     const filtrelenmisKatilimcilar = (f.katilimcilar||[]).filter(k => ekfYazdirSecili.has(k.personnelId));
-    // Grup adı stajyer grubu ise VEYA katılımcılardan herhangi biri stajyer ise okul/bölüm göster
-    const stajyerMi = f.katilimciGrupAdi === 'STAJYERLER' || (f.katilimcilar||[]).some(k => k.tip === 'stajyer');
+    const stajyerMi = f.katilimciGrupAdi === 'STAJYERLER';
     
     let html = '<div style="font-family:Arial,sans-serif;font-size:12px;color:#000;padding:20px;background:#fff;">';
     
@@ -11262,17 +11444,15 @@ function ekfRenderFormu(f, sifirla){
     } else {
         html += '<table style="width:100%;border-collapse:collapse;font-size:11px;">';
         html += '<thead><tr style="background:#e5e7eb;"><th style="border:1px solid #000;padding:5px;text-align:center;width:40px;">No</th><th style="border:1px solid #000;padding:5px;text-align:left;">Ad Soyad</th>';
-        // Hem Birim hem Okul/Bölüm sütunlarını göster (karışık grup olabilir)
         if(stajyerMi){
-            html += '<th style="border:1px solid #000;padding:5px;text-align:left;width:130px;">Birim / Okul</th><th style="border:1px solid #000;padding:5px;text-align:left;width:130px;">Bölüm</th>';
+            html += '<th style="border:1px solid #000;padding:5px;text-align:left;width:150px;">Okul</th><th style="border:1px solid #000;padding:5px;text-align:left;width:150px;">Bölüm</th>';
         } else {
             html += '<th style="border:1px solid #000;padding:5px;text-align:left;width:200px;">Birim</th>';
         }
         html += '<th style="border:1px solid #000;padding:5px;text-align:center;width:120px;">İmza</th></tr></thead><tbody>';
         filtrelenmisKatilimcilar.forEach((k, i) => {
-            const satirStajyer = k.tip === 'stajyer';
-            html += '<tr><td style="border:1px solid #000;padding:5px;text-align:center;">' + (i+1) + '</td><td style="border:1px solid #000;padding:5px;">' + escapeHtml(k.name) + (satirStajyer ? ' 🎓' : '') + '</td>';
-            if(satirStajyer){
+            html += '<tr><td style="border:1px solid #000;padding:5px;text-align:center;">' + (i+1) + '</td><td style="border:1px solid #000;padding:5px;">' + escapeHtml(k.name) + '</td>';
+            if(stajyerMi){
                 html += '<td style="border:1px solid #000;padding:5px;">' + escapeHtml(k.okul||'-') + '</td><td style="border:1px solid #000;padding:5px;">' + escapeHtml(k.bolum||'-') + '</td>';
             } else {
                 html += '<td style="border:1px solid #000;padding:5px;">' + escapeHtml(k.department||'-') + '</td>';
@@ -11357,12 +11537,14 @@ function ekfFormuTamamlaExecute(formId){
             const p = data.personnel.find(x => x.id === k.personnelId);
             if(!p){ return; }
             if(!p.trainings) p.trainings = [];
+            if(!p.requiredTrainings) p.requiredTrainings = [];
             
             (f.egitimler || []).forEach(eg => {
-                const mevcut = p.trainings.find(t => t.name === eg.ad);
                 const expiry = new Date(bugun);
                 expiry.setMonth(expiry.getMonth() + (parseInt(eg.yenilemeAy) || 12));
                 
+                // 1. trainings dizisinde zaten var mı? Varsa güncelle (yenileme)
+                const mevcut = p.trainings.find(t => t.name === eg.ad);
                 if(mevcut){
                     mevcut.completedDate = bugun.toISOString();
                     mevcut.expiryDate = expiry.toISOString();
@@ -11370,6 +11552,7 @@ function ekfFormuTamamlaExecute(formId){
                     if(eg.egitmen) mevcut.instructor = eg.egitmen;
                     if(eg.sure) mevcut.hours = parseInt(eg.sure);
                 } else {
+                    // 2. Yeni kayıt olarak ekle
                     p.trainings.push({
                         name: eg.ad,
                         completedDate: bugun.toISOString(),
@@ -11381,6 +11564,9 @@ function ekfFormuTamamlaExecute(formId){
                     });
                     eklenenKayit++;
                 }
+                
+                // 3. requiredTrainings'ten bu eğitimi çıkar (artık alındı)
+                p.requiredTrainings = p.requiredTrainings.filter(r => r.name !== eg.ad);
             });
             guncellenenPersonel++;
         }
@@ -11399,7 +11585,7 @@ function ekfFormuTamamlaExecute(formId){
                 
                 const eid = egitimObj.id;
                 
-                // Stajyerin eğitim listesinde yoksa ekle (yeni bir eğitim verdiysek)
+                // Stajyerin eğitim listesinde yoksa ekle
                 if(!s.egitimler.includes(eid)){
                     s.egitimler.push(eid);
                 }
@@ -11965,6 +12151,15 @@ function updateIstatistikCount(){
 }
 
 // Eğitim Almayanlar modalı - Personel + Stajyer iki ayrı tablo
+// ============================================================
+// ========== EĞİTİM ALMAYANLAR (Personel + Stajyer) ==========
+// ============================================================
+
+let ekfEaFilterState = {
+    personel: { activeFilters: {}, sortColumn: null, sortDirection: 'asc', selected: new Set() },
+    stajyer: { activeFilters: {}, sortColumn: null, sortDirection: 'asc', selected: new Set() }
+};
+
 function showEgitimAlmayanlar(){
     if(!isAdmin && !isViewer){ alert('❌ Giriş yapmanız gerekiyor!'); return; }
     
@@ -11972,20 +12167,21 @@ function showEgitimAlmayanlar(){
     const soon = new Date(now.getTime() + 30*24*60*60*1000);
     
     // ==================== PERSONEL LİSTESİ ====================
-    // Hiç eğitimi olmayan VEYA eğitim süresi dolan/yaklaşan personel
     const personelList = (data.personnel || []).filter(p => {
-        const t = p.trainings || [];
-        if(t.length === 0) return true;
-        // Süresi dolan veya yaklaşan varsa da göster
-        return t.some(k => {
+        const required = p.requiredTrainings || [];
+        const alinan = p.trainings || [];
+        if(required.length > 0) return true;
+        if(alinan.some(k => {
             if(!k.expiryDate) return false;
             const ed = new Date(k.expiryDate);
             return ed < now || ed <= soon;
-        });
+        })) return true;
+        if(required.length === 0 && alinan.length === 0) return true;
+        return false;
     }).map(p => {
-        const t = p.trainings || [];
-        // Alınan eğitimler (isimleri)
-        const alinanEgitimler = t.map(k => {
+        const required = p.requiredTrainings || [];
+        const alinan = p.trainings || [];
+        const alinanEgitimler = alinan.map(k => {
             let durum = 'gecerli';
             if(k.expiryDate){
                 const ed = new Date(k.expiryDate);
@@ -11994,59 +12190,101 @@ function showEgitimAlmayanlar(){
             }
             return {name: k.name, durum: durum};
         });
-        // Sistem'deki tüm eğitimlerden eksik olanlar
-        const alinanIsimler = new Set(t.map(k => k.name));
-        const eksikEgitimler = (data.trainings || []).filter(tr => !alinanIsimler.has(tr.name));
-        return { ...p, alinanEgitimler, eksikEgitimler, kaynak: 'personel' };
+        const alinanIsimler = new Set(alinan.map(k => k.name));
+        const eksikEgitimler = required.filter(r => !alinanIsimler.has(r.name)).map(r => ({name: r.name, duration: r.duration || 12}));
+        return { ...p, alinanEgitimler, eksikEgitimler, kaynak: 'personel', birim: p.department || '' };
     });
     
     // ==================== STAJYER LİSTESİ ====================
-    // Aktif stajyerlerden, eğitimleri tamamlanmamış olanlar
     const stajyerList = (data.stajyerler || []).filter(s => s.durum !== 'arsiv').map(s => {
         const egitimler = s.egitimler || [];
         const durumlar = s.egitimDurumlari || {};
-        // Alması gereken eğitimler ve durumları
         const egitimDetay = egitimler.map(eid => {
             const t = (data.trainings || []).find(x => x.id === eid);
             return { id: eid, name: t ? t.name : '-', tamamlandi: !!durumlar[eid] };
         });
         const bekleyenSayi = egitimDetay.filter(e => !e.tamamlandi).length;
-        return { ...s, egitimDetay, bekleyenSayi, kaynak: 'stajyer' };
-    }).filter(s => s.bekleyenSayi > 0); // Sadece bekleyen eğitimi olanlar
+        return { ...s, name: (s.ad||'') + ' ' + (s.soyad||''), egitimDetay, bekleyenSayi, kaynak: 'stajyer', birim: s.birim || '' };
+    }).filter(s => s.bekleyenSayi > 0);
     
-    // ==================== HTML OLUŞTUR ====================
+    // Seçili olanları temizle (yeni modal açılıyor)
+    ekfEaFilterState.personel.selected = new Set();
+    ekfEaFilterState.stajyer.selected = new Set();
+    ekfEaFilterState.personel.activeFilters = {};
+    ekfEaFilterState.stajyer.activeFilters = {};
+    ekfEaFilterState.personel.sortColumn = null;
+    ekfEaFilterState.stajyer.sortColumn = null;
+    
+    // Modal içeriğini oluştur
+    renderEgitimAlmayanlarModal(personelList, stajyerList);
+    
+    document.getElementById('trainingDetailIcon').innerHTML = '📊';
+    document.getElementById('trainingDetailTitle').textContent = 'Eğitim Almayanlar';
+    const sub = document.getElementById('trainingDetailSubTitle');
+    if(sub) sub.textContent = 'Personel ve stajyer eğitim durumu — Seçim yapıp yazdırabilirsiniz';
+    
+    trainingDetailFilterState.activeFilters = {};
+    trainingDetailFilterState.sortColumn = null;
+    trainingDetailFilterState.detailType = 'noTraining';
+    
+    // Modal kapat butonundan başka bir yere tıklama olursa...
+    showModal('trainingDetailModal');
+}
+
+function renderEgitimAlmayanlarModal(personelList, stajyerList){
+    // Filtre + sıralama uygula
+    const pFiltered = applyEaFilter(personelList, 'personel');
+    const sFiltered = applyEaFilter(stajyerList, 'stajyer');
+    
     let html = '';
     
     // Üst özet
     html += '<div class="bg-purple-50 rounded-lg p-3 mb-4 border-2 border-purple-200 text-sm">';
-    html += '<div class="flex justify-between flex-wrap gap-2">';
-    html += '<span><strong>👤 Personel:</strong> ' + personelList.length + ' kişi</span>';
-    html += '<span><strong>🎓 Stajyer:</strong> ' + stajyerList.length + ' kişi</span>';
-    html += '<span><strong>📊 Toplam:</strong> ' + (personelList.length + stajyerList.length) + ' kişi</span>';
+    html += '<div class="flex justify-between flex-wrap gap-2 items-center">';
+    html += '<span><strong>👤 Personel:</strong> ' + personelList.length + ' kişi (' + pFiltered.length + ' gösteriliyor)</span>';
+    html += '<span><strong>🎓 Stajyer:</strong> ' + stajyerList.length + ' kişi (' + sFiltered.length + ' gösteriliyor)</span>';
+    html += '<span class="bg-purple-200 text-purple-900 px-3 py-1 rounded-full font-bold">📊 Toplam: ' + (pFiltered.length + sFiltered.length) + '</span>';
     html += '</div></div>';
     
-    // ==================== PERSONEL TABLOSU ====================
-    html += '<h3 class="font-bold text-base text-blue-800 mb-2 bg-blue-100 px-3 py-2 rounded-lg border-l-4 border-blue-600">👤 PERSONEL TABLOSU (' + personelList.length + ')</h3>';
+    // Toolbar
+    html += '<div class="bg-gray-100 rounded-lg p-3 mb-4 border-2 border-gray-300 flex justify-between items-center flex-wrap gap-2">';
+    html += '<div class="flex gap-2 flex-wrap items-center">';
+    html += '<span class="text-xs font-bold text-gray-700">🖨️ Yazdırma:</span>';
+    html += '<button onclick="yazdirEgitimAlmayanlar(\'tumu\')" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-lg text-xs font-bold">📄 Tümünü Yazdır</button>';
+    html += '<button onclick="yazdirEgitimAlmayanlar(\'secili\')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-lg text-xs font-bold">✅ Seçili Olanları Yazdır</button>';
+    html += '<button onclick="openFormaAktarModal()" class="bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 text-white px-4 py-1.5 rounded-lg text-xs font-bold">📝 Forma Aktar</button>';
+    html += '</div>';
+    html += '<div class="flex gap-2 flex-wrap">';
+    html += '<button onclick="eaTumunuSec(\'personel\', true)" class="bg-blue-500 text-white px-3 py-1.5 rounded-lg text-xs font-bold">👤 Personel Tümünü Seç</button>';
+    html += '<button onclick="eaTumunuSec(\'stajyer\', true)" class="bg-emerald-500 text-white px-3 py-1.5 rounded-lg text-xs font-bold">🎓 Stajyer Tümünü Seç</button>';
+    html += '<button onclick="eaTumunuSec(\'hepsi\', false)" class="bg-red-500 text-white px-3 py-1.5 rounded-lg text-xs font-bold">🗑️ Seçimi Temizle</button>';
+    html += '</div>';
+    html += '</div>';
     
-    if(personelList.length === 0){
-        html += '<div class="text-center py-6 bg-green-50 rounded-lg border-2 border-green-200 mb-6"><div class="text-4xl mb-2">✅</div><div class="font-bold text-green-800">Tüm personel eğitimlerini tamamlamış!</div></div>';
+    // ==================== PERSONEL TABLOSU ====================
+    html += '<h3 class="font-bold text-base text-blue-800 mb-2 bg-blue-100 px-3 py-2 rounded-lg border-l-4 border-blue-600 flex justify-between items-center">';
+    html += '<span>👤 PERSONEL TABLOSU (' + pFiltered.length + ')</span>';
+    html += '<span class="text-xs bg-blue-200 text-blue-900 px-2 py-1 rounded-full">Seçili: <span id="eaSeciliPersonel">' + ekfEaFilterState.personel.selected.size + '</span></span>';
+    html += '</h3>';
+    
+    if(pFiltered.length === 0){
+        html += '<div class="text-center py-6 bg-green-50 rounded-lg border-2 border-green-200 mb-6"><div class="text-4xl mb-2">✅</div><div class="font-bold text-green-800">' + (personelList.length === 0 ? 'Tüm personel eğitimlerini tamamlamış!' : 'Filtreye uyan personel yok.') + '</div></div>';
     } else {
-        html += '<div class="overflow-x-auto max-h-[45vh] overflow-y-auto border-2 border-blue-200 rounded-lg mb-6">';
-        html += '<table class="w-full table-auto text-sm">';
-        html += '<thead class="bg-blue-100 sticky top-0 z-10"><tr>';
-        html += '<th class="px-3 py-2 text-left text-xs font-bold" style="width:40px;">#</th>';
-        html += '<th class="px-3 py-2 text-left text-xs font-bold">Ad Soyad</th>';
-        html += '<th class="px-3 py-2 text-left text-xs font-bold" style="width:110px;">TC</th>';
-        html += '<th class="px-3 py-2 text-left text-xs font-bold">Birim</th>';
-        html += '<th class="px-3 py-2 text-left text-xs font-bold" style="width:90px;">Statü</th>';
+        html += '<div class="overflow-x-auto border-2 border-blue-200 rounded-lg mb-6" style="max-height:45vh; overflow-y:auto;">';
+        html += '<table class="w-full table-auto text-sm"><thead class="bg-blue-100 sticky top-0 z-10"><tr>';
+        html += '<th class="px-2 py-2 text-center text-xs font-bold" style="width:40px;"><input type="checkbox" onclick="eaSayfaSecim(this,\'personel\')" title="Bu sayfadakileri seç/kaldır"></th>';
+        html += '<th class="px-3 py-2 text-left text-xs font-bold col-filter-header" data-tablo="personel" data-col="name" onclick="openEaColFilter(event,\'personel\',\'name\')" style="cursor:pointer;user-select:none;width:40px;">#</th>';
+        html += '<th class="px-3 py-2 text-left text-xs font-bold col-filter-header" data-tablo="personel" data-col="name" onclick="openEaColFilter(event,\'personel\',\'name\')" style="cursor:pointer;user-select:none;">Ad Soyad ▼</th>';
+        html += '<th class="px-3 py-2 text-left text-xs font-bold col-filter-header" data-tablo="personel" data-col="tcNo" onclick="openEaColFilter(event,\'personel\',\'tcNo\')" style="cursor:pointer;user-select:none;width:110px;">TC ▼</th>';
+        html += '<th class="px-3 py-2 text-left text-xs font-bold col-filter-header" data-tablo="personel" data-col="birim" onclick="openEaColFilter(event,\'personel\',\'birim\')" style="cursor:pointer;user-select:none;">Birim ▼</th>';
+        html += '<th class="px-3 py-2 text-left text-xs font-bold col-filter-header" data-tablo="personel" data-col="status" onclick="openEaColFilter(event,\'personel\',\'status\')" style="cursor:pointer;user-select:none;width:90px;">Statü ▼</th>';
         html += '<th class="px-3 py-2 text-left text-xs font-bold">Alması Gereken / Alınan Eğitimler</th>';
         html += '</tr></thead><tbody>';
         
-        personelList.slice().sort((a,b) => a.name.localeCompare(b.name, 'tr')).forEach((p, i) => {
-            // Eğitim durumu özeti
+        pFiltered.forEach((p, i) => {
+            const isChecked = ekfEaFilterState.personel.selected.has(p.id) ? 'checked' : '';
             let egitimHtml = '';
             
-            // Alınan eğitimler
             if(p.alinanEgitimler.length > 0){
                 egitimHtml += '<div class="mb-1">';
                 p.alinanEgitimler.forEach(e => {
@@ -12057,8 +12295,6 @@ function showEgitimAlmayanlar(){
                 });
                 egitimHtml += '</div>';
             }
-            
-            // Eksik eğitimler
             if(p.eksikEgitimler.length > 0){
                 egitimHtml += '<div>';
                 p.eksikEgitimler.forEach(tr => {
@@ -12066,14 +12302,19 @@ function showEgitimAlmayanlar(){
                 });
                 egitimHtml += '</div>';
             }
-            
             if(!egitimHtml) egitimHtml = '<span class="text-gray-400 italic text-xs">-</span>';
             
+            const hicEgitimYok = p.alinanEgitimler.length === 0 && p.eksikEgitimler.length === 0;
+            if(hicEgitimYok){
+                egitimHtml = '<button onclick="openHizliEgitimAtaModal(' + p.id + ')" class="bg-orange-500 hover:bg-orange-600 text-white px-3 py-1 rounded-lg text-xs font-bold inline-flex items-center gap-1">📚+ Eğitim Ata</button><div class="text-xs text-orange-700 font-bold mt-1">⚠️ Hiç eğitim atanmamış</div>';
+            }
+            
             html += '<tr class="border-b hover:bg-blue-50">';
+            html += '<td class="px-2 py-2 text-center"><input type="checkbox" class="ea-cb-personel" value="' + p.id + '" ' + isChecked + ' onchange="eaSecimToggle(\'personel\',' + p.id + ',this.checked)"></td>';
             html += '<td class="px-3 py-2 font-bold text-center">' + (i+1) + '</td>';
             html += '<td class="px-3 py-2"><strong>' + escapeHtml(p.name) + '</strong></td>';
             html += '<td class="px-3 py-2 font-mono text-xs">' + escapeHtml(p.tcNo||'-') + '</td>';
-            html += '<td class="px-3 py-2 text-xs">' + escapeHtml(p.department||'-') + '</td>';
+            html += '<td class="px-3 py-2 text-xs">' + escapeHtml(p.birim||'-') + '</td>';
             html += '<td class="px-3 py-2 text-xs">' + escapeHtml(p.status||'-') + '</td>';
             html += '<td class="px-3 py-2">' + egitimHtml + '</td>';
             html += '</tr>';
@@ -12083,34 +12324,31 @@ function showEgitimAlmayanlar(){
     }
     
     // ==================== STAJYER TABLOSU ====================
-    html += '<h3 class="font-bold text-base text-emerald-800 mb-2 bg-emerald-100 px-3 py-2 rounded-lg border-l-4 border-emerald-600">🎓 STAJYER TABLOSU (' + stajyerList.length + ')</h3>';
+    html += '<h3 class="font-bold text-base text-emerald-800 mb-2 bg-emerald-100 px-3 py-2 rounded-lg border-l-4 border-emerald-600 flex justify-between items-center">';
+    html += '<span>🎓 STAJYER TABLOSU (' + sFiltered.length + ')</span>';
+    html += '<span class="text-xs bg-emerald-200 text-emerald-900 px-2 py-1 rounded-full">Seçili: <span id="eaSeciliStajyer">' + ekfEaFilterState.stajyer.selected.size + '</span></span>';
+    html += '</h3>';
     
-    if(stajyerList.length === 0){
-        html += '<div class="text-center py-6 bg-green-50 rounded-lg border-2 border-green-200"><div class="text-4xl mb-2">✅</div><div class="font-bold text-green-800">Bekleyen eğitimi olan stajyer yok!</div></div>';
+    if(sFiltered.length === 0){
+        html += '<div class="text-center py-6 bg-green-50 rounded-lg border-2 border-green-200"><div class="text-4xl mb-2">✅</div><div class="font-bold text-green-800">' + (stajyerList.length === 0 ? 'Bekleyen eğitimi olan stajyer yok!' : 'Filtreye uyan stajyer yok.') + '</div></div>';
     } else {
-        html += '<div class="overflow-x-auto max-h-[45vh] overflow-y-auto border-2 border-emerald-200 rounded-lg">';
-        html += '<table class="w-full table-auto text-sm">';
-        html += '<thead class="bg-emerald-100 sticky top-0 z-10"><tr>';
+        html += '<div class="overflow-x-auto border-2 border-emerald-200 rounded-lg" style="max-height:45vh; overflow-y:auto;">';
+        html += '<table class="w-full table-auto text-sm"><thead class="bg-emerald-100 sticky top-0 z-10"><tr>';
+        html += '<th class="px-2 py-2 text-center text-xs font-bold" style="width:40px;"><input type="checkbox" onclick="eaSayfaSecim(this,\'stajyer\')"></th>';
         html += '<th class="px-3 py-2 text-left text-xs font-bold" style="width:40px;">#</th>';
-        html += '<th class="px-3 py-2 text-left text-xs font-bold">Ad Soyad</th>';
-        html += '<th class="px-3 py-2 text-left text-xs font-bold" style="width:110px;">TC</th>';
-        html += '<th class="px-3 py-2 text-left text-xs font-bold">Okul / Bölüm</th>';
-        html += '<th class="px-3 py-2 text-left text-xs font-bold" style="width:130px;">Birim</th>';
+        html += '<th class="px-3 py-2 text-left text-xs font-bold col-filter-header" data-tablo="stajyer" data-col="name" onclick="openEaColFilter(event,\'stajyer\',\'name\')" style="cursor:pointer;user-select:none;">Ad Soyad ▼</th>';
+        html += '<th class="px-3 py-2 text-left text-xs font-bold col-filter-header" data-tablo="stajyer" data-col="tcNo" onclick="openEaColFilter(event,\'stajyer\',\'tcNo\')" style="cursor:pointer;user-select:none;width:110px;">TC ▼</th>';
+        html += '<th class="px-3 py-2 text-left text-xs font-bold col-filter-header" data-tablo="stajyer" data-col="okul" onclick="openEaColFilter(event,\'stajyer\',\'okul\')" style="cursor:pointer;user-select:none;">Okul/Bölüm ▼</th>';
+        html += '<th class="px-3 py-2 text-left text-xs font-bold col-filter-header" data-tablo="stajyer" data-col="birim" onclick="openEaColFilter(event,\'stajyer\',\'birim\')" style="cursor:pointer;user-select:none;width:130px;">Birim ▼</th>';
         html += '<th class="px-3 py-2 text-left text-xs font-bold">Alması Gereken Eğitimler</th>';
         html += '</tr></thead><tbody>';
         
-        stajyerList.slice().sort((a,b) => (a.ad||'').localeCompare(b.ad||'', 'tr')).forEach((s, i) => {
+        sFiltered.forEach((s, i) => {
+            const isChecked = ekfEaFilterState.stajyer.selected.has(s.id) ? 'checked' : '';
             const initials = ((s.ad||'')[0]||'') + ((s.soyad||'')[0]||'');
             
-            // Birim gösterimi
-            let birimHtml = '';
-            if(s.birim){
-                birimHtml = '<span class="text-xs font-semibold">' + escapeHtml(s.birim) + '</span>';
-            } else {
-                birimHtml = '<span class="text-xs text-orange-700 font-bold">⏳ Bekliyor</span>';
-            }
+            let birimHtml = s.birim ? '<span class="text-xs font-semibold">' + escapeHtml(s.birim) + '</span>' : '<span class="text-xs text-orange-700 font-bold">⏳ Bekliyor</span>';
             
-            // Eğitim rozetleri
             let egitimHtml = '<div>';
             s.egitimDetay.forEach(e => {
                 let icon = e.tamamlandi ? '✅' : '⏳';
@@ -12120,6 +12358,7 @@ function showEgitimAlmayanlar(){
             egitimHtml += '</div>';
             
             html += '<tr class="border-b hover:bg-emerald-50">';
+            html += '<td class="px-2 py-2 text-center"><input type="checkbox" class="ea-cb-stajyer" value="' + s.id + '" ' + isChecked + ' onchange="eaSecimToggle(\'stajyer\',' + s.id + ',this.checked)"></td>';
             html += '<td class="px-3 py-2 font-bold text-center">' + (i+1) + '</td>';
             html += '<td class="px-3 py-2"><div class="flex items-center gap-2"><div class="w-8 h-8 rounded-full bg-emerald-200 text-emerald-800 flex items-center justify-center font-bold text-xs">' + escapeHtml(initials.toUpperCase()) + '</div><strong>' + escapeHtml(s.ad + ' ' + s.soyad) + '</strong></div></td>';
             html += '<td class="px-3 py-2 font-mono text-xs">' + escapeHtml(s.tcNo||'-') + '</td>';
@@ -12132,18 +12371,347 @@ function showEgitimAlmayanlar(){
         html += '</tbody></table></div>';
     }
     
-    // ==================== MODAL BAŞLIĞI VE GÖSTER ====================
-    document.getElementById('trainingDetailIcon').innerHTML = '📊';
-    document.getElementById('trainingDetailTitle').textContent = 'Eğitim Almayanlar';
-    const sub = document.getElementById('trainingDetailSubTitle');
-    if(sub) sub.textContent = 'Personel ve stajyer eğitim durumu özeti';
-    
-    trainingDetailFilterState.activeFilters = {};
-    trainingDetailFilterState.sortColumn = null;
-    trainingDetailFilterState.detailType = 'noTraining';
-    
     document.getElementById('trainingDetailContent').innerHTML = html;
-    showModal('trainingDetailModal');
+}
+
+// ==================== FİLTRE + SIRALAMA ====================
+function applyEaFilter(list, tablo){
+    let filtered = list.slice();
+    const s = ekfEaFilterState[tablo];
+    
+    Object.keys(s.activeFilters).forEach(col => {
+        const set = s.activeFilters[col];
+        if(!set || set.size === 0) return;
+        filtered = filtered.filter(item => {
+            let v = item[col];
+            if(v === null || v === undefined) v = '';
+            if(col === 'name') v = item.name || '';
+            return set.has(String(v));
+        });
+    });
+    
+    if(s.sortColumn){
+        const col = s.sortColumn;
+        const dir = s.sortDirection === 'asc' ? 1 : -1;
+        filtered.sort((a, b) => {
+            let va = a[col] || '', vb = b[col] || '';
+            if(col === 'name'){ va = a.name || ''; vb = b.name || ''; }
+            return String(va).toLowerCase().localeCompare(String(vb).toLowerCase(), 'tr', {numeric:true}) * dir;
+        });
+    }
+    return filtered;
+}
+
+function openEaColFilter(event, tablo, col){
+    event.stopPropagation();
+    const existingPanel = document.querySelector('.ea-col-filter-panel');
+    if(existingPanel) existingPanel.remove();
+    
+    if(!ekfEaFilterState[tablo]) return;
+    const state = ekfEaFilterState[tablo];
+    if(state.openPanelColumn === col){ state.openPanelColumn = null; return; }
+    state.openPanelColumn = col;
+    
+    const btn = event.currentTarget;
+    const rect = btn.getBoundingClientRect();
+    const panel = document.createElement('div');
+    panel.className = 'col-filter-panel ea-col-filter-panel';
+    
+    const colLabels = {name:'Ad Soyad', tcNo:'TC', birim:'Birim', status:'Statü', okul:'Okul'};
+    const title = document.createElement('div');
+    title.className = 'panel-title';
+    title.innerHTML = '<span>🔍 ' + (colLabels[col] || col) + '</span><button title="Kapat">✕</button>';
+    title.querySelector('button').onclick = (e) => { e.stopPropagation(); panel.remove(); state.openPanelColumn = null; };
+    panel.appendChild(title);
+    
+    // Sıralama
+    const sortAsc = document.createElement('label');
+    sortAsc.className = 'col-filter-item sort-option' + (state.sortColumn === col && state.sortDirection === 'asc' ? ' active' : '');
+    sortAsc.innerHTML = '<span>⬆️ A-Z (Artan)</span>';
+    sortAsc.onclick = () => { state.sortColumn = col; state.sortDirection = 'asc'; refreshEaList(); panel.remove(); state.openPanelColumn = null; };
+    panel.appendChild(sortAsc);
+    
+    const sortDesc = document.createElement('label');
+    sortDesc.className = 'col-filter-item sort-option' + (state.sortColumn === col && state.sortDirection === 'desc' ? ' active' : '');
+    sortDesc.innerHTML = '<span>⬇️ Z-A (Azalan)</span>';
+    sortDesc.onclick = () => { state.sortColumn = col; state.sortDirection = 'desc'; refreshEaList(); panel.remove(); state.openPanelColumn = null; };
+    panel.appendChild(sortDesc);
+    
+    const divider = document.createElement('div');
+    divider.style.borderTop = '1px solid #e5e7eb';
+    divider.style.margin = '6px 0';
+    panel.appendChild(divider);
+    
+    // Değerler
+    const values = new Set();
+    const sourceList = tablo === 'personel' 
+        ? (data.personnel || []).filter(p => (p.requiredTrainings||[]).length > 0 || (p.trainings||[]).length === 0 || (p.trainings||[]).some(k => k.expiryDate && new Date(k.expiryDate) < new Date(Date.now() + 30*24*60*60*1000)))
+        : (data.stajyerler || []).filter(s => s.durum !== 'arsiv');
+    
+    sourceList.forEach(item => {
+        let v = item[col];
+        if(col === 'name') v = item.name || ((item.ad||'') + ' ' + (item.soyad||''));
+        if(v === null || v === undefined || v === '') return;
+        values.add(String(v));
+    });
+    const valsArr = [...values].sort((a,b) => a.localeCompare(b, 'tr'));
+    
+    const activeFilters = state.activeFilters[col];
+    const isAllChecked = !activeFilters || activeFilters.size === 0;
+    
+    const allItem = document.createElement('label');
+    allItem.className = 'col-filter-item';
+    allItem.innerHTML = '<input type="checkbox" ' + (isAllChecked ? 'checked' : '') + '> <strong>(Tümü)</strong>';
+    allItem.querySelector('input').onchange = (e) => {
+        if(e.target.checked){ delete state.activeFilters[col]; }
+        else { state.activeFilters[col] = new Set(valsArr); }
+        refreshEaList(); panel.remove(); state.openPanelColumn = null;
+    };
+    panel.appendChild(allItem);
+    
+    valsArr.forEach(v => {
+        const item = document.createElement('label');
+        item.className = 'col-filter-item';
+        const isChecked = isAllChecked || activeFilters.has(v);
+        item.innerHTML = '<input type="checkbox" ' + (isChecked ? 'checked' : '') + '> <span>' + escapeHtml(v) + '</span>';
+        item.querySelector('input').onchange = (e) => {
+            let currentSet = state.activeFilters[col];
+            if(!currentSet){ currentSet = new Set(valsArr); state.activeFilters[col] = currentSet; }
+            if(e.target.checked){ currentSet.add(v); } else { currentSet.delete(v); }
+            if(currentSet.size === valsArr.length || currentSet.size === 0){ delete state.activeFilters[col]; }
+            refreshEaList(); panel.remove(); state.openPanelColumn = null;
+        };
+        panel.appendChild(item);
+    });
+    
+    const actions = document.createElement('div');
+    actions.className = 'col-filter-actions';
+    const clearBtn = document.createElement('button');
+    clearBtn.className = 'btn-clear';
+    clearBtn.textContent = '🗑️ Sütunu temizle';
+    clearBtn.onclick = () => { delete state.activeFilters[col]; refreshEaList(); panel.remove(); state.openPanelColumn = null; };
+    actions.appendChild(clearBtn);
+    panel.appendChild(actions);
+    
+    document.body.appendChild(panel);
+    
+    const panelWidth = 260;
+    let left = rect.left;
+    let top = rect.bottom + 4;
+    if(left + panelWidth > window.innerWidth - 10) left = window.innerWidth - panelWidth - 10;
+    if(top + 400 > window.innerHeight){ top = rect.top - 410; if(top < 10) top = 10; }
+    panel.style.left = left + 'px';
+    panel.style.top = top + 'px';
+    
+    setTimeout(() => { document.addEventListener('click', closeEaFilterOutside); }, 10);
+}
+
+function closeEaFilterOutside(e){
+    if(!e.target.closest('.ea-col-filter-panel') && !e.target.closest('.col-filter-header')){
+        const panel = document.querySelector('.ea-col-filter-panel');
+        if(panel) panel.remove();
+        if(ekfEaFilterState.personel) ekfEaFilterState.personel.openPanelColumn = null;
+        if(ekfEaFilterState.stajyer) ekfEaFilterState.stajyer.openPanelColumn = null;
+        document.removeEventListener('click', closeEaFilterOutside);
+    }
+}
+
+function refreshEaList(){
+    // Aynı listeyi yeniden hesapla
+    const now = new Date();
+    const soon = new Date(now.getTime() + 30*24*60*60*1000);
+    
+    const personelList = (data.personnel || []).filter(p => {
+        const required = p.requiredTrainings || [];
+        const alinan = p.trainings || [];
+        if(required.length > 0) return true;
+        if(alinan.some(k => {
+            if(!k.expiryDate) return false;
+            const ed = new Date(k.expiryDate);
+            return ed < now || ed <= soon;
+        })) return true;
+        if(required.length === 0 && alinan.length === 0) return true;
+        return false;
+    }).map(p => {
+        const required = p.requiredTrainings || [];
+        const alinan = p.trainings || [];
+        const alinanEgitimler = alinan.map(k => {
+            let durum = 'gecerli';
+            if(k.expiryDate){
+                const ed = new Date(k.expiryDate);
+                if(ed < now) durum = 'dolan';
+                else if(ed <= soon) durum = 'yaklasan';
+            }
+            return {name: k.name, durum: durum};
+        });
+        const alinanIsimler = new Set(alinan.map(k => k.name));
+        const eksikEgitimler = required.filter(r => !alinanIsimler.has(r.name)).map(r => ({name: r.name, duration: r.duration || 12}));
+        return { ...p, alinanEgitimler, eksikEgitimler, kaynak: 'personel', birim: p.department || '' };
+    });
+    
+    const stajyerList = (data.stajyerler || []).filter(s => s.durum !== 'arsiv').map(s => {
+        const egitimler = s.egitimler || [];
+        const durumlar = s.egitimDurumlari || {};
+        const egitimDetay = egitimler.map(eid => {
+            const t = (data.trainings || []).find(x => x.id === eid);
+            return { id: eid, name: t ? t.name : '-', tamamlandi: !!durumlar[eid] };
+        });
+        const bekleyenSayi = egitimDetay.filter(e => !e.tamamlandi).length;
+        return { ...s, name: (s.ad||'') + ' ' + (s.soyad||''), egitimDetay, bekleyenSayi, kaynak: 'stajyer', birim: s.birim || '' };
+    }).filter(s => s.bekleyenSayi > 0);
+    
+    renderEgitimAlmayanlarModal(personelList, stajyerList);
+}
+
+// ==================== SEÇİM ====================
+function eaSecimToggle(tablo, id, checked){
+    if(!ekfEaFilterState[tablo]) return;
+    if(checked) ekfEaFilterState[tablo].selected.add(id);
+    else ekfEaFilterState[tablo].selected.delete(id);
+    
+    const el = document.getElementById('eaSecili' + (tablo === 'personel' ? 'Personel' : 'Stajyer'));
+    if(el) el.textContent = ekfEaFilterState[tablo].selected.size;
+}
+
+function eaTumunuSec(tablo, sec){
+    if(tablo === 'personel' || tablo === 'hepsi'){
+        document.querySelectorAll('.ea-cb-personel').forEach(cb => {
+            cb.checked = sec;
+            const id = parseInt(cb.value);
+            if(sec) ekfEaFilterState.personel.selected.add(id);
+            else ekfEaFilterState.personel.selected.delete(id);
+        });
+        const el = document.getElementById('eaSeciliPersonel');
+        if(el) el.textContent = ekfEaFilterState.personel.selected.size;
+    }
+    if(tablo === 'stajyer' || tablo === 'hepsi'){
+        document.querySelectorAll('.ea-cb-stajyer').forEach(cb => {
+            cb.checked = sec;
+            const id = parseInt(cb.value);
+            if(sec) ekfEaFilterState.stajyer.selected.add(id);
+            else ekfEaFilterState.stajyer.selected.delete(id);
+        });
+        const el = document.getElementById('eaSeciliStajyer');
+        if(el) el.textContent = ekfEaFilterState.stajyer.selected.size;
+    }
+}
+
+function eaSayfaSecim(masterCb, tablo){
+    const cls = tablo === 'personel' ? '.ea-cb-personel' : '.ea-cb-stajyer';
+    document.querySelectorAll(cls).forEach(cb => {
+        cb.checked = masterCb.checked;
+        const id = parseInt(cb.value);
+        if(masterCb.checked) ekfEaFilterState[tablo].selected.add(id);
+        else ekfEaFilterState[tablo].selected.delete(id);
+    });
+    const el = document.getElementById('eaSecili' + (tablo === 'personel' ? 'Personel' : 'Stajyer'));
+    if(el) el.textContent = ekfEaFilterState[tablo].selected.size;
+}
+
+// ==================== YAZDIRMA ====================
+function yazdirEgitimAlmayanlar(mod){
+    const now = new Date();
+    const soon = new Date(now.getTime() + 30*24*60*60*1000);
+    
+    // Listeleri tekrar hesapla
+    const allPersonel = (data.personnel || []).filter(p => {
+        const required = p.requiredTrainings || [];
+        const alinan = p.trainings || [];
+        if(required.length > 0) return true;
+        if(alinan.some(k => {
+            if(!k.expiryDate) return false;
+            const ed = new Date(k.expiryDate);
+            return ed < now || ed <= soon;
+        })) return true;
+        if(required.length === 0 && alinan.length === 0) return true;
+        return false;
+    }).map(p => {
+        const required = p.requiredTrainings || [];
+        const alinan = p.trainings || [];
+        const alinanIsimler = new Set(alinan.map(k => k.name));
+        const eksikEgitimler = required.filter(r => !alinanIsimler.has(r.name)).map(r => r.name);
+        return { ...p, birim: p.department||'', eksikEgitimler };
+    });
+    
+    const allStajyer = (data.stajyerler || []).filter(s => s.durum !== 'arsiv').map(s => {
+        const egitimler = s.egitimler || [];
+        const durumlar = s.egitimDurumlari || {};
+        const bekleyenler = egitimler.filter(eid => !durumlar[eid]).map(eid => {
+            const t = (data.trainings || []).find(x => x.id === eid);
+            return t ? t.name : '-';
+        });
+        return { ...s, name: (s.ad||'') + ' ' + (s.soyad||''), birim: s.birim||'', eksikEgitimler: bekleyenler };
+    }).filter(s => s.eksikEgitimler.length > 0);
+    
+    let seciliP = allPersonel;
+    let seciliS = allStajyer;
+    
+    if(mod === 'secili'){
+        seciliP = allPersonel.filter(p => ekfEaFilterState.personel.selected.has(p.id));
+        seciliS = allStajyer.filter(s => ekfEaFilterState.stajyer.selected.has(s.id));
+        if(seciliP.length === 0 && seciliS.length === 0){
+            alert('❌ Hiç kişi seçilmedi! Lütfen en az bir kişi seçin.');
+            return;
+        }
+    }
+    
+    let html = '<div style="font-family:Arial,sans-serif;font-size:11px;color:#000;padding:10px;">';
+    html += '<div style="text-align:center;border-bottom:2px solid #333;padding-bottom:8px;margin-bottom:12px;">';
+    html += '<h1 style="font-size:18px;margin:0;font-weight:bold;">ATTİ RAYLI SİSTEM</h1>';
+    html += '<h2 style="font-size:13px;margin:4px 0 0;font-weight:normal;">Eğitim Almayanlar Raporu</h2>';
+    html += '<div style="font-size:10px;color:#666;margin-top:4px;">Oluşturulma: ' + new Date().toLocaleString('tr-TR') + ' | Personel: ' + seciliP.length + ' | Stajyer: ' + seciliS.length + '</div>';
+    html += '</div>';
+    
+    if(seciliP.length > 0){
+        html += '<h3 style="background:#3b82f6;color:#fff;padding:6px 10px;margin:14px 0 8px;font-size:12px;border-radius:4px;">👤 PERSONEL TABLOSU (' + seciliP.length + ')</h3>';
+        html += '<table style="width:100%;border-collapse:collapse;font-size:10px;">';
+        html += '<thead><tr style="background:#dbeafe;">';
+        html += '<th style="border:1px solid #333;padding:5px;text-align:center;width:30px;">#</th>';
+        html += '<th style="border:1px solid #333;padding:5px;text-align:left;">Ad Soyad</th>';
+        html += '<th style="border:1px solid #333;padding:5px;text-align:left;width:100px;">TC</th>';
+        html += '<th style="border:1px solid #333;padding:5px;text-align:left;width:110px;">Birim</th>';
+        html += '<th style="border:1px solid #333;padding:5px;text-align:left;width:80px;">Statü</th>';
+        html += '<th style="border:1px solid #333;padding:5px;text-align:left;">Alması Gereken Eğitimler</th>';
+        html += '</tr></thead><tbody>';
+        seciliP.sort((a,b) => (a.name||'').localeCompare(b.name||'','tr')).forEach((p,i) => {
+            html += '<tr><td style="border:1px solid #333;padding:5px;text-align:center;">' + (i+1) + '</td>';
+            html += '<td style="border:1px solid #333;padding:5px;"><strong>' + escapeHtml(p.name) + '</strong></td>';
+            html += '<td style="border:1px solid #333;padding:5px;font-family:monospace;">' + escapeHtml(p.tcNo||'-') + '</td>';
+            html += '<td style="border:1px solid #333;padding:5px;">' + escapeHtml(p.birim||'-') + '</td>';
+            html += '<td style="border:1px solid #333;padding:5px;">' + escapeHtml(p.status||'-') + '</td>';
+            html += '<td style="border:1px solid #333;padding:5px;font-size:10px;">' + (p.eksikEgitimler.length > 0 ? escapeHtml(p.eksikEgitimler.join(', ')) : '⚠️ Eğitim atanmamış') + '</td>';
+            html += '</tr>';
+        });
+        html += '</tbody></table>';
+    }
+    
+    if(seciliS.length > 0){
+        html += '<h3 style="background:#10b981;color:#fff;padding:6px 10px;margin:14px 0 8px;font-size:12px;border-radius:4px;">🎓 STAJYER TABLOSU (' + seciliS.length + ')</h3>';
+        html += '<table style="width:100%;border-collapse:collapse;font-size:10px;">';
+        html += '<thead><tr style="background:#d1fae5;">';
+        html += '<th style="border:1px solid #333;padding:5px;text-align:center;width:30px;">#</th>';
+        html += '<th style="border:1px solid #333;padding:5px;text-align:left;">Ad Soyad</th>';
+        html += '<th style="border:1px solid #333;padding:5px;text-align:left;width:100px;">TC</th>';
+        html += '<th style="border:1px solid #333;padding:5px;text-align:left;width:130px;">Okul/Bölüm</th>';
+        html += '<th style="border:1px solid #333;padding:5px;text-align:left;width:110px;">Birim</th>';
+        html += '<th style="border:1px solid #333;padding:5px;text-align:left;">Alması Gereken Eğitimler</th>';
+        html += '</tr></thead><tbody>';
+        seciliS.sort((a,b) => (a.name||'').localeCompare(b.name||'','tr')).forEach((s,i) => {
+            html += '<tr><td style="border:1px solid #333;padding:5px;text-align:center;">' + (i+1) + '</td>';
+            html += '<td style="border:1px solid #333;padding:5px;"><strong>' + escapeHtml(s.name) + '</strong></td>';
+            html += '<td style="border:1px solid #333;padding:5px;font-family:monospace;">' + escapeHtml(s.tcNo||'-') + '</td>';
+            html += '<td style="border:1px solid #333;padding:5px;">' + escapeHtml((s.okul||'-') + ' / ' + (s.bolum||'-')) + '</td>';
+            html += '<td style="border:1px solid #333;padding:5px;">' + escapeHtml(s.birim||'⏳ Bekliyor') + '</td>';
+            html += '<td style="border:1px solid #333;padding:5px;font-size:10px;">' + escapeHtml(s.eksikEgitimler.join(', ')) + '</td>';
+            html += '</tr>';
+        });
+        html += '</tbody></table>';
+    }
+    
+    html += '<div style="margin-top:20px;text-align:center;font-size:10px;color:#777;border-top:1px solid #ccc;padding-top:8px;">ATTİ Raylı Sistem - RTS Takip | Hazırlayan: Gökhan GÖKER</div>';
+    html += '</div>';
+    
+    openPrintPreview('Eğitim Almayanlar', (mod === 'secili' ? 'Seçili: ' : 'Tümü: ') + (seciliP.length + seciliS.length) + ' kişi', html);
 }
 
 // Genel İstatistik modalı
@@ -12255,6 +12823,372 @@ function openGenelIstatistikModal(){
     
     document.getElementById('trainingDetailContent').innerHTML = html;
     showModal('trainingDetailModal');
+}
+// ============================================================
+// ========== HIZLI EĞİTİM ATAMA (Eğitim Almayanlar için) ======
+// ============================================================
+
+function openHizliEgitimAtaModal(personnelId){
+    if(!isAdmin){ alert('❌ Yönetici girişi gerekli!'); return; }
+    
+    const p = (data.personnel || []).find(x => x.id === personnelId);
+    if(!p){ alert('Personel bulunamadı!'); return; }
+    
+    let modal = document.getElementById('hizliEgitimAtaModal');
+    if(!modal){
+        modal = document.createElement('div');
+        modal.id = 'hizliEgitimAtaModal';
+        modal.className = 'modal hidden fixed inset-0 bg-black bg-opacity-60 items-center justify-center z-[95]';
+        document.body.appendChild(modal);
+    }
+    
+    const allTrainings = data.trainings || [];
+    if(allTrainings.length === 0){
+        modal.innerHTML = '<div class="bg-white rounded-xl p-6 w-[500px] max-w-[97vw] shadow-2xl relative">' +
+            '<button onclick="hideModal(\'hizliEgitimAtaModal\')" class="absolute top-4 right-4 text-gray-400 text-2xl font-bold">✕</button>' +
+            '<div class="text-center mb-4"><div class="w-16 h-16 mx-auto mb-3 rounded-full bg-red-100 text-red-600 flex items-center justify-center text-3xl">⚠️</div>' +
+            '<h3 class="text-xl font-bold">Eğitim Bulunamadı</h3>' +
+            '<p class="text-sm text-gray-600 mt-2">Sistemde tanımlı eğitim yok. Önce eğitim ekleyin.</p></div>' +
+            '<div class="flex justify-center gap-2">' +
+            '<button onclick="hideModal(\'hizliEgitimAtaModal\')" class="px-6 py-2 bg-gray-500 text-white rounded-lg font-medium">Kapat</button>' +
+            '<button onclick="hideModal(\'hizliEgitimAtaModal\');switchSettingsPanel(\'panelTraining\');" class="px-6 py-2 bg-emerald-500 text-white rounded-lg font-bold">📚 Eğitim Ekle\'ye Git</button>' +
+            '</div></div>';
+        showModal('hizliEgitimAtaModal');
+        return;
+    }
+    
+    const mevcutIsimler = new Set((p.requiredTrainings || []).map(r => r.name));
+    const alinmisIsimler = new Set((p.trainings || []).map(t => t.name));
+    
+    let egitimHtml = '';
+    allTrainings.forEach((t, i) => {
+        const mevcut = mevcutIsimler.has(t.name);
+        const alinmis = alinmisIsimler.has(t.name);
+        const disabled = alinmis;
+        const checked = mevcut || alinmis;
+        
+        let durumEtiket = '';
+        if(alinmis){
+            durumEtiket = '<span class="text-xs bg-green-100 text-green-800 px-2 py-0.5 rounded ml-2 font-bold">✅ Zaten alınmış</span>';
+        } else if(mevcut){
+            durumEtiket = '<span class="text-xs bg-purple-100 text-purple-800 px-2 py-0.5 rounded ml-2 font-bold">⏳ Atanmış</span>';
+        }
+        
+        egitimHtml += '<label class="flex items-center gap-3 bg-white p-3 rounded-lg border-2 ' + (disabled ? 'border-green-300 bg-green-50' : 'border-purple-200 hover:bg-purple-50') + ' cursor-pointer ' + (disabled ? 'opacity-70' : '') + ' mb-2">' +
+            '<input type="checkbox" class="hizli-egitim-cb" value="' + t.id + '" data-name="' + escapeHtml(t.name) + '" data-duration="' + (t.duration||12) + '" data-instructor="' + escapeHtml(t.instructor||'') + '" data-hours="' + (t.hours||0) + '" data-location="' + escapeHtml(t.location||'') + '" data-subject="' + escapeHtml(t.subject||'') + '" ' + (checked ? 'checked' : '') + ' ' + (disabled ? 'disabled' : '') + '>' +
+            '<div class="flex-1"><div class="font-bold text-sm text-gray-800">📚 ' + escapeHtml(t.name) + durumEtiket + '</div>' +
+            '<div class="text-xs text-gray-500">' + (t.subject||'-') + ' • ' + (t.duration||12) + ' ay • ' + (t.hours||0) + ' saat • ' + escapeHtml(t.instructor||'-') + '</div></div>' +
+            '</label>';
+    });
+    
+    modal.innerHTML = '<div class="bg-white rounded-xl p-6 w-[700px] max-w-[97vw] shadow-2xl relative max-h-[92vh] overflow-y-auto">' +
+        '<button onclick="hideModal(\'hizliEgitimAtaModal\')" class="absolute top-4 right-4 text-gray-400 text-2xl font-bold">✕</button>' +
+        '<div class="text-center mb-4">' +
+        '<div class="w-16 h-16 mx-auto mb-3 rounded-full bg-gradient-to-r from-purple-500 to-indigo-600 flex items-center justify-center text-white text-2xl">📚</div>' +
+        '<h3 class="text-xl font-bold">Eğitim Ata</h3>' +
+        '<p class="text-xs text-gray-500 mt-1">' + escapeHtml(p.name) + ' için alması gereken eğitimleri seçin</p>' +
+        '</div>' +
+        '<div class="bg-purple-50 rounded-lg p-3 mb-4 border-2 border-purple-200">' +
+        '<div class="text-xs text-purple-800"><strong>ℹ️ Bilgi:</strong> Seçilen eğitimler <strong>"alması gereken"</strong> olarak kaydedilir. Eğitim katılım formu tamamlanınca <strong>"alınmış"</strong> durumuna geçer.</div>' +
+        '</div>' +
+        '<div class="mb-4">' +
+        '<div class="flex justify-between items-center mb-2 flex-wrap gap-2">' +
+        '<label class="text-sm font-bold text-gray-700">📚 Eğitim Listesi</label>' +
+        '<div class="flex gap-2">' +
+        '<button onclick="hizliEgitimTumunuSec(true)" class="text-xs bg-purple-600 text-white px-3 py-1 rounded-lg font-bold">✅ Tümünü Seç</button>' +
+        '<button onclick="hizliEgitimTumunuSec(false)" class="text-xs bg-gray-500 text-white px-3 py-1 rounded-lg font-bold">❌ Temizle</button>' +
+        '</div></div>' +
+        egitimHtml +
+        '</div>' +
+        '<div class="flex justify-end gap-3 pt-3 border-t-2 border-gray-200">' +
+        '<button onclick="hideModal(\'hizliEgitimAtaModal\')" class="px-6 py-3 text-gray-600 font-medium hover:bg-gray-100 rounded-lg">İptal</button>' +
+        '<button onclick="saveHizliEgitimAta(' + personnelId + ')" class="px-6 py-3 bg-gradient-to-r from-purple-500 to-indigo-600 text-white rounded-lg font-bold">💾 Kaydet</button>' +
+        '</div>' +
+        '</div>';
+    
+    showModal('hizliEgitimAtaModal');
+}
+
+function hizliEgitimTumunuSec(sec){
+    document.querySelectorAll('.hizli-egitim-cb:not(:disabled)').forEach(cb => {
+        cb.checked = sec;
+    });
+}
+
+function saveHizliEgitimAta(personnelId){
+    if(!isAdmin){ alert('❌ Yönetici girişi gerekli!'); return; }
+    
+    const p = (data.personnel || []).find(x => x.id === personnelId);
+    if(!p){ alert('Personel bulunamadı!'); return; }
+    
+    const alinmisIsimler = new Set((p.trainings || []).map(t => t.name));
+    const yeniRequired = [];
+    
+    document.querySelectorAll('.hizli-egitim-cb:checked:not(:disabled)').forEach(cb => {
+        const name = cb.getAttribute('data-name');
+        if(alinmisIsimler.has(name)) return;
+        
+        yeniRequired.push({
+            id: parseInt(cb.value),
+            name: name,
+            duration: parseInt(cb.getAttribute('data-duration')) || 12,
+            instructor: cb.getAttribute('data-instructor') || '',
+            hours: parseInt(cb.getAttribute('data-hours')) || 0,
+            location: cb.getAttribute('data-location') || '',
+            subject: cb.getAttribute('data-subject') || ''
+        });
+    });
+    
+    if(yeniRequired.length === 0){
+        alert('Hiç eğitim seçilmedi!');
+        return;
+    }
+    
+    p.requiredTrainings = yeniRequired;
+    
+    saveToLocalStorage();
+    hideModal('hizliEgitimAtaModal');
+    
+    // Eğitim Almayanlar listesini yenile
+    const detayModal = document.getElementById('trainingDetailModal');
+    if(detayModal && !detayModal.classList.contains('hidden')){
+        setTimeout(() => showEgitimAlmayanlar(), 100);
+    }
+    
+    updateAllStats();
+    showSuccessMessage('✅ ' + p.name + ' için ' + yeniRequired.length + ' eğitim atandı!');
+}
+// ============================================================
+// =========== EĞİTİM ALMAYANLARDAN FORMA AKTAR ================
+// ============================================================
+
+function openFormaAktarModal(){
+    if(!isAdmin){ alert('❌ Yönetici girişi gerekli!'); return; }
+    
+    // Seçili kişileri topla (hem personel hem stajyer)
+    const seciliPersonelIds = [...ekfEaFilterState.personel.selected];
+    const seciliStajyerIds = [...ekfEaFilterState.stajyer.selected];
+    
+    if(seciliPersonelIds.length === 0 && seciliStajyerIds.length === 0){
+        alert('❌ Önce form oluşturmak için en az bir kişi seçin!\n\n(Tablodaki checkbox\'ları kullanın)');
+        return;
+    }
+    
+    // Seçili kişilerin eksik eğitimlerini topla
+    const eksikEgitimMap = {}; // {egitimId: {id, name, duration, instructor, hours, location, subject}}
+    
+    // PERSONEL
+    seciliPersonelIds.forEach(pid => {
+        const p = (data.personnel || []).find(x => x.id === pid);
+        if(!p) return;
+        (p.requiredTrainings || []).forEach(r => {
+            const tid = r.id || r.name;
+            if(!eksikEgitimMap[tid]){
+                eksikEgitimMap[tid] = {
+                    id: r.id || null,
+                    name: r.name,
+                    duration: r.duration || 12,
+                    instructor: r.instructor || '',
+                    hours: r.hours || 0,
+                    location: r.location || '',
+                    subject: r.subject || ''
+                };
+            }
+        });
+    });
+    
+    // STAJYER
+    seciliStajyerIds.forEach(sid => {
+        const s = (data.stajyerler || []).find(x => x.id === sid);
+        if(!s) return;
+        const egitimler = s.egitimler || [];
+        const durumlar = s.egitimDurumlari || {};
+        egitimler.forEach(eid => {
+            if(durumlar[eid]) return; // zaten tamamlanmış
+            const t = (data.trainings || []).find(x => x.id === eid);
+            if(!t) return;
+            const tid = t.id;
+            if(!eksikEgitimMap[tid]){
+                eksikEgitimMap[tid] = {
+                    id: t.id,
+                    name: t.name,
+                    duration: t.duration || 12,
+                    instructor: t.instructor || '',
+                    hours: t.hours || 0,
+                    location: t.location || '',
+                    subject: t.subject || ''
+                };
+            }
+        });
+    });
+    
+    const eksikEgitimler = Object.values(eksikEgitimMap);
+    
+    if(eksikEgitimler.length === 0){
+        alert('⚠️ Seçili kişilerin tanımlı "alması gereken" eğitimi yok.\n\nForm oluşturmak için önce eğitim atamanız gerekir.');
+        return;
+    }
+    
+    // Modal oluştur
+    let modal = document.getElementById('formaAktarModal');
+    if(!modal){
+        modal = document.createElement('div');
+        modal.id = 'formaAktarModal';
+        modal.className = 'modal hidden fixed inset-0 bg-black bg-opacity-60 items-center justify-center z-[96]';
+        document.body.appendChild(modal);
+    }
+    
+    let egitimHtml = '';
+    eksikEgitimler.forEach((e, i) => {
+        egitimHtml += '<label class="flex items-center gap-3 bg-white p-3 rounded-lg border-2 border-purple-200 hover:bg-purple-50 cursor-pointer mb-2">' +
+            '<input type="checkbox" class="forma-aktar-egitim-cb" value="' + e.id + '" data-name="' + escapeHtml(e.name) + '" data-duration="' + e.duration + '" data-instructor="' + escapeHtml(e.instructor) + '" data-hours="' + e.hours + '" data-location="' + escapeHtml(e.location) + '" data-subject="' + escapeHtml(e.subject) + '" checked>' +
+            '<div class="flex-1"><div class="font-bold text-sm text-purple-900">📚 ' + escapeHtml(e.name) + '</div>' +
+            '<div class="text-xs text-gray-600">' + (e.subject||'-') + ' • ' + e.duration + ' ay • ' + e.hours + ' saat' + (e.instructor ? ' • 👨‍🏫 ' + escapeHtml(e.instructor) : '') + '</div></div>' +
+            '</label>';
+    });
+    
+    let kisiOzetHtml = '';
+    if(seciliPersonelIds.length > 0) kisiOzetHtml += '<div class="text-xs"><strong>👤 Personel:</strong> ' + seciliPersonelIds.length + ' kişi</div>';
+    if(seciliStajyerIds.length > 0) kisiOzetHtml += '<div class="text-xs"><strong>🎓 Stajyer:</strong> ' + seciliStajyerIds.length + ' kişi</div>';
+    
+    modal.innerHTML = '<div class="bg-white rounded-xl p-6 w-[700px] max-w-[97vw] shadow-2xl relative max-h-[92vh] overflow-y-auto">' +
+        '<button onclick="hideModal(\'formaAktarModal\')" class="absolute top-4 right-4 text-gray-400 text-2xl font-bold">✕</button>' +
+        '<div class="text-center mb-4">' +
+        '<div class="w-16 h-16 mx-auto mb-3 rounded-full bg-gradient-to-r from-purple-500 to-indigo-600 flex items-center justify-center text-white text-2xl">📝</div>' +
+        '<h3 class="text-xl font-bold">Forma Aktar</h3>' +
+        '<p class="text-xs text-gray-500 mt-1">Seçili kişilerin alması gereken eğitimlerden hangilerini bu forma ekleyeceksiniz?</p>' +
+        '</div>' +
+        '<div class="bg-blue-50 rounded-lg p-3 mb-4 border-2 border-blue-200">' +
+        '<div class="flex justify-between items-center flex-wrap gap-2">' + kisiOzetHtml + '</div>' +
+        '</div>' +
+        '<div class="bg-purple-50 rounded-lg p-3 mb-4 border-2 border-purple-300">' +
+        '<div class="flex justify-between items-center mb-2 flex-wrap gap-2">' +
+        '<label class="text-sm font-bold text-purple-900">📚 Bu Formda Verilecek Eğitimler</label>' +
+        '<div class="flex gap-2">' +
+        '<button onclick="formaAktarEgitimTumunuSec(true)" class="text-xs bg-purple-600 text-white px-3 py-1 rounded-lg font-bold">✅ Tümünü Seç</button>' +
+        '<button onclick="formaAktarEgitimTumunuSec(false)" class="text-xs bg-gray-500 text-white px-3 py-1 rounded-lg font-bold">❌ Temizle</button>' +
+        '</div></div>' +
+        egitimHtml +
+        '</div>' +
+        '<div class="bg-amber-50 rounded-lg p-3 mb-4 border-2 border-amber-200 text-xs text-amber-800">' +
+        '<strong>ℹ️ Bilgi:</strong> Seçilen eğitimler ve eğitim verenler otomatik olarak forma eklenecek. Kişiler <strong>katılımcı olarak</strong> hazır gelecek. Sadece tarih/yer onaylayıp kaydedeceksiniz.' +
+        '</div>' +
+        '<div class="flex justify-end gap-3 pt-3 border-t-2 border-gray-200">' +
+        '<button onclick="hideModal(\'formaAktarModal\')" class="px-6 py-3 text-gray-600 font-medium hover:bg-gray-100 rounded-lg">İptal</button>' +
+        '<button onclick="formaAktarDevamEt()" class="px-6 py-3 bg-gradient-to-r from-purple-500 to-indigo-600 text-white rounded-lg font-bold">➡️ Devam Et</button>' +
+        '</div>' +
+        '</div>';
+    
+    showModal('formaAktarModal');
+}
+
+function formaAktarEgitimTumunuSec(sec){
+    document.querySelectorAll('.forma-aktar-egitim-cb').forEach(cb => cb.checked = sec);
+}
+
+function formaAktarDevamEt(){
+    if(!isAdmin){ alert('❌ Yönetici girişi gerekli!'); return; }
+    
+    // Seçili eğitimleri topla
+    const seciliEgitimler = [];
+    document.querySelectorAll('.forma-aktar-egitim-cb:checked').forEach(cb => {
+        seciliEgitimler.push({
+            egitimId: parseInt(cb.value),
+            ad: cb.getAttribute('data-name'),
+            egitmen: cb.getAttribute('data-instructor') || '',
+            sure: parseInt(cb.getAttribute('data-hours')) || 0,
+            yenilemeAy: parseInt(cb.getAttribute('data-duration')) || 12,
+            subject: cb.getAttribute('data-subject') || ''
+        });
+    });
+    
+    if(seciliEgitimler.length === 0){
+        alert('❌ En az bir eğitim seçin!');
+        return;
+    }
+    
+    // Seçili kişileri topla
+    const seciliPersonelIds = [...ekfEaFilterState.personel.selected];
+    const seciliStajyerIds = [...ekfEaFilterState.stajyer.selected];
+    
+    // Modal kapat
+    hideModal('formaAktarModal');
+    
+    // trainingDetailModal kapat
+    hideModal('trainingDetailModal');
+    
+    // Ana formu aç (önceden doldurulmuş)
+    setTimeout(() => {
+        openYeniEgitimKatilimFormuModal();
+        
+        // Eğitimleri otomatik ekle
+        setTimeout(() => {
+            ekfEgitimSatirlari = [];
+            seciliEgitimler.forEach(e => {
+                ekfEgitimSatirlari.push({
+                    egitimId: e.egitimId,
+                    ad: e.ad,
+                    egitmen: e.egitmen,
+                    sure: e.sure,
+                    yenilemeAy: e.yenilemeAy
+                });
+            });
+            
+            // Eğitim verenleri otomatik ekle (kayıtlı eğitmenlerden)
+            ekfSeciliEgitmenler = [];
+            const eklenenEgitmenler = new Set();
+            seciliEgitimler.forEach(e => {
+                if(e.egitmen && !eklenenEgitmenler.has(e.egitmen)){
+                    ekfSeciliEgitmenler.push({ad: e.egitmen, unvan: 'Eğitim Uzmanı'});
+                    eklenenEgitmenler.add(e.egitmen);
+                }
+            });
+            // Hiç eğitmen yoksa boş bir satır koy
+            if(ekfSeciliEgitmenler.length === 0){
+                ekfSeciliEgitmenler = [{ad: '', unvan: ''}];
+            }
+            
+            ekfRenderEgitimListesi();
+            ekfRenderEgitmenListesi();
+            
+            // Katılımcıları otomatik seç
+            setTimeout(() => {
+                // PERSONEL
+                seciliPersonelIds.forEach(pid => {
+                    const p = (data.personnel || []).find(x => x.id === pid);
+                    if(!p) return;
+                    ekfSeciliKatilimcilar[pid] = {
+                        name: p.name,
+                        department: p.department || '',
+                        status: p.status || '',
+                        kaynak: 'auto',
+                        tip: 'personel'
+                    };
+                });
+                
+                // STAJYER
+                seciliStajyerIds.forEach(sid => {
+                    const s = (data.stajyerler || []).find(x => x.id === sid);
+                    if(!s) return;
+                    ekfSeciliKatilimcilar[sid] = {
+                        name: (s.ad||'') + ' ' + (s.soyad||''),
+                        department: s.birim || '',
+                        status: 'Stajyer',
+                        kaynak: 'auto',
+                        tip: 'stajyer'
+                    };
+                });
+                
+                // Katılımcı listesini yenile
+                ekfRenderManuelEklenenler();
+                ekfSeciliSayiGuncelle();
+                ekfRenderOtomatikListeler();
+                
+                // Bilgilendirici mesaj
+                showSuccessMessage('✅ ' + seciliEgitimler.length + ' eğitim ve ' + (seciliPersonelIds.length + seciliStajyerIds.length) + ' katılımcı forma otomatik eklendi. Tarih/yeri kontrol edip kaydedin.');
+            }, 200);
+        }, 100);
+    }, 150);
 }
 </script>
 
